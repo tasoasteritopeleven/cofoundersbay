@@ -33,7 +33,7 @@ describe('OAuth callback', () => {
     const login = vi.fn();
     window.addEventListener('cfb:login', login);
     render(<OAuthCallbackPage />);
-    await screen.findByText('Welcome!');
+    await screen.findByText('Welcome');
     expect(getMe).toHaveBeenCalledTimes(1);
     expect(login).not.toHaveBeenCalled();
     expect(localStorage.getItem('user')).toBe(JSON.stringify(PREVIEW_DEMO_USER));
@@ -47,7 +47,7 @@ describe('OAuth callback', () => {
     const login = vi.fn();
     window.addEventListener('cfb:login', login);
     render(<OAuthCallbackPage />);
-    await screen.findByText('Welcome!');
+    await screen.findByText('Welcome');
     expect(login).toHaveBeenCalledTimes(1);
     expect(localStorage.getItem('user')).toBe(JSON.stringify(user));
     await act(async () => { await new Promise((resolve) => setTimeout(resolve, 1250)); });

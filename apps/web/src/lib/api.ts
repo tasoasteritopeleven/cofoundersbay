@@ -4,7 +4,6 @@ import type { PublicStats, TransparencyReport } from '@cofounderbay/shared';
 // Returns the API base URL evaluated at call time — not module load time.
 // Dev proxy: browser uses same-origin `/api/*` (see next.config rewrites + api-origin.ts).
 import { getApiOrigin } from './api-origin';
-import { readDemoVisibility } from '@/lib/demo/visibility-world';
 
 function getApiBase(): string {
   return getApiOrigin();
@@ -475,33 +474,11 @@ export type OwnProfile = {
 export type PublicProfile = OwnProfile & { email?: string };
 
 export async function getMeProfile(): Promise<{ profile: OwnProfile | null; hasCompletedOnboarding: boolean }> {
-  if (isPreviewDemoSession()) {
-    return {
-      hasCompletedOnboarding: true,
-      profile: {
-        id: 'preview-demo-profile',
-        userId: 'preview-demo-user',
-        displayName: 'Alex Demo',
-        headline: 'Founder exploring CoFounderBay',
-        bio: 'This is a preview profile with sample data so you can walk the product without a backend.',
-        location: 'Athens, Greece',
-        timezone: 'Europe/Athens',
-        languages: ['English', 'Greek'],
-        avatarUrl: null,
-        rolePayload: { stage: 'idea', lookingFor: ['cofounder', 'mentor'] },
-        // Settings' visibility switches, as the demo stored them.
-        visibilityRules: readDemoVisibility() as Record<string, string> | null,
-        role: 'founder',
-        email: 'demo@cofounderbay.com',
-        skills: [
-          { skillId: 'product', skillName: 'Product', slug: 'product', level: 'advanced' },
-          { skillId: 'growth', skillName: 'Growth', slug: 'growth', level: 'intermediate' },
-        ],
-        createdAt: '2026-01-01T00:00:00.000Z',
-        updatedAt: '2026-01-01T00:00:00.000Z',
-      },
-    };
-  }
+  // The demo answers through `apiRequest` like every other read: the profile
+  // comes from the demo world (preview-api ME_PROFILE), the one copy its
+  // edits change and whose Experience and Education the profile shows. A
+  // second, hand-written copy here hid both from one's own profile. The demo's
+  // visibility switches (Settings → Privacy) are read there too.
   return apiRequest('/api/me/profile');
 }
 

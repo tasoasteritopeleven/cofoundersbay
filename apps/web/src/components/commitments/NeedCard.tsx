@@ -116,7 +116,9 @@ export function NeedCard({
         )}
       </dl>
 
-      <section aria-label={`${CMT.offer.en} · ${CMT.offer.el}`} className="space-y-1 rounded-xl border border-primary/15 bg-primary/[0.03] p-3">
+      {/* The offer reads by its label, on the card's axis: a box around it
+          inset the text 13px off the title and added a second frame. */}
+      <section aria-label={`${CMT.offer.en} · ${CMT.offer.el}`} className="space-y-1">
         <p className="text-xs font-medium text-muted-foreground">
           <BilingualText en={CMT.offer.en} el={CMT.offer.el} compact />
         </p>

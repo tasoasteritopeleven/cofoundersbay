@@ -13,7 +13,7 @@ export const HELP_TOPIC_EL: Record<string, { title: string; description: string 
   communities: { title: 'Κοινότητες & ομάδες', description: 'Συμμετοχή και δράση σε ομάδες.' },
   milestones: { title: 'Ορόσημα & πρόοδος', description: 'Παρακολούθηση της πορείας της startup σας.' },
   'privacy-security': { title: 'Απόρρητο & ασφάλεια', description: 'Η ασφάλεια του λογαριασμού σας.' },
-  billing: { title: 'Χρεώσεις & συνδρομές', description: 'Διαχείριση της συνδρομής σας.' },
+  billing: { title: 'Χρεώσεις & συνδρομές', description: 'Πληρωμή, αναβάθμιση, ακύρωση και επιστροφές.' },
 };
 
 export const HELP_FAQ_EL: Record<string, { q: string; a: string }> = {

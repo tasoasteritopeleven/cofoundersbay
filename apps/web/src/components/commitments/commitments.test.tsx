@@ -193,3 +193,27 @@ describe('the assistant’s commitment capabilities', () => {
     expect(api('/api/commitments/cards?mine=1').cards.length).toBe(cardsBefore);
   });
 });
+
+describe('the aspiring-founder demo', () => {
+  it('has no card of its own, keeps other people’s, and keeps what it posts', async () => {
+    const { resolvePreviewApi } = await import('@/lib/preview-api');
+    const { resetDemoCommitments } = await import('@/lib/demo/commitments-world');
+    const cards = (q: string) => (resolvePreviewApi(`/api/commitments/cards${q}`) as { cards: Array<{ id: string; isMine: boolean }> }).cards;
+    const threadsAs = () => (resolvePreviewApi('/api/commitments/threads?as=all') as { threads: Array<{ role: string }> }).threads;
+    resetDemoCommitments();
+    const founderOwn = cards('?mine=1').length;
+    expect(founderOwn).toBeGreaterThan(0);
+    expect(threadsAs().some((t) => t.role === 'owner')).toBe(true);
+    document.cookie = 'cfb_primary_role=aspiring_founder; path=/';
+    try {
+      expect(cards('?mine=1')).toEqual([]);
+      expect(cards('').length).toBeGreaterThan(0);
+      expect(threadsAs().length).toBeGreaterThan(0);
+      expect(threadsAs().every((t) => t.role !== 'owner')).toBe(true);
+    } finally {
+      document.cookie = 'cfb_primary_role=existing_founder; path=/';
+    }
+    // The founder's own world is untouched by the switch.
+    expect(cards('?mine=1')).toHaveLength(founderOwn);
+  });
+});

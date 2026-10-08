@@ -18,6 +18,7 @@ import {
   isCommitmentKind,
   LADDER_TERMS_METHODS,
   NEED_CARD_LIMITS,
+  placeVariants,
   termsChanges,
   validateTerms,
   VERIFICATION_REQUIRED_COPY,
@@ -403,7 +404,9 @@ export class CommitmentsService {
     if (filters.stage) where.stage = filters.stage;
     if (filters.commitment) where.commitment = filters.commitment;
     if (filters.category) where.category = { equals: filters.category, mode: 'insensitive' };
-    if (filters.place) where.place = { contains: filters.place, mode: 'insensitive' };
+    // Every spelling of a known place (Αθήνα, Athens), as the saved-search alert reads it.
+    const and: Record<string, unknown>[] = [];
+    if (filters.place) and.push({ OR: placeVariants(filters.place).map((v) => ({ place: { contains: v, mode: 'insensitive' } })) });
     if (filters.outcome && (COMMITMENT_OUTCOMES as readonly string[]).includes(filters.outcome)) where.status = filters.outcome;
     if (filters.projectRefs?.length) where.projectRef = { in: filters.projectRefs.slice(0, 50) };
     if (filters.q) {
@@ -411,6 +414,7 @@ export class CommitmentsService {
         [field]: { contains: filters.q, mode: 'insensitive' },
       }));
     }
+    if (and.length) where.AND = and;
     const limit = Math.min(Math.max(filters.limit ?? 30, 1), 100);
     const rows = await this.prisma.commitmentCard.findMany({
       where,

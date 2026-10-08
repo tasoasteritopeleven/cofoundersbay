@@ -80,9 +80,9 @@ export function SkillEvidencePanel({ userId, editable = false }: { userId: strin
         {!list.length ? (
           <p className="text-sm text-muted-foreground"><BilingualText en="Add skills to your profile to link evidence to them." el="Προσθέστε δεξιότητες στο προφίλ σας για να συνδέσετε τεκμήρια." wrap /></p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="divide-y divide-border">
             {list.map((s) => (
-              <li key={s.name} className="space-y-1.5 rounded-lg border border-border p-3">
+              <li key={s.name} className="space-y-1.5 py-3 first:pt-0 last:pb-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <span className="text-sm font-medium text-foreground">{s.name}</span>
                   <span className="text-xs text-muted-foreground">{summary(s)}</span>

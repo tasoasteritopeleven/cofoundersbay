@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LegalText } from '@/components/common/LegalText';
 import { BilingualText } from '@/components/common/BilingualText';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 const LAST_UPDATED = 'March 20, 2026';
 const LAST_UPDATED_EL = '20 Μαρτίου 2026';
@@ -194,7 +195,7 @@ export default function TermsPage() {
       </section>
 
       {/* Content */}
-      <main className="mx-auto max-w-4xl px-4 py-12">
+      <MainLandmark className="mx-auto max-w-4xl px-4 py-12">
         <div className="space-y-12">
           {sections.map((section) => (
             <Card key={section.id} id={section.id} className="scroll-mt-20 border-border">
@@ -225,7 +226,7 @@ export default function TermsPage() {
             </Button>
           </div>
         </div>
-      </main>
+      </MainLandmark>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card">

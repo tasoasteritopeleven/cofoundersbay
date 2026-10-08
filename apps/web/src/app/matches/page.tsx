@@ -449,7 +449,7 @@ function MatchPreviewPanel({
           </div>
 
           {/* Score */}
-          <div className="flex items-center justify-center gap-3 rounded-xl bg-secondary/30 p-3">
+          <div className="flex items-center justify-center gap-3">
             <div className="text-center">
               <p className={cn('text-2xl font-bold tabular-nums', colors.icon)}>{score}%</p>
               <p className={cn('text-2xs font-bold tracking-wider uppercase mt-0.5', colors.icon)}>

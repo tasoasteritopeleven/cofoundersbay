@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 /**
  * Four different people from the demo world, so the specimen shows how the
@@ -39,8 +40,9 @@ const SPECIMEN = [
 export default function AllianceThemePage() {
   const [activeTab, setActiveTab] = useState('discover');
 
+  // A preview of a third-party theme, drawn as that theme draws it: its icons stay.
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <MainLandmark data-keep-icon="" className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="alliance-hero relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
@@ -255,6 +257,6 @@ export default function AllianceThemePage() {
           </div>
         </div>
       </div>
-    </div>
+    </MainLandmark>
   );
 }

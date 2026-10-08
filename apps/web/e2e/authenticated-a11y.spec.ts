@@ -112,10 +112,18 @@ test.describe('authenticated routes', () => {
    * the server and during hydration and upgrades to the site's own relative
    * wording after mount. Hydration errors are ordinary uncaught errors again.
    */
-  for (const route of ROUTES) {
-    test(`${route.name} renders and has no WCAG A/AA violations`, async ({ page }) => {
+  /*
+   * Each route in both states a reader meets. signIn turns sample data on,
+   * and with it on the client answers from the demo world, not the stub, so
+   * until 2026-10-08 no route here was scanned as a real account reads it
+   * (the stub's empty lists and unfinished checklist); that state hid a
+   * 2.49:1 checklist row. `stub` turns sample data off for the same route.
+   */
+  for (const route of ROUTES) for (const state of ['sample data', 'stub'] as const) {
+    test(`${route.name} (${state}) renders and has no WCAG A/AA violations`, async ({ page }) => {
       const pageErrors: string[] = [];
       page.on('pageerror', (e) => pageErrors.push(e.message));
+      if (state === 'stub') await page.addInitScript(() => localStorage.setItem('cfb_demo_data', '0'));
 
       await page.goto(route.path, { waitUntil: 'domcontentloaded' });
       // Wait for the shell, then for the DOM to go quiet. `networkidle` is not
@@ -177,6 +185,45 @@ test.describe('authenticated routes', () => {
         .filter((id) => id && !id.startsWith('radix-') && !document.getElementById(id)),
     );
     expect(dangling).toEqual([]);
+  });
+
+  /*
+   * The founder's first screen against the stub, which answers with no need
+   * card and an unfinished checklist: one move up front, the rest folded and
+   * one press away, the choice remembered across a reload - and the unfolded
+   * dashboard scanned as well, so the fold does not shrink the coverage above.
+   */
+  test('a new founder meets one move, and the rest of the dashboard is one remembered press away', async ({ page }) => {
+    await page.addInitScript(() => {
+      for (const who of ['u_1', 'preview', 'preview-demo-user']) localStorage.setItem(`cfb.tour.founder-dashboard.${who}`, 'done');
+      // Sample data off, so reads go to the stub: with it on, the client answers
+      // from the demo world, whose founder already has need cards.
+      localStorage.setItem('cfb_demo_data', '0');
+    });
+    await page.goto('/dashboard/founder', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('heading', { name: /Who does your startup need/ })).toBeVisible({ timeout: 15_000 });
+    const rest = page.locator('#founder-dashboard-rest');
+    const show = page.getByRole('button', { name: /^Show the rest of the dashboard/ });
+    await expect(show).toHaveAttribute('aria-expanded', 'false');
+    await expect(rest).toBeHidden();
+
+    await show.click();
+    await expect(page.getByRole('button', { name: /^Hide the rest of the dashboard/ })).toHaveAttribute('aria-expanded', 'true');
+    await expect(rest).toBeVisible();
+
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await expect(rest).toBeVisible({ timeout: 15_000 });
+    await expect
+      .poll(async () => {
+        await waitForStableDom(page, 400, 5_000);
+        const results = await new AxeBuilder({ page })
+          .exclude(LOGOTYPE)
+          .withTags(TAGS)
+          .disableRules(['aria-valid-attr-value'])
+          .analyze();
+        return results.violations.map((v) => `${v.id} (${v.impact}) x${v.nodes.length}: ${v.help}`);
+      }, { message: 'axe violations on the unfolded founder dashboard', timeout: 45_000, intervals: [0, 1500, 3000] })
+      .toEqual([]);
   });
 
   test('the app shell is mounted exactly once', async ({ page }) => {

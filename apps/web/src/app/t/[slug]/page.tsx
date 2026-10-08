@@ -27,6 +27,7 @@ import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { StatusText } from '@/components/common/StatusText';
 import { bilingualAria } from '@/lib/i18n/format';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 function hexToHsl(hex: string): string | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -81,6 +82,7 @@ function TenantLanding({ tenant, sso, slug }: { tenant: TenantItem; sso: SSODisc
 
   return (
     <div className="min-h-screen bg-background" style={cssVars}>
+      <MainLandmark>
       {/* Hero */}
       <section
         className="relative overflow-hidden text-white"
@@ -211,6 +213,7 @@ function TenantLanding({ tenant, sso, slug }: { tenant: TenantItem; sso: SSODisc
           </CardContent>
         </Card>
       </section>
+      </MainLandmark>
 
       {/* Footer */}
       <footer className="border-t border-border bg-card">

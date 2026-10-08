@@ -195,7 +195,7 @@ function IntroRequestCard({
             )}
 
             {connection.message && (
-              <div className="flex gap-2 rounded-xl bg-secondary/50 px-3 py-2.5">
+              <div className="flex gap-2">
                 <Quote className="icon-sm shrink-0 mt-0.5 text-primary/60" />
                 <p className="text-sm text-foreground/80 italic">{connection.message}</p>
               </div>

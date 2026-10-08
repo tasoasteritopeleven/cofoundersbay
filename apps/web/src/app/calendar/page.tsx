@@ -623,7 +623,7 @@ export default function CalendarPage() {
                       {selectedDayEvents.map((e) => <EventChip key={e.id} event={e} />)}
                     </div>
                   ) : (
-                    <div className="py-8 text-center">
+                    <div className="py-2">
                       <CalendarIcon className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
                       <p className="text-sm text-muted-foreground"><BilingualText en="No events on this day" el="Καμία εκδήλωση αυτή την ημέρα" /></p>
                       <Button asChild variant="outline" size="sm" className="mt-3 gap-1">
@@ -668,7 +668,7 @@ export default function CalendarPage() {
               filteredEvents.map((e) => <EventChip key={e.id} event={e} />)
             ) : (
               <Card>
-                <CardContent className="py-12 text-center">
+                <CardContent>
                   <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground/30 mb-3" />
                   <p className="text-sm text-muted-foreground"><BilingualText en="No events match your filters" el="Καμία εκδήλωση δεν ταιριάζει με τα φίλτρα" /></p>
                 </CardContent>

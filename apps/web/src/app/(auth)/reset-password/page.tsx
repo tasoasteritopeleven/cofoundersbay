@@ -11,6 +11,7 @@ import { Logo } from '@/components/brand/Logo';
 import { resetPassword } from '@/lib/api';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -72,7 +73,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4">
+    <MainLandmark className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         <div className="space-y-2">
           <Link href="/" className="inline-block mb-6 hover:opacity-80 transition-opacity">
@@ -201,6 +202,6 @@ export default function ResetPasswordPage() {
           </Link>
         </div>
       </div>
-    </main>
+    </MainLandmark>
   );
 }

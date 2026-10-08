@@ -159,16 +159,15 @@ export function OnboardingChecklist({ steps, userName, autoCollapse = true }: On
         />
       </CardHeader>
 
-      <CardContent id={listId} hidden={!expanded} className="space-y-2 pb-4 pt-0">
+      {/* Steps are rows on the card's own left axis, parted by hairlines
+          (.card-rows); a finished step reads quieter through its struck,
+          muted label, not through opacity (60% over muted text measured
+          2.49:1) or a tint. */}
+      <CardContent id={listId} hidden={!expanded} className="card-rows pb-4 pt-0">
         {steps.map((step) => (
           <div
             key={step.id}
-            className={cn(
-              'grid grid-cols-1 items-start gap-x-3 gap-y-2 rounded-lg px-3 py-2.5 transition-colors sm:grid-cols-[minmax(0,1fr)_auto]',
-              step.done
-                ? 'opacity-60'
-                : 'bg-foreground/[0.025] hover:bg-foreground/[0.04]',
-            )}
+            className="grid grid-cols-1 items-start gap-x-3 gap-y-2 sm:grid-cols-[minmax(0,1fr)_auto]"
           >
             <div className="min-w-0">
               <p className={cn('text-xs font-medium', step.done ? 'text-muted-foreground line-through' : 'text-foreground')}>

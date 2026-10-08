@@ -85,7 +85,7 @@ export function ProfileHero({
               </div>
               {headline ? <div className="text-base text-muted-foreground">{headline}</div> : null}
               {facts.length ? (
-                <ul className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5 text-sm text-muted-foreground">
+                <ul className="facts-dotted flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-sm text-muted-foreground">
                   {facts.map((fact, i) => (
                     <li key={i} className="flex min-w-0 items-center gap-1.5">{fact}</li>
                   ))}

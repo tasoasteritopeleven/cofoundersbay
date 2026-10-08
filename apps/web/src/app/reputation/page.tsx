@@ -335,20 +335,20 @@ export default function ReputationPage() {
                         )}
                       </p>
                       <div className="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
-                        <div className="flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-1.5">
+                        <div className="flex items-center gap-2">
                           <Trophy className="icon-sm text-status-warning" aria-hidden />
                           <span className="text-sm font-medium tabular-nums">
                             {badgeList.length} {t(badgeList.length === 1 ? 'badge_earned_one' : 'badges_earned')}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-1.5">
+                        <div className="flex items-center gap-2">
                           <Flame className={cn('icon-sm', (streakData?.currentStreak ?? 0) > 0 ? 'text-status-warning' : 'text-muted-foreground')} aria-hidden />
                           <span className="text-sm font-medium tabular-nums">
                             {streakData?.currentStreak ?? 0} {t((streakData?.currentStreak ?? 0) === 1 ? 'streak_day_one' : 'streak_days')}
                           </span>
                         </div>
                         {recentTotal > 0 && (
-                          <div className="flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-1.5">
+                          <div className="flex items-center gap-2">
                             <TrendingUp className="icon-sm text-status-success" aria-hidden />
                             <span className="text-sm font-medium tabular-nums">+{recentTotal} XP</span>
                           </div>
@@ -417,13 +417,13 @@ export default function ReputationPage() {
                         <p className="text-sm text-muted-foreground"><BilingualText en={reputationEn('streak_none')} el={reputationEl('streak_none')} compact /></p>
                       ) : (
                         <dl className="grid grid-cols-2 gap-4">
-                          <div className="rounded-xl border border-border p-3">
+                          <div className="min-w-0">
                             <dt className="text-xs text-muted-foreground">{t('current')}</dt>
                             <dd className="page-stat mt-1 text-2xl font-semibold tabular-nums">
                               {streakData.currentStreak} <span className="text-sm font-normal text-muted-foreground">{t(streakData.currentStreak === 1 ? 'day_one' : 'days')}</span>
                             </dd>
                           </div>
-                          <div className="rounded-xl border border-border p-3">
+                          <div className="min-w-0">
                             <dt className="text-xs text-muted-foreground">{t('longest')}</dt>
                             <dd className="page-stat mt-1 text-2xl font-semibold tabular-nums">
                               {streakData.longestStreak} <span className="text-sm font-normal text-muted-foreground">{t(streakData.longestStreak === 1 ? 'day_one' : 'days')}</span>
@@ -497,7 +497,8 @@ export default function ReputationPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Columns 24px apart: each tip's hover surface reaches 12px past its text. */}
+            <div className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
               {(
                 [
                   { icon: Hammer, tone: 'text-status-info bg-status-info-bg', title: 'tip_build_title', desc: 'tip_build_desc', href: '/builder' },
@@ -507,7 +508,7 @@ export default function ReputationPage() {
               ).map((tip) => {
                 const TipIcon = tip.icon;
                 return (
-                  <Link key={tip.title} href={tip.href} className="flex gap-3 rounded-xl border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/40">
+                  <Link key={tip.title} href={tip.href} className="axis-row flex gap-3 rounded-md py-2.5 transition-colors hover:bg-accent">
                     <span className={cn('h-fit rounded-lg p-2', tip.tone)}><TipIcon className="icon-sm" aria-hidden /></span>
                     <span className="min-w-0">
                       <span className="block text-sm font-medium"><BilingualText en={reputationEn(tip.title)} el={reputationEl(tip.title)} /></span>

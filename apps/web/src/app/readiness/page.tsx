@@ -580,7 +580,7 @@ function DimensionCard({
                 thing still open, which is more useful than silence and fills
                 the space honestly. */}
             {status === 'excellent' && (
-              <div className="mt-auto space-y-2.5 rounded-xl bg-secondary/40 p-3">
+              <div className="mt-auto space-y-2.5 border-t border-border pt-3">
                 <p className="mb-1.5 flex items-center gap-2 text-xs font-semibold">
                   <CheckCircle2 className={cn('icon-sm shrink-0', STATUS.success.icon)} />
                   <BilingualText
@@ -613,7 +613,7 @@ function DimensionCard({
             )}
 
             {dim.recommendations.length > 0 && status !== 'excellent' && (
-              <div className="mt-auto space-y-2.5 rounded-xl bg-secondary/40 p-3">
+              <div className="mt-auto space-y-2.5 border-t border-border pt-3">
                 <p className="mb-1.5 flex items-center gap-2 text-xs font-semibold">
                   <CfbGlyph name="spark" className={cn('icon-sm shrink-0', STATUS.warning.icon)} />
                   <BilingualText en={readinessEn('recommendation')} el={readinessEl('recommendation')} compact />

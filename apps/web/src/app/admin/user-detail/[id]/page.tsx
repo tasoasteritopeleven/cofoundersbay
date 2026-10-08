@@ -243,7 +243,7 @@ export default function AdminUserDetailPage() {
 
       {!usersLoading && !user && (
         <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
+          <CardContent className="flex flex-col items-start gap-3">
             <UserX className="icon-xl text-muted-foreground/60" aria-hidden="true" />
             <p className="font-medium">
               <BilingualText
@@ -264,7 +264,7 @@ export default function AdminUserDetailPage() {
       {user && status && (
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
           <Card>
-            <CardContent className="flex flex-col items-center gap-3 text-center">
+            <CardContent className="flex flex-col items-start gap-3">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={user.profile?.avatarUrl ?? undefined} alt={name} />
                 <AvatarFallback className="text-lg">{initialsOf(name)}</AvatarFallback>

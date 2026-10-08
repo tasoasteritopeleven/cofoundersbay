@@ -661,7 +661,7 @@ export default function TenantDomainsPage() {
                 <XCircle className="icon-sm" />{(addCustom.error as Error).message}
               </p>
             )}
-            <div className="rounded-lg bg-muted/40 border border-border p-3 space-y-1 text-xs text-muted-foreground">
+            <div className="space-y-1 text-xs text-muted-foreground">
               <p className="font-medium text-foreground">How it works:</p>
               <ol className="list-decimal list-inside space-y-0.5 ml-0.5">
                 <li><BilingualText en="Add your domain below — we generate DNS records for you" el="Προσθέστε τον τομέα σας παρακάτω — δημιουργούμε τις εγγραφές DNS για εσάς" wrap /></li>

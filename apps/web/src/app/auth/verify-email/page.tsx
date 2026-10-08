@@ -13,6 +13,7 @@ import { errorMessage as readErrorMessage } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { verifyEmail, resendVerification } from '@/lib/api';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 type VerificationStatus = 'loading' | 'success' | 'error' | 'no-token';
 
@@ -64,7 +65,7 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
+    <MainLandmark className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
@@ -247,6 +248,6 @@ export default function VerifyEmailPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </MainLandmark>
   );
 }

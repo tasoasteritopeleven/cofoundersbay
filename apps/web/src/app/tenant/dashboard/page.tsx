@@ -162,12 +162,12 @@ export default function TenantDashboardPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Running and upcoming programs, with how full each is. */}
-          <SectionCard className="lg:col-span-2" title="Programs" titleEl="Προγράμματα" action={{ href: '/tenant/programs', label: 'Manage', labelEl: 'Διαχείριση' }} contentClassName="space-y-3">
+          <SectionCard className="lg:col-span-2" title="Programs" titleEl="Προγράμματα" action={{ href: '/tenant/programs', label: 'Manage', labelEl: 'Διαχείριση' }} contentClassName="card-rows">
             {programsLoading && [0, 1].map((i) => <Skeleton key={i} className="h-16" />)}
             {runningOrNext.map((program) => {
               const fill = program.capacity ? Math.min(100, Math.round((program.participantCount / program.capacity) * 100)) : 0;
               return (
-                <Link key={program.id} href={`/programs/${program.id}`} className="block rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/30 focus-ring">
+                <Link key={program.id} href={`/programs/${program.id}`} className="axis-row block rounded-md transition-colors hover:bg-accent focus-ring">
                   <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                     <span className="flex items-center gap-2">
                       <span className="font-medium">{program.title}</span>
@@ -224,7 +224,7 @@ export default function TenantDashboardPage() {
         <SectionCard title="Upcoming events" titleEl="Επόμενες εκδηλώσεις" action={{ href: '/events/create', label: 'Add event', labelEl: 'Νέα εκδήλωση' }}>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {upcomingEvents.map((event) => (
-              <div key={event.id} className="rounded-lg border border-border p-3">
+              <div key={event.id} className="min-w-0">
                 <p className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Calendar className="icon-sm" aria-hidden="true" />
                   {event.date} · {event.type}

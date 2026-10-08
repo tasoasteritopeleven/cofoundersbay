@@ -47,6 +47,17 @@ import { NextActionBanner, deriveNextAction } from '@/components/gamification/Ne
 import { VentureReadinessCard } from '@/components/gamification/VentureReadinessCard';
 import { CommitmentOutcomes } from '@/components/commitments/CommitmentOutcomes';
 import { WhatsNewPanel } from '@/components/dashboard/WhatsNewPanel';
+import {
+  FIRST_MOVE_LATER_KEY,
+  FULL_DASHBOARD_KEY,
+  FounderFirstMove,
+  RestOfDashboardToggle,
+  firstMoveLayout,
+  useFirstMoveState,
+  useStoredFlag,
+} from '@/components/dashboard/FounderFirstMove';
+import { listCommitmentThreads } from '@/lib/commitments-api';
+import { nextAction as ladderNextAction, waitsOnMe } from '@/lib/commitments-next';
 import { MetricTile } from '@/components/dashboard/MetricTile';
 import { FirstRunTour, type TourStep } from '@/components/common/FirstRunTour';
 import { BehavioralNudge } from '@/components/behavioral/BehavioralNudge';
@@ -423,6 +434,23 @@ export default function FounderDashboardContent() {
     enabled: hasSession && mounted,
   });
 
+  /*
+   * Need cards and their threads, on the keys CommitmentOutcomes reads. A
+   * founder who has never posted one meets the first move instead of the
+   * whole dashboard; one who has, and is waited on, gets that step as the
+   * first attention chip.
+   */
+  const firstMove = useFirstMoveState(hasSession && mounted);
+  const [firstMoveLater, setFirstMoveLater] = useStoredFlag(FIRST_MOVE_LATER_KEY);
+  const [fullDashboard, setFullDashboard] = useStoredFlag(FULL_DASHBOARD_KEY);
+  const { data: ladderThreads } = useQuery({
+    queryKey: qk('commitments', 'threads', 'all'),
+    queryFn: () => listCommitmentThreads('all'),
+    enabled: hasSession && mounted,
+    staleTime: 30_000,
+    retry: 0,
+  });
+
   const { data: vrs } = useQuery({
     queryKey: qk('readiness', 'venture'),
     queryFn: getVentureReadiness,
@@ -556,6 +584,19 @@ export default function FounderDashboardContent() {
             el: `${openMilestones.length} ανοιχτά`,
           };
   const attentionItems: AttentionItem[] = [];
+  // A person is waiting on the founder's answer on the ladder: that comes first.
+  const waitingThreads = (ladderThreads ?? []).filter(waitsOnMe);
+  const firstWaiting = waitingThreads[0];
+  const firstWaitingStep = firstWaiting ? ladderNextAction(firstWaiting) : null;
+  if (firstWaiting && firstWaitingStep) {
+    const more = waitingThreads.length - 1;
+    attentionItems.push({
+      href: `/commitments/${encodeURIComponent(firstWaiting.cardId)}?thread=${encodeURIComponent(firstWaiting.id)}`,
+      glyph: 'pact',
+      en: more > 0 ? `${firstWaitingStep.en} (+${more} more)` : firstWaitingStep.en,
+      el: more > 0 ? `${firstWaitingStep.el} (+${more} ακόμη)` : firstWaitingStep.el,
+    });
+  }
   // Unread messages have their own tile directly above these chips, linking to
   // the same inbox; a chip saying "1 unread message" under "Unread messages 1"
   // was the same fact twice. The chips carry what no tile says.
@@ -609,8 +650,10 @@ export default function FounderDashboardContent() {
       'Next milestone': nextOpenMilestone?.titleEn ?? 'none',
       'Round progress': `${fundingPct}%`,
       'Committed investors': fundStats.committed,
+      'Need cards posted': firstMove.count ?? 'unknown',
+      'Ladder steps waiting on you': waitingThreads.length,
     },
-    actions: ['navigate', 'shortlist_add', 'send_connection', 'start_or_send_message'],
+    actions: ['navigate', 'draft_need_card', 'shortlist_add', 'send_connection', 'start_or_send_message'],
   });
 
   const onboardingSteps = buildOnboardingSteps({
@@ -623,6 +666,15 @@ export default function FounderDashboardContent() {
 
   const checklistDismissed = useOnboardingChecklistDismissed();
   const checklistDone = onboardingSteps.every((s) => s.done);
+
+  // The first move, and the fold over the rest for a founder just starting.
+  const { showFirstMove, restFoldable, restFolded } = firstMoveLayout({
+    state: firstMove.state,
+    later: firstMoveLater,
+    checklistDone,
+    checklistDismissed,
+    full: fullDashboard,
+  });
 
   const nextAction = deriveNextAction({
     hasProfile:      !!(profile?.profile?.displayName && profile?.profile?.headline),
@@ -1158,7 +1210,9 @@ export default function FounderDashboardContent() {
         </>
       }
     >
-      <FirstRunTour tourId="founder-dashboard" steps={FOUNDER_TOUR} ready={mounted} />
+      {/* The tour points at the figures, checklist and readiness: it waits for
+          the card list to answer and never plays over a folded dashboard. */}
+      <FirstRunTour tourId="founder-dashboard" steps={FOUNDER_TOUR} ready={mounted && firstMove.settled && !restFolded} />
       <div className="min-w-0 space-y-6 overflow-x-clip">
 
         <p className="text-sm text-muted-foreground">
@@ -1171,104 +1225,129 @@ export default function FounderDashboardContent() {
           />
         </p>
 
-        {/* Getting-started checklist. */}
-        <OnboardingChecklist steps={onboardingSteps} />
-
-        {/* One "what to do next" prompt at a time.
-            The checklist already names the next incomplete step and links to it,
-            so a NextActionBanner above it was a second copy of the same advice.
-            Once the checklist is finished or dismissed the banner takes over, so
-            the guidance is never lost. `undefined` means localStorage has not
-            been read yet — render nothing rather than flash the banner. */}
-        {nextAction && (checklistDone || checklistDismissed === true) && (
-          <NextActionBanner action={nextAction} />
-        )}
-
-        {/* Stats */}
-        <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" data-tour="founder-stats">
-          <MetricTile
-            glyph="profile"
-            label={dashboardEn('profile_views')} labelEl={dashboardEl('profile_views')}
-            value={userMetrics?.profileViews ?? '—'}
-            trend={trendOf(userMetrics?.profileViewsChange)}
-            href="/analytics"
-          />
-          {/* No endpoint reports a week-over-week change for matches, so this
-              tile carried a literal 3 as its arrow. It shows the count alone. */}
-          <MetricTile
-            glyph="matches"
-            label={dashboardEn('top_matches')} labelEl={dashboardEl('top_matches')}
-            value={stats?.matchesThisWeek ?? '—'}
-            href="/matches"
-          />
-          <MetricTile
-            glyph="messages"
-            label={dashboardEn('unread_messages')} labelEl={dashboardEl('unread_messages')}
-            value={unreadMessages}
-            href="/messages"
-            caption={messageCaption.en}
-            captionEl={messageCaption.el}
-          />
-          <MetricTile
-            glyph="flag"
-            label={dashboardEn('milestones')} labelEl={dashboardEl('milestones')}
-            value={`${completedMilestoneCount}/${milestones.length}`}
-            href="/milestones"
-            caption={milestoneCaption.en}
-            captionEl={milestoneCaption.el}
-          />
-        </div>
-
-        <AttentionChips items={attentionItems} />
-
-        {/* Readiness — single home in the column.
-            Fundraising, matches, milestones and profile strength live in
-            the rail (`snapshot`) so this page stays a glance, not a stack. */}
-        {vrs && (
-          <div id="founder-progress" className="scroll-mt-24" data-tour="founder-readiness">
-            <VentureReadinessCard
-                data={vrs}
-                footer={
-                  <div className="space-y-2.5">
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                      <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
-                        <Link href="/readiness" className="w-full">
-                          <CfbGlyph name="chart" className="icon-sm" />
-                          <BilingualText en="Startup readiness" el="Ετοιμότητα startup" compact wrap />
-                        </Link>
-                      </Button>
-                      <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
-                        <Link href="/builder" className="w-full">
-                          <CfbGlyph name="builder" className="icon-sm" />
-                          <BilingualText en="Open Builder" el="Άνοιγμα Builder" compact wrap />
-                        </Link>
-                      </Button>
-                      <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
-                        <Link href="/expert-reviews" className="w-full">
-                          <CfbGlyph name="award" className="icon-sm" />
-                          <BilingualText en="Get Expert Review" el="Αξιολόγηση ειδικού" compact wrap />
-                        </Link>
-                      </Button>
-                    </div>
-                    <AskAiButton
-                      variant="ghost"
-                      className="w-full"
-                      prompt="What should I improve next on venture readiness, given the lowest dimension on this dashboard?"
-                      labelEn={dashboardEn('ask_ai_readiness')}
-                      labelEl={dashboardEl('ask_ai_readiness')}
-                    />
-                  </div>
-                }
+        {showFirstMove && (
+          <FounderFirstMove
+            onLater={() => setFirstMoveLater(true)}
+            assist={
+              <AskAiButton
+                prompt="Help me draft my first need card: ask me who my startup needs, then open the filled guide so I can review and publish it."
+                labelEn="Draft it with the assistant"
+                labelEl="Σύνταξη με τον βοηθό"
               />
-          </div>
+            }
+          />
         )}
 
-        {/* Beside readiness: whether the people the startup needs are coming -
-            each need card's outcome and the steps waiting on the founder. */}
-        <CommitmentOutcomes />
+        {restFoldable && (
+          <RestOfDashboardToggle
+            open={!restFolded}
+            onToggle={() => setFullDashboard(restFolded)}
+            controls="founder-dashboard-rest"
+            stepsDone={onboardingSteps.filter((s) => s.done).length}
+            stepsTotal={onboardingSteps.length}
+          />
+        )}
 
-        {/* What the October round added, each with the place to try it. */}
-        <WhatsNewPanel audience="founder" />
+        <div id="founder-dashboard-rest" hidden={restFolded} className="min-w-0 space-y-6">
+          {/* Getting-started checklist. */}
+          <OnboardingChecklist steps={onboardingSteps} />
+
+          {/* One "what to do next" prompt at a time.
+              The checklist already names the next incomplete step and links to it,
+              so a NextActionBanner above it was a second copy of the same advice.
+              Once the checklist is finished or dismissed the banner takes over, so
+              the guidance is never lost. `undefined` means localStorage has not
+              been read yet — render nothing rather than flash the banner. */}
+          {nextAction && (checklistDone || checklistDismissed === true) && (
+            <NextActionBanner action={nextAction} />
+          )}
+
+          {/* Stats */}
+          <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" data-tour="founder-stats">
+            <MetricTile
+              glyph="profile"
+              label={dashboardEn('profile_views')} labelEl={dashboardEl('profile_views')}
+              value={userMetrics?.profileViews ?? '—'}
+              trend={trendOf(userMetrics?.profileViewsChange)}
+              href="/analytics"
+            />
+            {/* No endpoint reports a week-over-week change for matches, so this
+                tile carried a literal 3 as its arrow. It shows the count alone. */}
+            <MetricTile
+              glyph="matches"
+              label={dashboardEn('top_matches')} labelEl={dashboardEl('top_matches')}
+              value={stats?.matchesThisWeek ?? '—'}
+              href="/matches"
+            />
+            <MetricTile
+              glyph="messages"
+              label={dashboardEn('unread_messages')} labelEl={dashboardEl('unread_messages')}
+              value={unreadMessages}
+              href="/messages"
+              caption={messageCaption.en}
+              captionEl={messageCaption.el}
+            />
+            <MetricTile
+              glyph="flag"
+              label={dashboardEn('milestones')} labelEl={dashboardEl('milestones')}
+              value={`${completedMilestoneCount}/${milestones.length}`}
+              href="/milestones"
+              caption={milestoneCaption.en}
+              captionEl={milestoneCaption.el}
+            />
+          </div>
+
+          <AttentionChips items={attentionItems} />
+
+          {/* Readiness — single home in the column.
+              Fundraising, matches, milestones and profile strength live in
+              the rail (`snapshot`) so this page stays a glance, not a stack. */}
+          {vrs && (
+            <div id="founder-progress" className="scroll-mt-24" data-tour="founder-readiness">
+              <VentureReadinessCard
+                  data={vrs}
+                  footer={
+                    <div className="space-y-2.5">
+                      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                        <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
+                          <Link href="/readiness" className="w-full">
+                            <CfbGlyph name="chart" className="icon-sm" />
+                            <BilingualText en="Startup readiness" el="Ετοιμότητα startup" compact wrap />
+                          </Link>
+                        </Button>
+                        <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
+                          <Link href="/builder" className="w-full">
+                            <CfbGlyph name="builder" className="icon-sm" />
+                            <BilingualText en="Open Builder" el="Άνοιγμα Builder" compact wrap />
+                          </Link>
+                        </Button>
+                        <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
+                          <Link href="/expert-reviews" className="w-full">
+                            <CfbGlyph name="award" className="icon-sm" />
+                            <BilingualText en="Get Expert Review" el="Αξιολόγηση ειδικού" compact wrap />
+                          </Link>
+                        </Button>
+                      </div>
+                      <AskAiButton
+                        variant="ghost"
+                        className="w-full"
+                        prompt="What should I improve next on venture readiness, given the lowest dimension on this dashboard?"
+                        labelEn={dashboardEn('ask_ai_readiness')}
+                        labelEl={dashboardEl('ask_ai_readiness')}
+                      />
+                    </div>
+                  }
+                />
+            </div>
+          )}
+
+          {/* Beside readiness: whether the people the startup needs are coming -
+              each need card's outcome and the steps waiting on the founder. */}
+          <CommitmentOutcomes />
+
+          {/* What the October round added, each with the place to try it. */}
+          <WhatsNewPanel audience="founder" />
+        </div>
       </div>
     </AppShell>
   );

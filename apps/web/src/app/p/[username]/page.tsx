@@ -325,7 +325,7 @@ export default function PublicProfilePage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8">
+                  <div>
                     <Star className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" aria-hidden="true" />
                     <p className="text-sm text-muted-foreground">
                       <BilingualText en="No endorsements yet" el="Δεν υπάρχουν συστάσεις ακόμα" compact />
@@ -458,8 +458,8 @@ export default function PublicProfilePage() {
             </Card>
 
             {/* CTA */}
-            <Card className="bg-primary/5 border-primary/20">
-              <CardContent className="pt-6 text-center">
+            <Card>
+              <CardContent className="pt-6">
                 <h3 className="font-semibold text-foreground mb-2">
                   <BilingualText en={`Want to connect with ${firstName}?`} el={`Θέλετε να συνδεθείτε με ${firstName};`} wrap />
                 </h3>

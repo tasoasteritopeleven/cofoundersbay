@@ -3222,6 +3222,23 @@ a[class~="inline-flex"].bg-destructive {
   display: none;
 }
 
+/* The same reach outside cards (2026-10-09): every decorative glyph in the
+   page body goes, so a badge, a meta line ("12 Nov", "Athens"), a section
+   heading or an empty state reads by its words alone. What stays: any icon
+   inside a control (at any depth, so an icon-only button never goes blank),
+   state glyphs (check, empty circle, lock, spinner, x), data (rating stars,
+   trend arrows), warnings and notes (alert, info), an icon placed inside a
+   field (`absolute`: the search magnifier), the rail, and [data-keep-icon]. */
+#main-content svg.lucide:not(.absolute):not(.lucide-check):not(.lucide-circle-check):not(.lucide-circle-check-big):not(.lucide-check-circle):not(.lucide-check-circle-2):not(.lucide-circle):not(.lucide-lock):not(.lucide-loader-2):not(.lucide-loader-circle):not(.lucide-x):not(.lucide-star):not(.lucide-star-half):not(.lucide-trending-up):not(.lucide-trending-down):not(.lucide-triangle-alert):not(.lucide-alert-triangle):not(.lucide-circle-alert):not(.lucide-alert-circle):not(.lucide-info):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-left):not(.lucide-chevron-up):not([data-keep-icon]):not([data-keep-icon] *):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="combobox"], [role="option"], [role="status"], [role="alert"], [role="img"], [data-slot="button"], [data-rail-surface]) *),
+#main-content svg.cfb-glyph:not(.absolute):not([data-keep-icon]):not([data-keep-icon] *):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="combobox"], [role="option"], [role="status"], [role="alert"], [role="img"], [data-slot="button"], [data-rail-surface]) *) {
+  display: none;
+}
+/* ...and the well each one sat in, as inside cards: a box whose only
+   children are glyphs that rule hides. */
+#main-content :is(div, span):not([data-keep-icon]):not([data-keep-icon] *):not([role="img"]):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="status"], [role="alert"], [data-slot="button"], [data-rail-surface]) *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.absolute, .lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-check-circle, .lucide-check-circle-2, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle, .lucide-x, .lucide-star, .lucide-star-half, .lucide-trending-up, .lucide-trending-down, .lucide-triangle-alert, .lucide-alert-triangle, .lucide-circle-alert, .lucide-alert-circle, .lucide-info, .lucide-chevron-down, .lucide-chevron-right, .lucide-chevron-left, .lucide-chevron-up))) {
+  display: none;
+}
+
 /* Labeled action buttons on every page (header Invite / New Document, asChild
    links, dialogs). Icon-only controls have only an svg child and are skipped. */
 button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
@@ -3579,4 +3596,51 @@ textarea[class~="border-input"]:focus,
   #main-content p.landing-lead {
     font-size: 20px;
   }
+}
+
+/* ── One left axis per card ───────────────────────────────────────────────
+   Text inside a card starts where the card's title starts. A row that needs
+   a hover surface (a link in a list) keeps its text on that axis and lets the
+   surface reach outward instead: equal negative margin and padding, in px at
+   every width, because the desktop root is 82% and a rem `-mx-3` beside the
+   px-restated `px-3` drifts 2px off the axis. Unlayered so a stray `px-*`
+   on the same element cannot undo it. `.clarity.mjs` measures the axis. */
+.axis-row {
+  margin-left: -12px;
+  margin-right: -12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* A list of rows inside a card: a hairline between rows, vertical padding
+   only, every row's text on the card's axis. It replaces a box per row (a
+   border, a fill and 12px of padding each), which framed every item twice and
+   moved its text off the title. Margins from a `space-y-*` on the same
+   container are cancelled, so the hairline sits midway between two rows. */
+.card-rows > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: calc(12px * var(--chrome-y, 1));
+  padding-bottom: calc(12px * var(--chrome-y, 1));
+}
+.card-rows > * + * {
+  border-top: 1px solid hsl(var(--border));
+}
+.card-rows > :first-child { padding-top: 0; }
+.card-rows > :last-child { padding-bottom: 0; }
+/* A clickable row keeps a hover surface around its text, first and last included. */
+.card-rows > .axis-row,
+.card-rows > .axis-row:first-child,
+.card-rows > .axis-row:last-child {
+  padding-top: calc(10px * var(--chrome-y, 1));
+  padding-bottom: calc(10px * var(--chrome-y, 1));
+}
+
+/* Facts on one wrapping line (a profile's place, time zone, languages,
+   joined) read apart by a middle dot now that their decorative glyphs are
+   gone; the dot is drawn, not spoken. */
+.facts-dotted > li + li::before {
+  content: "·";
+  margin-right: 0.5rem;
+  color: hsl(var(--muted-foreground));
 }

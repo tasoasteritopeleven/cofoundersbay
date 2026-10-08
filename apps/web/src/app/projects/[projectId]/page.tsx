@@ -305,9 +305,9 @@ export default function ProjectDetailPage() {
                       {project.rolesNeeded.length} <BilingualText en={projectEn('positions')} el={projectEl('positions')} compact />
                     </Badge>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="card-rows">
                     {project.rolesNeeded.map((role) => (
-                      <div key={role.title} className="rounded-xl bg-secondary/30 p-3">
+                      <div key={role.title} className="min-w-0">
                         <div className="mb-2 flex items-start justify-between gap-3">
                           <div>
                             <h4 className="page-section font-semibold text-foreground">

@@ -46,7 +46,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RoleBadge } from '@/components/common/RoleBadge';
 import { SkillChip } from '@/components/common/SkillChip';
-import { StatusText } from '@/components/common/StatusText';
+import { statusEl } from '@/components/common/StatusText';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
 import { BilingualText } from '@/components/common/BilingualText';
@@ -323,14 +323,9 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
 
   return (
     <AppShell
-      title={profile.displayName}
-      // `??` guarded the headline but not the role, so a profile payload without
-      // one interpolated the word itself and the page header read "undefined on
-      // CoFounderBay". Passing undefined lets resolvePageHeader fall back to the
-      // registry's own description, the same way the title already does.
-      description={
-        profile.headline ?? (profile.role ? `${profile.role} on CoFounderBay` : undefined)
-      }
+      // The header keeps the registry's "Profile" title and line: the person's
+      // name and headline are the top card's own, read once, as on a
+      // professional profile. Passing them here printed both twice.
       rail={rail}
       actions={
         <Button variant="secondary" size="sm" className="gap-2" asChild>
@@ -472,7 +467,11 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
             <CardHeader className="pb-3 border-b border-border">
               <CardTitle className="text-lg font-semibold flex items-center gap-2">
                 <RoleIcon className="icon-sm text-muted-foreground" />
-                <StatusText value={profile.role} /> <BilingualText en="details" el="στοιχεία" compact />
+                <BilingualText
+                  en={`${(profile.role ?? '').replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase())} details`}
+                  el={`${(statusEl(profile.role) ?? profile.role ?? '').replace(/^./, (c) => c.toUpperCase())} — λεπτομέρειες`}
+                  compact
+                />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-5">

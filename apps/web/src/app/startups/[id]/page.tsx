@@ -286,9 +286,9 @@ export default function StartupDealPage() {
               {(deal.recentEvents?.length ?? 0) === 0 ? (
                 <p className="text-sm text-muted-foreground"><BilingualText en="Nothing recorded yet." el="Δεν έχει καταγραφεί τίποτα ακόμη." compact /></p>
               ) : (
-                <ol className="space-y-3">
+                <ol className="card-rows">
                   {deal.recentEvents.map((ev) => (
-                    <li key={ev.id} className="border-l-2 border-border pl-3">
+                    <li key={ev.id}>
                       <p className="text-sm font-medium">{ev.title}</p>
                       {ev.body && ev.body !== ev.title && <p className="whitespace-pre-line text-sm text-muted-foreground">{ev.body}</p>}
                       <p className="text-xs text-muted-foreground"><RelativeTime date={ev.createdAt} format={formatRelativeTime} /></p>

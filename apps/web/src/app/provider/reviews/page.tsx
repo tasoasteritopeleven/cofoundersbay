@@ -84,7 +84,7 @@ function ReviewCard({ review }: { review: Review }) {
             <p className="text-sm mt-2">{review.comment}</p>
 
             {review.response && (
-              <div className="mt-3 p-3 rounded-lg bg-muted/50 border-l-2 border-primary">
+              <div className="mt-3 border-t border-border pt-3">
                 <p className="text-xs font-medium text-muted-foreground mb-1"><BilingualText en="Your Response" el="Η απάντησή σας" compact /></p>
                 <p className="text-sm">{review.response}</p>
               </div>

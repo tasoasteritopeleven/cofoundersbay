@@ -155,9 +155,11 @@ export function PeopleYouMayKnow({ excludeIds, limit = 6 }: { excludeIds: Readon
         </div>
       </CardHeader>
       <CardContent>
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {/* People in columns 32px apart, each on its column's axis: a frame
+            per person drew a card inside the card. */}
+        <ul className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
           {suggested.map(({ hit, shared, wanted }) => (
-            <li key={hit.userId} className="flex min-w-0 flex-col gap-3 rounded-xl border border-border p-4">
+            <li key={hit.userId} className="flex min-w-0 flex-col gap-3">
               <div className="flex min-w-0 items-start gap-3">
                 <Avatar className="h-12 w-12 shrink-0">
                   <AvatarImage src={hit.avatarUrl ?? undefined} alt="" />

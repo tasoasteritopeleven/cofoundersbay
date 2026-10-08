@@ -5,6 +5,7 @@ import { Check, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 type Step = {
   id: string;
@@ -270,7 +271,7 @@ export function OnboardingLayout({
         </div>
 
         {/* Content */}
-        <main className="flex-1 flex items-start justify-center px-6 py-8">
+        <MainLandmark className="flex-1 flex items-start justify-center px-6 py-8">
           <Card className="w-full max-w-2xl">
             <CardContent className="pt-8 pb-6 px-8">
               <OnboardingStepHeader steps={steps} />
@@ -278,7 +279,7 @@ export function OnboardingLayout({
               <OnboardingNavigation onComplete={onComplete} />
             </CardContent>
           </Card>
-        </main>
+        </MainLandmark>
       </div>
     </OnboardingProvider>
   );

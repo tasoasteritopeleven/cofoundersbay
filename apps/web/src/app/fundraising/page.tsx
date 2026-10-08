@@ -321,7 +321,7 @@ function RoundCard({
             { glyph: 'calendar' as const, label: 'stat_closing' as const, value: !round.closingDate ? null : days === null ? formatShortDate(round.closingDate, primary) : days < 0 ? 'overdue' : `${days}` },
             { glyph: 'award' as const, label: 'lead_investor' as const, value: round.leadInvestor ?? '' },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl bg-background/60 p-3">
+            <div key={s.label} className="min-w-0">
               <div className="mb-1 flex items-center gap-1.5">
                 <CfbGlyph name={s.glyph} className="icon-sm shrink-0 text-muted-foreground" />
                 <p className="min-w-0 text-2xs leading-snug text-muted-foreground">

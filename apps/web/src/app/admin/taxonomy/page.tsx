@@ -418,7 +418,7 @@ export default function AdminTaxonomyPage() {
                   {/* Grouped by category */}
                   {!categoryFilter && !search && Object.entries(groupedByCategory).map(([cat, items]) => (
                     <div key={cat}>
-                      <div className="px-4 sm:px-6 py-1.5 bg-muted/40 border-b text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                      <div className="px-4 sm:px-6 py-1.5 border-b text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                         <span>{cat} ({items.length})</span>
                       </div>
                       {items.map((skill) => (
@@ -433,7 +433,7 @@ export default function AdminTaxonomyPage() {
                   {/* Uncategorized */}
                   {!categoryFilter && !search && uncategorized.length > 0 && (
                     <div>
-                      <div className="px-4 sm:px-6 py-1.5 bg-muted/40 border-b text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                      <div className="px-4 sm:px-6 py-1.5 border-b text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                         <span>Uncategorized ({uncategorized.length})</span>
                       </div>
                       {uncategorized.map((skill) => (

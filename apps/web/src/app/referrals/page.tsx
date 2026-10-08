@@ -292,7 +292,7 @@ function ReferralCard({ referral }: { referral: Referral }) {
     .toUpperCase() || referral.email[0].toUpperCase();
 
   return (
-    <div className="flex items-center gap-4 p-4 rounded-lg border bg-card">
+    <div className="flex items-center gap-4">
       <Avatar className="h-10 w-10">
         <AvatarImage src={referral.avatarUrl} />
         <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm">
@@ -516,7 +516,7 @@ export default function ReferralsPage() {
                 <p><BilingualText en={referralsEn('empty_list')} el={referralsEl('empty_list')} compact wrap /></p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="card-rows">
                 {filteredReferrals.map((referral) => (
                   <ReferralCard key={referral.id} referral={referral} />
                 ))}

@@ -229,7 +229,7 @@ const faqCategories: FAQCategory[] = [
     id: 'billing',
     title: 'Billing & Subscriptions',
     icon: CreditCard,
-    description: 'Managing your subscription.',
+    description: 'Payment, upgrades, cancelling and refunds.',
     faqs: [
       {
         question: 'What payment methods do you accept?',
@@ -372,13 +372,10 @@ export default function HelpPage() {
       <div className="space-y-6 pb-10">
 
         {/* Search Hero */}
-        <div className="rounded-xl border border-border bg-primary/[0.03] p-6 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-            <HelpCircle className="icon-lg text-muted-foreground" />
-          </div>
+        <div>
           <h2 className="text-xl font-semibold text-foreground mb-1"><BilingualText en="How can we help you?" el="Πώς μπορούμε να βοηθήσουμε;" compact wrap /></h2>
           <p className="text-sm text-muted-foreground mb-4"><BilingualText en="Search our knowledge base or browse topics below" el="Αναζητήστε στη βάση γνώσεων ή δείτε τα θέματα παρακάτω" wrap /></p>
-          <div className="mx-auto max-w-lg relative">
+          <div className="max-w-lg relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 icon-sm text-muted-foreground" />
             <Input
               type="text"
@@ -467,8 +464,8 @@ export default function HelpPage() {
 
         {/* FAQ Content */}
         {displayCategories.length === 0 ? (
-          <Card className="shadow-sm border-border">
-            <CardContent className="py-16 text-center">
+          <Card>
+            <CardContent>
               <HelpCircle className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" aria-hidden="true" />
               <h2 className="text-lg font-semibold text-foreground mb-2"><BilingualText en="No results found" el="Δεν βρέθηκαν αποτελέσματα" compact /></h2>
               <p className="text-sm text-muted-foreground mb-4"><BilingualText en="Try a different search term or browse all topics" el="Δοκιμάστε άλλον όρο ή δείτε όλα τα θέματα" wrap /></p>
@@ -511,16 +508,16 @@ export default function HelpPage() {
         )}
 
         {/* Contact Support */}
-        <Card className="shadow-sm border-primary/15 bg-primary/[0.03]">
-          <CardContent className="text-center">
+        <Card>
+          <CardContent>
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
               <Mail className="icon-lg text-muted-foreground" />
             </div>
             <h2 className="text-lg font-semibold text-foreground mb-1"><BilingualText en="Still need help?" el="Χρειάζεστε ακόμα βοήθεια;" compact /></h2>
-            <p className="text-sm text-muted-foreground mb-5 max-w-md mx-auto">
+            <p className="text-sm text-muted-foreground mb-5 max-w-prose">
               <BilingualText en="Can&apos;t find what you&apos;re looking for? Our support team typically responds within 24 hours." el="Δεν βρίσκετε αυτό που ψάχνετε; Η ομάδα υποστήριξης απαντά συνήθως μέσα σε 24 ώρες." wrap />
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap gap-3">
               <Button asChild className="gap-2">
                 <a href="mailto:support@cofounderbay.com">
                   <Mail className="icon-sm" aria-hidden="true" />
@@ -542,8 +539,8 @@ export default function HelpPage() {
         {/* Quick Links */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Link href="/terms" className="group">
-            <Card className="h-full shadow-sm border-border hover:border-primary/40 transition-all">
-              <CardContent className="pt-5 pb-5 text-center">
+            <Card className="h-full transition-colors hover:border-primary/40">
+              <CardContent className="pt-5 pb-5">
                 <BookOpen className="mx-auto h-7 w-7 text-muted-foreground group-hover:text-primary-accessible transition-colors mb-2" />
                 <h3 className="text-sm font-medium text-foreground mb-0.5"><BilingualText en="Terms of Service" el="Όροι χρήσης" compact /></h3>
                 <p className="text-xs text-muted-foreground"><BilingualText en="Read our terms and conditions" el="Διαβάστε τους όρους χρήσης" compact /></p>
@@ -551,8 +548,8 @@ export default function HelpPage() {
             </Card>
           </Link>
           <Link href="/privacy" className="group">
-            <Card className="h-full shadow-sm border-border hover:border-primary/40 transition-all">
-              <CardContent className="pt-5 pb-5 text-center">
+            <Card className="h-full transition-colors hover:border-primary/40">
+              <CardContent className="pt-5 pb-5">
                 <Shield className="mx-auto h-7 w-7 text-muted-foreground group-hover:text-primary-accessible transition-colors mb-2" />
                 <h3 className="text-sm font-medium text-foreground mb-0.5"><BilingualText en="Privacy Policy" el="Πολιτική απορρήτου" compact /></h3>
                 <p className="text-xs text-muted-foreground"><BilingualText en="Learn how we protect your data" el="Μάθετε πώς προστατεύουμε τα δεδομένα σας" compact /></p>
@@ -560,8 +557,8 @@ export default function HelpPage() {
             </Card>
           </Link>
           <Link href="/settings" className="group">
-            <Card className="h-full shadow-sm border-border hover:border-primary/40 transition-all">
-              <CardContent className="pt-5 pb-5 text-center">
+            <Card className="h-full transition-colors hover:border-primary/40">
+              <CardContent className="pt-5 pb-5">
                 <Settings className="mx-auto h-7 w-7 text-muted-foreground group-hover:text-primary-accessible transition-colors mb-2" />
                 <h3 className="text-sm font-medium text-foreground mb-0.5"><BilingualText en="Account Settings" el="Ρυθμίσεις λογαριασμού" compact /></h3>
                 <p className="text-xs text-muted-foreground"><BilingualText en="Manage your preferences" el="Διαχειριστείτε τις προτιμήσεις σας" compact /></p>

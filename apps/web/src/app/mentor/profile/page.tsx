@@ -222,7 +222,7 @@ export default function MentorProfilePage() {
                     </Select>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center justify-between border-t border-border pt-4">
                   <div>
                     <p className="text-sm font-medium"><BilingualText en="Accepting New Mentees" el="Δέχεται νέους μαθητευόμενους" compact /></p>
                     <p className="text-xs text-muted-foreground"><BilingualText en="Toggle visibility in mentee search" el="Εμφάνιση στην αναζήτηση μαθητευόμενων" wrap /></p>
@@ -341,7 +341,7 @@ export default function MentorProfilePage() {
             <Card>
               <CardHeader><CardTitle className="text-base"><BilingualText en="Pricing" el="Τιμολόγηση" compact /></CardTitle></CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center justify-between border-t border-border pt-4">
                   <div>
                     <p className="text-sm font-medium"><BilingualText en="Free Mentoring" el="Δωρεάν καθοδήγηση" compact /></p>
                     <p className="text-xs text-muted-foreground"><BilingualText en="Offer sessions at no cost" el="Συνεδρίες χωρίς χρέωση" compact /></p>

@@ -723,10 +723,10 @@ export function DashboardHome() {
                       <BilingualText en={dashboardEn('view_all_milestones')} el={dashboardEl('view_all_milestones')} compact />
                     </Link>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-0.5">
                     {activeMilestonesList.map((m: { id: string; title: string; priority: string; dueDate?: string | null }) => (
                       <Link key={m.id} href="/milestones"
-                        className="flex items-center gap-2 rounded-lg bg-secondary/40 px-3 py-2 transition-colors hover:bg-secondary"
+                        className="axis-row flex items-center gap-2 rounded-md py-2 transition-colors hover:bg-accent"
                       >
                         <div className={cn('h-1.5 w-1.5 shrink-0 rounded-full', m.priority === 'high' ? 'bg-status-danger-mark' : m.priority === 'medium' ? 'bg-status-warning-mark' : 'bg-muted-foreground')} />
                         <span className="flex-1 truncate text-xs text-foreground">{m.title}</span>
@@ -760,7 +760,7 @@ export function DashboardHome() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/50 hover:text-foreground"
+                      className="axis-row flex items-center gap-2 rounded-md py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                     >
                       <NavIcon href={link.href} className="icon-sm" />
                       <BilingualText en={link.label} el={link.labelEl} compact />

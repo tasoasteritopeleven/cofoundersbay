@@ -52,6 +52,7 @@ import { SAVED_SEARCHES_STRINGS, savedSearchesEn, savedSearchesEl } from '@/lib/
 import { useRouter } from 'next/navigation';
 import { qk } from '@/lib/query-keys';
 import { CANCELLED, ROW_GONE, rowOptions, settle, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
+import { savedFiltersToParams } from '@/lib/need-card-wall';
 
 function SearchCard({
   search,
@@ -379,6 +380,8 @@ export default function SavedSearchesPage() {
       const params = new URLSearchParams({ type });
       if (search.query) params.set('q', search.query);
       if (search.filters?.remote?.length) params.set('remote', '1');
+      // The wall's chips (category, place, stage, commitment) open as they were saved.
+      savedFiltersToParams(search.filters as Partial<Record<string, string[]>> | undefined, params);
       void runSavedSearch(search.id)
         .then(() => queryClient.invalidateQueries({ queryKey: qk('saved-searches') }))
         .catch(() => undefined);

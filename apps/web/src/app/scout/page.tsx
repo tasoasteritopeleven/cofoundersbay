@@ -61,7 +61,7 @@ function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNo
             ))}
           </ul>
         ) : null}
-        <div className="space-y-1.5 rounded-lg border border-border p-3">
+        <div className="space-y-1.5 border-t border-border pt-3">
           <p className="text-xs font-medium text-muted-foreground"><BilingualText en="A first note you could send yourself" el="Ένα πρώτο σημείωμα που μπορείτε να στείλετε εσείς" compact /></p>
           <p className="text-sm text-foreground">{p.draftNote}</p>
           <Button

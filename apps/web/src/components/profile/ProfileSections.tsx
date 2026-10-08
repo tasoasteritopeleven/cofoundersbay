@@ -115,9 +115,9 @@ export function ProfileActivity({ userId, own }: { userId: string; own: boolean 
           {updates.length ? (
             <section aria-label="Updates · Ενημερώσεις" className="space-y-3">
               <p className="text-xs font-medium text-muted-foreground"><BilingualText en="Founder updates" el="Ενημερώσεις ιδρυτή" compact /></p>
-              <ul className="space-y-3">
+              <ul className="divide-y divide-border">
                 {updates.slice(0, 3).map((u) => (
-                  <li key={u.id} className="min-w-0 border-l-2 border-primary/15 pl-3">
+                  <li key={u.id} className="min-w-0 py-2.5 first:pt-0 last:pb-0">
                     <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
                       <p className="min-w-0 text-sm font-medium text-foreground">{u.title}</p>
                       {u.createdAt ? <span className="shrink-0 text-xs text-muted-foreground"><RelativeTime date={u.createdAt} /></span> : null}
@@ -160,10 +160,11 @@ function OrgMark({ name }: { name: string }) {
   );
 }
 
-function EntryRow({ title, sub, span }: { title: string; sub: string; span: { en: string; el: string } }) {
+/** `org` names the mark: the company for a role, the school for a degree. */
+function EntryRow({ title, sub, org, span }: { title: string; sub: string; org: string; span: { en: string; el: string } }) {
   return (
     <li className="flex min-w-0 gap-3 py-3 first:pt-0 last:pb-0">
-      <OrgMark name={sub || title} />
+      <OrgMark name={org || title || sub} />
       <div className="min-w-0">
         <p className="text-sm font-medium text-foreground">{title || sub}</p>
         {title && sub ? <p className="text-sm text-muted-foreground">{sub}</p> : null}
@@ -192,7 +193,7 @@ export function ProfileExperience({ payload, own }: { payload: Record<string, un
         <SectionCard id="experience" titleEn="Experience" titleEl="Εμπειρία" action={edit}>
           {experience.length ? (
             <ul className="divide-y divide-border">
-              {experience.map((e, i) => <EntryRow key={`${e.company}-${e.title}-${i}`} title={e.title} sub={e.company} span={spanOf(e)} />)}
+              {experience.map((e, i) => <EntryRow key={`${e.company}-${e.title}-${i}`} title={e.title} sub={e.company} org={e.company} span={spanOf(e)} />)}
             </ul>
           ) : (
             <p className="text-sm text-muted-foreground">
@@ -208,7 +209,7 @@ export function ProfileExperience({ payload, own }: { payload: Record<string, un
       {education.length ? (
         <SectionCard id="education" titleEn="Education" titleEl="Εκπαίδευση">
           <ul className="divide-y divide-border">
-            {education.map((e, i) => <EntryRow key={`${e.school}-${i}`} title={e.school} sub={e.degree} span={spanOf(e, false)} />)}
+            {education.map((e, i) => <EntryRow key={`${e.school}-${i}`} title={e.school} sub={e.degree} org={e.school} span={spanOf(e, false)} />)}
           </ul>
         </SectionCard>
       ) : null}

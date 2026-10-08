@@ -378,8 +378,8 @@ export default function ProviderServicesPage() {
     <AppShell
       title="My Services"
       titleEl="Οι υπηρεσίες μου"
-      description="Manage your service offerings"
-      descriptionEl="Διαχειριστείτε τις υπηρεσίες που προσφέρετε"
+      description="What founders find and book, with price and whether each listing is live"
+      descriptionEl="Τι βρίσκουν και κλείνουν οι ιδρυτές, με τιμή και αν η κάθε καταχώριση είναι ενεργή"
       actions={<Button size="sm" onClick={openCreate}><Plus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Add Service" el="Προσθήκη υπηρεσίας" compact /></Button>}
     >
       <div className="space-y-6">

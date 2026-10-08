@@ -8,6 +8,7 @@
  * lives in sessionStorage so a rename or an alert toggle survives navigation.
  */
 
+import { CARD_COMMITMENTS, CARD_STAGES, foldSearchText, placeVariants } from '@cofounderbay/shared';
 import { previewCommitmentsApi } from './commitments-world';
 
 export interface DemoSavedSearch {
@@ -15,7 +16,10 @@ export interface DemoSavedSearch {
   scope?: 'people' | 'need_cards';
   name: string;
   query: string;
-  filters: { roles?: string[]; skills?: string[]; industries?: string[]; locations?: string[]; stage?: string[]; kinds?: string[]; remote?: string[] };
+  filters: {
+    roles?: string[]; skills?: string[]; industries?: string[]; locations?: string[]; stage?: string[];
+    kinds?: string[]; remote?: string[]; categories?: string[]; commitments?: string[]; places?: string[];
+  };
   alertsEnabled: boolean;
   alertFrequency: 'instant' | 'daily' | 'weekly';
   lastRun?: string;
@@ -128,7 +132,14 @@ export function previewSavedSearchesApi(pathname: string, method: string, body: 
         query: typeof body.query === 'string' ? body.query.trim().slice(0, 200) : '',
         // The same keys the API keeps for each scope; anything else is dropped.
         filters: cards
-          ? { kinds: list(raw.kinds)?.filter((k) => ['cofounder', 'equity_role', 'investor_intro'].includes(k)), remote: list(raw.remote)?.includes('true') ? ['true'] : undefined }
+          ? {
+              kinds: list(raw.kinds)?.filter((k) => ['cofounder', 'equity_role', 'investor_intro'].includes(k)),
+              remote: list(raw.remote)?.includes('true') ? ['true'] : undefined,
+              stage: list(raw.stage)?.filter((v) => (CARD_STAGES as readonly string[]).includes(v)),
+              commitments: list(raw.commitments)?.filter((v) => (CARD_COMMITMENTS as readonly string[]).includes(v)),
+              categories: list(raw.categories),
+              places: list(raw.places),
+            }
           : { roles: list(raw.roles), skills: list(raw.skills), industries: list(raw.industries), locations: list(raw.locations), stage: list(raw.stage) },
         alertsEnabled: body.alertsEnabled === true,
         alertFrequency: (FREQUENCIES as readonly unknown[]).includes(body.alertFrequency) ? (body.alertFrequency as DemoSavedSearch['alertFrequency']) : 'daily',
@@ -186,6 +197,11 @@ function matchingCards(search: DemoSavedSearch, now: number): Array<{ id: string
     .filter((c) => c.isMine !== true && (c.outcome === 'open' || c.outcome === 'in_discussion'))
     .filter((c) => !search.filters.kinds?.length || search.filters.kinds.includes(String(c.kind)))
     .filter((c) => !search.filters.remote?.length || c.isRemote === true)
+    // The API's other need-card filters, read the same way (findCards).
+    .filter((c) => !search.filters.stage?.length || search.filters.stage.includes(String(c.stage)))
+    .filter((c) => !search.filters.commitments?.length || search.filters.commitments.includes(String(c.commitment)))
+    .filter((c) => !search.filters.categories?.length || search.filters.categories.some((v) => foldSearchText(v) === foldSearchText(String(c.category ?? ''))))
+    .filter((c) => !search.filters.places?.length || search.filters.places.flatMap((p) => placeVariants(p)).some((v) => foldSearchText(String(c.place ?? '')).includes(foldSearchText(v))))
     .filter((c) => words.every((w) => `${c.title} ${c.exists} ${c.goal} ${c.missing}`.toLowerCase().includes(w)))
     .map((c) => ({ id: String(c.id), title: String(c.title), kind: String(c.kind) }));
 }

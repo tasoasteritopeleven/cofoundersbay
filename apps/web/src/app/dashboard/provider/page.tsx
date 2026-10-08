@@ -296,10 +296,10 @@ export default function ProviderDashboard() {
           <div className="space-y-6 lg:col-span-2">
             {/* Only what waits on the provider: settled inquiries are projects
                 below, or closed, and a Reply beside them offered nothing. */}
-            <SectionCard title="Waiting on you" titleEl="Σας περιμένουν" icon={MessageSquare} action={{ href: '/provider/inquiries', label: 'All inquiries', labelEl: 'Όλα τα αιτήματα' }}>
+            <SectionCard title="Waiting on you" titleEl="Σας περιμένουν" icon={MessageSquare} action={{ href: '/provider/inquiries', label: 'All inquiries', labelEl: 'Όλα τα αιτήματα' }} contentClassName="card-rows">
               {inquiriesLoading && [0, 1].map((i) => <Skeleton key={i} className="h-16" />)}
               {waiting.slice(0, 5).map((inquiry) => (
-                <div key={inquiry.id} className="flex items-start gap-3 rounded-lg border border-border p-3">
+                <div key={inquiry.id} className="flex items-start gap-3">
                   <Avatar className="h-10 w-10 shrink-0">
                     <AvatarImage src={inquiry.clientAvatar} />
                     <AvatarFallback>{initialsOf(inquiry.clientName)}</AvatarFallback>
@@ -328,9 +328,9 @@ export default function ProviderDashboard() {
               )}
             </SectionCard>
 
-            <SectionCard title="Projects" titleEl="Έργα" icon={FolderKanban} action={{ href: '/provider/projects', label: 'All projects', labelEl: 'Όλα τα έργα' }}>
+            <SectionCard title="Projects" titleEl="Έργα" icon={FolderKanban} action={{ href: '/provider/projects', label: 'All projects', labelEl: 'Όλα τα έργα' }} contentClassName="card-rows">
               {projects.slice(0, 5).map((project) => (
-                <div key={project.id} className="flex items-center gap-3 rounded-lg border border-border p-3">
+                <div key={project.id} className="flex items-center gap-3">
                   <Avatar className="h-10 w-10 shrink-0">
                     <AvatarImage src={project.clientAvatar} />
                     <AvatarFallback>{initialsOf(project.clientName)}</AvatarFallback>
@@ -357,11 +357,11 @@ export default function ProviderDashboard() {
               titleEl="Οι υπηρεσίες σας"
               icon={Store}
               action={{ href: '/provider/services', label: 'Manage', labelEl: 'Διαχείριση' }}
-              contentClassName="grid grid-cols-1 gap-2 space-y-0 sm:grid-cols-2"
+              contentClassName="card-rows"
             >
               {servicesLoading && [0, 1].map((i) => <Skeleton key={i} className="h-16" />)}
               {services.map((svc) => (
-                <Link key={svc.id} href="/provider/services" className="rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/30 focus-ring">
+                <Link key={svc.id} href="/provider/services" className="axis-row block rounded-md transition-colors hover:bg-accent focus-ring">
                   <div className="flex items-start justify-between gap-2">
                     <p className="min-w-0 text-sm font-medium">{svc.title}</p>
                     <Badge size="sm" variant={svc.isActive === false ? 'secondary' : 'success'} className="shrink-0">
@@ -372,7 +372,7 @@ export default function ProviderDashboard() {
                 </Link>
               ))}
               {!servicesLoading && services.length === 0 && (
-                <div className="sm:col-span-2">
+                <div>
                   <EmptyLine en="List a service so founders can find and ask about it." el="Καταχωρήστε μια υπηρεσία ώστε οι ιδρυτές να τη βρίσκουν." />
                 </div>
               )}
@@ -413,9 +413,9 @@ export default function ProviderDashboard() {
               </p>
             </SectionCard>
 
-            <SectionCard title="Recent reviews" titleEl="Πρόσφατες αξιολογήσεις" icon={Star} action={{ href: '/provider/reviews', label: 'All', labelEl: 'Όλες' }} contentClassName="space-y-3">
+            <SectionCard title="Recent reviews" titleEl="Πρόσφατες αξιολογήσεις" icon={Star} action={{ href: '/provider/reviews', label: 'All', labelEl: 'Όλες' }} contentClassName="card-rows">
               {reviews.map((review) => (
-                <figure key={review.id} className="rounded-lg bg-muted/40 p-3">
+                <figure key={review.id}>
                   <figcaption className="mb-1 flex flex-wrap items-center gap-2">
                     <span className="text-sm font-medium">{review.client}</span>
                     <span className="flex items-center gap-0.5" role="img" aria-label={`${review.rating} out of 5`}>

@@ -473,7 +473,7 @@ export default function InvestorPipelinePage() {
                 const pct = deals.length > 0 ? Math.round((count / deals.length) * 100) : 0;
                 return (
                   <div key={stage.key} className="flex min-w-0 flex-1 items-center gap-2">
-                    <div className="min-w-0 flex-1 text-center">
+                    <div className="min-w-0 flex-1">
                       <p className="page-stat font-bold tabular-nums">{count}</p>
                       <p className="text-2xs leading-snug text-muted-foreground"><BilingualText en={stage.label} el={stage.labelEl} compact wrap /></p>
                       <Progress value={pct} className="h-1 mt-1" />

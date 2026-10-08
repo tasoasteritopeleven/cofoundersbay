@@ -651,9 +651,9 @@ export default function CohortDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-1 flex-col">
-                <div className="space-y-4">
+                <div className="card-rows">
                   {matches.slice(0, 3).map((match) => (
-                    <div key={match.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                    <div key={match.id} className="flex items-center gap-3">
                       <div className="flex shrink-0 -space-x-1">
                         <Avatar className="h-8 w-8 border-2 border-card">
                           <AvatarFallback className="bg-muted text-2xs font-semibold">
@@ -697,12 +697,12 @@ export default function CohortDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-1 flex-col">
-                <div className="space-y-4">
+                <div className="card-rows">
                   {sessions
                     .filter((s) => s.status === 'scheduled')
                     .slice(0, 3)
                     .map((session) => (
-                      <div key={session.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                      <div key={session.id} className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarFallback>
                             {initialsOf(session.mentor.name)}
@@ -846,9 +846,9 @@ export default function CohortDetailPage() {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="card-rows">
                 {matches.map((match) => (
-                  <div key={match.id} className="flex items-center gap-4 p-4 border rounded-lg">
+                  <div key={match.id} className="flex items-center gap-4">
                     <div className="flex shrink-0 -space-x-2">
                       <Avatar className="h-12 w-12 border-2 border-card">
                         <AvatarFallback className="bg-muted text-sm font-semibold">

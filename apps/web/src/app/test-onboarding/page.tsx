@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Circle, ArrowRight, Play, AlertCircle, Rocket } from 'lucide-react';
 import { BilingualText } from '@/components/common/BilingualText';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -169,7 +170,7 @@ export default function TestOnboardingPage() {
   const hasErrors = steps.some(step => step.status === 'error');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-8">
+    <MainLandmark className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -347,6 +348,6 @@ export default function TestOnboardingPage() {
           )}
         </div>
       </div>
-    </div>
+    </MainLandmark>
   );
 }

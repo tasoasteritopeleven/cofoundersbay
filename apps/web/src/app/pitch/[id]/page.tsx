@@ -666,7 +666,7 @@ export default function PitchDeckPage() {
         </aside>
 
         {/* Main slide area */}
-        <main className="flex-1 flex flex-col">
+        <MainLandmark className="flex-1 flex flex-col">
           <div className="rounded-2xl border bg-card shadow-lg flex-1 min-h-[360px] sm:min-h-[520px] relative overflow-hidden">
             <SlideRenderer slide={slides[currentSlide]} />
           </div>
@@ -712,7 +712,7 @@ export default function PitchDeckPage() {
           <p className="text-center text-sm text-muted-foreground mt-2">
             {currentSlide + 1} / {slides.length}
           </p>
-        </main>
+        </MainLandmark>
 
         {/* Author sidebar */}
         <aside className="flex flex-col gap-4 w-full xl:w-64 flex-shrink-0">

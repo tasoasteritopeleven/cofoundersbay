@@ -125,6 +125,9 @@ describe('CommitmentsService', () => {
     it('filters by kind, stage, place and project', async () => {
       await publish();
       expect((await service.listCards(MARCUS, { stage: 'building', place: 'athens' })).cards).toHaveLength(1);
+      // A place in either language, as the wall's chip and the saved-search alert send it.
+      expect((await service.listCards(MARCUS, { place: 'Αθήνα' })).cards).toHaveLength(1);
+      expect((await service.listCards(MARCUS, { place: 'Αθήνα', q: 'nowhere-in-the-card' })).cards).toHaveLength(0);
       expect((await service.listCards(MARCUS, { stage: 'idea' })).cards).toHaveLength(0);
       expect((await service.listCards(MARCUS, { projectRefs: ['1', '9'] })).cards).toHaveLength(1);
       expect((await service.listCards(MARCUS, { mine: true })).cards).toHaveLength(0);

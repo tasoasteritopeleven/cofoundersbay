@@ -57,7 +57,8 @@ function Rows<T extends { [K in keyof T]: string }>({
   return (
     <div className="space-y-3">
       {rows.map((row, i) => (
-        <div key={i} className="space-y-3 rounded-xl border border-border p-3">
+        // One hairline between entries; a frame per entry indented every field.
+        <div key={i} className="space-y-3 border-b border-border pb-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {fields.map((f) => {
               const id = `${base}-${i}-${String(f.key)}`;

@@ -259,13 +259,14 @@ export default function IncubatorDashboard() {
               titleEl="Αιτήσεις σε αναμονή"
               icon={UserPlus}
               action={{ href: '/org/applications', label: 'All applications', labelEl: 'Όλες οι αιτήσεις' }}
+              contentClassName="card-rows"
             >
               {loading && [0, 1].map((i) => <Skeleton key={i} className="h-16" />)}
               {waiting.slice(0, 5).map(({ row, program }) => {
                 const name = row.user.profile?.displayName ?? 'Applicant';
                 const startup = startupOf(row.user.profile?.headline);
                 return (
-                  <div key={row.id} className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-3 sm:flex-nowrap">
+                  <div key={row.id} className="flex flex-wrap items-center gap-3 sm:flex-nowrap">
                     <Avatar className="h-10 w-10 shrink-0">
                       <AvatarFallback className="bg-muted text-foreground">{initialsOf(name)}</AvatarFallback>
                     </Avatar>
@@ -297,7 +298,7 @@ export default function IncubatorDashboard() {
               )}
             </SectionCard>
 
-            <SectionCard title="Programs" titleEl="Προγράμματα" icon={FolderKanban} action={{ href: '/org/programs', label: 'Manage', labelEl: 'Διαχείριση' }}>
+            <SectionCard title="Programs" titleEl="Προγράμματα" icon={FolderKanban} action={{ href: '/org/programs', label: 'Manage', labelEl: 'Διαχείριση' }} contentClassName="card-rows">
               {loading && [0, 1].map((i) => <Skeleton key={i} className="h-20" />)}
               {programs.map((program) => {
                 const badge = STATUS_BADGE[program.status] ?? STATUS_BADGE.draft;
@@ -306,7 +307,7 @@ export default function IncubatorDashboard() {
                   <Link
                     key={program.id}
                     href={`/programs/${program.id}`}
-                    className="block rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/30 focus-ring"
+                    className="axis-row block rounded-md transition-colors hover:bg-accent focus-ring"
                   >
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span className="text-sm font-medium">{program.title}</span>
@@ -331,13 +332,13 @@ export default function IncubatorDashboard() {
               )}
             </SectionCard>
 
-            <SectionCard title="Startups in programs" titleEl="Startups σε προγράμματα" icon={Rocket} action={{ href: '/org/startups', label: 'All startups', labelEl: 'Όλες οι startups' }}>
+            <SectionCard title="Startups in programs" titleEl="Startups σε προγράμματα" icon={Rocket} action={{ href: '/org/startups', label: 'All startups', labelEl: 'Όλες οι startups' }} contentClassName="card-rows">
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {inPrograms.map(({ row, program }) => {
                   const name = row.user.profile?.displayName ?? 'Founder';
                   const startup = startupOf(row.user.profile?.headline) ?? name;
                   return (
-                    <div key={row.id} className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <div key={row.id} className="flex items-center gap-3">
                       <Avatar className="h-9 w-9 shrink-0 rounded-lg">
                         <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary-accessible">{startup[0]?.toUpperCase()}</AvatarFallback>
                       </Avatar>

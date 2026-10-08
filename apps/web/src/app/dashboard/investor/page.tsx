@@ -113,7 +113,7 @@ function DealRow({ deal, trailing }: { deal: InvestorDeal; trailing: React.React
   return (
     <Link
       href={`/startups/${deal.id}`}
-      className="group flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/30"
+      className="axis-row group flex items-center gap-3 rounded-md transition-colors hover:bg-accent"
     >
       <Avatar className="h-10 w-10 shrink-0 rounded-lg">
         <AvatarImage src={deal.logoUrl ?? undefined} />
@@ -241,7 +241,7 @@ export default function InvestorDashboard() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
             {/* Active deals first: they are what needs a decision. */}
-            <SectionCard title="Active deals" titleEl="Ενεργές συμφωνίες" icon={BarChart3} action={{ href: '/investor/pipeline', label: 'Pipeline', labelEl: 'Pipeline' }}>
+            <SectionCard title="Active deals" titleEl="Ενεργές συμφωνίες" icon={BarChart3} action={{ href: '/investor/pipeline', label: 'Pipeline', labelEl: 'Pipeline' }} contentClassName="card-rows">
               {dealsLoading && [0, 1, 2].map((i) => <Skeleton key={i} className="h-16" />)}
               {!dealsLoading && active.map((deal) => (
                 <DealRow
@@ -264,7 +264,7 @@ export default function InvestorDashboard() {
               )}
             </SectionCard>
 
-            <SectionCard title="Portfolio" titleEl="Χαρτοφυλάκιο" icon={PieChart} action={{ href: '/investor/portfolio', label: 'All companies', labelEl: 'Όλες οι εταιρείες' }}>
+            <SectionCard title="Portfolio" titleEl="Χαρτοφυλάκιο" icon={PieChart} action={{ href: '/investor/portfolio', label: 'All companies', labelEl: 'Όλες οι εταιρείες' }} contentClassName="card-rows">
               {invested.map((deal) => {
                 const x = multiple(deal);
                 return (
@@ -287,7 +287,7 @@ export default function InvestorDashboard() {
               )}
             </SectionCard>
 
-            <SectionCard title="Recently discovered" titleEl="Πρόσφατες ανακαλύψεις" icon={Rocket} action={{ href: '/investor/scouting', label: 'Scout more', labelEl: 'Περισσότερα' }}>
+            <SectionCard title="Recently discovered" titleEl="Πρόσφατες ανακαλύψεις" icon={Rocket} action={{ href: '/investor/scouting', label: 'Scout more', labelEl: 'Περισσότερα' }} contentClassName="card-rows">
               {discovered.map((deal) => (
                 <DealRow
                   key={deal.id}

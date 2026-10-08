@@ -96,9 +96,10 @@ export function QuickLinks({ links, label, title = 'Go to', titleEl = 'Μετά�
 }
 
 /** What a section says when it has no rows: one quiet, centred line in both languages. */
+/** An empty list's one line, on the card's left axis like the rows it stands in for. */
 export function EmptyLine({ en, el }: { en: string; el?: string }) {
   return (
-    <p className="py-4 text-center text-sm text-muted-foreground">
+    <p className="text-sm text-muted-foreground">
       <BilingualText en={en} el={el} stacked wrap />
     </p>
   );

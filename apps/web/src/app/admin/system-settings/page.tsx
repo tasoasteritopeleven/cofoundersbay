@@ -65,14 +65,14 @@ export default function SystemSettingsPage() {
                 <Label htmlFor="support-email"><BilingualText en="Support email" el="Email υποστήριξης" compact /></Label>
                 <Input id="support-email" type="email" value={supportEmail} onChange={(e) => setSupportEmail(e.target.value)} />
               </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
+              <div className="flex items-center justify-between border-t border-border pt-4">
                 <div>
                   <p className="font-medium"><BilingualText en="Maintenance mode" el="Λειτουργία συντήρησης" compact /></p>
                   <p className="text-sm text-muted-foreground"><BilingualText en="Temporarily limit access for upgrades" el="Προσωρινός περιορισμός πρόσβασης για αναβαθμίσεις" wrap /></p>
                 </div>
                 <Switch checked={maintenance} onCheckedChange={setMaintenance} aria-label="Maintenance mode" />
               </div>
-              <div className="flex items-center justify-between rounded-lg border p-3">
+              <div className="flex items-center justify-between border-t border-border pt-4">
                 <div>
                   <p className="font-medium"><BilingualText en="Open registration" el="Ανοιχτές εγγραφές" compact /></p>
                   <p className="text-sm text-muted-foreground"><BilingualText en="Allow new account signups" el="Να επιτρέπονται νέοι λογαριασμοί" compact /></p>

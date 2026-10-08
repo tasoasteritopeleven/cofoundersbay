@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import { STATUS } from '@/lib/semantic-colors';
 import { BilingualText } from '@/components/common/BilingualText';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -111,7 +112,7 @@ export default function ApiStatusPage() {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <MainLandmark className="container mx-auto p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold mb-2"><BilingualText en="API Status Check" el="Έλεγχος κατάστασης API" compact /></h1>
         <p className="text-muted-foreground">
@@ -185,6 +186,6 @@ export default function ApiStatusPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </MainLandmark>
   );
 }

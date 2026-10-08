@@ -23,6 +23,8 @@ import {
   ROLE_VERIFICATION_COPY,
   ROLE_VERIFICATION_METHODS,
   type TransparencySurface,
+  foldSearchText,
+  placeVariants,
 } from '@cofounderbay/shared';
 import { DemoRefusal } from './demo-refusal';
 import { recordDemoRefusal } from './transparency-world';
@@ -428,39 +430,78 @@ function seed(now: number): World {
   return { cards, threads, messages, terms };
 }
 
-let memory: World | null = null;
+/**
+ * Who the demo founder is. As an aspiring founder (`cfb_primary_role`, the
+ * role switcher's "Aspiring Founder") they have posted no card yet, so the
+ * founder dashboard opens on its first move; otherwise they have the two
+ * seeded cards and the threads on them. Each persona keeps its own world, so
+ * a card posted as one stays there and switching never mixes the two.
+ */
+type Persona = 'founder' | 'starting';
+
+function persona(): Persona {
+  try {
+    return typeof document !== 'undefined' && /(?:^|;\s*)cfb_primary_role=aspiring_founder(?:;|$)/.test(document.cookie) ? 'starting' : 'founder';
+  } catch {
+    return 'founder';
+  }
+}
+
+const storageKeyOf = (p: Persona) => (p === 'starting' ? `${STORAGE_KEY}:starting` : STORAGE_KEY);
+
+/** The seed as an aspiring founder meets it: other people's cards, none of one's own. */
+function withoutOwnCards(world: World): World {
+  const own = new Set(world.cards.filter((c) => c.ownerId === ME).map((c) => c.id));
+  const threads = world.threads.filter((t) => !own.has(t.cardId));
+  const kept = new Set(threads.map((t) => t.id));
+  return {
+    cards: world.cards.filter((c) => !own.has(c.id)),
+    threads,
+    messages: world.messages.filter((m) => kept.has(m.threadId)),
+    terms: world.terms.filter((t) => kept.has(t.threadId)),
+  };
+}
+
+const memory: Record<Persona, World | null> = { founder: null, starting: null };
 
 function load(now: number): World {
-  if (memory) return memory;
+  const p = persona();
+  const held = memory[p];
+  if (held) return held;
   try {
-    const raw = typeof window !== 'undefined' ? window.sessionStorage.getItem(STORAGE_KEY) : null;
+    const raw = typeof window !== 'undefined' ? window.sessionStorage.getItem(storageKeyOf(p)) : null;
     if (raw) {
       const parsed = JSON.parse(raw) as World;
       if (Array.isArray(parsed?.cards) && Array.isArray(parsed?.threads)) {
-        memory = { cards: parsed.cards, threads: parsed.threads, messages: parsed.messages ?? [], terms: parsed.terms ?? [] };
-        return memory;
+        memory[p] = { cards: parsed.cards, threads: parsed.threads, messages: parsed.messages ?? [], terms: parsed.terms ?? [] };
+        return memory[p]!;
       }
     }
   } catch {
     // Storage blocked or a stale shape: start from the seed.
   }
-  memory = seed(now);
-  return memory;
+  memory[p] = p === 'starting' ? withoutOwnCards(seed(now)) : seed(now);
+  return memory[p]!;
 }
 
 function save() {
+  const p = persona();
   try {
-    if (memory && typeof window !== 'undefined') window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(memory));
+    if (memory[p] && typeof window !== 'undefined') window.sessionStorage.setItem(storageKeyOf(p), JSON.stringify(memory[p]));
   } catch {
     // The demo still works for this page view.
   }
 }
 
-/** Test hook: forget the session's world. */
+/** Test hook: forget the session's worlds. */
 export function resetDemoCommitments() {
-  memory = null;
+  memory.founder = null;
+  memory.starting = null;
   try {
-    if (typeof window !== 'undefined') window.sessionStorage.removeItem(STORAGE_KEY);
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem(STORAGE_KEY);
+      window.sessionStorage.removeItem(storageKeyOf('starting'));
+    }
   } catch {
     /* ignore */
   }
@@ -697,7 +738,8 @@ function route(world: World, pathname: string, path: string, method: string, bod
         .filter((c) => !sp.get('stage') || c.stage === sp.get('stage'))
         .filter((c) => !sp.get('commitment') || c.commitment === sp.get('commitment'))
         .filter((c) => !sp.get('category') || c.category.toLowerCase() === (sp.get('category') ?? '').toLowerCase())
-        .filter((c) => !sp.get('place') || (c.place ?? '').toLowerCase().includes((sp.get('place') ?? '').toLowerCase()))
+        // Every spelling of a known place, as the API reads it (placeVariants).
+        .filter((c) => !sp.get('place') || placeVariants(sp.get('place') ?? '').some((v) => foldSearchText(c.place ?? '').includes(foldSearchText(v))))
         .filter((c) => !sp.get('outcome') || c.status === sp.get('outcome'))
         .filter((c) => !refs.length || (c.projectRef !== null && refs.includes(c.projectRef)))
         .filter((c) => !q || `${c.title} ${c.exists} ${c.goal} ${c.missing} ${c.offerRole}`.toLowerCase().includes(q))

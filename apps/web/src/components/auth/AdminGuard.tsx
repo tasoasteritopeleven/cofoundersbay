@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, AlertTriangle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BilingualText } from '@/components/common/BilingualText';
+import { MainLandmark } from '@/components/layout/AppShell';
 import { isPreviewDemo } from '@/lib/preview-demo';
 
 interface AdminGuardProps {
@@ -45,40 +46,44 @@ export function AdminGuard({ children }: AdminGuardProps) {
     checkAdmin();
   }, []);
 
+  // Both states render before the admin frame mounts, so each is its own
+  // page: the skip link needs a main landmark here too.
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Verifying access...</p>
+      <MainLandmark className="flex min-h-[400px] items-center justify-center">
+        <div className="flex flex-col items-center gap-4" role="status">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" aria-hidden="true" />
+          <p className="text-sm text-muted-foreground">
+            <BilingualText en="Verifying access…" el="Έλεγχος πρόσβασης…" compact />
+          </p>
         </div>
-      </div>
+      </MainLandmark>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center p-6">
-        <Card className="max-w-md w-full">
-          <CardContent className="pt-6 text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-              <AlertTriangle className="icon-xl text-destructive-accessible" />
-            </div>
-            <h2 className="mb-2 text-xl font-semibold text-foreground">Access Denied</h2>
-            <p className="mb-6 text-sm text-muted-foreground">
-              You don&apos;t have permission to access the admin dashboard. This area is restricted to administrators only.
-            </p>
-            <div className="flex items-center justify-center gap-3">
-              <Button variant="secondary" onClick={() => router.push('/')}>
-                Go Home
-              </Button>
-              <Button onClick={() => router.push('/login')}>
-                Sign In
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <MainLandmark className="flex min-h-[400px] flex-col items-center justify-center p-6 text-center">
+        <AlertTriangle className="icon-xl text-destructive-accessible" aria-hidden="true" />
+        <h1 className="mt-3 text-xl font-semibold text-foreground">
+          <BilingualText en="Administrators only" el="Μόνο για διαχειριστές" wrap />
+        </h1>
+        <p className="mt-2 max-w-md text-sm text-muted-foreground">
+          <BilingualText
+            en="This account is not an administrator. Sign in with one that is, or go back home."
+            el="Αυτός δεν είναι λογαριασμός διαχειριστή. Συνδεθείτε με λογαριασμό διαχειριστή ή επιστρέψτε στην αρχική."
+            wrap
+          />
+        </p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Button variant="secondary" onClick={() => router.push('/')}>
+            <BilingualText en="Go home" el="Αρχική" compact />
+          </Button>
+          <Button onClick={() => router.push('/login')}>
+            <BilingualText en="Sign in" el="Σύνδεση" compact />
+          </Button>
+        </div>
+      </MainLandmark>
     );
   }
 

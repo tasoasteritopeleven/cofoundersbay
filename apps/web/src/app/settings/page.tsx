@@ -317,15 +317,12 @@ function PrivacyCard() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
-        {PRIVACY_ITEMS.map(({ id, icon: Icon, label, desc }) => {
+        {PRIVACY_ITEMS.map(({ id, label, desc }) => {
           const readOnly = PRIVACY_READ_ONLY[id];
           const checked = readOnly ? readOnly.value : values[id as 'publicProfile' | 'searchable'];
           return (
-            <div key={id} className="flex items-center justify-between gap-4 rounded-xl py-2.5 hover:bg-secondary/40 transition-colors">
+            <div key={id} className="flex items-center justify-between gap-4 py-2.5">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-                  <Icon className="icon-sm text-muted-foreground" />
-                </div>
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-foreground">{t(label)}</p>
                   <p className="text-xs text-muted-foreground">
@@ -657,7 +654,7 @@ export default function SettingsPage() {
                       {t('Loading billing…')}
                     </div>
                   ) : (
-                    <div className="rounded-xl border border-border bg-card/60 p-4 text-sm">
+                    <div className="text-sm">
                       <p className="font-medium text-foreground">
                         {isPremium ? t('Premium is active.') : t('Upgrade to Premium to unlock advanced features.')}
                       </p>
@@ -799,11 +796,11 @@ export default function SettingsPage() {
                       connectUrl: '/api/auth/linkedin',
                     },
                   ].map(({ key, label, icon, connected, connectUrl }) => (
-                    <div key={key} className="flex items-center justify-between gap-4 rounded-xl border p-3">
+                    <div key={key} className="flex items-center justify-between gap-4 py-2.5">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary">
+                        <span className="flex h-8 w-8 items-center justify-center" data-keep-icon="">
                           {icon}
-                        </div>
+                        </span>
                         <div>
                           <p className="text-sm font-medium">{label}</p>
                           <p className="text-xs text-muted-foreground">
@@ -902,16 +899,12 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent className="space-y-1">
                   {quickCategories.map((category) => {
-                    const Icon = QUICK_ICONS[category.id];
                     return (
                       <div
                         key={category.id}
-                        className="flex items-center justify-between gap-4 rounded-xl py-2.5 hover:bg-secondary/40 transition-colors"
+                        className="flex items-center justify-between gap-4 py-2.5"
                       >
                         <div className="flex min-w-0 items-center gap-3">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
-                            <Icon className="icon-sm text-muted-foreground" />
-                          </div>
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-foreground">
                               <BilingualText en={category.titleEn} el={category.titleEl} compact />
@@ -929,11 +922,8 @@ export default function SettingsPage() {
                       </div>
                     );
                   })}
-                  <div className="flex items-center justify-between gap-4 rounded-xl py-2.5 hover:bg-secondary/40 transition-colors">
+                  <div className="flex items-center justify-between gap-4 py-2.5">
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
-                        <Mail className="icon-sm text-muted-foreground" />
-                      </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-foreground">
                           <BilingualText en="Weekly email digest" el="Εβδομαδιαία email σύνοψη" compact />
@@ -992,7 +982,7 @@ export default function SettingsPage() {
               <CardDescription><BilingualText en="Irreversible actions that affect your account permanently." el="Μη αναστρέψιμες ενέργειες που επηρεάζουν μόνιμα τον λογαριασμό σας." wrap /></CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="rounded-xl border border-border p-4 flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-foreground"><BilingualText en="Export your data" el="Εξαγωγή των δεδομένων σας" compact /></p>
                   <p className="text-xs text-muted-foreground"><BilingualText en="Download all your profile, connections, and activity data as a ZIP archive." el="Κατεβάστε όλα τα δεδομένα προφίλ, συνδέσεων και δραστηριότητας σε αρχείο ZIP." wrap /></p>

@@ -125,7 +125,7 @@ function ProtectedConversation({
         </p>
       </div>
       {thread.note ? (
-        <blockquote className="border-l-2 border-primary/30 pl-3 text-sm italic text-muted-foreground">{thread.note}</blockquote>
+        <blockquote className="text-sm italic text-muted-foreground">“{thread.note}”</blockquote>
       ) : null}
       <ol className="max-h-80 space-y-2 overflow-y-auto pr-1">
         {thread.messages.length === 0 ? (
@@ -232,14 +232,16 @@ function VersionCard({ version, highlight }: { version: CommitmentTermsVersion; 
         {rows.map(([field, value]) => {
           const changed = highlight && version.changed.includes(field);
           return (
-            <div key={field} className={cn('min-w-0 rounded-md px-2 py-1', changed && 'bg-primary/10', field === 'scope' && 'sm:col-span-2')}>
+            // A changed field says so in words ("· changed") and in weight; a
+            // tinted, padded cell around every field moved them off the axis.
+            <div key={field} className={cn('min-w-0 py-1', field === 'scope' && 'sm:col-span-2')}>
               <dt className="flex items-center gap-1.5 text-2xs text-muted-foreground">
                 <BilingualText en={FIELD_COPY[field].en} el={FIELD_COPY[field].el} compact />
                 {changed ? (
                   <span className="font-medium text-foreground">· <BilingualText en={CMT.changed.en} el={CMT.changed.el} compact /></span>
                 ) : null}
               </dt>
-              <dd className="text-sm tabular-nums text-foreground">{value}</dd>
+              <dd className={cn('text-sm tabular-nums text-foreground', changed && 'font-semibold')}>{value}</dd>
             </div>
           );
         })}
@@ -319,7 +321,7 @@ function TermsSpace({
       ) : null}
 
       {latest ? (
-        <div className="rounded-xl border border-border p-3">
+        <div>
           <VersionCard version={latest} highlight />
           {thread.step === 'terms' && !latest.acceptedByMe ? (
             <div className="pt-3">
@@ -339,7 +341,7 @@ function TermsSpace({
       )}
 
       {earlier.length ? (
-        <details className="rounded-xl border border-border p-3">
+        <details className="border-t border-border pt-3">
           <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
             <BilingualText en={CMT.earlier_versions.en} el={CMT.earlier_versions.el} compact />
           </summary>
@@ -366,7 +368,7 @@ function TermsSpace({
 
       {formOpen ? (
         <form
-          className="space-y-3 rounded-xl border border-border p-3"
+          className="space-y-3 border-t border-border pt-3"
           onSubmit={async (event) => {
             event.preventDefault();
             if (!canSubmit) return;
@@ -648,7 +650,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
 
       {thread.step === 'interest' ? (
         <section className="space-y-3">
-          {thread.note ? <blockquote className="border-l-2 border-primary/30 pl-3 text-sm italic text-muted-foreground">{thread.note}</blockquote> : null}
+          {thread.note ? <blockquote className="text-sm italic text-muted-foreground">“{thread.note}”</blockquote> : null}
           {isOwner ? (
             <div className="flex flex-wrap gap-2">
               <Button size="sm" disabled={busy} onClick={() => void run(() => acceptCommitmentInterest(threadId), 'Interest accepted')}>
@@ -678,7 +680,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
             error={error}
             onSend={async (body) => !(await run(() => sendCommitmentMessage(threadId, body)))}
           />
-          <section aria-labelledby={`confirm-${thread.id}`} className="space-y-2 rounded-xl border border-primary/15 bg-primary/[0.03] p-3">
+          <section aria-labelledby={`confirm-${thread.id}`} className="space-y-2 border-t border-border pt-3">
             <h3 id={`confirm-${thread.id}`} className="text-sm font-semibold text-foreground">
               <BilingualText en={CMT.confirm_title.en} el={CMT.confirm_title.el} compact />
             </h3>
@@ -734,7 +736,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
       ) : null}
 
       {thread.step === 'terms' || thread.step === 'agreed' || (thread.step === 'closed' && thread.messages.length > 0) ? (
-        <details className="rounded-xl border border-border p-3">
+        <details className="border-t border-border pt-3">
           <summary className="cursor-pointer text-xs font-medium text-muted-foreground">
             <BilingualText en={`${CMT.protected.en} · ${thread.messages.length}`} el={`${CMT.protected.el} · ${thread.messages.length}`} compact />
           </summary>

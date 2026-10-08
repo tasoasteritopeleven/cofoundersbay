@@ -406,9 +406,9 @@ export default function InvestorScoutingPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2"><Zap className="icon-sm text-muted-foreground" /><BilingualText en="Featured Startups" el="Προτεινόμενες startups" compact /></CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <CardContent className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
               {featured.map(s => (
-                <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg border bg-background">
+                <div key={s.id} className="flex items-center gap-3">
                   <Avatar className="h-10 w-10 rounded-lg">
                     <AvatarFallback className="rounded-lg bg-primary/10 text-primary-accessible font-semibold">{s.name[0]}</AvatarFallback>
                   </Avatar>

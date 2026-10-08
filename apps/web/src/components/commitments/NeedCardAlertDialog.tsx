@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/toast';
 import { createSavedSearch, type SavedSearch } from '@/lib/api';
+import { NO_CHIPS, chipSummary, chipsToSavedFilters, type CardChips } from '@/lib/need-card-wall';
 import { qk } from '@/lib/query-keys';
 
 const FREQUENCIES: Array<{ value: SavedSearch['alertFrequency']; en: string; el: string }> = [
@@ -26,7 +27,8 @@ const KIND_NAME: Record<CommitmentKind, { en: string; el: string }> = {
 
 /**
  * "Tell me about new need cards like these": saves the Opportunities
- * filters (kinds, remote, words) as a saved search over need cards, with
+ * filters (kinds, remote, words, and the wall's category, place, stage and
+ * commitment chips) as a saved search over need cards, with
  * alerts on. The alert names only cards the person has not been shown, and
  * never their own; the search lives in /saved-searches with the others,
  * where it can be renamed, paused or deleted.
@@ -37,12 +39,15 @@ export function NeedCardAlertDialog({
   kinds,
   remoteOnly,
   search,
+  chips = NO_CHIPS,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   kinds: readonly CommitmentKind[];
   remoteOnly: boolean;
   search: string;
+  /** The wall's chips; the API's alert reads them as categories, places, stage and commitments. */
+  chips?: CardChips;
 }) {
   const qc = useQueryClient();
   const { success, error } = useToast();
@@ -53,8 +58,9 @@ export function NeedCardAlertDialog({
   useEffect(() => {
     if (!open) return;
     const base = kinds.length === 1 ? KIND_NAME[kinds[0]].en : 'Need cards';
-    setName([base, search.trim(), remoteOnly ? 'remote' : ''].filter(Boolean).join(' · ').slice(0, 80));
-  }, [open, kinds, remoteOnly, search]);
+    const narrowed = chipSummary(chips)?.en ?? '';
+    setName([base, search.trim(), remoteOnly ? 'remote' : '', narrowed].filter(Boolean).join(' · ').slice(0, 80));
+  }, [open, kinds, remoteOnly, search, chips]);
 
   const save = async () => {
     if (!name.trim()) return;
@@ -64,7 +70,7 @@ export function NeedCardAlertDialog({
         scope: 'need_cards',
         name: name.trim(),
         query: search.trim(),
-        filters: { kinds: [...kinds], ...(remoteOnly ? { remote: ['true'] } : {}) },
+        filters: { kinds: [...kinds], ...(remoteOnly ? { remote: ['true'] } : {}), ...chipsToSavedFilters(chips) },
         alertsEnabled: true,
         alertFrequency: frequency,
       });

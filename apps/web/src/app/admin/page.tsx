@@ -327,7 +327,7 @@ function ReportCard({
           </div>
         </div>
 
-        <div className="mt-3 rounded-lg bg-secondary/40 p-3">
+        <div className="mt-3">
           <p className="text-sm text-foreground">{report.reason}</p>
         </div>
 

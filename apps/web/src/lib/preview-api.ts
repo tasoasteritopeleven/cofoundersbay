@@ -2749,10 +2749,11 @@ export function resolvePreviewApi(path: string, init?: RequestInit): unknown {
   if (pathname === '/api/me/profile') {
     // Settings' visibility switches are stored for the demo; the rest of the
     // profile stays the demo's own.
+    // The switches live on the profile, as the API keeps them (`profile.visibilityRules`).
     if (method === 'PATCH' && body && typeof body === 'object' && 'visibilityRules' in (body as Record<string, unknown>)) {
-      return { ...ME_PROFILE, visibilityRules: writeDemoVisibility((body as Record<string, unknown>).visibilityRules) };
+      return { ...ME_PROFILE.profile, visibilityRules: writeDemoVisibility((body as Record<string, unknown>).visibilityRules) };
     }
-    return { ...ME_PROFILE, visibilityRules: readDemoVisibility() ?? (ME_PROFILE as { visibilityRules?: unknown }).visibilityRules ?? null };
+    return { ...ME_PROFILE, profile: { ...ME_PROFILE.profile, visibilityRules: readDemoVisibility() ?? ME_PROFILE.profile.visibilityRules } };
   }
   if (pathname === '/api/auth/refresh' || pathname === '/api/auth/logout') {
     return { ok: true };

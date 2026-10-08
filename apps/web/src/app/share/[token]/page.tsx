@@ -18,6 +18,7 @@ import { cn, errorStatus } from '@/lib/utils';
 import { apiRequest } from '@/lib/api';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -228,12 +229,12 @@ export default function SharePage() {
 
   if (step === 'loading') {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <MainLandmark className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="icon-xl animate-spin mx-auto mb-3 text-primary-accessible" />
           <p className="text-sm text-muted-foreground"><BilingualText en="Loading shared document…" el="Φόρτωση κοινόχρηστου εγγράφου…" compact /></p>
         </div>
-      </div>
+      </MainLandmark>
     );
   }
 
@@ -241,7 +242,7 @@ export default function SharePage() {
 
   if (step === 'password') {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <MainLandmark className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-sm">
           <CardHeader className="text-center pb-3">
             <div className="flex justify-center mb-3">
@@ -282,7 +283,7 @@ export default function SharePage() {
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </MainLandmark>
     );
   }
 
@@ -290,7 +291,7 @@ export default function SharePage() {
 
   if (step === 'error') {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <MainLandmark className="min-h-screen bg-background flex items-center justify-center p-4">
         <Card className="w-full max-w-sm text-center">
           <CardContent className="py-8">
             <AlertCircle className="h-10 w-10 mx-auto mb-3 text-destructive-accessible" />
@@ -301,14 +302,14 @@ export default function SharePage() {
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </MainLandmark>
     );
   }
 
   // ── Document view ────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <MainLandmark className="min-h-screen bg-muted/30">
       {/* Top bar */}
       <div className="bg-background border-b sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -479,6 +480,6 @@ export default function SharePage() {
         </a>{' '}
         — Startup Builder Platform
       </footer>
-    </div>
+    </MainLandmark>
   );
 }

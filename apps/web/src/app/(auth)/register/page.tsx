@@ -13,6 +13,7 @@ import { useTenant } from '@/components/providers/TenantContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 import { bilingualInline } from '@/lib/i18n/format';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 /**
  * Password strength presentation. Colour comes from the semantic status tokens,
@@ -126,7 +127,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <MainLandmark className="flex min-h-screen">
       {/* Left — hero panel */}
       <div className="hidden bg-hero-gradient lg:flex lg:w-1/2 lg:flex-col lg:items-center lg:justify-center px-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-radial pointer-events-none" />
@@ -324,6 +325,6 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
-    </div>
+    </MainLandmark>
   );
 }

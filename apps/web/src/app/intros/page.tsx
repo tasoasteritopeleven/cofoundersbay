@@ -81,7 +81,7 @@ function IntroCard({
             {intro.card?.title || <BilingualText en="need card" el="κάρτα ανάγκης" compact />}
           </Link>
         </p>
-        <blockquote className="border-l-2 border-border pl-3 text-sm text-foreground">{intro.note}</blockquote>
+        <blockquote className="text-sm text-foreground">“{intro.note}”</blockquote>
         {intro.forwardNote ? (
           <p className="text-sm text-muted-foreground">
             <BilingualText en={`${intro.intermediary.displayName} adds:`} el={`Ο/Η ${intro.intermediary.displayName} προσθέτει:`} compact /> {intro.forwardNote}

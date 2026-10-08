@@ -634,7 +634,7 @@ export default function ProfilePage() {
                     {profile.bio}
                   </p>
                 ) : (
-                  <div className="text-center py-6 bg-secondary/20 rounded-lg border border-dashed border-border">
+                  <div>
                     <p className="text-sm text-muted-foreground mb-3">
                       <BilingualText en={profileEn('bio_empty_hint')} el={profileEl('bio_empty_hint')} />
                     </p>
@@ -680,7 +680,7 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className={cn('grid grid-cols-1 gap-4 pt-5', cards.length > 1 && 'sm:grid-cols-2')}>
                   {cards.map(({ icon: Icon, labelEn, labelEl, values }) => (
-                    <div key={labelEn} className="rounded-xl border bg-card p-4 hover:border-primary/30 transition-colors shadow-sm">
+                    <div key={labelEn} className="min-w-0">
                       <div className="mb-2 flex items-start gap-2.5">
                         <div className="shrink-0 p-1.5 rounded-md bg-primary/10 text-primary-accessible">
                           <Icon className="icon-sm" />
@@ -695,7 +695,7 @@ export default function ProfilePage() {
                           <BilingualText en={labelEn} el={labelEl} compact wrap />
                         </span>
                       </div>
-                      <p className="flex flex-wrap gap-x-3 gap-y-1 pl-1 text-sm font-medium text-foreground">
+                      <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-medium text-foreground">
                         {values.map((v) => <StatusText key={v} value={v} />)}
                       </p>
                     </div>
@@ -732,9 +732,9 @@ export default function ProfilePage() {
                 {/* A level shows only when the person declared one. The bars
                     used to invent both a level and a percentage from the
                     skill's place in the list. */}
-                <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <ul className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
                   {(showAllSkills ? profile.skills : profile.skills.slice(0, 6)).map((s, i) => (
-                    <li key={s.skillId ?? s.skillName ?? i} className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5">
+                    <li key={s.skillId ?? s.skillName ?? i} className="flex min-w-0 items-center justify-between gap-3 border-b border-border py-2.5">
                       <span className="min-w-0 truncate text-sm font-medium text-foreground">{s.skillName}</span>
                       {s.level ? (
                         <Badge variant="secondary" size="sm" className="shrink-0 bg-background"><StatusText value={s.level} /></Badge>
@@ -743,7 +743,7 @@ export default function ProfilePage() {
                   ))}
                 </ul>
                 {profile.skills.length > 6 && (
-                  <div className="mt-4 pt-4 border-t border-border text-center">
+                  <div className="mt-4 pt-4 border-t border-border">
                     {/* It offered to show all of them and did nothing; the six
                         after the sixth were simply unreachable. */}
                     <Button
@@ -786,7 +786,7 @@ export default function ProfilePage() {
               </div>
             </CardHeader>
             <CardContent className="pt-5">
-              <div className="flex flex-col items-center justify-center gap-3 py-8 text-center rounded-xl bg-secondary/10 border border-dashed border-border">
+              <div className="flex flex-col items-start gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
                   <FolderOpen className="icon-lg" />
                 </div>
@@ -794,7 +794,7 @@ export default function ProfilePage() {
                   <p className="text-sm font-medium text-foreground">
                     <BilingualText en={profileEn('showcase_title')} el={profileEl('showcase_title')} />
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                  <p className="text-xs text-muted-foreground mt-1 max-w-prose">
                     <BilingualText en={profileEn('showcase_desc')} el={profileEl('showcase_desc')} />
                   </p>
                 </div>

@@ -131,7 +131,7 @@ export function TwoFactorManagement({ isEnabled, onStatusChange }: TwoFactorMana
 
   return (
     <>
-      <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-start sm:gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
         <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary">
             <Shield className="icon-md text-muted-foreground" />

@@ -273,7 +273,7 @@ export default function TenantAnalyticsPage() {
                 { en: 'Upcoming events', el: 'Επόμενες εκδηλώσεις', value: eventsData ? (eventsData.events ?? []).length : '—', note: 'next on the calendar' },
                 { en: 'Applications waiting', el: 'Αιτήσεις σε αναμονή', value: programData ? waiting : '—', note: 'for a decision' },
               ].map((cell) => (
-                <div key={cell.en} className="rounded-lg bg-muted/40 p-3">
+                <div key={cell.en} className="min-w-0">
                   <dt className="text-xs text-muted-foreground">
                     <BilingualText en={cell.en} el={cell.el} stacked wrap />
                   </dt>

@@ -419,7 +419,7 @@ export default function TenantsAdminPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              <label className="flex items-center gap-3 px-4 pb-1 text-xs font-medium text-muted-foreground">
+              <label className="flex items-center gap-3 pb-1 text-xs font-medium text-muted-foreground">
                 <input
                   type="checkbox"
                   checked={isAllSelected}
@@ -436,7 +436,7 @@ export default function TenantsAdminPage() {
               {visibleTenants.map((tenant) => (
                 <div
                   key={tenant.id}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors"
+                  className="axis-row flex items-center justify-between rounded-md py-3 transition-colors hover:bg-accent"
                 >
                   <div className="flex min-w-0 items-center gap-4">
                     <BulkCheckbox

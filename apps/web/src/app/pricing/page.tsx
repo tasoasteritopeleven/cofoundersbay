@@ -33,6 +33,7 @@ import { LandingNav } from '@/components/layout/LandingNav';
 import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria } from '@/lib/i18n/format';
+import { MainLandmark } from '@/components/layout/AppShell';
 
 type PlanFeature = {
   name: string;
@@ -207,6 +208,7 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-background">
       <LandingNav />
+      <MainLandmark>
       {/* Header */}
       <div className="border-b border-border bg-primary/[0.03] pt-[52px]">
         <div className="mx-auto max-w-7xl px-6 py-16 text-center">
@@ -461,6 +463,7 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
+      </MainLandmark>
     </div>
   );
 }

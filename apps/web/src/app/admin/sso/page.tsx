@@ -108,12 +108,12 @@ export default function SSOAdminPage() {
               {[1, 2, 3].map(i => <div key={i} className="h-16 rounded-lg bg-muted/50 animate-pulse" />)}
             </div>
           ) : tenantsError ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="py-2 text-muted-foreground">
               <AlertTriangle className="icon-xl mx-auto mb-2 text-destructive-accessible" />
               <p><BilingualText en="Failed to load tenants" el="Δεν ήταν δυνατή η φόρτωση των οργανισμών" compact /></p>
             </div>
           ) : !tenants?.length ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="py-2 text-muted-foreground">
               <Building2 className="icon-xl mx-auto mb-2" />
               <p className="text-sm"><BilingualText en="No tenants yet — create one in the Tenants admin page." el="Δεν υπάρχουν οργανισμοί ακόμα — δημιουργήστε έναν στη διαχείριση οργανισμών." wrap /></p>
             </div>
@@ -159,7 +159,7 @@ export default function SSOAdminPage() {
           {eventsLoading ? (
             <div className="space-y-2">{[1,2,3].map(i => <div key={i} className="h-12 rounded-lg bg-muted/50 animate-pulse" />)}</div>
           ) : !events?.length ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="py-2 text-muted-foreground">
               <Activity className="icon-xl mx-auto mb-2" />
               <p className="text-sm"><BilingualText en="No SSO events yet" el="Δεν υπάρχουν συμβάντα SSO ακόμα" compact /></p>
             </div>
@@ -434,7 +434,7 @@ function SSOConfigPanel({
             {providersLoading ? (
               <div className="h-12 rounded-lg bg-muted/50 animate-pulse" />
             ) : !providers?.length && !showNewProvider ? (
-              <div className="p-4 rounded-lg border border-dashed text-center text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 <BilingualText en="No identity providers yet. Add one to enable SSO." el="Δεν υπάρχουν πάροχοι ταυτότητας. Προσθέστε έναν για να ενεργοποιήσετε το SSO." wrap />
               </div>
             ) : (
@@ -633,7 +633,7 @@ function SSOConfigPanel({
               {domainsLoading ? (
                 <div className="space-y-2">{[1,2].map(i => <div key={i} className="h-10 rounded-lg bg-muted/50 animate-pulse" />)}</div>
               ) : !domainMappings?.length ? (
-                <div className="p-4 rounded-lg border border-dashed text-center text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   <Globe className="icon-lg mx-auto mb-1" />
                   <BilingualText en="No email domains mapped for this tenant" el="Δεν υπάρχουν τομείς email για αυτόν τον οργανισμό" wrap />
                 </div>

@@ -598,7 +598,7 @@ export default function AISettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                 {(agents.length > 0 ? agents : [
                   { id: 'general', name: 'General Assistant', description: 'Platform help and FAQs' },
                   { id: 'matching', name: 'Co-Founder Matching', description: 'Find the right co-founder' },
@@ -609,7 +609,7 @@ export default function AISettingsPage() {
                 ]).map((agent) => (
                   <div
                     key={agent.id}
-                    className="flex items-start gap-3 rounded-lg border border-border p-3 bg-card"
+                    className="flex items-start gap-3"
                   >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                       <CfbGlyph name="spark" className="icon-sm" />

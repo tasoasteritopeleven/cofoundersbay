@@ -55,7 +55,7 @@ function sessionWhen(iso: string, locale: 'en-GB' | 'el-GR' = 'en-GB'): string {
 
 function MenteeRowItem({ mentee }: { mentee: MenteeRow }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-muted/30">
+    <div className="flex items-center gap-3">
       <Avatar className="h-10 w-10 shrink-0">
         <AvatarImage src={mentee.avatarUrl ?? undefined} />
         <AvatarFallback className="bg-primary/10 text-primary-accessible">{initialsOf(mentee.name)}</AvatarFallback>
@@ -78,10 +78,10 @@ function MenteeRowItem({ mentee }: { mentee: MenteeRow }) {
   );
 }
 
-/** The next session is the one that stands out; the rest are a quiet list. */
+/** The next session stands out by its filled Join button; the rest are a quiet list. */
 function SessionRowItem({ session, next }: { session: SessionRow; next: boolean }) {
   return (
-    <div className={cn('flex items-center gap-3 rounded-lg border p-3', next ? 'border-primary/30 bg-primary/5' : 'border-border')}>
+    <div className="flex items-center gap-3">
       <div className={cn('shrink-0 rounded-full p-2', next ? 'bg-primary/10' : 'bg-muted')}>
         <Video className={cn('icon-sm', next ? 'text-primary-accessible' : 'text-muted-foreground')} aria-hidden="true" />
       </div>
@@ -104,7 +104,7 @@ function SessionRowItem({ session, next }: { session: SessionRow; next: boolean 
 
 function RequestRowItem({ request }: { request: RequestRow }) {
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-border p-3">
+    <div className="flex items-start gap-3">
       <Avatar className="h-10 w-10 shrink-0">
         <AvatarImage src={request.avatarUrl ?? undefined} />
         <AvatarFallback className="bg-muted text-foreground">{initialsOf(request.name)}</AvatarFallback>
@@ -344,6 +344,7 @@ export default function MentorDashboard() {
                 titleEl={`Αιτήματα καθοδήγησης (${pendingRequests.length})`}
                 icon={Zap}
                 action={{ href: '/mentor/requests', label: 'View all', labelEl: 'Όλα' }}
+                contentClassName="card-rows"
               >
                 {pendingRequests.map((request) => (
                   <RequestRowItem key={request.id} request={request} />
@@ -351,14 +352,14 @@ export default function MentorDashboard() {
               </SectionCard>
             )}
 
-            <SectionCard title="Upcoming sessions" titleEl="Επόμενες συνεδρίες" icon={Calendar} action={{ href: '/mentor/sessions', label: 'View all', labelEl: 'Όλες' }}>
+            <SectionCard title="Upcoming sessions" titleEl="Επόμενες συνεδρίες" icon={Calendar} action={{ href: '/mentor/sessions', label: 'View all', labelEl: 'Όλες' }} contentClassName="card-rows">
               {upcomingAll.map((session, i) => (
                 <SessionRowItem key={session.id} session={session} next={i === 0} />
               ))}
               {upcomingAll.length === 0 && <EmptyLine en="No upcoming sessions scheduled." el="Δεν υπάρχουν προγραμματισμένες συνεδρίες." />}
             </SectionCard>
 
-            <SectionCard title="Your mentees" titleEl="Οι καθοδηγούμενοί σας" icon={UserCheck} action={{ href: '/mentor/mentees', label: 'View all', labelEl: 'Όλοι' }}>
+            <SectionCard title="Your mentees" titleEl="Οι καθοδηγούμενοί σας" icon={UserCheck} action={{ href: '/mentor/mentees', label: 'View all', labelEl: 'Όλοι' }} contentClassName="card-rows">
               {mentees.map((mentee) => (
                 <MenteeRowItem key={mentee.id} mentee={mentee} />
               ))}

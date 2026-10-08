@@ -201,7 +201,7 @@ export default function NotificationPreferencesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="divide-y divide-border/50 p-0">
-            <div className="flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 px-4 py-4 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 space-y-0.5">
                 <Label htmlFor="digest" className="flex flex-wrap items-center gap-2 text-sm font-medium">
                   <BilingualText en="Email digest" el="Email σύνοψη" compact />
@@ -227,7 +227,7 @@ export default function NotificationPreferencesPage() {
               </Select>
             </div>
 
-            <div className="space-y-3 px-6 py-4">
+            <div className="space-y-3 px-4 py-4 sm:px-6">
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0 space-y-0.5">
                   <p id="page-cap1-cap" className="flex items-center gap-2 text-sm font-medium">
@@ -278,7 +278,7 @@ export default function NotificationPreferencesPage() {
           </CardHeader>
           <CardContent className="p-0">
             {/* Column heads, from sm up; below sm each switch carries its own icon. */}
-            <div className="hidden items-center justify-end gap-4 border-b border-border px-6 py-2 text-xs font-medium text-muted-foreground sm:flex">
+            <div className="hidden items-center justify-end gap-4 border-b border-border px-4 py-2 sm:px-6 text-xs font-medium text-muted-foreground sm:flex">
               {CHANNELS.map((ch) => (
                 <span key={ch.id} className="flex w-16 flex-col items-center gap-0.5 text-center">
                   <ch.icon className="icon-sm" aria-hidden="true" />
@@ -290,7 +290,7 @@ export default function NotificationPreferencesPage() {
               const Icon = CATEGORY_ICONS[category.id];
               return (
                 <section key={category.id} className="border-b border-border last:border-b-0" aria-labelledby={`cat-${category.id}`}>
-                  <div className="flex flex-col gap-3 bg-muted/20 px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col gap-3 px-4 py-3 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
                         <Icon className="icon-sm text-muted-foreground" aria-hidden="true" />
@@ -314,7 +314,7 @@ export default function NotificationPreferencesPage() {
                   {category.settings.map((setting) => {
                     const channels = channelsOf(prefs, setting);
                     return (
-                      <div key={setting.id} className="flex flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:justify-between sm:pl-[72px]">
+                      <div key={setting.id} className="flex flex-col gap-3 px-4 py-3 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
                         <div className="min-w-0 space-y-0.5">
                           <p className="text-sm font-medium text-foreground">
                             <BilingualText en={setting.labelEn} el={setting.labelEl} compact />

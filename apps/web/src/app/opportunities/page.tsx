@@ -33,6 +33,14 @@ import {
 } from '@/lib/api';
 import { AppShell } from '@/components/layout/AppShell';
 import { NeedCardsSection, kindsForOpportunityType } from '@/components/commitments/NeedCardsSection';
+import { useNeedCardWall } from '@/components/commitments/useNeedCardWall';
+import {
+  CHIP_KEYS,
+  CHIP_LABEL,
+  NO_CHIPS,
+  chipsFromParams,
+  type CardChips,
+} from '@/lib/need-card-wall';
 import { NonGuaranteeNote } from '@/components/commitments/NonGuaranteeNote';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailOptions, RailStats } from '@/components/layout/RailParts';
@@ -532,9 +540,25 @@ export default function OpportunitiesPage() {
   const toggleJob = useSaveToggle('job');
   const [oppTypeFilter, setOppTypeFilter] = useState<OpportunityType | 'all'>('all');
   const [cardAlertOpen, setCardAlertOpen] = useState(false);
-  // A need-card search opened from /saved-searches arrives as ?type=&q=&remote=1.
+  // The need-card wall's chips (category, place, stage, commitment).
+  const [cardChips, setCardChipsState] = useState<CardChips>(NO_CHIPS);
+  /** Sets the chips and mirrors them in the address bar, so a narrowed wall can be linked. */
+  const setCardChips = (next: CardChips) => {
+    setCardChipsState(next);
+    try {
+      const url = new URL(window.location.href);
+      for (const key of CHIP_KEYS) {
+        if (next[key]) url.searchParams.set(key, next[key]);
+        else url.searchParams.delete(key);
+      }
+      window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    } catch { /* the address bar is a convenience */ }
+  };
+  // A need-card search opened from /saved-searches arrives as ?type=&q=&remote=1
+  // and, when saved from the wall, &category=&place=&stage=&commitment=.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
+    setCardChipsState(chipsFromParams(p));
     const type = p.get('type');
     if (type && (['all', 'job', 'cofounder', 'investment', 'partnership', 'mentorship', 'other'] as const).includes(type as OpportunityType | 'all')) setOppTypeFilter(type as OpportunityType | 'all');
     const q = p.get('q');
@@ -568,6 +592,15 @@ export default function OpportunitiesPage() {
     retry: 1,
   });
 
+  /*
+   * The need-card wall's data, from the hook the section draws with (one
+   * request, shared cache), so the assistant's chip controls offer exactly
+   * the choices the chips show and its rows are the cards on the wall.
+   */
+  const wall = useNeedCardWall({ type: oppTypeFilter, remoteOnly, search, chips: cardChips });
+  const chipChoices = wall.options;
+  const wallCards = wall.cards;
+
   const opportunities = (opportunitiesData?.opportunities ?? []).filter((o) => !savedOnly || savedListings.ids.has(o.id));
   const listingJobs = (jobsData?.jobs ?? []).filter((j) => !savedOnly || savedJobs.ids.has(j.id));
   const pendingProposals = proposals.filter((p) => p.status === 'pending').length;
@@ -591,6 +624,12 @@ export default function OpportunitiesPage() {
   const pendingList = proposals.filter((p) => p.status === 'pending');
   usePageList([
     {
+      id: 'need_cards',
+      labelEn: 'Need cards',
+      labelEl: 'Κάρτες ανάγκης',
+      rows: !wall.ready ? [] : wallCards.map((c) => `${c.title} · ${c.kind} · ${c.category || '—'} · ${c.isRemote ? 'remote' : (c.place ?? '—')} · ${c.stage} · ${c.commitment} · ${c.outcome}`),
+    },
+    {
       id: 'opportunities',
       labelEn: 'Opportunities',
       labelEl: 'Ευκαιρίες',
@@ -611,6 +650,17 @@ export default function OpportunitiesPage() {
       { value: 'off', en: 'Any location', el: 'Οποιαδήποτε τοποθεσία' },
       { value: 'on', en: 'Remote only', el: 'Μόνο εξ αποστάσεως' },
     ], remoteOnly ? 'on' : 'off', (v) => setRemoteOnly(v === 'on')),
+    // The wall's chips, with the same choices (and only those) the chips list.
+    ...CHIP_KEYS.map((key) =>
+      choiceControl(
+        `need_card_${key}`,
+        `Need cards: ${CHIP_LABEL[key].en.toLowerCase()}`,
+        `Κάρτες ανάγκης: ${CHIP_LABEL[key].el.toLowerCase()}`,
+        [{ value: 'any', en: 'Any', el: 'Οποιοδήποτε' }, ...chipChoices[key].map((o) => ({ value: o.value, en: `${o.en} (${o.count})`, el: `${o.el} (${o.count})` }))],
+        cardChips[key] || 'any',
+        (v) => { setActiveTab('listings'); setCardChips({ ...cardChips, [key]: v === 'any' ? '' : v }); },
+      ),
+    ),
     choiceControl('saved_only', 'Saved only', 'Μόνο αποθηκευμένα', [
       { value: 'all', en: 'Everything', el: 'Όλα' },
       { value: 'saved', en: 'Saved only', el: 'Μόνο αποθηκευμένα' },
@@ -868,7 +918,8 @@ export default function OpportunitiesPage() {
         {/* Listings tab */}
         {activeTab === 'listings' && (
           <div className="space-y-6">
-            <NeedCardsSection type={oppTypeFilter} remoteOnly={remoteOnly} search={search} alertOpen={cardAlertOpen} onAlertOpenChange={setCardAlertOpen} />
+            {/* The words narrow the need cards and the listings both, so the
+                field leads, above the wall and its chips. */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 icon-sm -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <Input
@@ -879,6 +930,15 @@ export default function OpportunitiesPage() {
                 className="pl-9"
               />
             </div>
+            <NeedCardsSection
+              type={oppTypeFilter}
+              remoteOnly={remoteOnly}
+              search={search}
+              chips={cardChips}
+              onChipsChange={setCardChips}
+              alertOpen={cardAlertOpen}
+              onAlertOpenChange={setCardAlertOpen}
+            />
 
             {oppError ? (
               <Card><CardContent className="flex flex-col items-center gap-3 py-12 text-center">

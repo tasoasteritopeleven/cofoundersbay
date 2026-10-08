@@ -3,7 +3,7 @@
  *
  * It implements only the calls `CommitmentsService` makes, with the subset of
  * Prisma's `where` it uses (equality, `in`, `lt`, `gte`, `equals`/`contains`
- * with `mode`, `OR`, and a relation filter on a thread's card), so a test can
+ * with `mode`, `OR`, `AND`, and a relation filter on a thread's card), so a test can
  * walk the whole ladder - interest to agreed terms - and read back what was
  * stored. It proves the service's rules, not Postgres.
  */
@@ -49,6 +49,7 @@ export function createFakePrisma() {
   function matchCard(card: Row, where: Row = {}): boolean {
     return Object.entries(where).every(([key, cond]) => {
       if (key === 'OR') return (cond as Row[]).some((w) => matchCard(card, w));
+      if (key === 'AND') return (cond as Row[]).every((w) => matchCard(card, w));
       return matchValue(card[key], cond);
     });
   }

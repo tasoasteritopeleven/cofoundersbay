@@ -367,7 +367,7 @@ export default function OrgAnalyticsPage() {
                 { en: 'Average rating', el: 'Μέση βαθμολογία', value: avgRating == null ? '—' : avgRating.toFixed(1), note: rated.length ? `${rated.length} rated sessions` : undefined },
                 { en: 'Places taken', el: 'Κατειλημμένες θέσεις', value: slots ? `${Math.round((taken / slots) * 100)}%` : '—', note: slots ? `${taken} of ${slots} mentee places` : undefined },
               ].map((cell) => (
-                <div key={cell.en} className="rounded-lg bg-muted/40 p-3">
+                <div key={cell.en} className="min-w-0">
                   <dt className="text-xs text-muted-foreground">
                     <BilingualText en={cell.en} el={cell.el} stacked wrap />
                   </dt>

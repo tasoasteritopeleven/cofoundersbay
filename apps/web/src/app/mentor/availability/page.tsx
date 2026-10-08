@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Clock, Plus, Trash2, Save, CheckCircle2, AlertCircle, Globe, Info, RefreshCw,
+  Clock, Plus, Trash2, Save, CheckCircle2, AlertCircle, Info, RefreshCw,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Button } from '@/components/ui/button';
@@ -291,13 +291,21 @@ export default function MentorAvailabilityPage() {
               <p className="text-xs text-muted-foreground"><BilingualText en={`across ${slots.length} time blocks`} el={`σε ${slots.length} χρονοθυρίδες`} compact /></p>
             </CardContent>
           </Card>
+          {/* The zone is shown and changed in one place: this card (it once had
+              a second card under the tabs holding the same value's select). */}
           <Card>
-            <CardContent>
-              <div className="flex items-center gap-2 mb-1">
-                <Globe className="icon-sm text-muted-foreground" />
-                <span className="text-sm font-medium"><BilingualText en="Timezone" el="Ζώνη ώρας" compact /></span>
-              </div>
-              <p className="text-sm font-semibold truncate">{timezone.replace('/', ' / ')}</p>
+            <CardContent className="space-y-2">
+              <Label htmlFor="mentor-timezone" className="text-sm font-medium"><BilingualText en="Timezone" el="Ζώνη ώρας" compact /></Label>
+              <Select value={timezone} onValueChange={setTimezone}>
+                <SelectTrigger id="mentor-timezone" aria-label="Timezone" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {TIMEZONES.map(tz => (
+                    <SelectItem key={tz} value={tz}>{tz.replace('_', ' ')}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <p className="text-xs text-muted-foreground"><BilingualText en="All times shown in local time" el="Όλες οι ώρες σε τοπική ώρα" compact /></p>
             </CardContent>
           </Card>
@@ -311,26 +319,6 @@ export default function MentorAvailabilityPage() {
 
           {/* Schedule Tab */}
           <TabsContent value="schedule" className="space-y-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base"><BilingualText en="Timezone" el="Ζώνη ώρας" compact /></CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Select value={timezone} onValueChange={setTimezone}>
-                  <SelectTrigger aria-label="Timezone" className="w-72">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TIMEZONES.map(tz => (
-                      <SelectItem key={tz} value={tz}>{tz.replace('_', ' ')}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </CardContent>
-            </Card>
-
             <div className="space-y-3">
               {DAYS.map(day => {
                 const daySlots = slots.filter(s => s.weekday === day.key);
