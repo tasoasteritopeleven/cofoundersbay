@@ -50,6 +50,11 @@ describe('phone reading scale', () => {
   it('raises every reading step and leaves the query phone-only', () => {
     expect(fontSize('.text-2xs')).toBe('13.044px');
     expect(fontSize('.text-xs')).toBe('14.406px');
+    expect(fontSize('#main-content .text-xs')).toBe('14.406px');
+    expect(BLOCK).toMatch(/font-size:\s*12\.663px/);
+    expect(BLOCK).toMatch(/div\.text-xs\.text-muted-foreground:is\(\.leading-snug, \.leading-relaxed\)/);
+    expect(BLOCK).toMatch(/\.type-ui\.text-muted-foreground:not\(\.truncate\)/);
+    expect(BLOCK).toMatch(/\.type-support\.text-muted-foreground:not\(\.truncate\)/);
     expect(fontSize('.text-sm')).toBe('14.170px');
     expect(fontSize('.text-base')).toBe('15.520px');
     expect(fontSize('body')).toBe('15.520px');

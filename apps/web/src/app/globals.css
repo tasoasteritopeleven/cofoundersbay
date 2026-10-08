@@ -3306,7 +3306,9 @@ textarea[class~="border-input"]:focus,
 
      caption 13.044 · meta 14.406 · body 14.170 · lead 12.921 · figure 15.520 · section 13.816 · title 14.148
 
-   Captions, meta, and the line under a page title stay put. Every larger
+   Captions, meta labels, and the line under a page title stay put. The
+   muted sentence under a title or a subtitle is 12.663, a little under
+   that subtitle. Every larger
    phone step is another 2% under the previous phone size: body 14.459 ×
    0.98, the root and figures 15.837 × 0.98, stat numbers 14.883 × 0.98,
    the page title 14.437 × 0.98, section headings 14.098 × 0.98. The same
@@ -3446,6 +3448,30 @@ textarea[class~="border-input"]:focus,
   #main-content p.page-lead,
   p.page-lead {
     font-size: 12.921px;
+    line-height: 1.45;
+  }
+
+  /* The explanatory sentence under a title or a subtitle ("Weighted across
+     6 dimensions…", "Investor and accelerator readiness…", and the same
+     muted line on every page). It was on the meta step, 14.406, level with
+     the page title (14.148) and above the subtitle (12.921). On a phone it
+     sits a little under that subtitle: 12.921 × 0.98. A one-line label
+     (truncate, line-clamp-1), a flex meta row, the subtitle itself, stat
+     labels, and every larger step stay where they are. */
+  #main-content :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead):not(.page-stat-label):not(.page-stat-meta):not(.founder-dash-stat-label):not(.founder-dash-stat-meta):not(.person-subtitle),
+  #main-content div.text-xs.text-muted-foreground:is(.leading-snug, .leading-relaxed):not(.flex):not(.inline-flex):not(.font-semibold):not(.font-medium),
+  #main-content :is(div, ol, ul).text-xs.text-muted-foreground li,
+  #main-content :is(p, li).text-xs :is(span, a).text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.bilingual-secondary):not(.font-semibold):not(.font-medium),
+  #main-content :is(p, li, span).type-ui.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.flex):not(.inline-flex),
+  #main-content :is(p, li, span).type-support.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.flex):not(.inline-flex),
+  [role='dialog'] :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead),
+  [role='dialog'] div.text-xs.text-muted-foreground:is(.leading-snug, .leading-relaxed):not(.flex):not(.inline-flex):not(.font-semibold):not(.font-medium),
+  [role='dialog'] :is(div, ol, ul).text-xs.text-muted-foreground li,
+  [role='dialog'] :is(p, li, span).type-ui.text-muted-foreground:not(.truncate):not(.line-clamp-1),
+  [role='dialog'] :is(p, li, span).type-support.text-muted-foreground:not(.truncate):not(.line-clamp-1),
+  [role='alertdialog'] :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead),
+  [role='alertdialog'] :is(div, ol, ul).text-xs.text-muted-foreground li {
+    font-size: 12.663px;
     line-height: 1.45;
   }
 
