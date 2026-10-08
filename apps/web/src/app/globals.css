@@ -3304,11 +3304,11 @@ textarea[class~="border-input"]:focus,
    640px the steps move up to sizes a hand-held screen can read, and the
    line-height opens for Greek accents:
 
-     caption 13.044 · meta 14.406 · body 14.170 · lead 12.921 · figure 15.520 · section 13.816 · title 14.148
+     caption 13.044 · support 12.663 · body 14.170 · lead 12.921 · figure 15.520 · section 13.816 · title 14.148
 
-   Captions, meta labels, and the line under a page title stay put. The
-   muted sentence under a title or a subtitle is 12.663, a little under
-   that subtitle. Every larger
+   Captions, the line under a page title, and the body subtitle stay put.
+   The support step (chips, dimension rows, in-card actions, and the muted
+   sentence under a title) is 12.663, a little under that subtitle. Every larger
    phone step is another 2% under the previous phone size: body 14.459 ×
    0.98, the root and figures 15.837 × 0.98, stat numbers 14.883 × 0.98,
    the page title 14.437 × 0.98, section headings 14.098 × 0.98. The same
@@ -3334,7 +3334,7 @@ textarea[class~="border-input"]:focus,
   }
 
   .text-2xs { font-size: 13.044px; line-height: 1.35; }
-  .text-xs { font-size: 14.406px; line-height: 1.4; }
+  .text-xs { font-size: 12.663px; line-height: 1.4; }
   .text-sm { font-size: 14.170px; line-height: 1.45; }
   .text-base { font-size: 15.520px; line-height: 1.5; }
   .text-lg { font-size: 13.816px; line-height: 1.4; }
@@ -3384,7 +3384,7 @@ textarea[class~="border-input"]:focus,
   #main-content .type-ui.text-sm,
   #main-content .type-ui.text-base,
   #main-content .type-ui.sm\:text-sm {
-    font-size: 14.406px;
+    font-size: 12.663px;
     line-height: 1.4;
   }
 
@@ -3396,6 +3396,29 @@ textarea[class~="border-input"]:focus,
   #main-content [data-rail-content] .text-base {
     font-size: 14.170px;
     line-height: 1.45;
+  }
+
+  /* In-card actions such as Startup readiness and Open Builder use the body
+     step and sat level with the title. On a phone they join the support
+     step, under the subtitle. A text-sm paragraph (the greeting and the
+     score tier) is the subtitle and stays on the body step. */
+  #main-content button.text-sm,
+  #main-content a.text-sm,
+  #main-content [role='button'].text-sm,
+  #main-content button.text-xs,
+  #main-content [role='button'].text-xs,
+  [role='dialog'] button.text-sm,
+  [role='dialog'] a.text-sm,
+  [role='dialog'] [role='button'].text-sm,
+  [role='dialog'] button.text-xs,
+  [role='dialog'] [role='button'].text-xs,
+  [role='alertdialog'] button.text-sm,
+  [role='alertdialog'] a.text-sm,
+  [role='alertdialog'] [role='button'].text-sm,
+  [role='alertdialog'] button.text-xs,
+  [role='alertdialog'] [role='button'].text-xs {
+    font-size: 12.663px;
+    line-height: 1.35;
   }
 
   #main-content p.page-figure,
