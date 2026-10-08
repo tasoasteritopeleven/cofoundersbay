@@ -1,162 +1,73 @@
 import Link from 'next/link';
 import {
   ArrowRight,
+  BadgeCheck,
   Briefcase,
   Building2,
   Calendar,
   CheckCircle,
   Compass,
+  EyeOff,
+  FileCheck,
   GraduationCap,
+  Handshake,
   MessageCircle,
-  Shield,
+  Newspaper,
+  Play,
+  Search,
+  ShieldCheck,
   Sparkles,
+  Target,
   TrendingUp,
   Users,
-  Star,
   Zap,
-  Target,
-  UserCheck,
-  Rocket,
-  Network,
-  Globe,
-  Twitter,
-  Linkedin,
-  Github,
-  Play,
   type LucideIcon,
 } from 'lucide-react';
+import { NON_GUARANTEE_COPY } from '@cofounderbay/shared';
 import { Logo } from '@/components/brand/Logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { LandingNav } from '@/components/layout/LandingNav';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CookieChoicesButton } from '@/components/common/CookieChoicesButton';
 import { MainLandmark } from '@/components/layout/AppShell';
-import { NeedCard } from '@/components/commitments/NeedCard';
-import { LiveStatsGrid, LiveStatsStrip } from '@/components/landing/LiveStats';
+import { NeedCard, type NeedCardView } from '@/components/commitments/NeedCard';
+import { LiveStatsSection, LiveStatsStrip } from '@/components/landing/LiveStats';
+import { PLAN_HIGHLIGHTS } from '@/lib/billing';
 import { ORG_FOUNDERS } from '@/lib/demo/org-world';
 
-const FEATURES: Array<{ icon: LucideIcon; title: string; desc: string }> = [
-  {
-    icon: Compass,
-    title: 'Smart matchmaking',
-    desc: 'AI-powered discovery surfaces the right co-founders, mentors, and investors based on role, skills, and stage.',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Real-time messaging',
-    desc: 'Chat directly with anyone in the network. Threads are persistent, searchable, and support file attachments.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Mentoring & sessions',
-    desc: 'Book 1:1 sessions with verified mentors. Integrated scheduling, video links, and session notes.',
-  },
-  {
-    icon: Calendar,
-    title: 'Events & networking',
-    desc: 'Discover meetups, webinars, and demo days. RSVP in one click and add them to your calendar.',
-  },
-  {
-    icon: Briefcase,
-    title: 'Jobs & opportunities',
-    desc: 'Startups post roles and equity opportunities. Apply directly through your profile.',
-  },
-  {
-    icon: Shield,
-    title: 'Trust & safety',
-    desc: 'Verified profiles, moderation tools, and privacy controls to keep the community quality high.',
-  },
-];
+/**
+ * The public home, read the way a first visit reads it: the one move (a need
+ * card) and an example of it before anything else, then what protects you,
+ * how a card becomes agreed terms, who it is for, what is built, measured
+ * counts, plans, and the way in.
+ *
+ * What this page no longer says, and why (docs/PLATFORM_DESIGN_AI_PLAN.md
+ * §48): six five-star testimonials from people who do not exist (one naming
+ * a real employer); a "Trusted by" row of Y Combinator, Techstars, EIT
+ * Digital, Innovate UK, Google for Startups and MIT Delta v, none of which
+ * endorsed anything; "Join thousands of founders"; "signed term sheets";
+ * "apply directly through your profile" (there is no apply route); a
+ * 14-day free trial the checkout never grants; "priority match placement"
+ * (paid placement is a labelled slot that never touches match scores);
+ * links to /about, /blog and /contact, which do not exist; and social icons
+ * pointing at twitter.com, linkedin.com and github.com themselves.
+ */
 
-const PERSONAS: Array<{
-  icon: LucideIcon;
-  role: string;
-  color: string;
-  bg: string;
-  headline: string;
-  bullets: string[];
-}> = [
-  {
-    icon: Briefcase,
-    role: 'Founder',
-    color: 'text-primary-accessible',
-    bg: 'bg-status-accent-bg border-status-accent-border',
-    headline: 'Find your co-founder',
-    bullets: [
-      'Get matched with complementary skill sets',
-      'Showcase traction, vision, and stage',
-      'Access mentors and investors in one place',
-    ],
-  },
-  {
-    icon: GraduationCap,
-    role: 'Mentor',
-    color: 'text-status-info',
-    bg: 'bg-status-info-bg border-status-info-border',
-    headline: 'Scale your impact',
-    bullets: [
-      'Set availability and get booked instantly',
-      'Help vetted founders with real challenges',
-      'Build your advisory portfolio',
-    ],
-  },
-  {
-    icon: TrendingUp,
-    role: 'Investor',
-    color: 'text-status-warning',
-    bg: 'bg-status-warning-bg border-status-warning-border',
-    headline: 'Source deals smarter',
-    bullets: [
-      'Filter by stage, sector, and geography',
-      'See warm intros through shared connections',
-      "Track founders you're following",
-    ],
-  },
-  {
-    icon: Building2,
-    role: 'Accelerator',
-    color: 'text-status-accent',
-    bg: 'bg-status-accent-bg border-status-accent-border',
-    headline: 'Run your cohort',
-    bullets: [
-      'Organize events and office hours at scale',
-      'Connect portfolio founders with mentors',
-      'Manage your community in one workspace',
-    ],
-  },
-];
+type Pair = { en: string; el: string };
+type Item = { icon: LucideIcon; title: Pair; desc: Pair };
 
-const HOW_IT_WORKS: Array<{ step: number; icon: LucideIcon; title: string; desc: string; color: string }> = [
-  {
-    step: 1,
-    icon: UserCheck,
-    title: 'Build your profile',
-    desc: 'Complete your guided onboarding. Define your role, expertise, startup stage, work style, and what you\'re looking for in a co-founder or collaborator.',
-    color: 'text-primary-accessible bg-status-accent-bg',
-  },
-  {
-    step: 2,
-    icon: Target,
-    title: 'Get matched intelligently',
-    desc: 'Our multi-dimension matching engine scores compatibility across skills, stage, industry, location, values, and goals — with full transparency on why each match appears.',
-    color: 'text-status-success bg-status-success-bg',
-  },
-  {
-    step: 3,
-    icon: Rocket,
-    title: 'Start building together',
-    desc: 'Send a connection request, open a private conversation, set shared milestones, and access mentors, investors, and communities — all in one workspace.',
-    color: 'text-primary-accessible bg-primary/10',
-  },
-];
+/** One language pair, rendered the product's way. */
+function T({ p, wrap, compact = true }: { p: Pair; wrap?: boolean; compact?: boolean }) {
+  return <BilingualText en={p.en} el={p.el} compact={compact} wrap={wrap} />;
+}
 
 /**
- * The example need card in "One card, three sentences", from the demo world:
- * Harbor is Elena Papadopoulos's startup in Aegean Venture Lab's graduated
- * cohort. Never a real company.
+ * The example card, from the demo world: Harbor is Elena Papadopoulos's
+ * startup in Aegean Venture Lab's graduated cohort. Never a real company.
  */
-const SAMPLE_NEED_CARD = {
+const SAMPLE_NEED_CARD: NeedCardView = {
   kind: 'cofounder',
   title: 'Commercial co-founder for Harbor',
   exists: 'Harbor runs a working founder workspace (graph, readiness, builder) with $375K of a $750K seed committed.',
@@ -173,38 +84,57 @@ const SAMPLE_NEED_CARD = {
   isRemote: false,
   stage: 'building',
   commitment: 'full_time',
-  outcome: 'open' as const,
+  outcome: 'open',
+  evidence: [
+    { id: 'milestones_completed', count: 4 },
+    { id: 'builder_documents', count: 2 },
+    { id: 'email_verified', value: true },
+  ],
   owner: {
     displayName: ORG_FOUNDERS['user-elena']?.name ?? 'Elena Papadopoulos',
     headline: ORG_FOUNDERS['user-elena']?.headline ?? 'Founder at Harbor',
   },
 };
 
-const CARD_STEPS: Array<{ icon: LucideIcon; en: string; el: string; noteEn: string; noteEl: string }> = [
+const MOVES: Array<{ title: Pair; note: Pair }> = [
   {
-    icon: Target,
-    en: 'Say what is missing',
-    el: 'Δηλώστε τι λείπει',
-    noteEn: 'What exists, the outcome, who is missing — three sentences.',
-    noteEl: 'Τι υπάρχει, το αποτέλεσμα, ποιος λείπει — τρεις προτάσεις.',
+    title: { en: 'Say what is missing', el: 'Πείτε τι λείπει' },
+    note: { en: 'What exists, the outcome, who is missing: three sentences and an offer.', el: 'Τι υπάρχει, το αποτέλεσμα, ποιος λείπει: τρεις προτάσεις και μια προσφορά.' },
   },
   {
-    icon: MessageCircle,
-    en: 'A protected first conversation',
-    el: 'Προστατευμένη πρώτη συζήτηση',
-    noteEn: 'No phone or email until both sides confirm.',
-    noteEl: 'Χωρίς τηλέφωνο ή email έως ότου επιβεβαιώσουν και οι δύο.',
+    title: { en: 'Talk in a protected conversation', el: 'Συζητήστε προστατευμένα' },
+    note: { en: 'No phone, email or links until both of you confirm.', el: 'Χωρίς τηλέφωνο, email ή συνδέσμους μέχρι να επιβεβαιώσετε και οι δύο.' },
   },
   {
-    icon: CheckCircle,
-    en: 'Terms in versions, then agreement',
-    el: 'Όροι σε εκδόσεις, μετά συμφωνία',
-    noteEn: 'Each draft is a version; agreement opens the deal room.',
-    noteEl: 'Κάθε πρόχειρο είναι μια έκδοση· η συμφωνία ανοίγει την αίθουσα.',
+    title: { en: 'Agree terms in versions', el: 'Συμφωνήστε όρους σε εκδόσεις' },
+    note: { en: 'Each change is a new version with its difference; agreement opens the deal room.', el: 'Κάθε αλλαγή είναι νέα έκδοση με τη διαφορά της· η συμφωνία ανοίγει την αίθουσα.' },
   },
 ];
 
-const AFTER_AGREEMENT: Array<{ en: string; el: string }> = [
+const PROTECTIONS: Item[] = [
+  {
+    icon: FileCheck,
+    title: { en: 'Checked before it is published', el: 'Έλεγχος πριν από τη δημοσίευση' },
+    desc: { en: 'Twelve checks run while you write. Contact details and promises of returns are refused on the server, in the same second.', el: 'Δώδεκα έλεγχοι τρέχουν όσο γράφετε. Στοιχεία επικοινωνίας και υποσχέσεις αποδόσεων απορρίπτονται στον server, στο ίδιο δευτερόλεπτο.' },
+  },
+  {
+    icon: ShieldCheck,
+    title: { en: 'No contact details at first', el: 'Χωρίς στοιχεία επικοινωνίας στην αρχή' },
+    desc: { en: 'Phones, emails, links and other apps are refused in the first conversation, until both of you confirm.', el: 'Τηλέφωνα, email, σύνδεσμοι και άλλες εφαρμογές απορρίπτονται στην πρώτη συζήτηση, μέχρι να επιβεβαιώσετε και οι δύο.' },
+  },
+  {
+    icon: EyeOff,
+    title: { en: 'Blind confirmation', el: 'Τυφλή επιβεβαίωση' },
+    desc: { en: 'Neither of you learns the other’s yes before both say yes, so no one is pressed and a quiet no stays quiet.', el: 'Κανείς δεν μαθαίνει το «ναι» του άλλου πριν πουν και οι δύο ναι· κανείς δεν πιέζεται και μια σιωπηλή άρνηση μένει σιωπηλή.' },
+  },
+  {
+    icon: BadgeCheck,
+    title: { en: 'Verified before terms', el: 'Επαλήθευση πριν από τους όρους' },
+    desc: { en: 'A work email or Verified on LinkedIn is asked before terms open, not to show interest.', el: 'Εταιρικό email ή Verified on LinkedIn ζητείται πριν ανοίξουν οι όροι, όχι για να δείξετε ενδιαφέρον.' },
+  },
+];
+
+const AFTER_AGREEMENT: Pair[] = [
   { en: 'Readiness', el: 'Ετοιμότητα' },
   { en: 'Milestones', el: 'Ορόσημα' },
   { en: 'Pitch', el: 'Pitch' },
@@ -212,258 +142,107 @@ const AFTER_AGREEMENT: Array<{ en: string; el: string }> = [
   { en: 'AI next step', el: 'Επόμενο βήμα με AI' },
 ];
 
-const TESTIMONIALS: Array<{
-  name: string; role: string; company: string; avatar: string;
-  quote: string; rating: number; tag: string;
-}> = [
+const PERSONAS: Array<{ icon: LucideIcon; role: Pair; headline: Pair; bullets: Pair[] }> = [
   {
-    name: 'Alexandros Papadopoulos',
-    role: 'Founder & CEO',
-    company: 'NovaSense.io',
-    avatar: 'AP',
-    quote: 'I found my technical co-founder within two weeks of joining. The compatibility score wasn\'t just accurate — it explained *why* we\'d work well together. We\'ve been building for 8 months now.',
-    rating: 5,
-    tag: 'Co-founder Match',
+    icon: Briefcase,
+    role: { en: 'Founder', el: 'Ιδρυτής' },
+    headline: { en: 'Find your co-founder', el: 'Βρείτε τον συνιδρυτή σας' },
+    bullets: [
+      { en: 'A need card instead of a cold message', el: 'Μια κάρτα ανάγκης αντί για ψυχρό μήνυμα' },
+      { en: 'Matches that explain their score', el: 'Αντιστοιχίσεις που εξηγούν τη βαθμολογία τους' },
+      { en: 'Readiness, builder, pitch and data room in one place', el: 'Ετοιμότητα, builder, pitch και αίθουσα δεδομένων σε ένα σημείο' },
+    ],
   },
   {
-    name: 'Maria Stavridou',
-    role: 'Mentor & Angel Investor',
-    company: 'Former VP, Workday',
-    avatar: 'MS',
-    quote: 'CoFounderBay lets me set availability, filter by stage and sector, and only see founders who are genuinely a fit for my expertise. The session booking flow is the smoothest I\'ve used.',
-    rating: 5,
-    tag: 'Mentor Experience',
+    icon: GraduationCap,
+    role: { en: 'Mentor', el: 'Μέντορας' },
+    headline: { en: 'Mentor where it counts', el: 'Καθοδηγήστε εκεί που μετράει' },
+    bullets: [
+      { en: 'Set your availability and take bookings', el: 'Ορίστε διαθεσιμότητα και δεχτείτε κρατήσεις' },
+      { en: 'See what a founder has built before you meet', el: 'Δείτε τι έχει χτίσει ο ιδρυτής πριν συναντηθείτε' },
+      { en: 'Recommendations that name the work you did together', el: 'Συστάσεις που ονομάζουν τη δουλειά που κάνατε μαζί' },
+    ],
   },
   {
-    name: 'James Okafor',
-    role: 'CTO & Co-founder',
-    company: 'GreenLoop Tech',
-    avatar: 'JO',
-    quote: 'As a technical co-founder looking for a mission-driven startup, the values-based matching was a game changer. I joined a CleanTech company I\'d never have found on LinkedIn.',
-    rating: 5,
-    tag: 'Co-founder Seeker',
+    icon: TrendingUp,
+    role: { en: 'Investor', el: 'Επενδυτής' },
+    headline: { en: 'Meet founders through people you trust', el: 'Γνωρίστε ιδρυτές μέσα από ανθρώπους που εμπιστεύεστε' },
+    bullets: [
+      { en: 'Filter by stage, sector and place', el: 'Φίλτρα ανά στάδιο, κλάδο και τόπο' },
+      { en: 'Warm introductions from someone who knows both', el: 'Ζεστές συστάσεις από κάποιον που γνωρίζει και τους δύο' },
+      { en: 'Follow founders and read their monthly updates', el: 'Ακολουθήστε ιδρυτές και διαβάστε τις μηνιαίες ενημερώσεις τους' },
+    ],
   },
   {
-    name: 'Priya Krishnamurthy',
-    role: 'Program Director',
-    company: 'Athens Innovation Center',
-    avatar: 'PK',
-    quote: 'We migrated our entire cohort management to CoFounderBay. The tenant workspace, mentor pool, and event system save us hours every week. Our founders love the community features.',
-    rating: 5,
-    tag: 'Accelerator',
-  },
-  {
-    name: 'Dimitris Lekkas',
-    role: 'Seed Investor',
-    company: 'Aegean Ventures',
-    avatar: 'DL',
-    quote: 'The scouting dashboard surfaces early-stage deals I would have completely missed. Pipeline tracking, watchlists, and warm intro paths — everything I need in one clean interface.',
-    rating: 5,
-    tag: 'Investor Tools',
-  },
-  {
-    name: 'Sofia Hartmann',
-    role: 'Founder',
-    company: 'Medly Health',
-    avatar: 'SH',
-    quote: 'From fundraising tracker to pitch deck builder to investor scouting — CoFounderBay replaced four separate tools for me. The profile completion prompts alone helped me land my first VC call.',
-    rating: 5,
-    tag: 'All-in-one Platform',
+    icon: Building2,
+    role: { en: 'Programme', el: 'Πρόγραμμα' },
+    headline: { en: 'Run your cohort', el: 'Τρέξτε την κοορτή σας' },
+    bullets: [
+      { en: 'Applications, cohorts and mentors in one workspace', el: 'Αιτήσεις, κοορτές και μέντορες σε έναν χώρο' },
+      { en: 'Events and office hours', el: 'Εκδηλώσεις και ώρες γραφείου' },
+      { en: 'Your own branding and domain', el: 'Δική σας ταυτότητα και domain' },
+    ],
   },
 ];
 
-const PRICING_PLANS: Array<{
-  name: string; price: string; period: string; highlight: boolean;
-  badge?: string; desc: string; features: string[]; cta: string; href: string;
-}> = [
+const FEATURES: Item[] = [
+  { icon: Compass, title: { en: 'Matching that explains itself', el: 'Αντιστοιχίσεις που εξηγούνται' }, desc: { en: 'Scores across skills, stage, industry, place and goals, with the reasons behind each one.', el: 'Βαθμολογία σε δεξιότητες, στάδιο, κλάδο, τόπο και στόχους, με τους λόγους πίσω από την καθεμία.' } },
+  { icon: Search, title: { en: 'Search in plain words', el: 'Αναζήτηση με απλά λόγια' }, desc: { en: 'Type “co-founder SaaS Athens full-time”; the words become filters you can see and undo.', el: 'Γράψτε «συνιδρυτής SaaS Αθήνα πλήρης απασχόληση»· οι λέξεις γίνονται φίλτρα που βλέπετε και αναιρείτε.' } },
+  { icon: Handshake, title: { en: 'Warm introductions', el: 'Ζεστές συστάσεις' }, desc: { en: 'Ask someone who knows both of you; they decide whether to forward.', el: 'Ζητήστε από κάποιον που γνωρίζει και τους δύο· εκείνος αποφασίζει αν θα προωθήσει.' } },
+  { icon: Newspaper, title: { en: 'Founder updates', el: 'Ενημερώσεις ιδρυτών' }, desc: { en: 'A monthly update for the people who follow you, or as a public link.', el: 'Μηνιαία ενημέρωση για όσους σας ακολουθούν, ή ως δημόσιος σύνδεσμος.' } },
+  { icon: Users, title: { en: 'Co-founder scout', el: 'Ανιχνευτής συνιδρυτών' }, desc: { en: 'Proposes people for your brief, with its reasons. It never contacts anyone.', el: 'Προτείνει ανθρώπους για το σημείωμά σας, με τους λόγους του. Δεν επικοινωνεί ποτέ με κανέναν.' } },
+  { icon: MessageCircle, title: { en: 'Messages', el: 'Μηνύματα' }, desc: { en: 'Conversations that stay, can be searched and take attachments.', el: 'Συνομιλίες που μένουν, αναζητούνται και δέχονται συνημμένα.' } },
+  { icon: GraduationCap, title: { en: 'Mentoring and sessions', el: 'Καθοδήγηση και συνεδρίες' }, desc: { en: 'Book one-to-one sessions from a mentor’s availability.', el: 'Κλείστε συνεδρίες ένας προς έναν από τη διαθεσιμότητα του μέντορα.' } },
+  { icon: Calendar, title: { en: 'Events', el: 'Εκδηλώσεις' }, desc: { en: 'Meetups, webinars and demo days, with RSVP and a calendar file.', el: 'Meetups, webinars και demo days, με δήλωση συμμετοχής και αρχείο ημερολογίου.' } },
+  { icon: Target, title: { en: 'Readiness, builder and data room', el: 'Ετοιμότητα, builder και αίθουσα δεδομένων' }, desc: { en: 'Know what is missing before a meeting, write it, and share it by link.', el: 'Δείτε τι λείπει πριν από μια συνάντηση, γράψτε το και μοιραστείτε το με σύνδεσμο.' } },
+];
+
+const PLANS: Array<{ key: keyof typeof PLAN_HIGHLIGHTS; name: Pair; desc: Pair; highlight?: boolean }> = [
+  { key: 'free', name: { en: 'Free', el: 'Δωρεάν' }, desc: { en: 'Everything you need to start.', el: 'Ό,τι χρειάζεστε για να ξεκινήσετε.' } },
+  { key: 'pro', name: { en: 'Pro', el: 'Pro' }, desc: { en: 'For founders and mentors who are active every week.', el: 'Για ιδρυτές και μέντορες που είναι ενεργοί κάθε εβδομάδα.' }, highlight: true },
+  { key: 'team', name: { en: 'Team', el: 'Team' }, desc: { en: 'For accelerators, incubators and programmes.', el: 'Για επιταχυντές, θερμοκοιτίδες και προγράμματα.' } },
+];
+
+const FOOTER: Array<{ title: Pair; links: Array<{ href: string; label: Pair }> }> = [
   {
-    name: 'Free',
-    price: '€0',
-    period: 'forever',
-    highlight: false,
-    desc: 'Everything you need to get started and explore the ecosystem.',
-    features: [
-      'Full profile with skills & preferences',
-      'Up to 10 connection requests/month',
-      'Access to mentor directory',
-      'Join up to 3 communities',
-      'Basic match discovery',
-      'Milestone tracker (5 milestones)',
+    title: { en: 'Product', el: 'Προϊόν' },
+    links: [
+      { href: '/#need-cards', label: { en: 'Need cards', el: 'Κάρτες ανάγκης' } },
+      { href: '/#how-it-works', label: { en: 'How it works', el: 'Πώς λειτουργεί' } },
+      { href: '/pricing', label: { en: 'Pricing', el: 'Τιμές' } },
+      { href: '/discover', label: { en: 'Discover', el: 'Ανακάλυψη' } },
+      { href: '/events', label: { en: 'Events', el: 'Εκδηλώσεις' } },
     ],
-    cta: 'Start for free',
-    href: '/register',
   },
   {
-    name: 'Pro',
-    price: '€19',
-    period: 'per month',
-    highlight: true,
-    badge: 'Most popular',
-    desc: 'For founders and co-founders actively building their startup team.',
-    features: [
-      'Unlimited connection requests',
-      'Priority match placement',
-      'Full fundraising toolkit',
-      'Unlimited communities & milestones',
-      'Startup Builder & Pitch Deck tool',
-      'Direct messaging with read receipts',
-      'Analytics dashboard',
-      'AI Assistant (50 requests/month)',
+    title: { en: 'Community', el: 'Κοινότητα' },
+    links: [
+      { href: '/mentoring', label: { en: 'Find a mentor', el: 'Βρείτε μέντορα' } },
+      { href: '/groups', label: { en: 'Communities', el: 'Κοινότητες' } },
+      { href: '/jobs', label: { en: 'Startup jobs', el: 'Θέσεις σε startups' } },
+      { href: '/marketplace', label: { en: 'Service marketplace', el: 'Αγορά υπηρεσιών' } },
+      { href: '/learning', label: { en: 'Learning hub', el: 'Κέντρο μάθησης' } },
     ],
-    cta: 'Start Pro trial',
-    href: '/register?plan=pro',
   },
   {
-    name: 'Organization',
-    price: 'Custom',
-    period: 'per cohort/year',
-    highlight: false,
-    desc: 'For incubators, accelerators, universities, and innovation hubs.',
-    features: [
-      'Branded tenant workspace',
-      'Program & cohort management',
-      'Mentor pool with scheduling',
-      'Event management at scale',
-      'Advanced analytics & reporting',
-      'SSO & domain mapping',
-      'API access & webhooks',
-      'Dedicated success manager',
+    title: { en: 'Trust', el: 'Εμπιστοσύνη' },
+    links: [
+      { href: '/help', label: { en: 'Help centre', el: 'Κέντρο βοήθειας' } },
+      { href: '/privacy', label: { en: 'Privacy policy', el: 'Πολιτική απορρήτου' } },
+      { href: '/terms', label: { en: 'Terms of service', el: 'Όροι χρήσης' } },
+      { href: '/transparency', label: { en: 'Transparency report', el: 'Αναφορά διαφάνειας' } },
     ],
-    cta: 'Contact us',
-    href: '/contact',
   },
 ];
 
-// The -400 steps rather than -500: at -500, dimmed by the row's opacity, every
-// one of these fell below 4.5:1 on the dark page background.
-const TRUSTED_BY: Array<{ name: string; abbr: string; color: string }> = [
-  { name: 'Y Combinator',    abbr: 'YC',  color: 'text-status-warning' },
-  { name: 'Techstars',       abbr: 'TS',  color: 'text-status-info'   },
-  { name: 'EIT Digital',     abbr: 'EIT', color: 'text-status-info'   },
-  { name: 'Innovate UK',     abbr: 'IUK', color: 'text-status-success'  },
-  { name: 'Google for Startups', abbr: 'GfS', color: 'text-primary-accessible' },
-  { name: 'MIT Delta v',     abbr: 'MIT', color: 'text-status-danger'    },
-];
-
-/**
- * The Greek beside every string the sections above carry as data. Kept as one
- * map keyed by the English, so the arrays stay readable and a string without
- * an entry still renders (English only) instead of breaking the page.
- */
-const LANDING_EL: Record<string, string> = {
-  "Smart matchmaking": "Έξυπνες αντιστοιχίσεις",
-  "AI-powered discovery surfaces the right co-founders, mentors, and investors based on role, skills, and stage.": "Η ανακάλυψη με AI φέρνει τους σωστούς συνιδρυτές, μέντορες και επενδυτές με βάση ρόλο, δεξιότητες και στάδιο.",
-  "Real-time messaging": "Μηνύματα σε πραγματικό χρόνο",
-  "Chat directly with anyone in the network. Threads are persistent, searchable, and support file attachments.": "Συνομιλήστε απευθείας με οποιονδήποτε στο δίκτυο. Οι συνομιλίες μένουν, αναζητούνται και δέχονται συνημμένα.",
-  "Mentoring & sessions": "Καθοδήγηση & συνεδρίες",
-  "Book 1:1 sessions with verified mentors. Integrated scheduling, video links, and session notes.": "Κλείστε συνεδρίες 1:1 με επαληθευμένους μέντορες. Ενσωματωμένος προγραμματισμός, σύνδεσμοι βίντεο και σημειώσεις.",
-  "Events & networking": "Εκδηλώσεις & δικτύωση",
-  "Discover meetups, webinars, and demo days. RSVP in one click and add them to your calendar.": "Βρείτε meetups, webinars και demo days. Δηλώστε συμμετοχή με ένα κλικ και προσθέστε τα στο ημερολόγιό σας.",
-  "Jobs & opportunities": "Θέσεις & ευκαιρίες",
-  "Startups post roles and equity opportunities. Apply directly through your profile.": "Οι startups δημοσιεύουν ρόλους και ευκαιρίες equity. Κάντε αίτηση απευθείας από το προφίλ σας.",
-  "Trust & safety": "Εμπιστοσύνη & ασφάλεια",
-  "Verified profiles, moderation tools, and privacy controls to keep the community quality high.": "Επαληθευμένα προφίλ, εργαλεία εποπτείας και έλεγχοι απορρήτου για μια ποιοτική κοινότητα.",
-  "Founder": "Ιδρυτής",
-  "Mentor": "Μέντορας",
-  "Investor": "Επενδυτής",
-  "Accelerator": "Επιταχυντής",
-  "Find your co-founder": "Βρείτε τον συνιδρυτή σας",
-  "Get matched with complementary skill sets": "Αντιστοιχίσεις με συμπληρωματικές δεξιότητες",
-  "Showcase traction, vision, and stage": "Δείξτε traction, όραμα και στάδιο",
-  "Access mentors and investors in one place": "Μέντορες και επενδυτές σε ένα σημείο",
-  "Scale your impact": "Πολλαπλασιάστε τον αντίκτυπό σας",
-  "Set availability and get booked instantly": "Ορίστε διαθεσιμότητα και δεχτείτε κρατήσεις αμέσως",
-  "Help vetted founders with real challenges": "Βοηθήστε ελεγμένους ιδρυτές σε πραγματικές προκλήσεις",
-  "Build your advisory portfolio": "Χτίστε το συμβουλευτικό σας portfolio",
-  "Source deals smarter": "Βρείτε ευκαιρίες πιο έξυπνα",
-  "Filter by stage, sector, and geography": "Φίλτρα ανά στάδιο, κλάδο και γεωγραφία",
-  "See warm intros through shared connections": "Γνωριμίες μέσα από κοινές επαφές",
-  "Track founders you're following": "Παρακολουθήστε τους ιδρυτές που σας ενδιαφέρουν",
-  "Run your cohort": "Τρέξτε την κοορτή σας",
-  "Organize events and office hours at scale": "Οργανώστε εκδηλώσεις και office hours σε κλίμακα",
-  "Connect portfolio founders with mentors": "Συνδέστε τους ιδρυτές του portfolio με μέντορες",
-  "Manage your community in one workspace": "Διαχειριστείτε την κοινότητά σας σε έναν χώρο",
-  "Build your profile": "Φτιάξτε το προφίλ σας",
-  "Complete your guided onboarding. Define your role, expertise, startup stage, work style, and what you're looking for in a co-founder or collaborator.": "Ολοκληρώστε την καθοδηγούμενη ένταξη. Ορίστε ρόλο, εξειδίκευση, στάδιο startup, τρόπο δουλειάς και τι ψάχνετε σε συνιδρυτή ή συνεργάτη.",
-  "Get matched intelligently": "Έξυπνες αντιστοιχίσεις",
-  "Our multi-dimension matching engine scores compatibility across skills, stage, industry, location, values, and goals — with full transparency on why each match appears.": "Η μηχανή αντιστοίχισης βαθμολογεί τη συμβατότητα σε δεξιότητες, στάδιο, κλάδο, τοποθεσία, αξίες και στόχους — και εξηγεί γιατί εμφανίζεται κάθε αντιστοίχιση.",
-  "Start building together": "Ξεκινήστε να χτίζετε μαζί",
-  "Send a connection request, open a private conversation, set shared milestones, and access mentors, investors, and communities — all in one workspace.": "Στείλτε αίτημα σύνδεσης, ανοίξτε ιδιωτική συνομιλία, ορίστε κοινά ορόσημα και βρείτε μέντορες, επενδυτές και κοινότητες — όλα σε έναν χώρο.",
-  "Active members": "Ενεργά μέλη",
-  "Connections made": "Συνδέσεις",
-  "Events hosted": "Εκδηλώσεις",
-  "Registered Members": "Εγγεγραμμένα μέλη",
-  "founders, mentors & investors": "ιδρυτές, μέντορες & επενδυτές",
-  "Successful Connections": "Επιτυχημένες συνδέσεις",
-  "meaningful introductions made": "ουσιαστικές γνωριμίες",
-  "Mentors Available": "Διαθέσιμοι μέντορες",
-  "across 40+ industries": "σε 40+ κλάδους",
-  "Profile Match Accuracy": "Ακρίβεια αντιστοίχισης",
-  "reported by users": "όπως αναφέρουν οι χρήστες",
-  "Events Hosted": "Εκδηλώσεις",
-  "online & in-person": "διαδικτυακές & δια ζώσης",
-  "Partner Organizations": "Συνεργαζόμενοι οργανισμοί",
-  "incubators & accelerators": "θερμοκοιτίδες & επιταχυντές",
-  "Co-founder Match": "Αντιστοίχιση συνιδρυτή",
-  "Mentor Experience": "Εμπειρία μέντορα",
-  "Co-founder Seeker": "Αναζήτηση συνιδρυτή",
-  "Investor Tools": "Εργαλεία επενδυτή",
-  "All-in-one Platform": "Όλα σε μία πλατφόρμα",
-  "Free": "Δωρεάν",
-  "Organization": "Οργανισμοί",
-  "forever": "για πάντα",
-  "per month": "τον μήνα",
-  "per cohort/year": "ανά κοορτή/έτος",
-  "Most popular": "Πιο δημοφιλές",
-  "Custom": "Κατά περίπτωση",
-  "Everything you need to get started and explore the ecosystem.": "Ό,τι χρειάζεστε για να ξεκινήσετε και να εξερευνήσετε το οικοσύστημα.",
-  "Full profile with skills & preferences": "Πλήρες προφίλ με δεξιότητες & προτιμήσεις",
-  "Up to 10 connection requests/month": "Έως 10 αιτήματα σύνδεσης/μήνα",
-  "Access to mentor directory": "Πρόσβαση στον κατάλογο μεντόρων",
-  "Join up to 3 communities": "Συμμετοχή σε έως 3 κοινότητες",
-  "Basic match discovery": "Βασική ανακάλυψη αντιστοιχίσεων",
-  "Milestone tracker (5 milestones)": "Παρακολούθηση ορόσημων (5 ορόσημα)",
-  "Start for free": "Ξεκινήστε δωρεάν",
-  "For founders and co-founders actively building their startup team.": "Για ιδρυτές και συνιδρυτές που χτίζουν ενεργά την ομάδα τους.",
-  "Unlimited connection requests": "Απεριόριστα αιτήματα σύνδεσης",
-  "Priority match placement": "Προτεραιότητα στις αντιστοιχίσεις",
-  "Full fundraising toolkit": "Πλήρη εργαλεία χρηματοδότησης",
-  "Unlimited communities & milestones": "Απεριόριστες κοινότητες & ορόσημα",
-  "Startup Builder & Pitch Deck tool": "Startup Builder & εργαλείο pitch deck",
-  "Direct messaging with read receipts": "Μηνύματα με επιβεβαίωση ανάγνωσης",
-  "Analytics dashboard": "Πίνακας αναλυτικών",
-  "AI Assistant (50 requests/month)": "Βοηθός AI (50 αιτήματα/μήνα)",
-  "Start Pro trial": "Δοκιμή Pro",
-  "For incubators, accelerators, universities, and innovation hubs.": "Για θερμοκοιτίδες, επιταχυντές, πανεπιστήμια και κόμβους καινοτομίας.",
-  "Branded tenant workspace": "Χώρος με την ταυτότητά σας",
-  "Program & cohort management": "Διαχείριση προγραμμάτων & κοορτών",
-  "Mentor pool with scheduling": "Δεξαμενή μεντόρων με προγραμματισμό",
-  "Event management at scale": "Διαχείριση εκδηλώσεων σε κλίμακα",
-  "Advanced analytics & reporting": "Προχωρημένα αναλυτικά & αναφορές",
-  "SSO & domain mapping": "SSO & αντιστοίχιση τομέων",
-  "API access & webhooks": "Πρόσβαση API & webhooks",
-  "Dedicated success manager": "Αποκλειστικός υπεύθυνος επιτυχίας",
-  "Contact us": "Επικοινωνία",
-  "Features": "Δυνατότητες",
-  "How it works": "Πώς λειτουργεί",
-  "Pricing": "Τιμές",
-  "Discover": "Ανακάλυψη",
-  "Events": "Εκδηλώσεις",
-  "Find a Mentor": "Βρείτε μέντορα",
-  "Communities": "Κοινότητες",
-  "Startup Jobs": "Θέσεις σε startups",
-  "Service Marketplace": "Αγορά υπηρεσιών",
-  "Learning Hub": "Κέντρο μάθησης",
-  "About us": "Σχετικά με εμάς",
-  "Blog": "Blog",
-  "Contact": "Επικοινωνία",
-  "Privacy Policy": "Πολιτική απορρήτου",
-  "Transparency report": "Αναφορά διαφάνειας",
-  "Terms of Service": "Όροι χρήσης",
-};
-
-function L({ en, wrap }: { en: string; wrap?: boolean }) {
-  return <BilingualText en={en} el={LANDING_EL[en]} compact={!wrap} wrap={wrap} />;
+function SectionHeading({ eyebrow, title, lead }: { eyebrow: Pair; title: Pair; lead?: Pair }) {
+  return (
+    <div className="mx-auto mb-12 max-w-3xl text-center">
+      <Badge variant="outline" className="mb-3 border-primary/30 text-primary-accessible"><T p={eyebrow} /></Badge>
+      <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl"><T p={title} wrap /></h2>
+      {lead ? <p className="mt-3 text-muted-foreground"><BilingualText en={lead.en} el={lead.el} wrap /></p> : null}
+    </div>
+  );
 }
 
 export function LandingHome() {
@@ -475,405 +254,273 @@ export function LandingHome() {
       <LandingNav />
       <MainLandmark>
 
-      {/* ── Hero ───────────────────────────────────────────────────────────── */}
-      <section className="relative flex items-start overflow-hidden pt-[52px] sm:min-h-screen sm:items-center">
-        {/* blur-3xl is 64px. 10% less, then another 5% (54.72px).
-            The accent token is the page colour, so that orb never showed;
-            both washes use the lilac tint the headline sits on. */}
+      {/* ── Hero: the one move, and an example of it ─────────────────────── */}
+      <section id="need-cards" className="relative overflow-hidden pt-[52px]">
+        {/* blur-3xl is 64px. 10% less, then another 5% (54.72px). */}
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="landing-wash absolute left-[18%] top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/[0.16] sm:left-1/4 sm:h-96 sm:w-96" />
           <div className="landing-wash absolute bottom-0 right-[12%] h-56 w-56 translate-x-1/2 rounded-full bg-primary/[0.11] sm:right-1/4 sm:h-96 sm:w-96" />
         </div>
-        <div className="landing-intro relative mx-auto w-full px-4 py-8 text-center sm:px-8 sm:py-24 lg:px-12 xl:px-16">
-          <div className="mb-6 animate-fade-in" style={{ animationDelay: '0ms' }}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.06] px-4 py-1.5 text-sm text-primary-accessible">
-              <Sparkles className="icon-sm" />
-              <BilingualText en="The startup ecosystem, connected" el="Το οικοσύστημα startups, συνδεδεμένο" compact />
-            </span>
+        <div className="landing-intro relative mx-auto w-full px-4 py-8 sm:px-8 sm:py-16 lg:px-12 lg:py-20 xl:px-16">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
+            <div className="min-w-0 animate-fade-in text-center lg:text-left">
+              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.06] px-4 py-1.5 text-sm text-primary-accessible">
+                <Sparkles className="icon-sm" />
+                <BilingualText en="Co-founders, mentors and investors" el="Συνιδρυτές, μέντορες και επενδυτές" compact />
+              </span>
+              <h1 className="landing-display font-display font-semibold tracking-tight text-foreground">
+                <BilingualText
+                  en="Say what is missing. Meet who will build it with you."
+                  el="Πείτε τι λείπει. Γνωρίστε ποιος θα το χτίσει μαζί σας."
+                  stacked
+                  wrap
+                  secondaryClassName="landing-display-secondary"
+                />
+              </h1>
+              <p className="landing-lead mx-auto mt-4 max-w-2xl text-muted-foreground sm:mt-6 lg:mx-0">
+                <BilingualText
+                  en="One need card: what exists, the outcome, who is missing. The right people answer in a protected conversation, and terms are agreed in versions."
+                  el="Μία κάρτα ανάγκης: τι υπάρχει, το αποτέλεσμα, ποιος λείπει. Οι κατάλληλοι άνθρωποι απαντούν σε προστατευμένη συζήτηση και οι όροι συμφωνούνται σε εκδόσεις."
+                  stacked
+                  wrap
+                />
+              </p>
+
+              <div className="mx-auto mt-8 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center lg:justify-start">
+                <Button size="lg" className="w-full gap-2 sm:w-auto" asChild>
+                  <Link href="/register?redirect=/commitments/new">
+                    <BilingualText en="Write your need card" el="Γράψτε την κάρτα σας" compact />
+                    <ArrowRight className="icon-sm" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" className="w-full sm:w-auto" asChild>
+                  <Link href="/demo">
+                    <Play className="icon-sm" />
+                    <BilingualText en="Try the demo" el="Δοκιμάστε το demo" compact />
+                  </Link>
+                </Button>
+              </div>
+              <p className="mt-4 text-sm">
+                <Link href="/discover" className="text-muted-foreground hover:text-foreground hover:underline">
+                  <BilingualText en="or browse profiles first" el="ή δείτε πρώτα προφίλ" compact />
+                </Link>
+              </p>
+
+              <ol className="mt-8 grid grid-cols-1 gap-3 text-left sm:grid-cols-3" aria-label="Three moves · Τρεις κινήσεις">
+                {MOVES.map(({ title }, index) => (
+                  <li key={title.en} className="flex min-w-0 items-center gap-2.5 rounded-xl border border-border bg-card/60 px-3 py-2.5">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-2xs font-bold tabular-nums text-primary-foreground">{index + 1}</span>
+                    <span className="min-w-0 text-sm font-medium text-foreground"><T p={title} wrap /></span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="min-w-0 animate-fade-in" style={{ animationDelay: '120ms' }}>
+              <Card className="mx-auto w-full max-w-xl shadow-lg shadow-primary/5">
+                <CardContent className="space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <Badge variant="secondary" className="text-2xs"><BilingualText en="Example card" el="Ενδεικτική κάρτα" compact /></Badge>
+                    <span className="text-2xs text-muted-foreground"><BilingualText en="From the demo, not a real company" el="Από το demo, όχι πραγματική εταιρεία" compact /></span>
+                  </div>
+                  <NeedCard card={SAMPLE_NEED_CARD} />
+                </CardContent>
+              </Card>
+            </div>
           </div>
-
-          <h1
-            className="landing-display animate-fade-in font-display font-semibold tracking-tight text-foreground"
-            style={{ animationDelay: '100ms' }}
-          >
-            Find your{' '}
-            <span className="text-primary-accessible">co-founder,</span>
-            <br />
-            mentor, or{' '}
-            <span className="text-primary-accessible">investor</span>
-          </h1>
-
-          <p
-            className="landing-lead mx-auto mt-4 max-w-3xl animate-fade-in text-muted-foreground sm:mt-6"
-            style={{ animationDelay: '200ms' }}
-          >
-            CoFounderBay connects founders, mentors, investors, and accelerators through smart
-            matching, real-time messaging, and curated events. No noise — just quality connections.
-          </p>
-
-          <div
-            className="mx-auto mt-8 flex w-full max-w-sm animate-fade-in flex-col items-stretch justify-center gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:items-center"
-            style={{ animationDelay: '300ms' }}
-          >
-            <Button size="lg" className="w-full gap-2 sm:w-auto" asChild>
-              <Link href="/register">
-                <BilingualText en="Get started free" el="Ξεκινήστε δωρεάν" compact />
-                <ArrowRight className="icon-sm" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="lg" className="w-full text-muted-foreground hover:text-foreground sm:w-auto" asChild>
-              <Link href="/demo">
-                <Play className="icon-sm" />
-                <BilingualText en="Try Demo" el="Δοκιμάστε το demo" compact />
-              </Link>
-            </Button>
-          </div>
-          <p className="mt-4 text-sm">
-            <Link href="/discover" className="text-muted-foreground hover:text-foreground hover:underline">
-              <BilingualText en="Explore profiles" el="Εξερευνήστε προφίλ" compact />
-            </Link>
-          </p>
 
           <LiveStatsStrip />
         </div>
       </section>
 
-      {/* ── Trusted By ─────────────────────────────────────────────────────── */}
-      <section className="border-t border-border bg-secondary/10 px-6 py-10 sm:px-8 lg:px-12 xl:px-16">
+      {/* ── What protects you ───────────────────────────────────────────── */}
+      <section id="trust" className="border-t border-border bg-secondary/10 px-6 py-16 sm:px-8 lg:px-12 xl:px-16">
         <div className="mx-auto w-full">
-          <p className="mb-6 text-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            <BilingualText en="Trusted by founders from leading programs" el="Το εμπιστεύονται ιδρυτές από κορυφαία προγράμματα" wrap />
-          </p>
-          {/* The row was blanket `opacity-60`, which dropped every label and
-              wordmark in it below 4.5:1. The recessive feel now comes from a
-              muted text colour instead of dimming real content. */}
-          <div className="flex flex-wrap items-center justify-center gap-8">
-            {TRUSTED_BY.map(({ name, abbr, color }) => (
-              <div key={name} className="flex items-center gap-2 transition-opacity hover:opacity-80">
-                <span className={`font-bold text-lg font-display ${color}`}>{abbr}</span>
-                <span className="text-sm text-muted-foreground hidden sm:block">{name}</span>
-              </div>
+          <SectionHeading
+            eyebrow={{ en: 'What protects you', el: 'Τι σας προστατεύει' }}
+            title={{ en: 'Checked before it is published, protected while you talk', el: 'Ελέγχεται πριν δημοσιευτεί, προστατεύεται όσο μιλάτε' }}
+          />
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {PROTECTIONS.map(({ icon: Icon, title, desc }) => (
+              <li key={title.en} className="flex min-w-0 gap-3 rounded-2xl border border-border bg-card p-5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
+                  <Icon className="icon-sm text-primary-accessible" />
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-foreground"><T p={title} wrap /></h3>
+                  <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
+                </div>
+              </li>
             ))}
+          </ul>
+          <div className="mt-8 flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
+            <p className="font-medium text-foreground"><BilingualText en={NON_GUARANTEE_COPY.en} el={NON_GUARANTEE_COPY.el} wrap /></p>
+            <Link href="/transparency" className="text-primary-accessible hover:underline">
+              <BilingualText en="How often the rules refused, per half year: the transparency report" el="Πόσο συχνά απέρριψαν οι κανόνες, ανά εξάμηνο: η αναφορά διαφάνειας" compact wrap />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── How It Works ───────────────────────────────────────────────────── */}
+      {/* ── How it works: from a card to agreed terms ───────────────────── */}
       <section id="how-it-works" className="border-t border-border px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
         <div className="mx-auto w-full">
-          <div className="mb-14 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="How it works" el="Πώς λειτουργεί" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="From profile to co-founder in 3 steps" el="Από το προφίλ στον συνιδρυτή σε 3 βήματα" wrap />
-            </h2>
-            <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-              CoFounderBay removes the guesswork from founder matching with structured profiles,
-              explainable scores, and end-to-end collaboration tools.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 relative">
-            <div className="hidden md:block absolute top-12 left-1/3 right-1/3 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-            {HOW_IT_WORKS.map(({ step, icon: Icon, title, desc, color }, index) => (
-              <div
-                key={step}
-                className="relative flex flex-col items-center text-center gap-5 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="relative">
-                  <div className={`flex h-20 w-20 items-center justify-center rounded-2xl ${color} ring-4 ring-background`}>
-                    <Icon className="h-9 w-9" />
-                  </div>
-                  <span className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-2xs font-bold text-primary-foreground shadow">
-                    {step}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg text-foreground"><L en={title} /></h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed"><L en={desc} wrap /></p>
-                </div>
-              </div>
+          <SectionHeading
+            eyebrow={{ en: 'How it works', el: 'Πώς λειτουργεί' }}
+            title={{ en: 'From a card to agreed terms', el: 'Από την κάρτα σε συμφωνημένους όρους' }}
+            lead={{ en: 'Mentoring and simple introductions keep ordinary messages; co-founder roles, equity roles and investor introductions use these three steps.', el: 'Η καθοδήγηση και οι απλές συστάσεις κρατούν τα συνηθισμένα μηνύματα· θέσεις συνιδρυτή, ρόλοι με equity και συστάσεις σε επενδυτές ακολουθούν αυτά τα τρία βήματα.' }}
+          />
+          <ol className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {MOVES.map(({ title, note }, index) => (
+              <li key={title.en} className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border bg-card p-6">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold tabular-nums text-primary-foreground">{index + 1}</span>
+                <h3 className="text-lg font-semibold text-foreground"><T p={title} wrap /></h3>
+                <p className="text-sm leading-relaxed text-muted-foreground"><BilingualText en={note.en} el={note.el} wrap /></p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── One card, three sentences ─────────────────────────────────────── */}
-      <section id="need-cards" className="border-t border-border px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="Need cards" el="Κάρτες ανάγκης" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="One card, three sentences" el="Μία κάρτα, τρεις προτάσεις" wrap />
-            </h2>
-            <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-              <BilingualText en="What exists, the outcome, who is missing." el="Τι υπάρχει, το αποτέλεσμα, ποιος λείπει." wrap />
+          </ol>
+          <div className="mt-10 flex flex-col items-center gap-4 text-center">
+            <p className="text-base font-medium text-foreground">
+              <BilingualText en="The agreement is the threshold, not the ceiling." el="Η συμφωνία είναι το κατώφλι, όχι το ταβάνι." wrap />
             </p>
-          </div>
-          <div className="mx-auto grid w-full max-w-4xl grid-cols-1 items-start gap-8 lg:grid-cols-2">
-            <Card className="animate-fade-in">
-              <CardContent>
-                <Badge variant="secondary" className="mb-3 text-2xs"><BilingualText en="Example card" el="Ενδεικτική κάρτα" compact /></Badge>
-                <NeedCard card={SAMPLE_NEED_CARD} />
-              </CardContent>
-            </Card>
-            <div className="space-y-6">
-              <ol className="space-y-4">
-                {CARD_STEPS.map(({ icon: Icon, en, el, noteEn, noteEl }, index) => (
-                  <li key={en} className="flex items-start gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                      <Icon className="icon-sm" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground">
-                        <span className="tabular-nums text-muted-foreground">{index + 1}. </span>
-                        <BilingualText en={en} el={el} compact wrap />
-                      </p>
-                      <p className="mt-0.5 text-sm text-muted-foreground"><BilingualText en={noteEn} el={noteEl} wrap /></p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <p className="text-sm font-medium text-foreground">
-                <BilingualText en="The agreement is the threshold, not the ceiling." el="Η συμφωνία είναι το κατώφλι, όχι το ταβάνι." wrap />
-              </p>
-              <ul className="flex flex-wrap gap-1.5" aria-label="What continues inside">
-                {AFTER_AGREEMENT.map(({ en, el }) => (
-                  <li key={en} className="rounded-full border border-border px-2.5 py-1 text-2xs text-muted-foreground">
-                    <BilingualText en={en} el={el} compact />
-                  </li>
-                ))}
-              </ul>
-              <Button asChild>
-                <Link href="/register">
-                  <BilingualText en="See how it works" el="Δείτε πώς λειτουργεί" compact />
-                  <ArrowRight className="icon-sm" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Personas ───────────────────────────────────────────────────────── */}
-      <section id="roles" className="border-t border-border bg-secondary/20 px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="Roles" el="Ρόλοι" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="Built for every role in the ecosystem" el="Φτιαγμένο για κάθε ρόλο του οικοσυστήματος" wrap />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <BilingualText en="Whether you&apos;re building, advising, investing, or supporting, CoFounderBay works for you." el="Είτε χτίζετε, είτε συμβουλεύετε, επενδύετε ή υποστηρίζετε, το CoFounderBay δουλεύει για εσάς." wrap />
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {PERSONAS.map(({ icon: Icon, role, color, bg, headline, bullets }, index) => (
-              <div
-                key={role}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 80}ms` }}
-              >
-                <Card className={`h-full border ${bg} card-interactive hover-lift`}>
-                  <CardHeader className="pb-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${bg}`}>
-                      <Icon className={`icon-md ${color}`} />
-                    </div>
-                    <Badge variant="outline" className={`mt-2 w-fit border-current text-xs ${color}`}>
-                      <L en={role} />
-                    </Badge>
-                    <CardTitle className="text-base"><L en={headline} /></CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 pt-0">
-                    {bullets.map((bullet) => (
-                      <div key={bullet} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <CheckCircle className={`mt-0.5 icon-sm shrink-0 ${color}`} />
-                        <L en={bullet} wrap />
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ───────────────────────────────────────────────────────── */}
-      <section id="features" className="border-t border-border px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="Platform" el="Πλατφόρμα" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="Everything your startup network needs" el="Ό,τι χρειάζεται το δίκτυο της startup σας" wrap />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <BilingualText en="One platform. No scattered tools. From introductions to signed term sheets." el="Μία πλατφόρμα. Χωρίς σκόρπια εργαλεία. Από τις γνωριμίες ως τα υπογεγραμμένα term sheets." wrap />
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {FEATURES.map(({ icon: Icon, title, desc }, index) => (
-              <div
-                key={title}
-                className="group flex animate-fade-in gap-4 rounded-2xl border border-border bg-card/70 p-5 transition-all duration-300 hover:border-primary/30"
-                style={{ animationDelay: `${index * 70}ms` }}
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
-                  <Icon className="icon-md text-muted-foreground" />
-                </div>
-                {/* min-w-0 and a wrapping title: four cards a row leave too little width for both languages on one line. */}
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-foreground"><L en={title} wrap /></h3>
-                  <p className="mt-1 text-sm text-muted-foreground"><L en={desc} wrap /></p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Platform Statistics ────────────────────────────────────────────── */}
-      <section className="border-t border-border bg-primary/[0.03] px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="By the numbers" el="Σε αριθμούς" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="A thriving ecosystem" el="Ένα ζωντανό οικοσύστημα" compact />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <BilingualText en="Real impact, real connections, real outcomes — across the global startup community." el="Πραγματικός αντίκτυπος, πραγματικές συνδέσεις, πραγματικά αποτελέσματα — σε όλη την κοινότητα startups." wrap />
-            </p>
-          </div>
-          <LiveStatsGrid />
-        </div>
-      </section>
-
-      {/* ── Testimonials ───────────────────────────────────────────────────── */}
-      <section className="border-t border-border px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="Testimonials" el="Μαρτυρίες" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="Loved by founders, mentors & investors" el="Αγαπημένο από ιδρυτές, μέντορες & επενδυτές" wrap />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <BilingualText en="What founders, mentors and investors use CoFounderBay for." el="Για τι χρησιμοποιούν το CoFounderBay ιδρυτές, μέντορες και επενδυτές." wrap />
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {TESTIMONIALS.map(({ name, role, company, avatar, quote, rating, tag }, index) => (
-              <div
-                key={name}
-                className="animate-fade-in flex flex-col gap-4 rounded-2xl border border-border bg-card/80 p-6 transition-all duration-300 hover:border-primary/20"
-                style={{ animationDelay: `${index * 60}ms` }}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: rating }).map((_, i) => (
-                      <Star key={i} className="icon-sm fill-status-warning text-status-warning" />
-                    ))}
-                  </div>
-                  <Badge variant="secondary" className="text-xs"><L en={tag} /></Badge>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                  &ldquo;{quote}&rdquo;
-                </p>
-                <div className="flex items-center gap-3 border-t border-border pt-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-bold text-muted-foreground">
-                    {avatar}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm text-foreground">{name}</p>
-                    <p className="text-xs text-muted-foreground">{role} · {company}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pricing ────────────────────────────────────────────────────────── */}
-      <section id="pricing" className="border-t border-border bg-secondary/20 px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full">
-          <div className="mb-12 text-center animate-fade-in">
-            <Badge variant="outline" className="mb-3 text-primary-accessible border-primary/30"><BilingualText en="Pricing" el="Τιμές" compact /></Badge>
-            <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl">
-              <BilingualText en="Simple, transparent pricing" el="Απλές, διαφανείς τιμές" compact />
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              <BilingualText en="Start free. Upgrade when you need more firepower. No hidden fees." el="Ξεκινήστε δωρεάν. Αναβαθμίστε όταν χρειαστείτε περισσότερα. Χωρίς κρυφές χρεώσεις." wrap />
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {PRICING_PLANS.map(({ name, price, period, highlight, badge, desc, features, cta, href }, index) => (
-              <div
-                key={name}
-                className={`animate-fade-in relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ${
-                  highlight
-                    ? 'border-primary/60 bg-primary/5 shadow-xl shadow-primary/10 scale-[1.02]'
-                    : 'border-border bg-card/80 hover:border-primary/20'
-                }`}
-                style={{ animationDelay: `${index * 80}ms` }}
-              >
-                {badge && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground shadow-sm">
-                    <L en={badge} />
-                  </Badge>
-                )}
-                <div className="mb-5">
-                  <h3 className="font-semibold text-lg text-foreground"><L en={name} /></h3>
-                  <div className="mt-2 flex items-baseline gap-1">
-                    <span className="font-display text-3xl font-bold text-foreground">{price === 'Custom' ? <L en="Custom" /> : price}</span>
-                    <span className="text-sm text-muted-foreground">/<L en={period} /></span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground"><L en={desc} wrap /></p>
-                </div>
-                <ul className="space-y-2.5 flex-1 mb-6">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <CheckCircle className="mt-0.5 icon-sm shrink-0 text-status-success" />
-                      <L en={f} wrap />
-                    </li>
-                  ))}
-                </ul>
-                <Button variant={highlight ? 'default' : 'outline'} className="w-full" asChild>
-                  <Link href={href}>
-                    <L en={cta} />
-                    {highlight && <ArrowRight className="ml-1.5 icon-sm" />}
-                  </Link>
-                </Button>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            <BilingualText en="All plans include a 14-day free trial of Pro features. No credit card required." el="Όλα τα πλάνα περιλαμβάνουν δωρεάν δοκιμή 14 ημερών των δυνατοτήτων Pro. Χωρίς πιστωτική κάρτα." wrap />
-          </p>
-        </div>
-      </section>
-
-      {/* ── Final CTA ──────────────────────────────────────────────────────── */}
-      <section id="cta" className="border-t border-border px-6 py-24 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mx-auto w-full max-w-3xl text-center animate-fade-in">
-          <div className="mb-4 flex justify-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
-              <Network className="h-7 w-7 text-primary-accessible" />
-            </div>
-          </div>
-          <h2 className="font-display text-4xl font-semibold text-foreground">
-            <BilingualText en="Ready to find your people?" el="Έτοιμοι να βρείτε τους ανθρώπους σας;" compact wrap />
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
-            Join thousands of founders, mentors, and investors already building meaningful
-            connections on CoFounderBay. Free to start, no credit card required.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Button size="lg" className="gap-2 px-10 py-6 text-base shadow-lg shadow-primary/25" asChild>
-              <Link href="/register">
-                <BilingualText en="Create free account" el="Δημιουργία δωρεάν λογαριασμού" compact />
+            <ul className="flex flex-wrap justify-center gap-1.5" aria-label="What continues after the agreement · Τι συνεχίζεται μετά τη συμφωνία">
+              {AFTER_AGREEMENT.map((p) => (
+                <li key={p.en} className="rounded-full border border-border px-2.5 py-1 text-2xs text-muted-foreground"><T p={p} /></li>
+              ))}
+            </ul>
+            <Button variant="outline" asChild>
+              <Link href="/demo">
+                <BilingualText en="Walk through it in the demo" el="Δείτε το βήμα βήμα στο demo" compact />
                 <ArrowRight className="icon-sm" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="gap-2 px-8 py-6 text-base" asChild>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Who it is for ───────────────────────────────────────────────── */}
+      <section id="roles" className="border-t border-border bg-secondary/20 px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto w-full">
+          <SectionHeading
+            eyebrow={{ en: 'Roles', el: 'Ρόλοι' }}
+            title={{ en: 'Built for every role in a founding team’s first year', el: 'Φτιαγμένο για κάθε ρόλο στον πρώτο χρόνο μιας ιδρυτικής ομάδας' }}
+          />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PERSONAS.map(({ icon: Icon, role, headline, bullets }) => (
+              <Card key={role.en} className="h-full">
+                <CardHeader className="pb-3">
+                  <Badge variant="outline" className="w-fit gap-1.5 text-xs text-primary-accessible">
+                    <Icon className="icon-sm" />
+                    <T p={role} />
+                  </Badge>
+                  <CardTitle className="text-base"><T p={headline} wrap /></CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {bullets.map((bullet) => (
+                    <div key={bullet.en} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle className="mt-0.5 icon-sm shrink-0 text-status-success" />
+                      <BilingualText en={bullet.en} el={bullet.el} wrap />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── What is built ───────────────────────────────────────────────── */}
+      <section id="features" className="border-t border-border px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto w-full">
+          <SectionHeading
+            eyebrow={{ en: 'Platform', el: 'Πλατφόρμα' }}
+            title={{ en: 'What is built, and where to try it', el: 'Τι έχει χτιστεί, και πού να το δοκιμάσετε' }}
+            lead={{ en: 'You can try each of them in the demo.', el: 'Μπορείτε να δοκιμάσετε καθένα από αυτά στο demo.' }}
+          />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map(({ icon: Icon, title, desc }) => (
+              <div key={title.en} className="flex min-w-0 gap-4 rounded-2xl border border-border bg-card/70 p-5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
+                  <Icon className="icon-md text-muted-foreground" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-foreground"><T p={title} wrap /></h3>
+                  <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Counted, not claimed (renders only with measured counts) ────── */}
+      <LiveStatsSection
+        heading={
+          <SectionHeading
+            eyebrow={{ en: 'By the numbers', el: 'Σε αριθμούς' }}
+            title={{ en: 'Counted, not claimed', el: 'Μετρημένα, όχι διατυπωμένα' }}
+            lead={{ en: 'Live counts from the platform’s own records. None of them is a target or an estimate.', el: 'Ζωντανές μετρήσεις από τα αρχεία της ίδιας της πλατφόρμας. Κανένας αριθμός δεν είναι στόχος ή εκτίμηση.' }}
+          />
+        }
+      />
+
+      {/* ── Plans ───────────────────────────────────────────────────────── */}
+      <section id="pricing" className="border-t border-border bg-secondary/20 px-6 py-20 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto w-full">
+          <SectionHeading
+            eyebrow={{ en: 'Pricing', el: 'Τιμές' }}
+            title={{ en: 'Start free', el: 'Ξεκινήστε δωρεάν' }}
+            lead={{ en: 'Paid plans add volume, promoted placement that is always labelled, and team workspaces. Paid placement never changes a match score.', el: 'Τα πληρωμένα πλάνα προσθέτουν όγκο, προωθημένη θέση που πάντα σημαίνεται, και χώρους ομάδας. Η πληρωμένη θέση δεν αλλάζει ποτέ βαθμολογία αντιστοίχισης.' }}
+          />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {PLANS.map(({ key, name, desc, highlight }) => (
+              <div
+                key={key}
+                className={highlight
+                  ? 'flex flex-col rounded-2xl border border-primary/40 bg-primary/[0.03] p-6'
+                  : 'flex flex-col rounded-2xl border border-border bg-card/80 p-6'}
+              >
+                <h3 className="text-lg font-semibold text-foreground"><T p={name} /></h3>
+                <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
+                <ul className="mt-5 flex-1 space-y-2.5">
+                  {PLAN_HIGHLIGHTS[key].map((f) => (
+                    <li key={f.en} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle className="mt-0.5 icon-sm shrink-0 text-status-success" />
+                      <BilingualText en={f.en} el={f.el} wrap />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Button variant="outline" asChild>
+              <Link href="/pricing">
+                <BilingualText en="Compare plans and prices" el="Σύγκριση πλάνων και τιμών" compact />
+                <ArrowRight className="icon-sm" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The way in ──────────────────────────────────────────────────── */}
+      <section id="cta" className="border-t border-border px-6 py-24 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mx-auto w-full max-w-3xl text-center">
+          <h2 className="font-display text-4xl font-semibold text-foreground">
+            <BilingualText en="Write the card. Meet the people." el="Γράψτε την κάρτα. Γνωρίστε τους ανθρώπους." stacked wrap />
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
+            <BilingualText en="Free to start. Nothing is shared outside the platform until both of you say yes." el="Δωρεάν για να ξεκινήσετε. Τίποτα δεν βγαίνει εκτός πλατφόρμας πριν πείτε και οι δύο ναι." wrap />
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Button size="lg" className="gap-2 px-10" asChild>
+              <Link href="/register">
+                <BilingualText en="Create a free account" el="Δημιουργία δωρεάν λογαριασμού" compact />
+                <ArrowRight className="icon-sm" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" className="gap-2 px-8" asChild>
               <Link href="/discover">
                 <Users className="icon-sm" />
                 <BilingualText en="Browse profiles" el="Περιήγηση προφίλ" compact />
@@ -881,106 +528,55 @@ export function LandingHome() {
             </Button>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/login" className="text-primary-accessible hover:underline font-medium"><BilingualText en="Sign in" el="Σύνδεση" compact /></Link>
+            <BilingualText en="Already have an account?" el="Έχετε ήδη λογαριασμό;" compact />{' '}
+            <Link href="/login" className="font-medium text-primary-accessible hover:underline"><BilingualText en="Sign in" el="Σύνδεση" compact /></Link>
           </p>
         </div>
       </section>
 
       </MainLandmark>
 
-      {/* ── Footer ─────────────────────────────────────────────────────────── */}
+      {/* ── Footer ─────────────────────────────────────────────────────── */}
       <footer className="border-t border-border bg-secondary/10 px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
         <div className="mx-auto w-full">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 mb-10">
-            <div className="lg:col-span-2 space-y-4">
+          <div className="mb-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="space-y-4 lg:col-span-2">
               <Logo size="sm" />
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                The startup ecosystem platform connecting founders, mentors, investors,
-                and accelerators through intelligent matching and real-time collaboration.
+              <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+                <BilingualText
+                  en="Where founding teams go from a first message to agreed terms: need cards, protected conversations and the workspace around them."
+                  el="Εκεί όπου οι ιδρυτικές ομάδες πάνε από το πρώτο μήνυμα σε συμφωνημένους όρους: κάρτες ανάγκης, προστατευμένες συζητήσεις και ο χώρος γύρω τους."
+                  wrap
+                />
               </p>
-              <div className="flex items-center gap-3">
-                <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="CoFounderBay on Twitter"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-border transition-colors">
-                  <Twitter className="icon-sm" aria-hidden="true" />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="CoFounderBay on LinkedIn"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-border transition-colors">
-                  <Linkedin className="icon-sm" aria-hidden="true" />
-                </a>
-                <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="CoFounderBay on GitHub"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-border transition-colors">
-                  <Github className="icon-sm" aria-hidden="true" />
-                </a>
-                <a href="https://globe.app" target="_blank" rel="noreferrer" aria-label="The CoFounderBay website"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-border transition-colors">
-                  <Globe className="icon-sm" aria-hidden="true" />
-                </a>
+            </div>
+            {FOOTER.map(({ title, links }) => (
+              <div key={title.en} className="space-y-4">
+                <h2 className="text-sm font-semibold text-foreground"><T p={title} /></h2>
+                <ul className="space-y-2.5 text-sm">
+                  {links.map(({ href, label }) => (
+                    <li key={href}>
+                      <Link href={href} className="text-muted-foreground transition-colors hover:text-foreground"><T p={label} /></Link>
+                    </li>
+                  ))}
+                  {title.en === 'Trust' ? (
+                    <>
+                      <li>
+                        <a href="mailto:support@cofounderbay.com" className="text-muted-foreground transition-colors hover:text-foreground">
+                          <BilingualText en="Contact" el="Επικοινωνία" compact />
+                        </a>
+                      </li>
+                      <li><CookieChoicesButton /></li>
+                    </>
+                  ) : null}
+                </ul>
               </div>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="font-semibold text-sm text-foreground"><BilingualText en="Product" el="Προϊόν" compact /></h4>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  { href: '#features',    label: 'Features' },
-                  { href: '#how-it-works',label: 'How it works' },
-                  { href: '#pricing',     label: 'Pricing' },
-                  { href: '/discover',    label: 'Discover' },
-                  { href: '/events',      label: 'Events' },
-                ].map(({ href, label }) => (
-                  <li key={label}>
-                    <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
-                      <L en={label} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="font-semibold text-sm text-foreground"><BilingualText en="Community" el="Κοινότητα" compact /></h4>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  { href: '/mentoring',   label: 'Find a Mentor' },
-                  { href: '/groups',      label: 'Communities' },
-                  { href: '/jobs',        label: 'Startup Jobs' },
-                  { href: '/marketplace', label: 'Service Marketplace' },
-                  { href: '/learning',    label: 'Learning Hub' },
-                ].map(({ href, label }) => (
-                  <li key={label}>
-                    <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
-                      <L en={label} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="font-semibold text-sm text-foreground"><BilingualText en="Company" el="Εταιρεία" compact /></h4>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  { href: '/about',   label: 'About us' },
-                  { href: '/blog',    label: 'Blog' },
-                  { href: '/contact', label: 'Contact' },
-                  { href: '/privacy', label: 'Privacy Policy' },
-                  { href: '/transparency', label: 'Transparency report' },
-                  { href: '/terms',   label: 'Terms of Service' },
-                ].map(({ href, label }) => (
-                  <li key={label}>
-                    <Link href={href} className="text-muted-foreground hover:text-foreground transition-colors">
-                      <L en={label} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ))}
           </div>
 
-          <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} CoFounderBay. All rights reserved.
+              © {new Date().getFullYear()} CoFounderBay. <BilingualText en="All rights reserved." el="Με την επιφύλαξη παντός δικαιώματος." compact />
             </p>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Zap className="icon-sm text-muted-foreground" />

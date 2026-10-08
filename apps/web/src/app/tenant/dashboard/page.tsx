@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@/components/ui/skeleton';
 import { qk } from '@/lib/query-keys';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 const ChartFallback = () => <Skeleton className="h-[160px] w-full rounded-lg" />;
 const MemberGrowthChart = dynamic(
@@ -45,6 +46,7 @@ const ProgramEngagementChart = dynamic(
 );
 
 export default function TenantDashboardPage() {
+  const fmtDate = useDateFormat();
   /*
    * The workspace's home, from its own reads.
    *
@@ -99,7 +101,7 @@ export default function TenantDashboardPage() {
     end.setDate(1);
     end.setMonth(end.getMonth() - (5 - i) + 1);
     end.setHours(0, 0, 0, 0);
-    const label = new Date(end.getTime() - 1).toLocaleDateString('en-GB', { month: 'short' });
+    const label = fmtDate(end.getTime() - 1, { month: 'short' });
     return { month: label, members: members.filter((m) => Date.parse(m.joinedAt) < Math.min(end.getTime(), now + 1)).length };
   });
   const engagement = runningOrNext.map((p) => ({
@@ -124,11 +126,10 @@ export default function TenantDashboardPage() {
     id: event.id,
     name: event.title,
     // UTC on both sides of hydration, as every other date here is.
-    date: new Date(event.startAt).toLocaleDateString('en-GB', {
+    date: fmtDate(event.startAt, {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
-      timeZone: 'UTC',
     }),
     type: event.eventType === 'workshop' ? 'Session' : 'Event',
   }));

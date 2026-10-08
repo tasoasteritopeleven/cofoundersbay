@@ -36,6 +36,7 @@ import { LocalTime } from '@/components/common/LocalTime';
 import { bilingualAria } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -195,6 +196,7 @@ export function BoardHistoryDrawer({
   boardId,
   boardTitle,
 }: BoardHistoryDrawerProps) {
+  const fmtDate = useDateFormat();
   const { success, error: toastError } = useToast();
   const queryClient = useQueryClient();
   const [snapshotLabel, setSnapshotLabel] = useState('');
@@ -230,7 +232,7 @@ export function BoardHistoryDrawer({
   // Group snapshots by date
   const grouped: Record<string, BoardSnapshot[]> = {};
   for (const snap of snapshots) {
-    const dateKey = new Date(snap.createdAt).toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const dateKey = fmtDate(snap.createdAt, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     if (!grouped[dateKey]) grouped[dateKey] = [];
     grouped[dateKey].push(snap);
   }

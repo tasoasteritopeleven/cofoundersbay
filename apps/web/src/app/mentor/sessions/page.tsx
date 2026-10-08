@@ -44,6 +44,7 @@ import {
   type MentorshipSessionItem,
 } from '@/lib/api';
 import { BilingualText } from '@/components/common/BilingualText';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 type SessionActions = {
   onReschedule: (s: MentorshipSessionItem) => void;
@@ -52,6 +53,7 @@ type SessionActions = {
 };
 
 function SessionCard({ session, onReschedule, onCancel, onNotes }: { session: MentorshipSessionItem } & SessionActions) {
+  const fmtDate = useDateFormat();
   const statusColors: Record<string, string> = {
     scheduled: 'bg-status-info-bg text-status-info border-status-info-border',
     completed: 'bg-status-success-bg text-status-success border-status-success-border',
@@ -68,9 +70,7 @@ function SessionCard({ session, onReschedule, onCancel, onNotes }: { session: Me
   const MeetingIcon = meetingIcons[session.meetingType || 'video'] || Video;
 
   const scheduledDate = new Date(session.scheduledAt);
-  const formattedDate = scheduledDate.toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short',
-    day: 'numeric',
-    year: 'numeric' });
+  const formattedDate = fmtDate(scheduledDate, { month: 'short', day: 'numeric', year: 'numeric' });
   const formattedTime = scheduledDate.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',

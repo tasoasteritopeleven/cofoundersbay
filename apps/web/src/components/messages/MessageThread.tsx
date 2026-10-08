@@ -13,6 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { MessageComposer } from './MessageComposer';
 import { qk } from '@/lib/query-keys';
+import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 
 interface Message {
   id: string;
@@ -37,6 +38,9 @@ interface MessageThreadProps {
 }
 
 export function MessageThread({ conversationId, currentUserId }: MessageThreadProps) {
+  const { primary } = useLanguagePreference();
+  // Message times in the reader's language and zone (fetched after mount, never server-rendered).
+  const timeLocale = primary === 'el' ? 'el-GR' : 'en-GB';
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
@@ -122,11 +126,11 @@ export function MessageThread({ conversationId, currentUserId }: MessageThreadPr
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 
     if (diffInHours < 24) {
-      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      return date.toLocaleTimeString(timeLocale, { hour: 'numeric', minute: '2-digit' });
     } else if (diffInHours < 168) {
-      return date.toLocaleDateString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+      return date.toLocaleDateString(timeLocale, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
     } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      return date.toLocaleDateString(timeLocale, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
     }
   };
 

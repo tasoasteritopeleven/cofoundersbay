@@ -14,7 +14,7 @@ type Item = { href: string; en: string; el: string; hintEn: string; hintEl: stri
 const ALL: readonly WhatsNewAudience[] = ['founder', 'investor', 'mentor', 'org', 'provider'];
 
 /**
- * What was added in the October 2026 round, each with the place to try it.
+ * What was added in the October 2026 rounds, each with the place to try it.
  * Only what is built and reachable is listed; each audience sees what it
  * can use. The list is fixed copy (not computed from today's date), so it
  * renders the same on the server and in the browser.
@@ -31,9 +31,13 @@ const ITEMS: Item[] = [
   { href: '/profile/edit', en: 'Import from LinkedIn', el: 'Εισαγωγή από το LinkedIn', hintEn: 'Fill your profile from your LinkedIn data export; nothing is saved until you press Save.', hintEl: 'Συμπληρώστε το προφίλ από το αρχείο εξαγωγής του LinkedIn· τίποτα δεν αποθηκεύεται πριν πατήσετε Αποθήκευση.', for: ALL },
   { href: '/profile', en: 'Skills with evidence', el: 'Δεξιότητες με τεκμήρια', hintEn: 'Link a skill to a milestone, a builder document or an agreed commitment.', hintEl: 'Συνδέστε μια δεξιότητα με ορόσημο, έγγραφο του builder ή συμφωνημένη δέσμευση.', for: ['founder', 'mentor', 'provider'] },
   { href: '/transparency', en: 'Transparency report', el: 'Αναφορά διαφάνειας', hintEn: 'What the safety rules refused and what members reported, per half year.', hintEl: 'Τι απέρριψαν οι κανόνες ασφαλείας και τι ανέφεραν τα μέλη, ανά εξάμηνο.', for: ALL },
+  // 8 October 2026
+  { href: '/connections', en: 'People you may know', el: 'Ίσως γνωρίζετε', hintEn: 'Suggestions from the roles you are looking for and what you share; each says why. Never from who viewed whom.', hintEl: 'Προτάσεις από τους ρόλους που αναζητάτε και όσα μοιράζεστε· η καθεμία λέει γιατί. Ποτέ από το ποιος είδε ποιον.', for: ALL },
+  { href: '/jobs', en: 'Save jobs and listings', el: 'Αποθήκευση θέσεων και καταχωρίσεων', hintEn: 'Save keeps a job or a listing for you; "Saved only" in the filters brings them back. Nobody is told.', hintEl: 'Η Αποθήκευση κρατά μια θέση ή καταχώριση για εσάς· το «Μόνο αποθηκευμένα» στα φίλτρα τις επαναφέρει. Δεν ειδοποιείται κανείς.', for: ALL },
 ];
 
-const ROUND = '2026-10-07';
+// A new round shows the panel again to those who hid the previous one.
+const ROUND = '2026-10-08';
 
 export function whatsNewItems(audience: WhatsNewAudience): Item[] {
   return ITEMS.filter((i) => i.for.includes(audience));
@@ -70,7 +74,7 @@ export function WhatsNewPanel({ audience }: { audience: WhatsNewAudience }) {
               <BilingualText en="What’s new" el="Τι νέο υπάρχει" compact />
             </h2>
             <p className="text-xs text-muted-foreground">
-              <BilingualText en="Added on 7 October 2026. Each opens where you can try it." el="Προστέθηκαν στις 7 Οκτωβρίου 2026. Το καθένα ανοίγει εκεί που μπορείτε να το δοκιμάσετε." wrap />
+              <BilingualText en="Added on 7 and 8 October 2026. Each opens where you can try it." el="Προστέθηκαν στις 7 και 8 Οκτωβρίου 2026. Το καθένα ανοίγει εκεί που μπορείτε να το δοκιμάσετε." wrap />
             </p>
           </div>
           <Button size="sm" variant="ghost" onClick={hide}>

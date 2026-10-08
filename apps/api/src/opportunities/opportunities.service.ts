@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 type OpportunityType = 'job' | 'cofounder' | 'investment' | 'partnership' | 'mentorship' | 'other';
 
@@ -38,10 +39,38 @@ export interface OpportunityFilters {
 
 @Injectable()
 export class OpportunitiesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    // Optional so unit tests that build the service without it still work.
+    @Optional() private readonly notifications?: NotificationsService,
+  ) {}
+
+  /**
+   * People who follow the poster hear about a new listing, the way a
+   * company page's followers hear about its posts. An organisation is an
+   * account (role "org"), so following its page is this same follow. At
+   * most 500 notifications per listing; a failed one never fails the post.
+   */
+  private async tellFollowers(posterId: string, opportunity: { id: string; title: string }, posterName: string | null) {
+    if (!this.notifications) return 0;
+    const followers = await this.prisma.userFollow.findMany({ where: { followingId: posterId }, select: { followerId: true }, take: 500 });
+    for (const f of followers) {
+      await this.notifications
+        .createNotification({
+          userId: f.followerId,
+          // "News from someone you follow"; no separate enum value, so no schema change.
+          type: 'founder_update',
+          title: `${posterName ?? 'Someone you follow'}: new opportunity — ${opportunity.title}`,
+          body: null,
+          link: `/opportunities#opportunity-${opportunity.id}`,
+        })
+        .catch(() => undefined);
+    }
+    return followers.length;
+  }
 
   async create(userId: string, dto: CreateOpportunityDto) {
-    return this.prisma.opportunity.create({
+    const created = await this.prisma.opportunity.create({
       data: {
         title: dto.title,
         description: dto.description,
@@ -67,6 +96,8 @@ export class OpportunitiesService {
         },
       },
     });
+    await this.tellFollowers(userId, created, created.createdBy?.profile?.displayName ?? null).catch(() => 0);
+    return created;
   }
 
   async findAll(filters: OpportunityFilters = {}) {

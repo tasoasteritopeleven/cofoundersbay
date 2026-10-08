@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ArrowRight, ExternalLink, MapPin, MessageCircle, Star, XCircle } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { BilingualText } from '@/components/common/BilingualText';
+import { StatusText } from '@/components/common/StatusText';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -303,14 +304,14 @@ export default function StartupDealPage() {
           <Card>
             <CardContent className="space-y-2 text-sm">
               {deal.industry && <Badge variant="secondary">{deal.industry}</Badge>}
-              {deal.companyStage && <p><span className="text-muted-foreground">Stage:</span> {deal.companyStage}</p>}
+              {deal.companyStage && <p><span className="text-muted-foreground"><BilingualText en="Stage" el="Στάδιο" compact />:</span> <StatusText value={deal.companyStage} /></p>}
               {deal.location && (
                 <p className="flex items-center gap-1.5"><MapPin className="icon-sm text-muted-foreground" aria-hidden="true" />{deal.location}</p>
               )}
-              {deal.teamSize != null && <p><span className="text-muted-foreground">Team:</span> {deal.teamSize}</p>}
+              {deal.teamSize != null && <p><span className="text-muted-foreground"><BilingualText en="Team" el="Ομάδα" compact />:</span> <span className="tabular-nums">{deal.teamSize}</span></p>}
               {deal.askAmountCents != null && (
                 <p>
-                  <span className="text-muted-foreground">Raising:</span>{' '}
+                  <span className="text-muted-foreground"><BilingualText en="Raising" el="Αναζητά" compact />:</span>{' '}
                   {new Intl.NumberFormat('en-GB', { style: 'currency', currency: deal.currency, maximumFractionDigits: 0 }).format(deal.askAmountCents / 100)}
                 </p>
               )}

@@ -530,7 +530,6 @@ describe('pages that offer controls', () => {
       'src/app/matches/[userId]/page.tsx': "one match's detail page: copy its link, open the profile",
       'src/components/builder/BuilderWorkspace.tsx': 'the builder workspace, reached through the builder capabilities',
       'src/components/research/CanvasBranchSelector.tsx': 'canvas branch picker',
-      'src/components/search/AdvancedSearch.tsx': 'a filter menu inside the search panel, not a row',
       'src/components/common/LanguagePreferenceToggle.tsx': 'app chrome',
       'src/components/common/LanguageSwitcher.tsx': 'app chrome',
       'src/components/theme/ThemeSwitcher.tsx': 'app chrome',

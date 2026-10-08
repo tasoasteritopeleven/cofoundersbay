@@ -47,7 +47,7 @@ describe('live landing stats', () => {
     vi.mocked(getPublicStats).mockImplementation(() => apiMocks.realGet!() as ReturnType<typeof getPublicStats>);
     renderWithQuery(<LiveStatsGrid />);
     await screen.findByText('Registered Members');
-    for (const label of ['Successful Connections', 'Mentors Available', 'Events Hosted', 'Partner Organizations']) {
+    for (const label of ['Accepted Connections', 'Mentors Available', 'Events Listed', 'Organizations']) {
       expect(screen.getByText(label)).toBeTruthy();
     }
     // The demo world knows 25 members and 4 mentors; the tiles show those,

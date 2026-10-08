@@ -92,8 +92,8 @@ const PLANS = [
     color: 'text-primary-accessible',
     bgColor: 'bg-primary/10',
     popular: true,
-    cta: 'Start Free Trial',
-    ctaEl: 'Δωρεάν δοκιμή',
+    cta: 'Choose Pro',
+    ctaEl: 'Επιλογή Pro',
     features: PLAN_HIGHLIGHTS.pro,
   },
   {
@@ -108,8 +108,8 @@ const PLANS = [
     color: 'text-status-accent',
     bgColor: 'bg-status-accent-bg',
     popular: false,
-    cta: 'Start Free Trial',
-    ctaEl: 'Δωρεάν δοκιμή',
+    cta: 'Choose Team',
+    ctaEl: 'Επιλογή Team',
     features: PLAN_HIGHLIGHTS.team,
   },
   {
@@ -218,7 +218,7 @@ export default function PricingPage() {
             <BilingualText en="Choose the plan that fits your journey" el="Επιλέξτε το πλάνο που ταιριάζει στη διαδρομή σας" wrap />
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            <BilingualText en="Start free and scale as you grow. All plans include a 14-day free trial." el="Ξεκινήστε δωρεάν και μεγαλώστε μαζί μας. Όλα τα πλάνα έχουν δωρεάν δοκιμή 14 ημερών." wrap />
+            <BilingualText en="Start free, with no time limit. A paid plan starts when you subscribe and can be cancelled at any time." el="Ξεκινήστε δωρεάν, χωρίς χρονικό όριο. Ένα πληρωμένο πλάνο ξεκινά όταν εγγραφείτε συνδρομητές και ακυρώνεται οποτεδήποτε." wrap />
           </p>
 
           {/* Billing toggle */}
@@ -400,36 +400,40 @@ export default function PricingPage() {
           <BilingualText en="Frequently asked questions" el="Συχνές ερωτήσεις" compact />
         </h2>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+          {/* Every answer says what the code does: checkout grants no trial
+              (the "14-day free trial, no card" answers described nothing that
+              existed), and plan changes and cancellation go through the
+              payment provider's portal opened from Settings → Billing. */}
           {[
             {
-              q: 'Can I switch plans later?',
-              a: 'Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we\'ll prorate any differences.',
+              q: { en: 'Can I switch plans later?', el: 'Μπορώ να αλλάξω πλάνο αργότερα;' },
+              a: { en: 'Yes. Settings → Billing opens the payment provider’s portal, where you change or cancel your plan.', el: 'Ναι. Οι Ρυθμίσεις → Τιμολόγηση ανοίγουν την πύλη του παρόχου πληρωμών, όπου αλλάζετε ή ακυρώνετε το πλάνο σας.' },
             },
             {
-              q: 'What payment methods do you accept?',
-              a: 'We accept all major credit cards (Visa, Mastercard, Amex) and can arrange invoicing for Enterprise customers.',
+              q: { en: 'How do I pay?', el: 'Πώς πληρώνω;' },
+              a: { en: 'By card, through Stripe. Enterprise plans can be invoiced.', el: 'Με κάρτα, μέσω Stripe. Τα πλάνα Enterprise μπορούν να τιμολογηθούν.' },
             },
             {
-              q: 'Is there a free trial?',
-              a: 'Yes, all paid plans include a 14-day free trial. No credit card required to start.',
+              q: { en: 'Is there a free trial?', el: 'Υπάρχει δωρεάν δοκιμή;' },
+              a: { en: 'The Free plan has no time limit, so you can use the platform before paying. A paid plan starts when you subscribe.', el: 'Το πλάνο Free δεν έχει χρονικό όριο, οπότε χρησιμοποιείτε την πλατφόρμα πριν πληρώσετε. Ένα πληρωμένο πλάνο ξεκινά όταν εγγραφείτε συνδρομητές.' },
             },
             {
-              q: 'What happens when my trial ends?',
-              a: 'You\'ll be notified before your trial ends. If you don\'t upgrade, you\'ll be moved to the Free plan automatically.',
+              q: { en: 'Can I cancel at any time?', el: 'Μπορώ να ακυρώσω οποτεδήποτε;' },
+              a: { en: 'Yes, from the same portal. You keep access until the end of the period you paid for.', el: 'Ναι, από την ίδια πύλη. Κρατάτε την πρόσβαση μέχρι το τέλος της περιόδου που πληρώσατε.' },
             },
             {
-              q: 'Can I cancel anytime?',
-              a: 'Absolutely. You can cancel your subscription at any time. You\'ll retain access until the end of your billing period.',
+              q: { en: 'Does paying change my match scores?', el: 'Αλλάζει η πληρωμή τις βαθμολογίες αντιστοίχισης;' },
+              a: { en: 'No. Paid plans may appear in a separate slot labelled “Promoted”; scores and the order of results are the same for everyone.', el: 'Όχι. Τα πληρωμένα πλάνα μπορεί να εμφανίζονται σε χωριστή θέση με την ένδειξη «Προώθηση»· οι βαθμολογίες και η σειρά των αποτελεσμάτων είναι ίδιες για όλους.' },
             },
             {
-              q: 'Do you offer discounts for nonprofits?',
-              a: 'Yes! We offer special pricing for nonprofits, educational institutions, and social enterprises. Contact us to learn more.',
+              q: { en: 'Nonprofits and universities?', el: 'Μη κερδοσκοπικοί οργανισμοί και πανεπιστήμια;' },
+              a: { en: 'Write to enterprise@cofounderbay.com; pricing for them is agreed case by case.', el: 'Γράψτε στο enterprise@cofounderbay.com· η τιμή τους συμφωνείται κατά περίπτωση.' },
             },
           ].map(({ q, a }) => (
-            <div key={q} className="rounded-xl border border-border bg-card/50 p-5">
-              <h3 className="font-semibold text-foreground">{q}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{a}</p>
+            <div key={q.en} className="rounded-xl border border-border bg-card/50 p-5">
+              <h3 className="font-semibold text-foreground"><BilingualText en={q.en} el={q.el} wrap /></h3>
+              <p className="mt-2 text-sm text-muted-foreground"><BilingualText en={a.en} el={a.el} wrap /></p>
             </div>
           ))}
         </div>
@@ -447,7 +451,7 @@ export default function PricingPage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Button size="lg" className="gap-2" asChild>
               <Link href="/register">
-                <BilingualText en="Start free trial" el="Έναρξη δωρεάν δοκιμής" compact />
+                <BilingualText en="Start free" el="Ξεκινήστε δωρεάν" compact />
                 <ArrowRight className="icon-sm" />
               </Link>
             </Button>

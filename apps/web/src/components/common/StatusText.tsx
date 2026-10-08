@@ -148,6 +148,14 @@ const STATUS_EL: Record<string, string> = {
   terms: 'όροι',
   filled: 'καλύφθηκε',
   expired: 'έληξε',
+  // Job categories and employment types (the jobs board's words)
+  engineering: 'μηχανική λογισμικού',
+  data: 'δεδομένα',
+  research: 'έρευνα',
+  support: 'υποστήριξη',
+  temporary: 'προσωρινή',
+  remote: 'εξ αποστάσεως',
+  'on site': 'στον χώρο εργασίας',
 };
 
 /** "in_progress" → "In progress": an enum value read as a word, not a token. */
@@ -158,7 +166,10 @@ function sentenceCase(value: string): string {
 
 export function statusEl(value: string | null | undefined): string | undefined {
   if (!value) return undefined;
-  const el = STATUS_EL[value.toLowerCase().replace(/_/g, ' ').trim()] ?? STATUS_EL[value.toLowerCase()];
+  const lower = value.toLowerCase();
+  // "full-time" is the same word as "full_time": the jobs board writes the
+  // hyphen and found no Greek. Hyphenated keys ("in-person") are tried as written first.
+  const el = STATUS_EL[lower.replace(/_/g, ' ').trim()] ?? STATUS_EL[lower] ?? STATUS_EL[lower.replace(/[_-]/g, ' ').trim()];
   return el ? sentenceCase(el) : undefined;
 }
 

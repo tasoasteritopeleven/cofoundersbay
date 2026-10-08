@@ -62,6 +62,7 @@ import {
 } from '@/lib/api';
 
 import { pressableProps } from '@/lib/pressable';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const PROGRAM_STATUS_TONE: Record<string, StatusTone> = {
   open: 'success',
@@ -104,10 +105,7 @@ function badgeType(programType: string): BilingualPair {
   return PROGRAMS_STRINGS[`type_${programType}`] ?? { en: typeLabel(programType), el: typeLabel(programType) };
 }
 
-function formatDate(d: string | null) {
-  if (!d) return null;
-  return new Date(d).toLocaleDateString('en-US', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' });
-}
+const PROGRAM_DATE: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
 
 function daysUntil(d: string | null): number | null {
   if (!d) return null;
@@ -129,6 +127,7 @@ function ApplyModal({
   onApply: (note: string) => void;
   isApplying: boolean;
 }) {
+  const fmtDate = useDateFormat();
   const [note, setNote] = useState('');
   // A placeholder is one attribute and cannot hold both languages the way a
   // label can, so it follows the reader's primary language.
@@ -172,7 +171,7 @@ function ApplyModal({
                 <span className="text-muted-foreground">
                   <BilingualText en={programsEn('application_deadline')} el={programsEl('application_deadline')} compact />
                 </span>
-                <span className="font-medium">{formatDate(program.applicationDeadline)}</span>
+                <span className="font-medium">{program.applicationDeadline ? fmtDate(program.applicationDeadline, PROGRAM_DATE) : null}</span>
               </div>
             )}
             {program.capacity && (
@@ -230,6 +229,7 @@ function ProgramCard({
   isEnrolled: boolean;
   onApply: (p: ProgramItem) => void;
 }) {
+  const fmtDate = useDateFormat();
   const TypeIcon = TYPE_ICONS[program.programType] ?? Award;
   const deadline = daysUntil(program.applicationDeadline);
   const spotsLeft = program.capacity ? program.capacity - program.participantCount : null;
@@ -288,7 +288,7 @@ function ProgramCard({
               {program.startDate && (
                 <span className="flex items-center gap-1">
                   <Calendar className="icon-sm" />
-                  Starts {formatDate(program.startDate)}
+                  <BilingualText en={`Starts ${fmtDate(program.startDate, PROGRAM_DATE)}`} el={`Ξεκινά ${fmtDate(program.startDate, PROGRAM_DATE)}`} compact />
                 </span>
               )}
               <span className="flex items-center gap-1">

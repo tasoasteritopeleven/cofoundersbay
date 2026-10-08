@@ -60,6 +60,7 @@ import { qk } from '@/lib/query-keys';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
+import { formatDate } from '@/lib/i18n/format';
 
 const PROGRAM_STATUS_FILTERS: { value: 'all' | 'current' | Program['status']; en: string; el: string }[] = [
   { value: 'current', en: 'Not archived', el: 'Μη αρχειοθετημένα' },
@@ -108,11 +109,8 @@ function scheduleProgress(start: string | null, end: string | null): number {
 
 function fmtDate(iso: string | null): string {
   if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-US', {
-    timeZone: 'UTC',
-    month: 'short',
-    year: 'numeric',
-  });
+  // Numeric month/year reads the same in both languages ("10/2026").
+  return formatDate(iso, 'en', { month: '2-digit', year: 'numeric' });
 }
 
 function toViewProgram(p: ProgramItem & { name?: string; _count?: { participants?: number } }): Program {

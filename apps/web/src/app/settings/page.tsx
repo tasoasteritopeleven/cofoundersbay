@@ -37,9 +37,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/toast';
-import { createBillingCheckout, createBillingPortal, getBillingSubscription, changePassword, getTwoFactorStatus, getLinkedAccounts, getNotificationPreferences, updateNotificationPreferences, type BillingSubscription } from '@/lib/api';
+import { createBillingCheckout, createBillingPortal, getBillingSubscription, changePassword, getTwoFactorStatus, getLinkedAccounts, getNotificationPreferences, updateNotificationPreferences, getMeProfile, updateProfile, type BillingSubscription } from '@/lib/api';
 import { TwoFactorManagement } from '@/components/auth/TwoFactorManagement';
 import { VerificationCard } from '@/components/settings/VerificationCard';
+import { openCookieChoices } from '@/lib/cookie-consent';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { OpenToCard } from '@/components/settings/OpenToCard';
 import { clearPreviewDemoSession } from '@/lib/preview-demo';
@@ -47,10 +48,10 @@ import { LanguageChipGrid } from '@/components/common/LanguageSwitcher';
 import { APP_LOCALES, applyLocale, getStoredLocale, LOCALE_CHANGE_EVENT } from '@/lib/locale';
 import { useI18n } from '@/components/common/I18nProvider';
 import { useLanguagePreference, type LanguageDisplayMode } from '@/lib/i18n/LanguagePreferenceContext';
-import { qk } from '@/lib/query-keys';
+import { qk, queryKeys } from '@/lib/query-keys';
 import { choiceControl, usePageControls } from '@/lib/page-controls';
 import { NOTIFICATION_CATEGORIES, categoryChannelOn, channelsOf, setChannel, useNotificationPrefs, type NotificationCategoryDef } from '@/lib/notification-prefs';
-import { bilingualInline } from '@/lib/i18n/format';
+import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { cn } from '@/lib/utils';
 
 /*
@@ -217,18 +218,88 @@ function LanguageCard() {
 }
 
 /*
- * These four were switches that changed component state and nothing else -
- * no endpoint writes profile visibility (the schema's `profileVisibility`,
- * `showInSearch` and `showInMatching` have no API), so a reader who turned
- * "Appear in search" off stayed in search. They now show what the platform
- * does today, and say why they cannot be changed yet.
+ * Two of these hold everywhere they apply and are real switches now
+ * (`profile.visibilityRules`, shared/visibility): "Public profile" (off: the
+ * profile cannot be read without signing in, so /p/ and its link preview
+ * show nothing) and "Appear in search" (off: out of other people's search,
+ * the directory, recommendations, "People you may know" and the scout).
+ *
+ * The other two stay read-only and say why: hiding a location must hold in
+ * every list that prints one (search hits, members, matches, cohorts), not
+ * only on the profile page; "recent activity" is founder updates, which have
+ * their own audience, and need cards, which are public on the board.
  */
-const PRIVACY_CURRENT: Record<(typeof PRIVACY_ITEMS)[number]['id'], boolean> = {
-  publicProfile: true, showLocation: true, searchable: true, showActivity: false,
+const PRIVACY_READ_ONLY: Partial<Record<(typeof PRIVACY_ITEMS)[number]['id'], { value: boolean; whyEn: string; whyEl: string }>> = {
+  showLocation: {
+    value: true,
+    whyEn: 'Hiding your location has to hold in search, matches and every list, not only on your profile page; it cannot be changed here yet.',
+    whyEl: 'Η απόκρυψη της τοποθεσίας πρέπει να ισχύει στην αναζήτηση, στις αντιστοιχίσεις και σε κάθε λίστα, όχι μόνο στη σελίδα του προφίλ σας· δεν αλλάζει ακόμη εδώ.',
+  },
+  showActivity: {
+    value: true,
+    whyEn: 'Your updates follow the audience you choose on each one, and need cards are public on the board.',
+    whyEl: 'Οι ενημερώσεις σας ακολουθούν το κοινό που διαλέγετε στην καθεμία, και οι κάρτες ανάγκης είναι δημόσιες στον πίνακα.',
+  },
 };
+
+/** What each live switch does when off, in both languages. */
+const PRIVACY_LIVE_COPY = {
+  publicProfile: {
+    en: 'On: anyone with the link can read your profile. Off: only signed-in members; the public page and its link preview show nothing.',
+    el: 'Ναι: όποιος έχει τον σύνδεσμο διαβάζει το προφίλ σας. Όχι: μόνο συνδεδεμένα μέλη· η δημόσια σελίδα και η προεπισκόπηση του συνδέσμου δεν δείχνουν τίποτα.',
+  },
+  searchable: {
+    en: 'Off: you leave other people\'s search, the directory, recommendations, "People you may know" and the scout. People who already know you still reach you.',
+    el: 'Όχι: φεύγετε από την αναζήτηση των άλλων, τον κατάλογο, τις προτάσεις, το «Ίσως γνωρίζετε» και τον ανιχνευτή. Όσοι σας γνωρίζουν ήδη σας βρίσκουν κανονικά.',
+  },
+} as const;
 
 function PrivacyCard() {
   const { t } = useI18n();
+  const queryClient = useQueryClient();
+  const { error: showError } = useToast();
+  const me = useQuery({ queryKey: queryKeys.me.profile(), queryFn: getMeProfile, staleTime: 5 * 60_000, retry: 1 });
+  const rules = (me.data?.profile?.visibilityRules ?? {}) as Record<string, string>;
+  const values = {
+    publicProfile: rules.profile !== 'members',
+    searchable: rules.search !== 'hidden',
+  };
+  const save = useMutation({
+    mutationFn: (patch: Record<string, string>) => updateProfile({ visibilityRules: { ...rules, ...patch } }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.me.profile() }),
+    onError: (err) => showError('Could not save the change', err instanceof Error ? err.message : undefined),
+  });
+  const setPublic = (on: boolean) => save.mutateAsync({ profile: on ? 'public' : 'members' });
+  const setSearchable = (on: boolean) => save.mutateAsync({ search: on ? 'visible' : 'hidden' });
+
+  // The same writes, offered to the assistant; each is the other's exact undo.
+  usePageControls([
+    {
+      id: 'set_public_profile',
+      labelEn: 'Public profile (readable without signing in)',
+      labelEl: 'Δημόσιο προφίλ (ανάγνωση χωρίς σύνδεση)',
+      writes: true,
+      options: [{ value: 'on', labelEn: 'On', labelEl: 'Ναι' }, { value: 'off', labelEn: 'Off', labelEl: 'Όχι' }],
+      current: values.publicProfile ? 'on' : 'off',
+      unavailableEn: me.data?.profile ? undefined : 'Your profile has not loaded.',
+      unavailableEl: me.data?.profile ? undefined : 'Το προφίλ σας δεν φορτώθηκε.',
+      run: async (v) => { await setPublic(v === 'on'); },
+      undo: () => ({ control: 'set_public_profile', value: values.publicProfile ? 'on' : 'off' }),
+    },
+    {
+      id: 'set_appear_in_search',
+      labelEn: 'Appear in search and recommendations',
+      labelEl: 'Εμφάνιση στην αναζήτηση και στις προτάσεις',
+      writes: true,
+      options: [{ value: 'on', labelEn: 'On', labelEl: 'Ναι' }, { value: 'off', labelEn: 'Off', labelEl: 'Όχι' }],
+      current: values.searchable ? 'on' : 'off',
+      unavailableEn: me.data?.profile ? undefined : 'Your profile has not loaded.',
+      unavailableEl: me.data?.profile ? undefined : 'Το προφίλ σας δεν φορτώθηκε.',
+      run: async (v) => { await setSearchable(v === 'on'); },
+      undo: () => ({ control: 'set_appear_in_search', value: values.searchable ? 'on' : 'off' }),
+    },
+  ]);
+
   return (
     <Card className="shadow-sm border-border">
       <CardHeader className="border-b border-border">
@@ -238,33 +309,60 @@ function PrivacyCard() {
         </CardTitle>
         <CardDescription>
           <BilingualText
-            en="What others can see today. These cannot be changed yet: visibility is not stored per member."
-            el="Τι βλέπουν οι άλλοι σήμερα. Δεν αλλάζουν ακόμη: η ορατότητα δεν αποθηκεύεται ανά μέλος."
+            en="Who can find you and read your profile. Changes apply at once."
+            el="Ποιος σας βρίσκει και διαβάζει το προφίλ σας. Οι αλλαγές ισχύουν αμέσως."
             compact
             wrap
           />
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-1">
-        {PRIVACY_ITEMS.map(({ id, icon: Icon, label, desc }) => (
-          <div key={id} className="flex items-center justify-between gap-4 rounded-xl py-2.5 hover:bg-secondary/40 transition-colors">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-                <Icon className="icon-sm text-muted-foreground" />
+        {PRIVACY_ITEMS.map(({ id, icon: Icon, label, desc }) => {
+          const readOnly = PRIVACY_READ_ONLY[id];
+          const checked = readOnly ? readOnly.value : values[id as 'publicProfile' | 'searchable'];
+          return (
+            <div key={id} className="flex items-center justify-between gap-4 rounded-xl py-2.5 hover:bg-secondary/40 transition-colors">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+                  <Icon className="icon-sm text-muted-foreground" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground">{t(label)}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {readOnly ? (
+                      <BilingualText en={readOnly.whyEn} el={readOnly.whyEl} wrap />
+                    ) : PRIVACY_LIVE_COPY[id as keyof typeof PRIVACY_LIVE_COPY] ? (
+                      <BilingualText en={PRIVACY_LIVE_COPY[id as keyof typeof PRIVACY_LIVE_COPY].en} el={PRIVACY_LIVE_COPY[id as keyof typeof PRIVACY_LIVE_COPY].el} wrap />
+                    ) : (
+                      t(desc)
+                    )}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{t(label)}</p>
-                <p className="text-xs text-muted-foreground">{t(desc)}</p>
-              </div>
+              <Switch
+                checked={checked}
+                disabled={Boolean(readOnly) || !me.data?.profile || save.isPending}
+                aria-label={t(label)}
+                title={readOnly ? bilingualAria(readOnly.whyEn, readOnly.whyEl) : undefined}
+                onCheckedChange={(on) => {
+                  if (id === 'publicProfile') void setPublic(on);
+                  if (id === 'searchable') void setSearchable(on);
+                }}
+              />
             </div>
-            <Switch
-              checked={PRIVACY_CURRENT[id]}
-              disabled
-              aria-label={t(label)}
-              title="Visibility is not stored per member yet"
-            />
+          );
+        })}
+        <div className="flex items-center justify-between gap-4 border-t border-border pt-3">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-foreground"><BilingualText en="Cookie choices" el="Επιλογές cookies" compact /></p>
+            <p className="text-xs text-muted-foreground">
+              <BilingualText en="Essential cookies are always on; product analytics only if you allow them." el="Τα απαραίτητα cookies είναι πάντα ενεργά· τα αναλυτικά στοιχεία μόνο αν τα επιτρέψετε." wrap />
+            </p>
           </div>
-        ))}
+          <Button variant="outline" size="sm" className="shrink-0" onClick={openCookieChoices}>
+            <BilingualText en="Change" el="Αλλαγή" compact />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -911,11 +1009,16 @@ export default function SettingsPage() {
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-4 flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-destructive-accessible"><BilingualText en="Delete account" el="Διαγραφή λογαριασμού" compact /></p>
-                  <p className="text-xs text-muted-foreground"><BilingualText en="Permanently remove your account and all associated data. This cannot be undone." el="Οριστική διαγραφή του λογαριασμού σας και όλων των δεδομένων του. Δεν αναιρείται." wrap /></p>
+                  <p className="text-xs text-muted-foreground"><BilingualText en="Permanently remove your account and its data. Send the request from the email you signed up with; it is answered within 30 days and cannot be undone." el="Οριστική διαγραφή του λογαριασμού σας και των δεδομένων του. Στείλτε το αίτημα από το email της εγγραφής σας· απαντάται μέσα σε 30 ημέρες και δεν αναιρείται." wrap /></p>
                 </div>
-                <Button variant="destructive" size="sm" className="shrink-0 gap-2" onClick={() => success('Contact support', 'Email support@cofounderbay.com to request account deletion.')}
-                >
-                  <Trash2 className="icon-sm" /><BilingualText en="Delete" el="Διαγραφή" compact />
+                {/* There is no self-serve deletion endpoint yet, so this was a
+                    destructive-looking button that only showed a toast. It now
+                    opens the request it always meant: an email to privacy,
+                    which section 7 of the privacy policy answers within 30 days. */}
+                <Button variant="destructive" size="sm" className="shrink-0 gap-2" asChild>
+                  <a href="mailto:privacy@cofounderbay.com?subject=Account%20deletion%20request">
+                    <Trash2 className="icon-sm" /><BilingualText en="Request deletion" el="Αίτημα διαγραφής" compact />
+                  </a>
                 </Button>
               </div>
             </CardContent>

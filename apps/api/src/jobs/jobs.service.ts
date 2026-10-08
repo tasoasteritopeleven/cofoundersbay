@@ -8,7 +8,8 @@ export type JobPostingView = {
   location: string | null;
   isRemote: boolean;
   isFeatured: boolean;
-  creator: { displayName: string; avatarUrl: string | null };
+  /** The poster's id, so a reader can open their profile or message them. */
+  creator: { id: string; displayName: string; avatarUrl: string | null };
   href?: string;
 };
 
@@ -50,6 +51,7 @@ export class JobsService {
       description: job.description,
       createdAt: job.createdAt.toISOString(),
       creator: {
+        id: job.creatorId,
         displayName: job.creator.profile?.displayName ?? 'Anonymous',
         avatarUrl: job.creator.profile?.avatarUrl ?? null,
       },
@@ -76,6 +78,7 @@ export class JobsService {
       description: job.description,
       createdAt: job.createdAt.toISOString(),
       creator: {
+        id: job.creatorId,
         displayName: job.creator.profile?.displayName ?? 'Anonymous',
         avatarUrl: job.creator.profile?.avatarUrl ?? null,
       },
@@ -111,10 +114,12 @@ export class JobsService {
       isRemote: j.isRemote,
       isFeatured: j.isFeatured,
       creator: {
+        id: j.creatorId,
         displayName: j.creator.profile?.displayName ?? 'Anonymous',
         avatarUrl: j.creator.profile?.avatarUrl ?? null,
       },
-      href: '/discover',
+      // "View" opened /discover for every job; it opens the poster now.
+      href: `/profiles/${j.creatorId}`,
     }));
   }
 }

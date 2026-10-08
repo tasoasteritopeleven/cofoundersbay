@@ -5,6 +5,7 @@ import { CacheService } from '../common/cache/cache.service';
 import { AutomationService } from '../automation/automation.service';
 import { Prisma } from '@prisma/client';
 import type { CreateProfileInput, UpdateProfileInput } from '@cofounderbay/shared';
+import { isMembersOnlyProfile } from '@cofounderbay/shared';
 
 @Injectable()
 export class ProfileService {
@@ -93,6 +94,11 @@ export class ProfileService {
 
     const visibility = (profile.visibilityRules as Record<string, string> | null) ?? {};
     const isOwner = viewerUserId === profileUserId;
+    // "Public profile: off": not readable without signing in (the /p/ page
+    // and its link preview). Answered as not found, so a link reveals nothing.
+    if (!viewerUserId && isMembersOnlyProfile(profile.visibilityRules)) {
+      throw new NotFoundException('Profile not found');
+    }
     const showEmail = isOwner || visibility.email === 'public';
 
     const result = {

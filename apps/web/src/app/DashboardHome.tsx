@@ -39,6 +39,7 @@ import { queryKeys, qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { CfbGlyph, NavIcon, type CfbGlyphName } from '@/components/icons/CfbGlyph';
 import { dashboardEn, dashboardEl } from '@/lib/i18n/strings-dashboard';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 function getTimeBasedGreeting(): { en: string; el: string } {
   const hour = new Date().getHours();
@@ -212,6 +213,7 @@ function ActivityRow({
 }
 
 export function DashboardHome() {
+  const fmtDate = useDateFormat();
   const router = useRouter();
   const { hasSession, mounted: sessionReady } = useSession();
 
@@ -588,8 +590,7 @@ export function DashboardHome() {
                       >
                         <span className="truncate text-sm text-foreground">{event.title}</span>
                         <span className="shrink-0 text-xs text-muted-foreground">
-                          {new Date(event.startAt).toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short',
-                            day: 'numeric' })}
+                          {fmtDate(event.startAt, { month: 'short', day: 'numeric' })}
                         </span>
                       </Link>
                     ))}
@@ -731,7 +732,7 @@ export function DashboardHome() {
                         <span className="flex-1 truncate text-xs text-foreground">{m.title}</span>
                         {m.dueDate && (
                           <span className="shrink-0 text-2xs text-muted-foreground">
-                            {new Date(m.dueDate).toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short', day: 'numeric' })}
+                            {fmtDate(m.dueDate, { month: 'short', day: 'numeric' })}
                           </span>
                         )}
                       </Link>

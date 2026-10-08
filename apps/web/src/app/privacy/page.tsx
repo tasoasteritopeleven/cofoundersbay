@@ -36,7 +36,7 @@ Please read this Privacy Policy carefully. By using CoFounderBay, you consent to
 • Device information (browser type, operating system)
 • Usage data (pages visited, features used, time spent)
 • IP address and approximate location
-• Cookies and similar tracking technologies
+• Cookies and browser storage (see section 8)
 
 **Information from Third Parties:**
 • Social login providers (Google, LinkedIn, GitHub)
@@ -156,19 +156,19 @@ We will respond to requests within 30 days or as required by applicable law.`,
     id: 'cookies',
     title: '8. Cookies and Tracking',
     icon: Settings,
-    content: `We use cookies and similar technologies to:
+    content: `We use two kinds of browser storage, and nothing else:
 
-• Remember your preferences and settings
-• Authenticate your sessions
-• Analyze usage and performance
-• Provide personalized content
+**Essential (always on):**
+• Your sign-in session and its security (session and CSRF cookies)
+• The language and theme you choose, kept in this browser
 
-**Types of Cookies:**
-• Essential cookies (required for functionality)
-• Analytics cookies (help us improve the Platform)
-• Preference cookies (remember your choices)
+**Product analytics (only if you allow it):**
+• Which pages and features are used, through PostHog on its EU host, when the Platform is configured with it
+• Off until you choose "Allow analytics" in the cookie banner; choosing "Essential only", or withdrawing consent later, stops it in that browser
 
-You can manage cookie preferences through your browser settings or our cookie consent tool. Disabling certain cookies may affect Platform functionality.`,
+We do not use advertising or marketing cookies, and we do not share browsing data with advertisers.
+
+You can change your choice at any time with "Cookie choices" in the site footer or in Settings → Privacy.`,
   },
   {
     id: 'data-retention',

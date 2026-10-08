@@ -20,6 +20,8 @@ import { ListEmptyState } from '@/components/common/EmptyStates';
 import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { StatusText } from '@/components/common/StatusText';
+import { ProfileHero } from '@/components/profile/ProfileHero';
+import { FollowButton } from '@/components/updates/FollowButton';
 
 interface OrgContentProps {
   org: OrgProfile;
@@ -49,92 +51,76 @@ export function OrgContent({ org, slug }: OrgContentProps) {
 
   return (
     <AppShell>
-      <div className="w-full min-w-0 px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            <Avatar className="h-16 w-16 shrink-0 ring-2 ring-border">
-              <AvatarImage src={org.avatarUrl ?? undefined} />
-              <AvatarFallback className="text-base bg-primary/10 text-primary-accessible font-semibold">
-                {org.name?.[0]?.toUpperCase() ?? 'O'}
-              </AvatarFallback>
-            </Avatar>
-
-            <div className="flex-1 min-w-0 space-y-3">
-              <div>
-                <h1 className="text-xl sm:text-2xl xl:text-3xl font-semibold text-foreground">{org.name}</h1>
-                {org.tagline && (
-                  <p className="text-base text-muted-foreground mt-1">{org.tagline}</p>
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                {org.location && (
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="icon-sm shrink-0" aria-hidden="true" />
-                    <span>{org.location}</span>
-                  </div>
-                )}
-                {org.website && (
-                  <a
-                    href={org.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-                  >
-                    <Globe className="icon-sm shrink-0" aria-hidden="true" />
-                    <span>{(() => { try { return new URL(org.website).hostname; } catch { return org.website; } })()}</span>
-                    <ExternalLink className="icon-sm" aria-hidden="true" />
-                  </a>
-                )}
-                {org.email && (
-                  <a
-                    href={`mailto:${org.email}`}
-                    className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-                  >
-                    <Mail className="icon-sm shrink-0" aria-hidden="true" />
-                    <span>{org.email}</span>
-                  </a>
-                )}
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="icon-sm shrink-0" aria-hidden="true" />
-                  <span><BilingualText en="Joined" el="Εγγράφηκε" compact /> <RelativeTime date={org.createdAt} format={formatRelativeTime} /></span>
-                </div>
-              </div>
-
-              {org.description && (
-                <p className="text-sm text-foreground/80 leading-relaxed max-w-2xl">
-                  {org.description}
-                </p>
-              )}
-
-              <div className="flex gap-2 pt-1">
-                {/* Neither had a handler. There is no follow model; Contact
-                    uses the organisation's own address when it lists one. */}
-                <Button size="sm" className="h-8 px-4 text-xs font-medium gap-1.5" disabled title="Following organisations is not supported yet">
-                  <Users className="icon-sm" aria-hidden="true" />
-                  <BilingualText en="Follow" el="Ακολούθηση" compact />
-                </Button>
-                {org.email || org.website ? (
-                  <Button size="sm" variant="outline" className="h-8 px-4 text-xs font-medium gap-1.5" asChild>
-                    <a href={org.email ? `mailto:${org.email}` : org.website!} target={org.email ? undefined : '_blank'} rel="noopener noreferrer">
-                      <Mail className="icon-sm" aria-hidden="true" />
-                      <BilingualText en="Contact" el="Επικοινωνία" compact />
-                    </a>
-                  </Button>
-                ) : (
-                  <Button size="sm" variant="outline" className="h-8 px-4 text-xs font-medium gap-1.5" disabled title="This organisation has not listed a contact">
+      <div className="w-full min-w-0 space-y-6">
+        {/* The same top card as a profile, the way a company page reads:
+            a calm cover, the logo as a rounded square (organisations are
+            squares; the old header drew a circle), name in the h1, tagline,
+            facts on one wrapping line, and the actions in one row. */}
+        <ProfileHero
+          headingLevel="h1"
+          shape="organisation"
+          name={org.name}
+          ariaLabel={`${org.name} · Organisation · Οργανισμός`}
+          avatarUrl={org.avatarUrl}
+          headline={org.tagline}
+          meta={[
+            org.location ? <><MapPin className="icon-sm shrink-0" aria-hidden="true" />{org.location}</> : null,
+            org.website ? (
+              <a href={org.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
+                <Globe className="icon-sm shrink-0" aria-hidden="true" />
+                {(() => { try { return new URL(org.website).hostname; } catch { return org.website; } })()}
+                <ExternalLink className="icon-sm" aria-hidden="true" />
+              </a>
+            ) : null,
+            org.email ? (
+              <a href={`mailto:${org.email}`} className="inline-flex items-center gap-1.5 hover:text-foreground">
+                <Mail className="icon-sm shrink-0" aria-hidden="true" />{org.email}
+              </a>
+            ) : null,
+            <><Calendar className="icon-sm shrink-0" aria-hidden="true" /><BilingualText en="On the platform since" el="Στην πλατφόρμα από" compact />{' '}<RelativeTime date={org.createdAt} format={formatRelativeTime} /></>,
+          ]}
+          aside={
+            org.industry ? (
+              <Badge variant="outline" className="gap-1.5 text-xs">
+                <Building2 className="icon-sm" aria-hidden="true" />
+                {org.industry.split(',')[0]?.trim()}
+              </Badge>
+            ) : null
+          }
+          actions={
+            <>
+              {/* An organisation is an account (role "org"), so following it
+                  is the same follow as a person's: its updates reach the
+                  reader's /updates, and unfollowing removes the row. It was a
+                  disabled button that said following was not supported. */}
+              <FollowButton userId={org.id} />
+              {org.email || org.website ? (
+                <Button size="sm" variant="outline" className="gap-1.5" asChild>
+                  <a href={org.email ? `mailto:${org.email}` : org.website!} target={org.email ? undefined : '_blank'} rel="noopener noreferrer">
                     <Mail className="icon-sm" aria-hidden="true" />
                     <BilingualText en="Contact" el="Επικοινωνία" compact />
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+                  </a>
+                </Button>
+              ) : (
+                <Button size="sm" variant="outline" className="gap-1.5" disabled title="This organisation has not listed a contact · Ο οργανισμός δεν έχει δηλώσει στοιχεία επικοινωνίας">
+                  <Mail className="icon-sm" aria-hidden="true" />
+                  <BilingualText en="Contact" el="Επικοινωνία" compact />
+                </Button>
+              )}
+            </>
+          }
+        />
+
+        {org.description ? (
+          <Card>
+            <CardContent>
+              <p className="max-w-3xl text-sm leading-relaxed text-foreground/80">{org.description}</p>
+            </CardContent>
+          </Card>
+        ) : null}
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { label: 'Opportunities', labelEl: 'Ευκαιρίες', value: org._count.opportunities, tab: 'opportunities' },
             { label: 'Programs', labelEl: 'Προγράμματα', value: org._count.cohorts, tab: 'programs' },
@@ -248,7 +234,7 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                             <RelativeTime date={opp.createdAt} format={formatRelativeTime} />
                           </span>
                           <Button size="sm" variant="ghost" className="h-7 text-xs px-3" asChild>
-                            <Link href="/opportunities"><BilingualText en="View" el="Προβολή" compact /></Link>
+                            <Link href={`/opportunities#opportunity-${encodeURIComponent(opp.id)}`}><BilingualText en="View" el="Προβολή" compact /></Link>
                           </Button>
                         </div>
                       </div>
@@ -359,12 +345,12 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <a
+                          <Link
                             href={`/profiles/${member.id}`}
                             className="text-sm font-semibold text-foreground hover:text-primary-accessible transition-colors line-clamp-1"
                           >
                             {member.displayName}
-                          </a>
+                          </Link>
                           {member.headline && (
                             <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{member.headline}</p>
                           )}

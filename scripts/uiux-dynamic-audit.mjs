@@ -143,7 +143,7 @@ if (!args['summary-only']) {
           localStorage.setItem('user', JSON.stringify({ id: 'preview-demo-user', email: 'demo@cofounderbay.com', role: 'founder', displayName: 'Alex Demo', firstName: 'Alex', lastName: 'Demo' }));
           localStorage.setItem('cfb_demo_data', '1');
           localStorage.setItem('accessToken', 'preview-demo');
-          localStorage.setItem('cookie_consent', 'accepted');
+          localStorage.setItem('cfb_cookie_consent', 'true');
           localStorage.setItem('theme', theme);
           localStorage.setItem('cfb:primary-language', locale);
           localStorage.setItem('cfb:language-display', 'primary-only');

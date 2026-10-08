@@ -72,6 +72,7 @@ import {
 import { cn, initialsOf } from '@/lib/utils';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 // Types
 interface Document {
@@ -292,6 +293,7 @@ const DEMO_ACCESS_LOGS: AccessLog[] = [
 ];
 
 export default function DataRoomPage() {
+  const fmtDate = useDateFormat();
   const params = useParams();
   const roomId = params?.id as string;
   
@@ -316,9 +318,7 @@ export default function DataRoomPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short',
-      day: 'numeric',
-      year: 'numeric' });
+    return fmtDate(dateString, { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
   const getFileIcon = (type: string) => {

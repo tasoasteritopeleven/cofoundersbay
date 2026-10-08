@@ -40,6 +40,7 @@ import { qk } from '@/lib/query-keys';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { formatDate } from '@/lib/i18n/format';
 
 type MemberRole = 'owner' | 'admin' | 'manager' | 'member' | 'mentor' | 'viewer';
 
@@ -71,7 +72,7 @@ const ROLE_VALUES = ['owner', 'admin', 'manager', 'member', 'mentor', 'viewer'] 
 /** "12 Mar 2025" from the ISO timestamp the API sends. */
 function joinedOn(iso: string): string {
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return Number.isNaN(d.getTime()) ? iso : formatDate(d, 'en', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 /**

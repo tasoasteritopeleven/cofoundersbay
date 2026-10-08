@@ -31,6 +31,7 @@ import {
   BarChart3,
   BookOpen,
 } from 'lucide-react';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 // ── Readiness dimension display config ───────────────────────────────────────
 
@@ -412,6 +413,7 @@ interface MentorMetricsPanelProps {
 }
 
 export function MentorMetricsPanel({ workspaceId }: MentorMetricsPanelProps) {
+  const fmtDate = useDateFormat();
   const { data, isLoading } = useQuery<GamificationMentorMetrics>({
     queryKey: qk('gamification', 'mentor-metrics', workspaceId),
     queryFn: () => getWorkspaceMentorMetrics(workspaceId),
@@ -483,18 +485,22 @@ export function MentorMetricsPanel({ workspaceId }: MentorMetricsPanelProps) {
 
         {(data.unresolvedFeedback ?? 0) > 0 && (
           <p className="text-2xs text-status-warning ">
-            {data.unresolvedFeedback} unresolved feedback item{data.unresolvedFeedback !== 1 ? 's' : ''} — consider applying
+            <BilingualText
+              en={`${data.unresolvedFeedback} unresolved feedback item${data.unresolvedFeedback !== 1 ? 's' : ''} — consider applying`}
+              el={`${data.unresolvedFeedback} ${data.unresolvedFeedback !== 1 ? 'σχόλια χωρίς απάντηση' : 'σχόλιο χωρίς απάντηση'} — εξετάστε να τα εφαρμόσετε`}
+              wrap
+            />
           </p>
         )}
 
         {data.avgResponseTimeHrs > 0 && (
           <p className="text-2xs text-muted-foreground">
-            Avg. response time: <span className="font-medium">{data.avgResponseTimeHrs.toFixed(1)}h</span>
+            <BilingualText en="Avg. response time:" el="Μέσος χρόνος απάντησης:" compact /> <span className="font-medium tabular-nums">{data.avgResponseTimeHrs.toFixed(1)}h</span>
           </p>
         )}
         {data.lastFeedbackAt && (
           <p className="text-2xs text-muted-foreground">
-            Last feedback: {new Date(data.lastFeedbackAt).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short' })}
+            <BilingualText en="Last feedback:" el="Τελευταία ανατροφοδότηση:" compact /> {fmtDate(data.lastFeedbackAt, { day: 'numeric', month: 'short' })}
           </p>
         )}
       </CardContent>

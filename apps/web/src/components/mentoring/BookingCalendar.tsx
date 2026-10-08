@@ -19,6 +19,7 @@ import { RoleBadge } from '@/components/common/RoleBadge';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useLocalDateFormat } from '@/lib/i18n/useDateFormat';
 
 export type TimeSlot = {
   id: string;
@@ -104,6 +105,7 @@ export function BookingCalendar({
   minDate = new Date(),
   maxDate,
 }: BookingCalendarProps) {
+  const fmtLocal = useLocalDateFormat();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
@@ -209,7 +211,7 @@ export function BookingCalendar({
                   <ChevronLeft className="icon-md" />
                 </Button>
                 <span className="font-semibold text-foreground" aria-live="polite">
-                  {currentMonth.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'long', year: 'numeric' })}
+                  {fmtLocal(currentMonth, { month: 'long', year: 'numeric' })}
                 </span>
                 <Button variant="ghost" size="icon" onClick={nextMonth} aria-label="Next month">
                   <ChevronRight className="icon-md" />
@@ -270,7 +272,7 @@ export function BookingCalendar({
                     <BilingualText en="Select a time" el="Επιλέξτε ώρα" compact />
                   </CardTitle>
                   <CardDescription>
-                    {selectedDate.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
+                    {fmtLocal(selectedDate, { weekday: 'long', month: 'long', day: 'numeric' })}
                   </CardDescription>
                 </div>
                 <Button variant="ghost" onClick={() => setStep('date')}>
@@ -325,7 +327,7 @@ export function BookingCalendar({
                 <div className="flex items-center gap-3 text-foreground">
                   <Calendar className="icon-md text-muted-foreground" />
                   <span className="font-medium">
-                    {selectedDate?.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
+                    {fmtLocal(selectedDate, { weekday: 'long', month: 'long', day: 'numeric' })}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-foreground mt-2">
@@ -406,7 +408,7 @@ export function BookingCalendar({
                 <span className="text-muted-foreground"><BilingualText en="Date" el="Ημερομηνία" compact /></span>
                 <span className="font-medium text-foreground">
                   {selectedDate
-                    ? selectedDate.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short', day: 'numeric' })
+                    ? fmtLocal(selectedDate, { month: 'short', day: 'numeric' })
                     : 'Not selected'}
                 </span>
               </div>

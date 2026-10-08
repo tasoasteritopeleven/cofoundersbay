@@ -30,6 +30,10 @@ export interface ProfileVisibilityRules {
   email?: VisibilityLevel;
   phone?: VisibilityLevel;
   location?: VisibilityLevel;
+  /** `hidden`: out of other people's search, directory, recommendations and scout (shared/visibility). */
+  search?: 'visible' | 'hidden';
+  /** `members`: the profile is not readable without signing in. */
+  profile?: 'public' | 'members';
 }
 
 export interface PublicProfile {

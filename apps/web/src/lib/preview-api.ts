@@ -8,6 +8,8 @@ import { previewCommitmentsApi } from './demo/commitments-world';
 import { previewSavedSearchesApi } from './demo/saved-searches-world';
 import { previewVerificationApi } from './demo/verification-world';
 import { previewUpdatesApi } from './demo/updates-world';
+import { previewSavedItemsApi } from './demo/saved-items-world';
+import { readDemoVisibility, writeDemoVisibility } from './demo/visibility-world';
 import { previewOpenToApi } from './demo/open-to-world';
 import { previewIntrosApi } from './demo/intros-world';
 import { previewSkillEvidenceApi } from './demo/skill-evidence-world';
@@ -1521,7 +1523,7 @@ const PREVIEW_EVENTS: PreviewEvent[] = [
     description: 'A working session on interview design, signal vs. noise in early feedback, and deciding what not to build.',
     eventType: 'workshop', mode: 'hybrid',
     startAt: '2026-09-17T09:00:00.000Z', endAt: '2026-09-17T12:00:00.000Z',
-    timezone: 'Europe/Athens', location: 'Impact Hub, Athens', isOnline: true, meetingUrl: 'https://meet.cofounderbay.com/discovery',
+    timezone: 'Europe/Athens', location: 'Aegean Venture Lab, Athens', isOnline: true, meetingUrl: 'https://meet.cofounderbay.com/discovery',
     capacity: 40, coverImageUrl: null, attendeesCount: 32,
     host: PREVIEW_EVENT_HOSTS.sarah, viewerRsvp: null,
   },
@@ -1578,12 +1580,12 @@ const PREVIEW_EVENTS: PreviewEvent[] = [
 ];
 
 const PREVIEW_JOBS = [
-  { id: 'job-founding-eng', title: 'Founding Engineer', role: 'engineering', location: 'Athens, Greece', isRemote: false, type: 'full-time', isFeatured: true, creator: { displayName: 'Elena Papadopoulos', avatarUrl: null } },
-  { id: 'job-growth-lead', title: 'Growth Lead', role: 'marketing', location: 'Remote — EU time zones', isRemote: true, type: 'full-time', creator: { displayName: 'Marcus Chen', avatarUrl: null } },
-  { id: 'job-product-designer', title: 'Product Designer (Founding)', role: 'design', location: 'Athens, Greece', isRemote: false, type: 'full-time', creator: { displayName: 'Elena Papadopoulos', avatarUrl: null } },
-  { id: 'job-data-contract', title: 'Data Scientist — 3-month contract', role: 'data', location: 'Remote', isRemote: true, type: 'contract', creator: { displayName: 'Dr. Sarah Kim', avatarUrl: null } },
-  { id: 'job-bizdev-see', title: 'Business Development, Southeast Europe', role: 'sales', location: 'Thessaloniki, Greece', isRemote: false, type: 'full-time', creator: { displayName: 'Nikos Andreou', avatarUrl: null } },
-  { id: 'job-backend-intern', title: 'Backend Engineering Intern', role: 'engineering', location: 'Remote', isRemote: true, type: 'internship', creator: { displayName: 'Marcus Chen', avatarUrl: null } },
+  { id: 'job-founding-eng', title: 'Founding Engineer', role: 'engineering', location: 'Athens, Greece', isRemote: false, type: 'full-time', isFeatured: true, creator: { id: 'user-elena', displayName: 'Elena Papadopoulos', avatarUrl: null }, href: '/profiles/user-elena' },
+  { id: 'job-growth-lead', title: 'Growth Lead', role: 'marketing', location: 'Remote — EU time zones', isRemote: true, type: 'full-time', creator: { id: 'user-marcus', displayName: 'Marcus Chen', avatarUrl: null }, href: '/profiles/user-marcus' },
+  { id: 'job-product-designer', title: 'Product Designer (Founding)', role: 'design', location: 'Athens, Greece', isRemote: false, type: 'full-time', creator: { id: 'user-elena', displayName: 'Elena Papadopoulos', avatarUrl: null }, href: '/profiles/user-elena' },
+  { id: 'job-data-contract', title: 'Data Scientist — 3-month contract', role: 'data', location: 'Remote', isRemote: true, type: 'contract', creator: { id: 'user-sarah', displayName: 'Dr. Sarah Kim', avatarUrl: null }, href: '/profiles/user-sarah' },
+  { id: 'job-bizdev-see', title: 'Business Development, Southeast Europe', role: 'sales', location: 'Thessaloniki, Greece', isRemote: false, type: 'full-time', creator: { id: 'user-nikos', displayName: 'Nikos Andreou', avatarUrl: null }, href: '/profiles/user-nikos' },
+  { id: 'job-backend-intern', title: 'Backend Engineering Intern', role: 'engineering', location: 'Remote', isRemote: true, type: 'internship', creator: { id: 'user-marcus', displayName: 'Marcus Chen', avatarUrl: null }, href: '/profiles/user-marcus' },
 ];
 
 type PreviewGroup = {
@@ -2677,6 +2679,18 @@ export function resolvePreviewApi(path: string, init?: RequestInit): unknown {
   // Following and founder updates, with the API's rules and refusals.
   const updatesAnswer = previewUpdatesApi(pathname, method, (body ?? {}) as Record<string, unknown>, previewNowMs());
   if (updatesAnswer !== undefined) return updatesAnswer;
+  // Saved listings and jobs, looked up in the demo's own lists.
+  const savedItemsAnswer = previewSavedItemsApi(
+    pathname,
+    new URLSearchParams(path.split('?')[1] ?? ''),
+    method,
+    (body ?? {}) as Record<string, unknown>,
+    previewNowMs(),
+    (kind, itemId) => (kind === 'opportunity'
+      ? PREVIEW_OPPORTUNITIES.find((o) => o.id === itemId)?.title
+      : PREVIEW_JOBS.find((j) => j.id === itemId)?.title) ?? null,
+  );
+  if (savedItemsAnswer !== undefined) return savedItemsAnswer;
   // "Open to" and warm introductions; accepting an introduction answers the
   // need card in the commitments world above.
   const openToAnswer = previewOpenToApi(pathname, method, (body ?? {}) as Record<string, unknown>, previewNowMs());
@@ -2733,7 +2747,12 @@ export function resolvePreviewApi(path: string, init?: RequestInit): unknown {
     };
   }
   if (pathname === '/api/me/profile') {
-    return ME_PROFILE;
+    // Settings' visibility switches are stored for the demo; the rest of the
+    // profile stays the demo's own.
+    if (method === 'PATCH' && body && typeof body === 'object' && 'visibilityRules' in (body as Record<string, unknown>)) {
+      return { ...ME_PROFILE, visibilityRules: writeDemoVisibility((body as Record<string, unknown>).visibilityRules) };
+    }
+    return { ...ME_PROFILE, visibilityRules: readDemoVisibility() ?? (ME_PROFILE as { visibilityRules?: unknown }).visibilityRules ?? null };
   }
   if (pathname === '/api/auth/refresh' || pathname === '/api/auth/logout') {
     return { ok: true };

@@ -24,6 +24,7 @@ import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls
 import { qk } from '@/lib/query-keys';
 import { cn } from '@/lib/utils';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 /*
  * Workspace analytics, counted.
@@ -49,6 +50,7 @@ const PERIODS = [
 const DAY = 86_400_000;
 
 export default function TenantAnalyticsPage() {
+  const fmtDate = useDateFormat();
   const [period, setPeriod] = useState<(typeof PERIODS)[number]['value']>('30d');
   const windowDays = PERIODS.find((p) => p.value === period)?.days ?? 30;
   const { activeTenant } = useTenant();
@@ -159,7 +161,7 @@ export default function TenantAnalyticsPage() {
     end.setMonth(end.getMonth() - (5 - i) + 1);
     const cutoff = Math.min(end.getTime(), now + 1);
     return {
-      month: new Date(end.getTime() - 1).toLocaleDateString('en-GB', { month: 'short' }),
+      month: fmtDate(end.getTime() - 1, { month: 'short' }),
       count: members.filter((m) => Date.parse(m.joinedAt) < cutoff).length,
     };
   });

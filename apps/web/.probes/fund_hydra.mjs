@@ -21,7 +21,7 @@ const b = await chromium.launch();
     localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' }));
     localStorage.setItem('cfb_demo_data', '1');
     localStorage.setItem('accessToken', 'preview-demo');
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
     sessionStorage.setItem('cfb:demo-fundraising', JSON.stringify({
       created: [{ id: 'l-9', name: 'Overlay Investor', type: 'Angel', stage: 'Seed', checkSize: '$50K', status: 'prospect', isVerified: false }],
       status: { ata: 'passed' },
@@ -53,7 +53,7 @@ const b = await chromium.launch();
     localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' }));
     localStorage.setItem('cfb_demo_data', '1');
     localStorage.setItem('accessToken', 'preview-demo');
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
   });
   await page.clock.setFixedTime(new Date(Date.now() + 40 * 86_400_000));
   await page.goto('http://localhost:3000/fundraising', { waitUntil: 'networkidle' }).catch(() => {});

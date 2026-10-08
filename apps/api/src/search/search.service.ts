@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { Role } from '@prisma/client';
 import { Prisma } from '@prisma/client';
-import { computeMatchScore, placeVariants, planPromotes, PROMOTED_SLOTS, type ProfileSnapshot } from '@cofounderbay/shared';
+import { computeMatchScore, isHiddenFromSearch, placeVariants, planPromotes, PROMOTED_SLOTS, type ProfileSnapshot } from '@cofounderbay/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { MeilisearchService } from './meilisearch.service';
 
@@ -35,10 +35,28 @@ export class SearchService {
       }
     }
     if (!result) result = await this.searchProfilesFallback(params);
+    result = await this.withoutHiddenFromSearch(result);
     // The labelled "Promoted" slot is offered on the first page only, from
     // people already in it; the hits themselves are returned untouched.
     const promotedUserIds = params.offset ? [] : await this.promotedAmong((result?.hits ?? []) as Array<{ userId?: string }>);
     return { ...result, promotedUserIds };
+  }
+
+  /**
+   * Drops members who chose "Appear in search: off" (`visibilityRules.search
+   * = 'hidden'`, shared/visibility). One read for both paths, the search
+   * index and the database fallback, so neither can show them. The total
+   * goes down by the members dropped from this page; a hidden member on a
+   * later page is dropped there.
+   */
+  private async withoutHiddenFromSearch<R extends { hits: unknown[]; total: number }>(result: R): Promise<R> {
+    const ids = (result.hits as Array<{ userId?: unknown }>).map((h) => h?.userId).filter((id): id is string => typeof id === 'string' && !!id);
+    if (!ids.length) return result;
+    const rows = await this.prisma.profile.findMany({ where: { userId: { in: ids } }, select: { userId: true, visibilityRules: true } });
+    const hidden = new Set(rows.filter((r) => isHiddenFromSearch(r.visibilityRules)).map((r) => r.userId));
+    if (!hidden.size) return result;
+    const hits = (result.hits as Array<{ userId?: unknown }>).filter((h) => !(typeof h?.userId === 'string' && hidden.has(h.userId)));
+    return { ...result, hits, total: Math.max(0, result.total - (result.hits.length - hits.length)) };
   }
 
   /**
@@ -326,7 +344,8 @@ export class SearchService {
         : Promise.resolve([]),
     ]);
 
-    const peopleHits = people.map((p) => ({
+    // "Appear in search: off" holds here too (shared/visibility).
+    const peopleHits = people.filter((p) => !isHiddenFromSearch(p.visibilityRules)).map((p) => ({
       id: p.userId,
       type: 'user' as const,
       title: p.displayName,
@@ -336,7 +355,7 @@ export class SearchService {
       href: `/profiles/${p.userId}`,
       meta: p.location ? { location: p.location } : undefined,
     }));
-    const mentorHits = mentors.map((p) => ({
+    const mentorHits = mentors.filter((p) => !isHiddenFromSearch(p.visibilityRules)).map((p) => ({
       id: p.userId,
       type: 'user' as const,
       title: p.displayName,
@@ -455,7 +474,7 @@ export class SearchService {
     });
 
     const viewerSnapshot = this.toProfileSnapshot(viewer);
-    const scored = candidates.map((p) => {
+    const scored = candidates.filter((p) => !isHiddenFromSearch(p.visibilityRules)).map((p) => {
       const candidateSnapshot = this.toProfileSnapshot(p);
       const { score, breakdown } = computeMatchScore(viewerSnapshot, candidateSnapshot);
       const rp = p.rolePayload as Record<string, unknown> | null;

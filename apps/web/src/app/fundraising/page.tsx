@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Plus, ChevronRight, Clock, Upload, Download, X,
+  Plus, ChevronRight, Clock, CheckCircle2, Download, X,
 } from 'lucide-react';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { AppShell } from '@/components/layout/AppShell';
@@ -565,24 +565,44 @@ function DataRoomView({
                         variant="ghost"
                         size="sm"
                         className={cn('h-7 w-7 p-0', BUILDER_BTN)}
-                        aria-label={bilingualAria(fundraisingEn('upload'), fundraisingEl('upload'))}
+                        // It never uploaded anything: it marks the row ready in this
+                        // browser, and now says so instead of "Upload queued".
+                        aria-label={bilingualAria(fundraisingEn('mark_ready'), fundraisingEl('mark_ready'))}
+                        title={bilingualAria(fundraisingEn('mark_ready'), fundraisingEl('mark_ready'))}
+                        disabled={doc.status !== 'draft'}
                         onClick={() => {
                           markFundraisingDocStatus(doc.id, 'ready');
                           onChange();
-                          success('Upload queued', 'The file is marked ready in this browser.');
+                          success('Marked ready', 'The document is marked ready in this browser.');
                         }}
                       >
-                        <Upload className="icon-sm" />
+                        <CheckCircle2 className="icon-sm" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={cn('h-7 w-7 p-0', BUILDER_BTN)}
-                        aria-label={bilingualAria(fundraisingEn('download'), fundraisingEl('download'))}
-                        onClick={() => success('Download started', 'It stays in this data room until a fundraising API exists.')}
-                      >
-                        <Download className="icon-sm" />
-                      </Button>
+                      {/* "Download started" was a toast with no file behind it. A
+                          document with a link opens there; one without says why
+                          nothing can be downloaded. */}
+                      {doc.href ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn('h-7 w-7 p-0', BUILDER_BTN)}
+                          aria-label={bilingualAria(fundraisingEn('download'), fundraisingEl('download'))}
+                          asChild
+                        >
+                          <Link href={doc.href}><Download className="icon-sm" /></Link>
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn('h-7 w-7 p-0', BUILDER_BTN)}
+                          aria-label={bilingualAria(fundraisingEn('download'), fundraisingEl('download'))}
+                          title={bilingualAria(fundraisingEn('no_file'), fundraisingEl('no_file'))}
+                          disabled
+                        >
+                          <Download className="icon-sm" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardContent>

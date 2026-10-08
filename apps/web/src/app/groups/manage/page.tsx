@@ -47,6 +47,7 @@ import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 type ManagedGroup = {
   id: string;
@@ -166,6 +167,7 @@ function GroupCard({ group, onInvite, onDelete }: { group: ManagedGroup } & Grou
 }
 
 export default function ManageGroupsPage() {
+  const fmtDate = useDateFormat();
   // Illustrative rows are for the showcase; a real account with nothing
   // to list sees the page's empty state, not invented people and records.
   const { showDemoData } = useDemoData();
@@ -196,9 +198,9 @@ export default function ManageGroupsPage() {
           postCount: g.postCount,
           role: g.memberRole as ManagedGroup['role'],
           isActive: true,
-          lastActivity: new Date(g.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }),
+          lastActivity: fmtDate(g.updatedAt, { day: 'numeric', month: 'short' }),
         })),
-    [data],
+    [data, fmtDate],
   );
   const showingSample = !isLoading && live.length === 0;
   const groups: ManagedGroup[] = live.length > 0 ? live : isLoading || !showDemoData ? [] : MOCK_GROUPS;

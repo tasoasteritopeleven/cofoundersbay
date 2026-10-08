@@ -21,7 +21,7 @@ async function signIn(page: Page) {
   await page.context().addInitScript(() => {
     localStorage.setItem('user', JSON.stringify({ id: 'u_1', email: 'admin@cofounderbay.test', role: 'admin' }));
     localStorage.setItem('cfb_demo_data', '1');
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
     for (const tour of ['matches', 'founder-dashboard']) {
       for (const user of ['preview', 'u_1', 'preview-demo-user']) localStorage.setItem(`cfb.tour.${tour}.${user}`, 'done');
     }

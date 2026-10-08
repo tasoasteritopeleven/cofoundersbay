@@ -4,7 +4,7 @@ const b = await chromium.launch();
 for (const theme of ['light','alliance','minimal','apricot']) {
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
   await ctx.addCookies([{ name: 'cfb_session', value: 'probe', domain: 'localhost', path: '/' },{ name: 'cfb_primary_role', value: 'founder', domain: 'localhost', path: '/' }]);
-  await ctx.addInitScript((t) => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' })); localStorage.setItem('cfb_demo_data','1'); localStorage.setItem('cookie_consent','accepted'); localStorage.setItem('theme',t); localStorage.setItem('cfb_tours_done','1'); }, theme);
+  await ctx.addInitScript((t) => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' })); localStorage.setItem('cfb_demo_data','1'); localStorage.setItem('cfb_cookie_consent','true'); localStorage.setItem('theme',t); localStorage.setItem('cfb_tours_done','1'); }, theme);
   const p = await ctx.newPage();
   await p.goto('http://localhost:3000/readiness', { waitUntil: 'networkidle' }); await p.waitForTimeout(1600);
   await p.screenshot({ path: `.probes/final_${theme}.png` });

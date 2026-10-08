@@ -605,6 +605,7 @@ model User {
 
   // Saved searches
   savedSearches               SavedSearch[]               @relation("SavedSearches")
+  savedItems                  SavedItem[]                 @relation("SavedItems")
 
   // Platform announcements
   platformAnnouncements       PlatformAnnouncement[]      @relation("PlatformAnnouncements")
@@ -6496,6 +6497,22 @@ enum SavedSearchType {
   community
   member
   job
+}
+
+/// A listing or a job a member saved to come back to (LinkedIn's "Save").
+/// Private to the member; the title is copied from the source on save.
+/// Schema-only like the other October 2026 models: `prisma db push`.
+model SavedItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("SavedItems", fields: [userId], references: [id], onDelete: Cascade)
+  kind      String // 'opportunity' | 'job' (packages/shared saved-items)
+  itemId    String
+  title     String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, kind, itemId])
+  @@index([userId, createdAt])
 }
 
 model SavedSearch {

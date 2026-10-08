@@ -28,6 +28,7 @@ import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls
 import { qk } from '@/lib/query-keys';
 import { cn } from '@/lib/utils';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 const ChartFallback = () => <Skeleton className="h-[180px] w-full rounded-lg" />;
 const PieFallback = () => <Skeleton className="h-[140px] w-[140px] rounded-full" />;
@@ -85,6 +86,7 @@ function monthKey(d: Date): string {
 }
 
 export default function OrgAnalyticsPage() {
+  const fmtDate = useDateFormat();
   const [period, setPeriod] = useState<(typeof PERIODS)[number]['value']>('30d');
   const windowDays = PERIODS.find((p) => p.value === period)?.days ?? 30;
   const { slug, membership } = useCurrentOrg();
@@ -177,12 +179,12 @@ export default function OrgAnalyticsPage() {
     return d;
   });
   const trend = months.map((d) => ({
-    month: d.toLocaleDateString('en-GB', { month: 'short' }),
+    month: fmtDate(d, { month: 'short' }),
     applications: participants.filter(({ row }) => monthKey(new Date(row.appliedAt)) === monthKey(d)).length,
     accepted: participants.filter(({ row }) => row.acceptedAt && monthKey(new Date(row.acceptedAt)) === monthKey(d)).length,
   }));
   const sessionsByMonth = months.map((d) => ({
-    month: d.toLocaleDateString('en-GB', { month: 'short' }),
+    month: fmtDate(d, { month: 'short' }),
     sessions: sessions.filter((s) => monthKey(new Date(s.scheduledAt)) === monthKey(d)).length,
   }));
   const recentMonths = sessionsByMonth.slice(-3);

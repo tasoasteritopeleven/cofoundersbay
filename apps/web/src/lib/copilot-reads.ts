@@ -535,7 +535,8 @@ export const AREA_READERS: Record<AreaReadId, Reader> = {
 
     const citations: CopilotCitation[] = [];
     const lines = items.map((item) => {
-      citations.push({ type: 'opportunity', id: item.id, label: item.title, href: `/opportunities/${item.id}` });
+      // There is no /opportunities/:id page; the list scrolls to the card.
+      citations.push({ type: 'opportunity', id: item.id, label: item.title, href: `/opportunities#opportunity-${encodeURIComponent(item.id)}` });
       const details = [
         OPPORTUNITY_TYPE[item.type] ? t(OPPORTUNITY_TYPE[item.type]) : '',
         item.company ?? '',

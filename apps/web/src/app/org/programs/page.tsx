@@ -35,6 +35,7 @@ import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { StatusText } from '@/components/common/StatusText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 /**
  * The page's own row from the API row.
@@ -92,13 +93,10 @@ const STATUS_LABEL: Record<Program['status'], { en: string; el: string }> = {
 };
 
 /** "7 Sep 2026": the API sends ISO timestamps, which the card printed as they came. */
-function programDate(iso: string | undefined): string {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-}
+const PROGRAM_DATE: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
 
 function ProgramCard({ program }: { program: Program }) {
+  const fmtDate = useDateFormat();
   /*
    * "Archive" was a menu item with no handler. It writes the status the API
    * already accepts, and the list refreshes from the server rather than from
@@ -139,7 +137,7 @@ function ProgramCard({ program }: { program: Program }) {
               {program.startDate && (
                 <span className="flex items-center gap-1">
                   <Calendar className="icon-sm" aria-hidden="true" />
-                  {programDate(program.startDate)} – {program.endDate ? programDate(program.endDate) : <BilingualText en="Ongoing" el="Σε εξέλιξη" compact />}
+                  {fmtDate(program.startDate, PROGRAM_DATE)} – {program.endDate ? fmtDate(program.endDate, PROGRAM_DATE) : <BilingualText en="Ongoing" el="Σε εξέλιξη" compact />}
                 </span>
               )}
               <span className="flex items-center gap-1">

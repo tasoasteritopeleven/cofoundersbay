@@ -10,7 +10,7 @@ await page.context().addCookies([
 await page.goto('http://localhost:3000/matches', { waitUntil: 'domcontentloaded' });
 await page.evaluate(() => {
   localStorage.setItem('user', JSON.stringify({ id: 'probe', primaryRole: 'platform_admin' }));
-  localStorage.setItem('cfb_demo_data', '1'); localStorage.setItem('cookie_consent', 'accepted');
+  localStorage.setItem('cfb_demo_data', '1'); localStorage.setItem('cfb_cookie_consent', 'true');
 });
 await page.reload({ waitUntil: 'networkidle' }).catch(() => {});
 await page.waitForTimeout(3000);

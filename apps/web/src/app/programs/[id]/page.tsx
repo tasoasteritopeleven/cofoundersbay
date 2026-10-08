@@ -20,6 +20,7 @@ import { qk } from '@/lib/query-keys';
 import { usePageControls } from '@/lib/page-controls';
 import { StatusText } from '@/components/common/StatusText';
 import type { ReactNode } from 'react';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 /**
  * One labelled fact. No icon: the calm-surface rule hides decorative glyphs
@@ -34,10 +35,7 @@ function Fact({ en, el, children }: { en: string; el: string; children: ReactNod
   );
 }
 
-function formatDate(d: string | null): string {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-}
+const PROGRAM_DATE: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
 
 /**
  * One programme.
@@ -48,6 +46,7 @@ function formatDate(d: string | null): string {
  * lets a founder apply from it, with the same optional note.
  */
 export default function ProgramDetailPage() {
+  const fmtDate = useDateFormat();
   const params = useParams<{ id: string }>();
   const id = params?.id ?? '';
   const queryClient = useQueryClient();
@@ -171,10 +170,10 @@ export default function ProgramDetailPage() {
                   </span>
                 </Fact>
                 <Fact en="Dates" el="Ημερομηνίες">
-                  {formatDate(program.startDate)} – {formatDate(program.endDate)}
+                  {program.startDate ? fmtDate(program.startDate, PROGRAM_DATE) : '—'} – {program.endDate ? fmtDate(program.endDate, PROGRAM_DATE) : '—'}
                 </Fact>
                 <Fact en={programsEn('application_deadline')} el={programsEl('application_deadline')}>
-                  {formatDate(program.applicationDeadline)}
+                  {program.applicationDeadline ? fmtDate(program.applicationDeadline, PROGRAM_DATE) : '—'}
                 </Fact>
                 <Fact en="Location" el="Τοποθεσία">
                   {program.isRemote ? <BilingualText en="Remote" el="Εξ αποστάσεως" compact /> : program.location ?? '—'}

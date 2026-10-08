@@ -389,7 +389,13 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
                       )}
                       {connButtonLabel}
                     </Button>
-                    <Button variant="outline" className="gap-2" onClick={handleMessage} disabled={messaging || isBlocked}>
+                    <Button
+                      variant="outline"
+                      className="gap-2"
+                      onClick={handleMessage}
+                      disabled={messaging || isBlocked}
+                      title={isBlocked ? bilingualAria('Messages are closed between you and this member', 'Τα μηνύματα είναι κλειστά ανάμεσα σε εσάς και αυτό το μέλος') : undefined}
+                    >
                       {messaging ? (
                         <Loader2 className="icon-sm animate-spin" aria-hidden="true" />
                       ) : (
@@ -409,6 +415,7 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
                     variant="outline"
                     size="sm"
                     label="AI Match Analysis"
+                    labelEl="Ανάλυση αντιστοίχισης με AI"
                   />
                 ) : null}
                 <Button

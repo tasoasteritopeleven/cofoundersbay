@@ -37,7 +37,6 @@ export { SkillChip, SkillChipGroup } from './SkillChip';
 export * from './StatCard';
 
 // Quick Actions
-export * from './QuickActions';
 
 // Theme
 export * from './ThemeToggle';

@@ -15,7 +15,7 @@ for (const theme of ['dark', 'light']) {
     localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' }));
     localStorage.setItem('cfb_demo_data', '1');
     localStorage.setItem('accessToken', 'preview-demo');
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
     localStorage.setItem('theme', t);
     localStorage.setItem('cfb.tour.matches.preview-demo-user', 'done');
     localStorage.setItem('cfb.tour.discover.preview-demo-user', 'done');

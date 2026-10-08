@@ -36,6 +36,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { qk } from '@/lib/query-keys';
 import { FirstRunTour, type TourStep } from '@/components/common/FirstRunTour';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 const ACHIEVEMENTS_TOUR: TourStep[] = [
   {
@@ -480,6 +481,7 @@ function computeEarnedBadgeIds(signals?: { connectionCount: number; boardCount: 
 }
 
 export default function AchievementsPage() {
+  const fmtDate = useDateFormat();
   const [activeTab, setActiveTab] = useState<'all' | 'unlocked' | 'locked' | 'leaderboard' | 'reputation' | 'badges'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
@@ -782,7 +784,7 @@ export default function AchievementsPage() {
                               <div className="flex-1 min-w-0">
                                 <p className="text-xs font-medium truncate">{a.title}</p>
                                 <p className="text-xs text-muted-foreground">
-                                  {a.unlockedAt?.toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short' })}
+                                  {a.unlockedAt ? fmtDate(a.unlockedAt, { day: 'numeric', month: 'short' }) : null}
                                 </p>
                               </div>
                               <Badge variant="secondary" size="sm" className="px-1.5 shrink-0">{a.points}pts</Badge>

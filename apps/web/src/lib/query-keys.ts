@@ -80,6 +80,8 @@ export const QUERY_ROOTS = [
   'recommendations',
   'research-boards',
   'roles',
+  // Saved listings and jobs (LinkedIn's "Save"), one resource.
+  'saved-items',
   'saved-searches',
   'scout',
   'search',

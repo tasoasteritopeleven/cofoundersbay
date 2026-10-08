@@ -44,6 +44,8 @@ import { useToast } from '@/components/ui/toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { StatusText } from '@/components/common/StatusText';
+import { SaveItemButton } from '@/components/common/SaveItemButton';
 import { jobsEn, jobsEl } from '@/lib/i18n/strings-jobs';
 import { bilingualInline } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
@@ -98,10 +100,10 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {job.role && (
-                  <Badge variant="secondary" className="text-xs">{job.role}</Badge>
+                  <Badge variant="secondary" className="text-xs"><StatusText value={job.role} /></Badge>
                 )}
                 {job.type && (
-                  <Badge variant="outline" className="text-xs">{job.type}</Badge>
+                  <Badge variant="outline" className="text-xs"><StatusText value={job.type} /></Badge>
                 )}
                 {job.isRemote && (
                   <Badge variant="outline" className="text-xs border-status-success-border text-status-success bg-status-success-bg">
@@ -125,12 +127,19 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
             </div>
           </div>
 
-          <Button variant="ghost" size="sm" className="ml-auto gap-1 shrink-0" asChild>
-            <Link href={job.href ?? `/jobs`}>
-              <ExternalLink className="icon-sm" />
-              <BilingualText en={jobsEn('view')} el={jobsEl('view')} compact />
-            </Link>
-          </Button>
+          <div className="ml-auto flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
+            <SaveItemButton kind="job" itemId={job.id} title={job.title} />
+            {/* "View" linked to /discover (API) or back to /jobs (demo) for
+                every role; it opens the poster's profile when the poster is known. */}
+            {job.creator?.id ? (
+              <Button variant="ghost" size="sm" className="gap-1" asChild>
+                <Link href={`/profiles/${job.creator.id}`}>
+                  <ExternalLink className="icon-sm" />
+                  <BilingualText en="View poster" el="Προβολή εκδότη" compact />
+                </Link>
+              </Button>
+            ) : null}
+          </div>
         </div>
       </CardContent>
     </Card>

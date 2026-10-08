@@ -32,6 +32,7 @@ import { MENTOR_DEMO_REVIEWS } from '@/lib/demo/mentor-world';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { formatDate } from '@/lib/i18n/format';
 
 type Review = {
   id: string;
@@ -110,7 +111,7 @@ function sampleReviews(now: number | null): Review[] {
     mentee: r.mentee,
     rating: r.rating,
     comment: r.comment,
-    date: now == null ? '' : new Date(now - r.ago * 86_400_000).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' }),
+    date: now == null ? '' : formatDate(now - r.ago * 86_400_000, 'en', { day: '2-digit', month: '2-digit', year: 'numeric' }),
     sessionType: r.sessionType,
     helpful: r.helpful,
   }));

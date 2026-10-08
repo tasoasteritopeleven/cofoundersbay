@@ -54,6 +54,7 @@ import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 import { choiceControl, rowOptions, usePageControls, usePageList } from '@/lib/page-controls';
 import { useRouter } from 'next/navigation';
+import { formatDate } from '@/lib/i18n/format';
 
 /**
  * The page's own row from the API row.
@@ -68,7 +69,7 @@ import { useRouter } from 'next/navigation';
 function shortDay(iso: string | null): string {
   if (!iso) return '';
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  return Number.isNaN(d.getTime()) ? iso : formatDate(d, 'en', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function toPageCohort(item: CohortItem): Cohort {

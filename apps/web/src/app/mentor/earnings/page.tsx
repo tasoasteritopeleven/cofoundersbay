@@ -65,7 +65,8 @@ function mockMonthly() {
   const now = new Date();
   return MOCK_MONTHLY_TOTALS.map((m, i) => {
     const d = new Date(now.getFullYear(), now.getMonth() - (MOCK_MONTHLY_TOTALS.length - 1 - i), 1);
-    return { month: d.toLocaleString('en-GB', { month: 'short' }), ...m };
+    // "10/26" reads the same in both languages.
+    return { month: d.toLocaleDateString('en-GB', { month: '2-digit', year: '2-digit' }), ...m };
   });
 }
 

@@ -60,6 +60,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 import { statusEl } from '@/components/common/StatusText';
+import { formatDate } from '@/lib/i18n/format';
 
 /**
  * The page's own row from the tenant membership row.
@@ -84,7 +85,7 @@ function toPageMember(row: TenantMemberItem): Member {
     role: row.role,
     status: row.isActive ? 'active' : 'suspended',
     // The API sends an ISO timestamp, which the card printed as it came.
-    joinedAt: new Date(row.joinedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    joinedAt: formatDate(row.joinedAt, 'en', { day: '2-digit', month: '2-digit', year: 'numeric' }),
     lastActive: '',
   };
 }

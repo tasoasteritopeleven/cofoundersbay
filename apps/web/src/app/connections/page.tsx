@@ -1,7 +1,7 @@
 'use client';
 
 import { choiceControl, ROW_GONE, rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useQuery, useQueries, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -46,6 +46,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { connectionsEn, connectionsEl } from '@/lib/i18n/strings-connections';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
+import { PeopleYouMayKnow } from '@/components/network/PeopleYouMayKnow';
 
 const CollaborationStarter = dynamic(
   () => import('@/components/collaboration/CollaborationStarter').then((m) => ({ default: m.CollaborationStarter })),
@@ -292,6 +293,18 @@ export default function ConnectionsPage() {
   const receivedCount = countOf(receivedQ);
   const sentCount = countOf(sentQ);
   const acceptedCount = countOf(acceptedQ);
+  // Everyone already connected, or with a request either way, stays out of
+  // "People you may know".
+  const knownIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const q of [receivedQ, sentQ, acceptedQ]) {
+      for (const c of q.data?.connections ?? []) {
+        if (c?.requesterId) ids.add(c.requesterId);
+        if (c?.receiverId) ids.add(c.receiverId);
+      }
+    }
+    return ids;
+  }, [receivedQ.data, sentQ.data, acceptedQ.data]);
 
   const respondMutation = useMutation({
     mutationFn: ({ id, status, otherUserId }: { id: string; status: 'accepted' | 'declined'; otherUserId?: string; acceptedUserInfo?: { id: string; displayName: string; avatarUrl?: string | null; role?: string; headline?: string | null } }) =>
@@ -582,6 +595,7 @@ export default function ConnectionsPage() {
           </TabsContent>
         ))}
       </Tabs>
+      <PeopleYouMayKnow excludeIds={knownIds} />
       </div>
     </AppShell>
     </>

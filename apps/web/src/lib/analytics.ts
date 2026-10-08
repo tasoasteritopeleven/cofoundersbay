@@ -5,18 +5,38 @@
  * colocated, typed, and easy to audit.  Every call is wrapped in a
  * try/catch so that a PostHog outage never affects the product.
  *
+ * Nothing is sent, and PostHog is never loaded, until the visitor has said
+ * yes to analytics in the cookie banner (`lib/cookie-consent.ts`). Before
+ * this gate the banner's "Essential only" changed nothing: PostHog started
+ * on the first event whenever a key was configured.
+ *
  * Usage:
  *   import { analytics } from '@/lib/analytics';
  *   analytics.track('match_viewed', { matchScore: 87, matchRole: 'founder' });
  */
 
+import { analyticsAllowed, COOKIE_CONSENT_EVENT, type CookiePreferences } from './cookie-consent';
+
 // Try to import PostHog, fall back to mock if not available
 let _ph: typeof import('posthog-js').default | null = null;
 let _useMock = false;
 
+// A withdrawn consent stops capture at once, in this tab, without a reload.
+if (typeof window !== 'undefined') {
+  window.addEventListener(COOKIE_CONSENT_EVENT, (event) => {
+    const prefs = (event as CustomEvent<CookiePreferences>).detail;
+    try {
+      if (!_ph) return;
+      if (prefs?.analytics) _ph.opt_in_capturing();
+      else _ph.opt_out_capturing();
+    } catch { /* never throw */ }
+  });
+}
+
 async function getPostHog() {
   if (_useMock) return null;
   if (typeof window === 'undefined') return null;
+  if (!analyticsAllowed()) return null;
   if (_ph) return _ph;
   try {
     const { default: posthog } = await import('posthog-js');
@@ -117,7 +137,7 @@ async function track<E extends AnalyticsEvent['event']>(
     const ph = await getPostHog();
     if (ph) {
       ph.capture(event, properties ?? {});
-    } else if (_useMock) {
+    } else if (_useMock && analyticsAllowed()) {
       // Fall back to mock
       const { analytics: mockAnalytics } = await import('./analytics-mock');
       mockAnalytics.track(event, properties);

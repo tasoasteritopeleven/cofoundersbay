@@ -3,7 +3,7 @@ const { chromium } = createRequire(new URL('../package.json', import.meta.url))(
 const b = await chromium.launch();
 const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
 await ctx.addCookies([{ name: 'cfb_session', value: 'probe', domain: 'localhost', path: '/' },{ name: 'cfb_primary_role', value: 'founder', domain: 'localhost', path: '/' }]);
-await ctx.addInitScript(({ theme }) => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'investor' })); localStorage.setItem('cfb_demo_data','1'); localStorage.setItem('cookie_consent','accepted'); if (theme) localStorage.setItem('theme', theme); }, { theme: process.env.THEME || 'minimal' });
+await ctx.addInitScript(({ theme }) => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'investor' })); localStorage.setItem('cfb_demo_data','1'); localStorage.setItem('cfb_cookie_consent','true'); if (theme) localStorage.setItem('theme', theme); }, { theme: process.env.THEME || 'minimal' });
 const p = await ctx.newPage();
 await p.goto('http://localhost:3000/investor/portfolio', { waitUntil: 'networkidle' });
 await p.waitForTimeout(2000);

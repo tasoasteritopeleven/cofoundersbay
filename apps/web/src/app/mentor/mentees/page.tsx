@@ -32,8 +32,10 @@ import {
 } from '@/lib/api';
 import { isUpcoming, fromBooking } from '@/lib/mentoring/sessions';
 import { BilingualText } from '@/components/common/BilingualText';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: MentorshipRelationshipItem; upcomingBookings?: number }) {
+  const fmtDate = useDateFormat();
   const mentee = relationship.mentee;
   const displayName = mentee?.displayName || 'Unknown';
   const initials = displayName
@@ -51,12 +53,10 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
   };
 
   const nextSessionFormatted = relationship.nextSessionAt
-    ? new Date(relationship.nextSessionAt).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short',
-        day: 'numeric' })
+    ? fmtDate(relationship.nextSessionAt, { month: 'short', day: 'numeric' })
     : null;
 
-  const startedAtFormatted = new Date(relationship.startedAt).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short',
-    year: 'numeric' });
+  const startedAtFormatted = fmtDate(relationship.startedAt, { month: 'short', year: 'numeric' });
 
   return (
     <Card className="transition-all hover:border-primary/30">

@@ -112,6 +112,8 @@ export const FUNDRAISING_STRINGS: Record<string, BilingualPair> = {
   cat_traction: { en: 'Traction', el: 'Traction' },
   upload: { en: 'Upload', el: 'Μεταφόρτωση' },
   download: { en: 'Download', el: 'Λήψη' },
+  mark_ready: { en: 'Mark as ready', el: 'Σήμανση ως έτοιμο' },
+  no_file: { en: 'No file is stored for this document yet; open it from its link or the data room.', el: 'Δεν έχει αποθηκευτεί αρχείο για αυτό το έγγραφο ακόμη· ανοίξτε το από τον σύνδεσμό του ή την αίθουσα δεδομένων.' },
   upload_done: { en: 'Upload queued', el: 'Η μεταφόρτωση μπήκε στην ουρά' },
   download_done: { en: 'Download started', el: 'Η λήψη ξεκίνησε' },
   empty_docs: { en: 'No documents in this category', el: 'Δεν υπάρχουν έγγραφα σε αυτή την κατηγορία' },

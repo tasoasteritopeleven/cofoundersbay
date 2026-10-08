@@ -14,7 +14,7 @@ await ctx.addCookies([
 await ctx.addInitScript(({ theme }) => {
   localStorage.setItem('user', JSON.stringify({ id: 'u_1', email: 'a@b.test', role: 'founder' }));
   localStorage.setItem('cfb_demo_data', '1');
-  localStorage.setItem('cookie_consent', 'accepted');
+  localStorage.setItem('cfb_cookie_consent', 'true');
   if (theme) localStorage.setItem('theme', theme);
 }, { theme: process.env.THEME || '' });
 const page = await ctx.newPage();

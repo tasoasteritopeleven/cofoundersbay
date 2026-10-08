@@ -65,16 +65,19 @@ const FILTER_TABS = [
   { value: 'system', labelEn: 'System', labelEl: 'Σύστημα', icon: Bell },
 ];
 
-const TYPE_LABELS: Record<string, string> = {
-  connection: 'Connection',
-  message: 'Message',
-  event: 'Event',
-  match: 'Match',
-  achievement: 'Achievement',
-  job: 'Job',
-  community: 'Community',
-  system: 'System',
+const TYPE_LABELS: Record<string, { en: string; el: string }> = {
+  connection: { en: 'Connection', el: 'Σύνδεση' },
+  message: { en: 'Message', el: 'Μήνυμα' },
+  event: { en: 'Event', el: 'Εκδήλωση' },
+  match: { en: 'Match', el: 'Αντιστοίχιση' },
+  achievement: { en: 'Achievement', el: 'Επίτευγμα' },
+  job: { en: 'Job', el: 'Θέση εργασίας' },
+  community: { en: 'Community', el: 'Κοινότητα' },
+  system: { en: 'System', el: 'Σύστημα' },
 };
+
+/** The date groups' Greek; the keys are the English groupByDate returns. */
+const GROUP_EL: Record<string, string> = { Today: 'Σήμερα', Yesterday: 'Χθες', 'This Week': 'Αυτή την εβδομάδα', Older: 'Παλαιότερες' };
 
 function groupByDate(notifications: NotificationItem[]): { label: string; items: NotificationItem[] }[] {
   const now = new Date();
@@ -125,7 +128,7 @@ const NotificationRow = memo(function NotificationRow({
   const isUnread = !item.readAt;
   const Icon = TYPE_ICONS[item.type] ?? Bell;
   const colorClass = TYPE_COLORS[item.type] ?? TYPE_COLORS.system;
-  const typeLabel = TYPE_LABELS[item.type] ?? item.type;
+  const typeLabel = TYPE_LABELS[item.type] ?? { en: item.type, el: item.type };
 
   return (
     <div
@@ -173,7 +176,7 @@ const NotificationRow = memo(function NotificationRow({
             {/* Redundant on a phone: the coloured icon to the left already encodes
                 the type. Shown again from sm, where there is room for both. */}
             <Badge variant="secondary" className="hidden sm:inline-flex text-2xs px-1.5 py-0 h-4 shrink-0 capitalize">
-              {typeLabel}
+              <BilingualText en={typeLabel.en} el={typeLabel.el} compact />
             </Badge>
           </div>
           <span className="shrink-0 text-2xs text-muted-foreground"><RelativeTime date={item.createdAt} absoluteAfterDays={7} /></span>
@@ -181,7 +184,10 @@ const NotificationRow = memo(function NotificationRow({
         {item.body && (
           <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">{item.body}</p>
         )}
-        <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+        {/* Always shown: at opacity-0 until hover the three actions were
+            invisible on touch screens yet still took taps, and on a desktop
+            they left an empty band under every row. */}
+        <div className="mt-2 flex items-center gap-2">
           {item.link && (
             <Link
               href={item.link}
@@ -524,7 +530,9 @@ export default function NotificationsPage() {
             grouped.map(({ label, items }) => (
               <div key={label}>
                 <div className="px-4 py-2 border-b border-border bg-muted/30">
-                  <p className="text-2xs font-semibold uppercase tracking-widest text-muted-foreground">{label}</p>
+                  <p className="text-2xs font-semibold uppercase tracking-widest text-muted-foreground">
+                    <BilingualText en={label} el={GROUP_EL[label] ?? label} compact />
+                  </p>
                 </div>
                 {items.map((item) => (
                   <NotificationRow
@@ -544,9 +552,12 @@ export default function NotificationsPage() {
 
         {notifications.length > 0 && (
           <p className="mt-3 text-center text-xs text-muted-foreground">
-            Showing {notifications.length} notification{notifications.length !== 1 ? 's' : ''}
-            {unreadCount > 0 && ` · ${unreadCount} unread`}
-            {bulkMode && selectedIds.size > 0 && ` · ${selectedIds.size} selected`}
+            <BilingualText
+              en={`Showing ${notifications.length} notification${notifications.length !== 1 ? 's' : ''}${unreadCount > 0 ? ` · ${unreadCount} unread` : ''}${bulkMode && selectedIds.size > 0 ? ` · ${selectedIds.size} selected` : ''}`}
+              el={`${notifications.length} ${notifications.length !== 1 ? 'ειδοποιήσεις' : 'ειδοποίηση'}${unreadCount > 0 ? ` · ${unreadCount} ${unreadCount !== 1 ? 'αδιάβαστες' : 'αδιάβαστη'}` : ''}${bulkMode && selectedIds.size > 0 ? ` · ${selectedIds.size} επιλεγμένες` : ''}`}
+              compact
+              wrap
+            />
           </p>
         )}
       </div>

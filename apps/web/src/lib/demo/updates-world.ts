@@ -28,6 +28,8 @@ const PEOPLE: Record<string, Person> = {
   'user-marcus': { id: 'user-marcus', displayName: 'Marcus Chen', headline: 'Technical cofounder · Full-stack', avatarUrl: null },
   'user-sarah': { id: 'user-sarah', displayName: 'Dr. Sarah Kim', headline: 'Startup mentor · Ex-Google · 3x founder', avatarUrl: null },
   'user-nikos': { id: 'user-nikos', displayName: 'Nikos Andreou', headline: 'Angel investor · Seed', avatarUrl: null },
+  // The demo's organisation is an account too; following it is a follow like any other.
+  'org-aegean': { id: 'org-aegean', displayName: 'Aegean Venture Lab', headline: 'A pre-seed and seed accelerator for founders in Greece and Cyprus', avatarUrl: null },
 };
 
 interface DemoUpdate {

@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   await page.context().addInitScript(() => {
     localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' }));
     localStorage.setItem('cfb_demo_data', '1');
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
     for (const tour of ['founder-dashboard', 'builder', 'research']) {
       for (const user of ['preview', 'u_1', 'preview-demo-user']) localStorage.setItem(`cfb.tour.${tour}.${user}`, 'done');
     }

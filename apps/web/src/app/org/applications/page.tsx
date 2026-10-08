@@ -52,6 +52,7 @@ import { choiceControl, ROW_GONE, rowOptions, settle, usePageControls, usePageLi
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
+import { formatDate } from '@/lib/i18n/format';
 
 /**
  * An application is a program participant whose status says so.
@@ -83,7 +84,7 @@ function startupOf(headline: string | null | undefined): string | null {
 /** "23 Sep 2026" from the ISO timestamp the API sends. */
 function submittedOn(iso: string): string {
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return Number.isNaN(d.getTime()) ? iso : formatDate(d, 'en', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function toApplication(

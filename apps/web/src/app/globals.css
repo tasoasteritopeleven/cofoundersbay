@@ -2366,6 +2366,20 @@ html {
   padding-top: 0;
 }
 
+/* A header that draws a rule under itself (`border-b`, 41 headers in 15
+   files: profile sections, Settings, Billing, Help, Invite…) is a different
+   seam. The body cannot borrow the header's padding across a hairline, so
+   with the rule above it the first line sat on the line. The body steps off
+   the rule by the same distance the title keeps above it. */
+.card-comfortable.card-header.border-b ~ .card-comfortable {
+  padding-top: calc(12px * var(--chrome-y));
+}
+@media (min-width: 640px) {
+  .card-comfortable.card-header.border-b ~ .card-comfortable {
+    padding-top: calc(16px * var(--chrome-y));
+  }
+}
+
 /* ── −1% component height ───────────────────────────────────────────────
    Boxes only: min-height, height, and (above) padding-block. font-size and
    line-height are not listed. `lg:h-auto` is restated after so stacked CTAs
@@ -3513,6 +3527,15 @@ textarea[class~="border-input"]:focus,
 #main-content p.landing-stat {
   font-size: 15.343px;
   line-height: 1.2;
+}
+/* The hero headline's second language: a subtitle under the display line,
+   not a second display line (0.85em of 60px read as two headlines). */
+#main-content h1.landing-display .landing-display-secondary {
+  margin-top: 0.4em;
+  font-size: 0.5em;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 @media (min-width: 640px) {
   #main-content h1.landing-display {

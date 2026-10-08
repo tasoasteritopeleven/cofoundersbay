@@ -29,6 +29,10 @@ const WEB_PORT = 3000;
 // origin stays `localhost` — see WEB_ORIGIN_HOST — so cookie scope and OAuth
 // redirect URIs are untouched.
 const WEB_HOST = '::';
+// A host without IPv6 (many Linux containers and CI runners) refuses '::' with
+// EAFNOSUPPORT and the server never starts. Probe once and fall back to the
+// IPv4 wildcard there; where IPv6 exists nothing changes.
+const IPV4_WILDCARD = '0.0.0.0';
 // Advertised origin: stays `localhost` because OAuth providers whitelist it and
 // cookies are scoped to it. Only the proxy's upstream target changes below.
 const WEB_ORIGIN_HOST = 'localhost';
@@ -168,7 +172,21 @@ fs.writeFileSync(
   ),
 );
 
+function canListenOnIpv6() {
+  return new Promise((resolve) => {
+    const probe = require('net').createServer();
+    probe.once('error', () => resolve(false));
+    probe.once('listening', () => probe.close(() => resolve(true)));
+    probe.listen(0, '::');
+  });
+}
+
 async function main() {
+  const webHost = (await canListenOnIpv6()) ? WEB_HOST : IPV4_WILDCARD;
+  if (webHost !== WEB_HOST) {
+    console.log('IPv6 is unavailable on this host; binding 0.0.0.0 instead of ::.');
+  }
+
   await ensureStrictLocalPort({
     port: WEB_PORT,
     host: '127.0.0.1',
@@ -185,7 +203,7 @@ async function main() {
   // large app (per-route recompiles drop from ~0.7-2.6s to ~50-200ms). Opt out with
   // CFB_DISABLE_TURBOPACK=1 if a dependency ever proves incompatible.
   const useTurbopack = process.env.CFB_DISABLE_TURBOPACK !== '1';
-  const devArgs = [nextBin, 'dev', '-H', WEB_HOST, '-p', String(WEB_PORT)];
+  const devArgs = [nextBin, 'dev', '-H', webHost, '-p', String(WEB_PORT)];
   if (useTurbopack) devArgs.push('--turbopack');
   devArgs.push(...forwardedArgs);
 
@@ -207,7 +225,7 @@ async function main() {
       env: {
         ...devEnv,
         PORT: String(WEB_PORT),
-        HOSTNAME: WEB_HOST,
+        HOSTNAME: webHost,
         NEXT_PUBLIC_API_USE_PROXY: '1',
         API_PROXY_TARGET: API_ORIGIN,
         // OAuth / SSR use getAbsoluteApiOrigin() → API_PROXY_TARGET.

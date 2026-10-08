@@ -27,6 +27,7 @@ import {
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useLocalDateFormat } from '@/lib/i18n/useDateFormat';
 
 type ScheduleCallModalProps = {
   open: boolean;
@@ -84,6 +85,7 @@ export function ScheduleCallModal({
   recipientAvatar,
   onScheduled,
 }: ScheduleCallModalProps) {
+  const fmtLocal = useLocalDateFormat();
   const [step, setStep] = useState<'date' | 'time' | 'details' | 'confirm'>('date');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -97,7 +99,7 @@ export function ScheduleCallModal({
   const [viewYear, setViewYear] = useState(today.getFullYear());
 
   const calendarDays = generateCalendarDays(viewYear, viewMonth);
-  const monthName = new Date(viewYear, viewMonth).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', year: 'numeric' });
+  const monthName = fmtLocal(new Date(viewYear, viewMonth, 1), { month: 'long', year: 'numeric' });
 
   const prevMonth = () => {
     if (viewMonth === 0) {
@@ -247,7 +249,7 @@ export function ScheduleCallModal({
           <div className="space-y-4">
             <Button variant="ghost" size="sm" onClick={() => setStep('date')} className="gap-1 -ml-2">
               <ChevronLeft className="icon-sm" />
-              {selectedDate.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })}
+              {fmtLocal(selectedDate, { weekday: 'long', month: 'long', day: 'numeric' })}
             </Button>
 
             <div className="grid grid-cols-3 gap-2">
@@ -279,7 +281,7 @@ export function ScheduleCallModal({
           <div className="space-y-4">
             <Button variant="ghost" size="sm" onClick={() => setStep('time')} className="gap-1 -ml-2">
               <ChevronLeft className="icon-sm" />
-              {selectedDate.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' })} at {selectedTime}
+              {fmtLocal(selectedDate, { weekday: 'short', month: 'short', day: 'numeric' })} · {selectedTime}
             </Button>
 
             {/* Call Type */}
@@ -367,7 +369,7 @@ export function ScheduleCallModal({
             <div>
               <h3 className="text-lg font-semibold text-foreground"><BilingualText en="Call Scheduled!" el="Η κλήση προγραμματίστηκε!" compact /></h3>
               <p className="text-muted-foreground mt-1">
-                {selectedDate.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric' })} at {selectedTime}
+                {fmtLocal(selectedDate, { weekday: 'long', month: 'long', day: 'numeric' })} · {selectedTime}
               </p>
             </div>
             <Card className="bg-muted/50">

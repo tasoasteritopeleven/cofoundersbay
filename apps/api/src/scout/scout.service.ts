@@ -14,8 +14,7 @@ import {
   type ScoutBrief,
   type ScoutCandidate,
   type ScoutReason,
-  type VerificationMethod,
-} from '@cofounderbay/shared';
+  type VerificationMethod, isHiddenFromSearch } from '@cofounderbay/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { TransparencyService } from '../transparency/transparency.service';
@@ -123,11 +122,13 @@ export class ScoutService {
         .filter((v) => !v.expiresAt || v.expiresAt > now)
         .map((v) => ({ method: v.method as VerificationMethod, verifiedAt: v.verifiedAt.toISOString(), expiresAt: v.expiresAt?.toISOString() ?? null })),
     );
-    const users = await this.prisma.user.findMany({
+    const pool = await this.prisma.user.findMany({
       where: { id: { notIn: [...skip] }, moderationStatus: 'active', profile: { isNot: null } },
-      select: { id: true, profile: { select: { displayName: true, headline: true, location: true, skills: { select: { skill: { select: { name: true } } } } } } },
+      select: { id: true, profile: { select: { displayName: true, headline: true, location: true, visibilityRules: true, skills: { select: { skill: { select: { name: true } } } } } } },
       take: 300,
     });
+    // A member who chose "Appear in search: off" is never proposed.
+    const users = pool.filter((u) => !isHiddenFromSearch(u.profile?.visibilityRules));
     const ids = users.map((u) => u.id);
     const [signals, verifications] = ids.length
       ? await Promise.all([

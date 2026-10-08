@@ -7,6 +7,9 @@ export const profileVisibilitySchema = z.object({
   email: visibilityLevel.optional(),
   phone: visibilityLevel.optional(),
   location: visibilityLevel.optional(),
+  // Read by search, matching, the scout and the profile read (shared/visibility).
+  search: z.enum(['visible', 'hidden']).optional(),
+  profile: z.enum(['public', 'members']).optional(),
 });
 
 // Role-specific payloads (flexible for search/filters later)

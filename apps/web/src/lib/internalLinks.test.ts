@@ -13,7 +13,10 @@ import { describe, expect, it } from 'vitest';
  * pages (some new, some existing); this keeps it that way.
  *
  * Reads `href=`, `router.push(` and `router.replace(` with a literal or
- * template path, substitutes `${...}` with a placeholder segment, and matches
+ * template path, and `href:` in data (nav arrays, footers, assistant
+ * citations: the landing footer's /about, /blog and /contact and the
+ * assistant's /opportunities/:id hid there), substitutes `${...}` with a
+ * placeholder segment, and matches
  * the result against the `page.tsx` tree (a `[param]` directory matches any
  * one segment; `(group)` directories add none). Query strings and fragments
  * are ignored. A path that *starts* with an interpolation is skipped - it is
@@ -46,7 +49,9 @@ const routePatterns = walk(APP, (n) => n === 'page.tsx').map((file) => {
   return new RegExp(`^/${body}/?$`);
 });
 
-const LINK = /(?:href|push|replace)\s*[=(]\s*\{?\s*(["'`])(\/[^"'`]*)\1/g;
+const LINK = /(?:href|push|replace)\s*[=(:]\s*\{?\s*(["'`])(\/[^"'`]*)\1/g;
+/** A file under `public/` (an icon, a manifest), not a route. */
+const ASSET = /\.[a-z0-9]{2,5}$/i;
 
 function exists(path: string): boolean {
   return routePatterns.some((re) => re.test(path));
@@ -67,7 +72,7 @@ describe('internal links', () => {
         const raw = m[2];
         if (raw.startsWith('/api/') || raw.startsWith('/_next') || raw.startsWith('//')) continue;
         const path = raw.replace(/\$\{[^}]*\}/g, 'X').split('?')[0].split('#')[0];
-        if (!path || path.startsWith('/X')) continue;
+        if (!path || path.startsWith('/X') || ASSET.test(path)) continue;
         if (!exists(path)) {
           const line = source.slice(0, m.index ?? 0).split('\n').length;
           offenders.push(`${file.replace(/\\/g, '/')}:${line} -> ${path}`);

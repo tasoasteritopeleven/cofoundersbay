@@ -12,7 +12,7 @@ await page.goto('http://localhost:3000/builder?tab=market', { waitUntil: 'domcon
 await page.evaluate(() => {
   localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'admin' }));
   localStorage.setItem('cfb_demo_data', '1'); localStorage.setItem('accessToken', 'preview-demo');
-  localStorage.setItem('cookie_consent', 'accepted');
+  localStorage.setItem('cfb_cookie_consent', 'true');
 });
 await page.reload({ waitUntil: 'networkidle' }).catch(() => {});
 await page.waitForTimeout(3500);

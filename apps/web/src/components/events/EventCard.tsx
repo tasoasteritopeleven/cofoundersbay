@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 export type EventData = {
   id: string;
@@ -48,10 +49,6 @@ type EventCardProps = {
   isBookmarked?: boolean;
   className?: string;
 };
-
-function formatEventDate(date: Date): string {
-  return date.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' });
-}
 
 function formatEventTime(start: Date, end: Date): string {
   const startTime = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -97,6 +94,7 @@ export function EventCard({
   isBookmarked = false,
   className,
 }: EventCardProps) {
+  const fmtDate = useDateFormat();
   const [rsvped, setRsvped] = useState(event.isRsvped || false);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
 
@@ -122,7 +120,7 @@ export function EventCard({
             <div className="flex-shrink-0 text-center">
               <div className="w-14 h-14 rounded-lg bg-muted flex flex-col items-center justify-center">
                 <span className="text-xs text-primary-accessible">
-                  {event.startDate.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short' })}
+                  {fmtDate(event.startDate, { month: 'short' })}
                 </span>
                 <span className="text-lg font-semibold text-primary-accessible">
                   {event.startDate.getDate()}
@@ -194,7 +192,7 @@ export function EventCard({
             <div className="absolute top-4 left-4">
               <div className="rounded-lg bg-background/90 backdrop-blur-sm px-3 py-2 text-center">
                 <span className="text-xs font-medium text-primary-accessible block">
-                  {event.startDate.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short' })}
+                  {fmtDate(event.startDate, { month: 'short' })}
                 </span>
                 <span className="text-xl font-bold text-foreground">
                   {event.startDate.getDate()}
@@ -227,7 +225,7 @@ export function EventCard({
           <div className="mt-4 space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="icon-sm" />
-              {formatEventDate(event.startDate)} • {formatEventTime(event.startDate, event.endDate)}
+              {fmtDate(event.startDate, { weekday: 'short', month: 'short', day: 'numeric' })} • {formatEventTime(event.startDate, event.endDate)}
             </div>
             {event.location && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -317,7 +315,7 @@ export function EventCard({
           <div className="flex-shrink-0 text-center">
             <div className="w-16 h-16 rounded-xl bg-muted flex flex-col items-center justify-center">
               <span className="text-xs text-primary-accessible">
-                {event.startDate.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short' })}
+                {fmtDate(event.startDate, { month: 'short' })}
               </span>
               <span className="text-2xl font-semibold text-primary-accessible">
                 {event.startDate.getDate()}

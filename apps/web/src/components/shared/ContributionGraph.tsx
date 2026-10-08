@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 type ContributionLevel = 0 | 1 | 2 | 3 | 4;
 
@@ -99,6 +100,7 @@ export function ContributionGraph({
   size = 'md',
   className,
 }: ContributionGraphProps) {
+  const fmtDate = useDateFormat();
   const activityData = data ?? [];
   
   const { grid, monthLabels, maxCount, totalCount } = useMemo(() => {
@@ -201,10 +203,7 @@ export function ContributionGraph({
                         {day.count} contribution{day.count !== 1 ? 's' : ''}
                       </p>
                       <p className="text-muted-foreground">
-                        {new Date(day.date).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short',
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric' })}
+                        {fmtDate(day.date, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                       </p>
                     </TooltipContent>
                   </Tooltip>

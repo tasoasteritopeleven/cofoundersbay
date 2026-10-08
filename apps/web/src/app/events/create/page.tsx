@@ -30,6 +30,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 
 const EVENT_TYPES = [
   { value: 'networking', label: 'Networking', labelEl: 'Δικτύωση' },
@@ -44,17 +45,17 @@ type EventType = (typeof EVENT_TYPES)[number]['value'];
 const EVENT_TYPE_VALUES: readonly string[] = EVENT_TYPES.map((t) => t.value);
 
 /** "Thu 24 Oct, 18:30 – 21:00", from the two datetime-local values as typed. */
-function whenText(startAt: string, endAt: string): string | null {
+function whenText(startAt: string, endAt: string, locale: 'en-GB' | 'el-GR' = 'en-GB'): string | null {
   const start = startAt ? new Date(startAt) : null;
   if (!start || Number.isNaN(start.getTime())) return null;
-  const day = start.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-  const time = (d: Date) => d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const day = start.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const time = (d: Date) => d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
   const end = endAt ? new Date(endAt) : null;
   if (!end || Number.isNaN(end.getTime())) return `${day}, ${time(start)}`;
   const sameDay = end.toDateString() === start.toDateString();
   return sameDay
     ? `${day}, ${time(start)} – ${time(end)}`
-    : `${day}, ${time(start)} – ${end.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}, ${time(end)}`;
+    : `${day}, ${time(start)} – ${end.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}, ${time(end)}`;
 }
 
 /** A card section of the form: a bilingual title with its icon, then fields. */
@@ -80,6 +81,7 @@ function FormSection({ icon: Icon, title, titleEl, children }: { icon: typeof Ca
  * to its input.
  */
 export default function CreateEventPage() {
+  const { primary } = useLanguagePreference();
   const router = useRouter();
   const { success, error: showError } = useToast();
   const [submitting, setSubmitting] = useState(false);
@@ -151,7 +153,8 @@ export default function CreateEventPage() {
   };
 
   const type = EVENT_TYPES.find((t) => t.value === form.type) ?? EVENT_TYPES[0];
-  const when = whenText(form.startAt, form.endAt);
+  // Typed as local time, so shown in local time, in the reader's language.
+  const when = whenText(form.startAt, form.endAt, primary === 'el' ? 'el-GR' : 'en-GB');
   const place = form.isOnline ? (form.meetingUrl.trim() ? 'Online' : null) : form.location.trim() || null;
   const capacity = form.capacity ? parseInt(form.capacity, 10) : null;
   const checklist = [

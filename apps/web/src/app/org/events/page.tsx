@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Calendar,
@@ -42,6 +42,7 @@ import { choiceControl, ROW_GONE, rowOptions, usePageControls, usePageList, type
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 type OrgEvent = {
   id: string;
@@ -90,7 +91,7 @@ const EVENT_TYPE_MAP: Record<string, OrgEvent['type']> = {
   other: 'workshop',
 };
 
-function toOrgEvent(item: EventItem): OrgEvent {
+function toOrgEvent(item: EventItem, fmtDate: (v: string | number | Date, o?: Intl.DateTimeFormatOptions) => string): OrgEvent {
   const start = new Date(item.startAt);
   const end = new Date(item.endAt);
   const now = Date.now();
@@ -102,12 +103,7 @@ function toOrgEvent(item: EventItem): OrgEvent {
       end.getTime() < now ? 'completed' : start.getTime() <= now ? 'ongoing' : 'upcoming',
     // Pinned to UTC on both sides of hydration, the way every other date in
     // this codebase is.
-    date: start.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'UTC',
-    }),
+    date: fmtDate(start, { day: 'numeric', month: 'short', year: 'numeric' }),
     time: start.toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
@@ -121,45 +117,46 @@ function toOrgEvent(item: EventItem): OrgEvent {
   };
 }
 
-/** Shown to an organisation that has scheduled nothing yet. */
-const MOCK_EVENTS: OrgEvent[] = [
+/**
+ * Shown to an organisation that has scheduled nothing yet, with sample data
+ * on. Ages, not dates: the old rows were "upcoming" on dates in April 2025.
+ * The speakers are the demo world's people, never a real fund's partner.
+ */
+const MOCK_EVENT_ROWS: Array<Omit<OrgEvent, 'date' | 'status'> & { inDays: number }> = [
   {
     id: '1',
-    title: 'Spring Demo Day 2025',
+    title: 'Spring Demo Day',
     type: 'demo_day',
-    status: 'upcoming',
-    date: 'Apr 15, 2025',
-    time: '10:00 AM – 4:00 PM',
+    inDays: 7,
+    time: '10:00 – 16:00',
     format: 'hybrid',
-    location: 'HQ + Zoom',
+    location: 'Aegean Venture Lab + stream',
     attendees: 87,
     capacity: 200,
-    speakers: ['Jane Doe (Partner, Sequoia)', 'Tom A. (CEO, TechCorp)'],
-    description: 'Cohort 7 final showcase. 12 startups presenting to 50+ investors.',
+    speakers: ['Nikos Andreou (angel investor)', 'Elena Papadopoulos (Founder, Harbor)'],
+    description: 'Cohort 7 final showcase. 12 startups presenting to investors.',
   },
   {
     id: '2',
     title: 'Fundraising Masterclass',
     type: 'workshop',
-    status: 'upcoming',
-    date: 'Apr 22, 2025',
-    time: '2:00 PM – 5:00 PM',
+    inDays: 14,
+    time: '14:00 – 17:00',
     format: 'online',
-    location: 'Zoom',
+    location: 'Online',
     attendees: 34,
     capacity: 50,
-    speakers: ['Michael Chen (Angel Investor)'],
+    speakers: ['Nikos Andreou (angel investor)'],
     description: 'Deep dive on SAFE notes, cap table management, and Series A readiness.',
   },
   {
     id: '3',
     title: 'Mentor Speed Dating',
     type: 'mentorship',
-    status: 'ongoing',
-    date: 'Apr 10, 2025',
-    time: '3:00 PM – 6:00 PM',
+    inDays: 0,
+    time: '15:00 – 18:00',
     format: 'in-person',
-    location: 'Innovation Hub, Room 4B',
+    location: 'Aegean Venture Lab, Room 4B',
     attendees: 24,
     capacity: 30,
     speakers: [],
@@ -169,17 +166,24 @@ const MOCK_EVENTS: OrgEvent[] = [
     id: '4',
     title: 'Cohort 6 Graduation',
     type: 'demo_day',
-    status: 'completed',
-    date: 'Mar 28, 2025',
-    time: '11:00 AM – 3:00 PM',
+    inDays: -11,
+    time: '11:00 – 15:00',
     format: 'hybrid',
-    location: 'Event Center + Stream',
+    location: 'Aegean Venture Lab + stream',
     attendees: 156,
     capacity: 200,
     speakers: [],
     description: '10 graduating startups, 3 received follow-on funding.',
   },
 ];
+
+function mockEvents(now: number, fmtDate: (v: number, o?: Intl.DateTimeFormatOptions) => string): OrgEvent[] {
+  return MOCK_EVENT_ROWS.map(({ inDays, ...row }) => ({
+    ...row,
+    status: inDays > 0 ? 'upcoming' : inDays === 0 ? 'ongoing' : 'completed',
+    date: fmtDate(now + inDays * 86_400_000, { day: 'numeric', month: 'short', year: 'numeric' }),
+  }));
+}
 
 function EventCard({ event, onDuplicate }: { event: OrgEvent; onDuplicate?: (e: OrgEvent) => void }) {
   const typeCfg = TYPE_CONFIG[event.type];
@@ -299,8 +303,12 @@ export default function OrgEventsPage() {
     retry: 0,
   });
 
-  const live = useMemo(() => (data?.events ?? []).map(toOrgEvent), [data]);
-  const events = live.length > 0 ? live : isLoading || !showDemoData ? [] : MOCK_EVENTS;
+  const fmtDate = useDateFormat();
+  // Sample rows carry ages and are stamped after mount (no date frozen at build).
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
+  const live = useMemo(() => (data?.events ?? []).map((e) => toOrgEvent(e, fmtDate)), [data, fmtDate]);
+  const events = live.length > 0 ? live : isLoading || !showDemoData || now == null ? [] : mockEvents(now, fmtDate);
   const queryClient = useQueryClient();
   const { success, error: toastError } = useToast();
 

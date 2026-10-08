@@ -16,6 +16,10 @@ import { cn } from '@/lib/utils';
  * photo is a circle because people are circles, and the type is the
  * product's ladder (name `text-xl`/`md:text-2xl`, headline `text-base`, the
  * rest `text-sm`).
+ *
+ * An organisation's page (`/org/[slug]`) reads the same way, the way a
+ * company page does: `shape="organisation"` draws the logo as a rounded
+ * square, because organisations are rounded squares (AGENTS.md).
  */
 export function ProfileHero({
   name,
@@ -29,6 +33,8 @@ export function ProfileHero({
   actions,
   className,
   headingLevel = 'h2',
+  shape = 'person',
+  ariaLabel,
 }: {
   name: string;
   avatarUrl?: string | null;
@@ -49,18 +55,22 @@ export function ProfileHero({
   className?: string;
   /** A standalone page (the public /p/ profile) names the person in its h1. */
   headingLevel?: 'h1' | 'h2';
+  /** People are circles; organisations, startups and programmes are rounded squares. */
+  shape?: 'person' | 'organisation';
+  /** The region's name; defaults to "<name> · Profile · Προφίλ". */
+  ariaLabel?: string;
 }) {
   const Heading = headingLevel;
   const facts = (meta ?? []).filter(Boolean);
   return (
-    <section aria-label={`${name} · Προφίλ`} className={cn('relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm', className)}>
+    <section aria-label={ariaLabel ?? `${name} · Profile · Προφίλ`} className={cn('relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm', className)}>
       <div className="h-20 w-full bg-primary/[0.05] sm:h-24 md:h-28" aria-hidden="true" />
       <div className="relative px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="-mt-12 flex flex-col gap-4 sm:-mt-14 md:-mt-16">
           <div className="relative inline-block self-start">
-            <Avatar className="h-24 w-24 ring-4 ring-background sm:h-28 sm:w-28 md:h-32 md:w-32">
-              <AvatarImage src={avatarUrl ?? undefined} alt="" />
-              <AvatarFallback className="bg-primary/10 text-3xl font-semibold text-primary-accessible" data-keep-icon="">
+            <Avatar className={cn('h-24 w-24 ring-4 ring-background sm:h-28 sm:w-28 md:h-32 md:w-32', shape === 'organisation' && 'rounded-2xl')}>
+              <AvatarImage src={avatarUrl ?? undefined} alt="" className={shape === 'organisation' ? 'rounded-2xl' : undefined} />
+              <AvatarFallback className={cn('bg-primary/10 text-3xl font-semibold text-primary-accessible', shape === 'organisation' && 'rounded-2xl')} data-keep-icon="">
                 {name?.[0]?.toUpperCase() ?? '?'}
               </AvatarFallback>
             </Avatar>

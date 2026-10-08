@@ -41,6 +41,7 @@ import { dashboardEl, dashboardEn } from '@/lib/i18n/strings-dashboard';
 import { qk, queryKeys } from '@/lib/query-keys';
 import { cn, formatRelativeTime, initialsOf } from '@/lib/utils';
 import { WhatsNewPanel } from '@/components/dashboard/WhatsNewPanel';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 
 /*
  * The organisation's home.
@@ -61,12 +62,12 @@ import { WhatsNewPanel } from '@/components/dashboard/WhatsNewPanel';
 const DAY = 86_400_000;
 const ENROLLED = new Set(['accepted', 'active', 'completed']);
 
-const STATUS_BADGE: Record<string, { en: string; variant: 'success' | 'info' | 'secondary' | 'warning' }> = {
-  active: { en: 'Running', variant: 'success' },
-  upcoming: { en: 'Upcoming', variant: 'info' },
-  completed: { en: 'Completed', variant: 'secondary' },
-  draft: { en: 'Draft', variant: 'warning' },
-  archived: { en: 'Archived', variant: 'secondary' },
+const STATUS_BADGE: Record<string, { en: string; el: string; variant: 'success' | 'info' | 'secondary' | 'warning' }> = {
+  active: { en: 'Running', el: 'Σε εξέλιξη', variant: 'success' },
+  upcoming: { en: 'Upcoming', el: 'Προσεχές', variant: 'info' },
+  completed: { en: 'Completed', el: 'Ολοκληρώθηκε', variant: 'secondary' },
+  draft: { en: 'Draft', el: 'Πρόχειρο', variant: 'warning' },
+  archived: { en: 'Archived', el: 'Αρχειοθετημένο', variant: 'secondary' },
 };
 
 /** "Founder at Taverna OS" names the startup; a participant row carries no other field for it. */
@@ -80,12 +81,10 @@ function daysFromNow(iso: string | null, now: number): number | null {
   return Math.round((Date.parse(iso) - now) / DAY);
 }
 
-function shortDate(iso: string | null): string {
-  if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-}
 
 export default function IncubatorDashboard() {
+  const fmtDate = useDateFormat();
+  const shortDate = (iso: string | null) => (iso ? fmtDate(iso, { day: 'numeric', month: 'short' }) : '—');
   const { hasSession, mounted } = useSession();
   const { membership, name: orgName, isLoading: orgLoading, isNone } = useCurrentOrg();
   const organizationId = membership?.organizationId ?? null;
@@ -311,10 +310,10 @@ export default function IncubatorDashboard() {
                   >
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span className="text-sm font-medium">{program.title}</span>
-                      <Badge size="sm" variant={badge.variant}>{badge.en}</Badge>
+                      <Badge size="sm" variant={badge.variant}><BilingualText en={badge.en} el={badge.el} compact /></Badge>
                     </div>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      {shortDate(program.startDate)} – {shortDate(program.endDate)} · {program.applicationCount} applications
+                      <BilingualText en={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} applications`} el={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} αιτήσεις`} compact wrap />
                     </p>
                     {pct != null && (
                       <div className="mt-2 flex items-center gap-3">

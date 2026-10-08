@@ -41,15 +41,15 @@ const faqCategories: FAQCategory[] = [
     faqs: [
       {
         question: 'What is CoFounderBay?',
-        answer: 'CoFounderBay is a platform designed to help entrepreneurs find co-founders, mentors, and collaborators. We use AI-powered matching to connect you with people who complement your skills and share your vision.',
+        answer: 'CoFounderBay helps founding teams find co-founders, mentors and investors and get from a first conversation to agreed terms: need cards, protected conversations, terms in versions, and the workspace around them (readiness, builder, pitch, data room).',
       },
       {
         question: 'How do I create an account?',
-        answer: 'Click "Get Started" on the homepage and follow the registration process. You can sign up with email or use social login (Google, LinkedIn, GitHub). After registration, complete your profile to start getting matched.',
+        answer: 'Click "Join free" on the homepage and follow the registration. You can sign up with email, Google or LinkedIn. After registration, complete your profile to start getting matched.',
       },
       {
         question: 'Is CoFounderBay free to use?',
-        answer: 'CoFounderBay offers a free tier with core features including profile creation, basic matching, and messaging. Premium features like advanced analytics, priority matching, and unlimited connections are available with paid plans.',
+        answer: 'Yes. The Free plan has no time limit and includes your profile, discovery, matching, messages and need cards. Paid plans add volume, promoted placement in discovery (always labelled "Promoted", and it never changes a match score) and team workspaces.',
       },
       {
         question: 'How does the matching algorithm work?',
@@ -73,11 +73,11 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'How do I change my email or password?',
-        answer: 'Go to Settings > Account to update your email address or change your password. For security, you\'ll need to verify your current password before making changes.',
+        answer: 'Change your password in Settings > Account; you will be asked for the current one first. Changing the email you sign in with is not self-serve yet: write to support@cofounderbay.com from that address.',
       },
       {
         question: 'How do I delete my account?',
-        answer: 'Go to Settings > Account > Delete Account. This action is permanent and will remove all your data. You can also request data export before deletion to keep a copy of your information.',
+        answer: 'In Settings, under Danger Zone, "Request deletion" opens an email to privacy@cofounderbay.com; send it from the address you signed up with and it is answered within 30 days. Deletion is permanent, so export your data first from the same place.',
       },
     ],
   },
@@ -113,7 +113,7 @@ const faqCategories: FAQCategory[] = [
     faqs: [
       {
         question: 'How do I message someone?',
-        answer: 'You can message anyone you\'re connected with. Go to Messages or click the message icon on their profile. For non-connections, send a connection request first.',
+        answer: 'Open Messages, or press Message on their profile. You can write to any member who has not blocked you. Replies to a need card are different: that first conversation is protected, and phone numbers, emails and links are refused until both of you confirm.',
       },
       {
         question: 'Can I send attachments in messages?',
@@ -149,7 +149,7 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'Can I cancel or reschedule a session?',
-        answer: 'Yes, you can cancel or reschedule sessions from the Mentoring page. Please provide at least 24 hours notice when possible to respect everyone\'s time.',
+        answer: 'You can change or cancel a booking from the Mentoring page. Please give at least 24 hours\' notice when you can, out of respect for everyone\'s time.',
       },
     ],
   },
@@ -189,11 +189,11 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'How do I create a milestone?',
-        answer: 'Go to the Milestones page and click "New Milestone". Add a title, description, due date, and category. You can also assign collaborators and set priority levels.',
+        answer: 'Go to the Milestones page and click "New Milestone". Add a title, description, due date and category. You can also add a collaborator and set a priority.',
       },
       {
         question: 'Can I share milestones with my team?',
-        answer: 'Yes! Add collaborators to milestones to share progress. Collaborators can update status, add notes, and track progress together.',
+        answer: 'Yes. Add a collaborator to a milestone; they see it in their own list and can update its status and notes with you.',
       },
       {
         question: 'How do milestone notifications work?',
@@ -209,7 +209,7 @@ const faqCategories: FAQCategory[] = [
     faqs: [
       {
         question: 'Who can see my profile?',
-        answer: 'By default, your profile is visible to other CoFounderBay members. You can adjust visibility settings in Settings > Privacy to control what information is shown.',
+        answer: 'Anyone with your profile\'s link can read it, unless you turn "Public profile" off in Settings > Privacy (then only signed-in members can). Members find you in search and recommendations unless you turn "Appear in search" off. Your email stays hidden. Hiding your location is not available yet; your "Open to" signal has its own setting: nobody, verified members or everyone.',
       },
       {
         question: 'How is my data protected?',
@@ -217,7 +217,7 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'Can I enable two-factor authentication?',
-        answer: 'Yes! Go to Settings > Security to enable 2FA. We support authenticator apps and SMS verification for added account security.',
+        answer: 'Yes. Go to Settings > Security and turn on two-factor authentication with an authenticator app (time-based codes). SMS codes are not offered.',
       },
       {
         question: 'How do I report a security issue?',
@@ -233,11 +233,11 @@ const faqCategories: FAQCategory[] = [
     faqs: [
       {
         question: 'What payment methods do you accept?',
-        answer: 'We accept all major credit cards (Visa, Mastercard, American Express) and PayPal. Enterprise customers can also pay via invoice.',
+        answer: 'Cards, through Stripe. Enterprise customers can also pay by invoice.',
       },
       {
         question: 'How do I upgrade my plan?',
-        answer: 'Go to Settings > Billing to view available plans and upgrade. Your new features will be available immediately after payment.',
+        answer: 'Go to Settings > Billing to see the plans and subscribe. The plan\'s features apply once the payment is confirmed.',
       },
       {
         question: 'Can I cancel my subscription?',
@@ -245,7 +245,7 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'Do you offer refunds?',
-        answer: 'We offer a 14-day money-back guarantee for new subscriptions. Contact support@cofounderbay.com for refund requests.',
+        answer: 'Write to support@cofounderbay.com with your request. Your rights under EU consumer law apply in every case.',
       },
     ],
   },

@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
-import { OPEN_TO_COPY, openToBoost, openToShownTo, seekerWants } from '@cofounderbay/shared';
+import { OPEN_TO_COPY, openToBoost, openToShownTo, seekerWants, isHiddenFromSearch } from '@cofounderbay/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { CacheService } from '../common/cache/cache.service';
 import { OpenToService } from '../open-to/open-to.service';
@@ -726,11 +726,13 @@ export class MatchingService {
     if (criteria.location && !criteria.remote) {
       where.profile = { location: criteria.location };
     }
-    return this.prisma.user.findMany({
+    const users = await this.prisma.user.findMany({
       where,
       include: { profile: { include: { skills: { include: { skill: true } } } } },
       take: 100,
     });
+    // "Appear in search: off" keeps a member out of recommendations too.
+    return users.filter((u) => !isHiddenFromSearch(u.profile?.visibilityRules));
   }
 
   // ── Structured scoring helpers ─────────────────────────────────────────────

@@ -53,6 +53,7 @@ import { STATUS, type StatusTone } from '@/lib/semantic-colors';
 import { qk } from '@/lib/query-keys';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { bilingualInline } from '@/lib/i18n/format';
+import { formatDate } from '@/lib/i18n/format';
 
 type Program = {
   /** Set on live rows; the owning organisation's own programs page. */
@@ -81,7 +82,8 @@ const PROGRAM_STATUS_TONE: Record<Program['status'], StatusTone> = {
 /** Month and year, in the page's existing "Jan 2025" style. */
 function monthYear(iso: string | null): string {
   if (!iso) return '\u2014';
-  return new Date(iso).toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+  // Numeric month/year reads the same in both languages ("10/2026").
+  return formatDate(iso, 'en', { month: '2-digit', year: 'numeric' });
 }
 
 /** Share of the programme's calendar that has elapsed, for the progress bar. */

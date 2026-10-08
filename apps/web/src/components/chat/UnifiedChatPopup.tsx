@@ -94,16 +94,6 @@ function formatTime(d: Date) {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatRelativeTime(d: Date) {
-  const now = new Date();
-  const diff = now.getTime() - d.getTime();
-  const days = Math.floor(diff / 86400000);
-  if (days === 0) return formatTime(d);
-  if (days === 1) return 'Yesterday';
-  if (days < 7) return d.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short' });
-  return d.toLocaleDateString('en-GB', { timeZone: 'UTC', month: 'short', day: 'numeric' });
-}
-
 // ── Messaging sub-components ───────────────────────────────────────────────────
 
 function ConvoItem({ conv, selected, onClick }: { conv: Conversation; selected: boolean; onClick: () => void }) {
@@ -137,7 +127,7 @@ function ConvoItem({ conv, selected, onClick }: { conv: Conversation; selected: 
             {conv.recipientName}
           </span>
           <span className="text-2xs text-muted-foreground shrink-0 tabular-nums">
-            <RelativeTime date={conv.lastMessageTime} format={formatRelativeTime} />
+            <RelativeTime date={conv.lastMessageTime} short />
           </span>
         </div>
         <div className="flex items-center justify-between gap-1 mt-0.5">

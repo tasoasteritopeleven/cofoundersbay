@@ -95,7 +95,7 @@ async function signIn(page: Page) {
     // Pin the demo-data toggle so the assertions do not depend on its default.
     localStorage.setItem('cfb_demo_data', '1');
     // Dismiss the cookie banner, which otherwise overlays every page.
-    localStorage.setItem('cookie_consent', 'accepted');
+    localStorage.setItem('cfb_cookie_consent', 'true');
   });
 }
 

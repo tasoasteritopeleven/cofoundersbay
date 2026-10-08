@@ -17,7 +17,7 @@ await ctx.addCookies([
 await ctx.addInitScript(() => {
   localStorage.setItem('user', JSON.stringify({ id: 'u_1', email: 'a@b.test', role: 'admin' }));
   localStorage.setItem('cfb_demo_data', '1');
-  localStorage.setItem('cookie_consent', 'accepted');
+  localStorage.setItem('cfb_cookie_consent', 'true');
   localStorage.setItem('theme', 'light');
   // keep first-run tours out of the frame
   const origGet = Storage.prototype.getItem;
