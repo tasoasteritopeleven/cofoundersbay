@@ -391,13 +391,13 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                 {org.industry && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Industry" el="Κλάδος" compact /></h3>
-                    <FactLine className="text-sm text-foreground" items={org.industry.split(',').map((ind: string) => ind.trim())} />
+                    <FactLine className="text-foreground sm:text-sm" items={org.industry.split(',').map((ind: string) => ind.trim())} />
                   </div>
                 )}
                 {org.focus && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Focus Areas" el="Πεδία εστίασης" compact /></h3>
-                    <FactLine className="text-sm text-foreground" items={org.focus.split(',').map((f: string) => f.trim())} />
+                    <FactLine className="text-foreground sm:text-sm" items={org.focus.split(',').map((f: string) => f.trim())} />
                   </div>
                 )}
                 {org.size && (

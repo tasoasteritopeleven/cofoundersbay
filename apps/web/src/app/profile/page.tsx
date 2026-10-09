@@ -176,7 +176,7 @@ function RoleDetails({ role, payload }: { role: string; payload: Record<string, 
     return (
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <FactLine className="text-sm text-foreground" items={(arr as string[]).map((item) => <StatusText key={item} value={item} />)} />
+        <FactLine className="text-foreground sm:text-sm" items={(arr as string[]).map((item) => <StatusText key={item} value={item} />)} />
       </div>
     );
   };

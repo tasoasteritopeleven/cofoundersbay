@@ -270,7 +270,7 @@ function ProjectCard({
               </p>
               {/* The roles are what the card is looking for: body text under
                   their caption, not accent pills. */}
-              <FactLine className="text-sm text-foreground" items={project.rolesNeeded.map((role) => roleLabel(role))} />
+              <FactLine className="text-foreground sm:text-sm" items={project.rolesNeeded.map((role) => roleLabel(role))} />
             </div>
           )}
         </div>

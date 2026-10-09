@@ -110,7 +110,7 @@ export function NeedCard({
               <AvatarFallback className="bg-primary/15 text-2xs text-foreground">{initialsOf(owner.displayName)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="flex min-w-0 items-center gap-1 text-sm font-medium text-foreground">
+              <p className="flex min-w-0 items-center gap-1 text-xs font-medium text-foreground sm:text-sm">
                 <span className="min-w-0 truncate">{owner.displayName}</span>
                 <VerifiedBadge methods={owner.verifiedMethods ?? []} variant="mark" />
               </p>

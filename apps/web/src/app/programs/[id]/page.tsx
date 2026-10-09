@@ -201,7 +201,7 @@ export default function ProgramDetailPage() {
           {(program.industries?.length ?? 0) > 0 && (
             <section aria-labelledby="program-industries" className="space-y-2">
               <h2 id="program-industries" className="text-xs font-medium uppercase tracking-wide text-muted-foreground"><BilingualText en="Industries" el="Κλάδοι" compact /></h2>
-              <FactLine className="text-sm text-foreground" items={program.industries} />
+              <FactLine className="text-foreground sm:text-sm" items={program.industries} />
             </section>
           )}
           {(program.benefits?.length ?? 0) > 0 && (

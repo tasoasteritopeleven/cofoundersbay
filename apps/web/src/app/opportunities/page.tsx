@@ -157,7 +157,7 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
               {/* Company, type and remote are facts about the listing: one
                   line, where the type and remote were two tinted pills. */}
               <FactLine
-                className="mt-1 text-sm"
+                className="mt-1 sm:text-sm"
                 items={[
                   opportunity.company,
                   <BilingualText key="type" en={opportunitiesEn(cfg.labelKey)} el={opportunitiesEl(cfg.labelKey)} compact />,

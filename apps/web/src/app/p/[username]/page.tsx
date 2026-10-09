@@ -286,7 +286,7 @@ export default function PublicProfilePage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <FactLine className="text-sm text-foreground" items={lookingFor} />
+                  <FactLine className="text-foreground sm:text-sm" items={lookingFor} />
                 </CardContent>
               </Card>
             )}
@@ -364,7 +364,7 @@ export default function PublicProfilePage() {
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {skills.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></p>}
-                  <FactLine className="text-sm text-foreground" items={skills} />
+                  <FactLine className="text-foreground sm:text-sm" items={skills} />
                 </div>
               </CardContent>
             </Card>
@@ -377,7 +377,7 @@ export default function PublicProfilePage() {
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {interests.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No interests listed" el="Δεν έχουν καταχωριστεί ενδιαφέροντα" compact /></p>}
-                  <FactLine className="text-sm text-foreground" items={interests} />
+                  <FactLine className="text-foreground sm:text-sm" items={interests} />
                 </div>
               </CardContent>
             </Card>

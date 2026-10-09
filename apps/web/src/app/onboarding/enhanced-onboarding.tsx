@@ -1010,7 +1010,7 @@ function ReviewStep({
           {data.skills.length > 0 && (
             <div>
               <h4 className="font-medium mb-1"><BilingualText en={`Skills (${data.skills.length})`} el={`Δεξιότητες (${data.skills.length})`} compact /></h4>
-              <FactLine className="text-sm text-foreground" items={[...data.skills.slice(0, 10), data.skills.length > 10 ? `+${data.skills.length - 10}` : null]} />
+              <FactLine className="text-foreground sm:text-sm" items={[...data.skills.slice(0, 10), data.skills.length > 10 ? `+${data.skills.length - 10}` : null]} />
             </div>
           )}
         </div>
@@ -1028,13 +1028,13 @@ function ReviewStep({
             {data.values.workStyle.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Work style" el="Τρόπος δουλειάς" compact /></p>
-                <FactLine className="text-sm text-foreground" items={data.values.workStyle.map(id => WORK_STYLES.find(w => w.id === id)?.label ?? id)} />
+                <FactLine className="text-foreground sm:text-sm" items={data.values.workStyle.map(id => WORK_STYLES.find(w => w.id === id)?.label ?? id)} />
               </div>
             )}
             {data.values.coreValues.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Core values" el="Βασικές αξίες" compact /></p>
-                <FactLine className="text-sm text-foreground" items={data.values.coreValues} />
+                <FactLine className="text-foreground sm:text-sm" items={data.values.coreValues} />
               </div>
             )}
           </div>
@@ -1047,19 +1047,19 @@ function ReviewStep({
             {data.matchPrefs.lookingFor.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Looking for" el="Αναζητά" compact /></p>
-                <FactLine className="text-sm text-foreground" items={data.matchPrefs.lookingFor} />
+                <FactLine className="text-foreground sm:text-sm" items={data.matchPrefs.lookingFor} />
               </div>
             )}
             {data.matchPrefs.industries.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
-                <FactLine className="text-sm text-foreground" items={data.matchPrefs.industries} />
+                <FactLine className="text-foreground sm:text-sm" items={data.matchPrefs.industries} />
               </div>
             )}
             {data.matchPrefs.stages.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Startup stages" el="Στάδια startup" compact /></p>
-                <FactLine className="text-sm text-foreground" items={data.matchPrefs.stages} />
+                <FactLine className="text-foreground sm:text-sm" items={data.matchPrefs.stages} />
               </div>
             )}
           </div>

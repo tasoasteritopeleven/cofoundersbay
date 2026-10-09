@@ -102,7 +102,7 @@ function PayloadEntry({ entryKey, value }: { entryKey: string; value: RolePayloa
     return (
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <FactLine className="text-sm text-foreground" items={value as string[]} />
+        <FactLine className="text-foreground sm:text-sm" items={value as string[]} />
       </div>
     );
   }
@@ -448,7 +448,7 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-5">
-              <FactLine className="text-sm text-foreground" items={profile.skills.map((s) => s.skillName)} />
+              <FactLine className="text-foreground sm:text-sm" items={profile.skills.map((s) => s.skillName)} />
             </CardContent>
           </Card>
         ) : null}

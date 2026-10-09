@@ -138,7 +138,7 @@ function ProfileColumn({
       <div className="mb-4">
         <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
         <div>
-          {(profile.skills?.length ?? 0) > 0 ? <FactLine className="text-sm text-foreground" items={(profile.skills ?? []).slice(0, 5).map((skill) => skill.name)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></span>}
+          {(profile.skills?.length ?? 0) > 0 ? <FactLine className="text-foreground sm:text-sm" items={(profile.skills ?? []).slice(0, 5).map((skill) => skill.name)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></span>}
         </div>
       </div>
 
@@ -146,7 +146,7 @@ function ProfileColumn({
       <div className="mb-4">
         <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
         <div>
-          {(profile.industries?.length ?? 0) > 0 ? <FactLine className="text-sm text-foreground" items={(profile.industries ?? []).slice(0, 3)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></span>}
+          {(profile.industries?.length ?? 0) > 0 ? <FactLine className="text-foreground sm:text-sm" items={(profile.industries ?? []).slice(0, 3)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></span>}
         </div>
       </div>
 

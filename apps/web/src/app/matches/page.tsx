@@ -470,7 +470,7 @@ function MatchPreviewPanel({
           {(hit.skillNames ?? []).length > 0 && (
             <div>
               <p className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
-              <FactLine className="text-sm text-foreground" items={hit.skillNames ?? []} />
+              <FactLine className="text-foreground sm:text-sm" items={hit.skillNames ?? []} />
             </div>
           )}
 

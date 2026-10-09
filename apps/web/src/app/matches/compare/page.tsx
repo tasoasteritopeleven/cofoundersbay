@@ -280,7 +280,7 @@ export default function MatchComparePage() {
                   <th scope="row" className="p-4 text-left align-top text-xs font-medium text-muted-foreground"><BilingualText en="Skills" el="Δεξιότητες" compact /></th>
                   {people.map((person) => (
                     <td key={person.userId} className="p-4 align-top">
-                      <FactLine className="text-sm text-foreground" items={(person.skillNames.length ? person.skillNames : person.skills ?? []).slice(0, 6)} />
+                      <FactLine className="text-foreground sm:text-sm" items={(person.skillNames.length ? person.skillNames : person.skills ?? []).slice(0, 6)} />
                     </td>
                   ))}
                 </tr>
