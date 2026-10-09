@@ -228,97 +228,41 @@ export function SmartRecommendations() {
       {/* Recommendations Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {filteredRecommendations.map((rec) => (
-          <Card key={rec.id} className="relative overflow-hidden hover:border-primary/30 transition-colors">
-            {/* Match Score Badge */}
-            <div className="absolute top-4 right-4 z-10">
-              <Badge variant="secondary" className="gap-1 bg-primary/10 text-primary-accessible border-primary/20">
-                <Star className="icon-sm fill-current" />
-                {rec.matchScore}% Match
-              </Badge>
-            </div>
-
-            <CardContent className="space-y-3">
-              <div className="flex items-start gap-3">
-                {rec.type === 'person' ? (
-                  <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
-                    <AvatarImage src={rec.image} />
-                    <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-bold text-sm">{rec.title[0]}</AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted ring-2 ring-border/60">
-                    {getTypeIcon(rec.type)}
-                  </div>
-                )}
-                <div className="min-w-0 flex-1 space-y-1">
-                  <h3 className="font-display text-base font-semibold text-foreground">{rec.title}</h3>
-                  <p className="text-xs text-muted-foreground">{rec.subtitle}</p>
-                </div>
-                <Badge variant="outline" className="shrink-0 gap-1 text-xs">
+          <Card key={rec.id} className="card-interactive">
+            <CardContent className="flex items-center gap-4">
+              {rec.type === 'person' ? (
+                <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+                  <AvatarImage src={rec.image} />
+                  <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{rec.title[0]}</AvatarFallback>
+                </Avatar>
+              ) : (
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
                   {getTypeIcon(rec.type)}
-                  {getTypeLabel(rec.type)}
-                </Badge>
-              </div>
-
-              <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                {rec.description}
-              </p>
-
-              {rec.location && (
-                <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="icon-sm" />
-                    {rec.location}
-                  </span>
                 </div>
               )}
-
-              {/* Metadata */}
-              {rec.metadata && (
-                <FactLine items={Object.entries(rec.metadata).map(([key, value]) => `${key}: ${value}`)} />
-              )}
-
-              {/* Tags */}
-              {rec.tags && rec.tags.length > 0 && (
-                <FactLine items={rec.tags} />
-              )}
-
-              {/* Match Reasons */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-medium">
-                  <Zap className="icon-sm text-muted-foreground" />
-                  Why this matches you:
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="person-name font-display text-base font-semibold text-foreground">{rec.title}</h3>
+                  <Badge variant="outline" className="text-xs">{getTypeLabel(rec.type)}</Badge>
                 </div>
-                <ul className="space-y-1">
-                  {rec.matchReasons.slice(0, 3).map((reason, index) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <Check className="icon-sm text-primary-accessible mt-0.5 flex-shrink-0" />
-                      <span>{reason}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="row-ellipsis text-sm text-muted-foreground">{rec.subtitle}</p>
+                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                  {[
+                    rec.description,
+                    `${rec.matchScore}%`,
+                    rec.location,
+                    ...(rec.tags ?? []).slice(0, 3),
+                    ...Object.values(rec.metadata ?? {}).slice(0, 2).map(String),
+                    ...rec.matchReasons.slice(0, 2),
+                  ].filter(Boolean).join(' · ')}
+                </p>
               </div>
-
-              {/* Actions */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                <Button
-                  onClick={() => handleAccept(rec.id)}
-                  className="flex-1 gap-2"
-                >
-                  <Check className="icon-sm" />
-                  {rec.type === 'person' ? 'Connect' : 
-                   rec.type === 'opportunity' ? 'Apply' : 
-                   rec.type === 'event' ? 'Register' : 'Join'}
+              <div className="flex shrink-0 items-center gap-2">
+                <Button size="sm" onClick={() => handleAccept(rec.id)}>
+                  {rec.type === 'person' ? 'Connect' : rec.type === 'opportunity' ? 'Apply' : rec.type === 'event' ? 'Register' : 'Join'}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleDismiss(rec.id)}
-                  className="gap-2"
-                >
+                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Dismiss" onClick={() => handleDismiss(rec.id)}>
                   <X className="icon-sm" />
-                  <BilingualText en="Dismiss" el="Απόρριψη" compact />
-                </Button>
-                <Button variant="ghost" size="icon" aria-label={`View details for ${rec.title}`} disabled title="Recommendation details are not available yet">
-                  <ChevronRight className="icon-sm" aria-hidden="true" />
                 </Button>
               </div>
             </CardContent>

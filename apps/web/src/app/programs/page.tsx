@@ -63,6 +63,7 @@ import {
 import { pressableProps } from '@/lib/pressable';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
 import { FactLine } from '@/components/common/FactLine';
+import { ListRowCard } from '@/components/common/ListRowCard';
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const PROGRAM_STATUS_TONE: Record<string, StatusTone> = {
   open: 'success',
@@ -231,102 +232,52 @@ function ProgramCard({
 }) {
   const fmtDate = useDateFormat();
   const TypeIcon = TYPE_ICONS[program.programType] ?? Award;
-  const deadline = daysUntil(program.applicationDeadline);
   const spotsLeft = program.capacity ? program.capacity - program.participantCount : null;
   const isFull = spotsLeft !== null && spotsLeft <= 0;
 
+  const place = program.isRemote ? 'Remote' : (program.location ?? 'On-site');
+  const when = program.startDate ? fmtDate(program.startDate, PROGRAM_DATE) : null;
+  const spots = spotsLeft === null ? null : isFull ? 'Full' : `${spotsLeft} left`;
+  const industries = (program.industries ?? []).slice(0, 4).join(' · ');
+  const benefits = ((program.benefits as string[] | undefined) ?? []).slice(0, 3).join(' · ');
+
   return (
-    <Card className={cn('transition-all hover:border-primary/30 group', isEnrolled && 'border-primary/40 bg-primary/2')}>
-      <CardContent className="space-y-3 text-left">
-        <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
-            <AvatarImage src={program.organization?.logoUrl ?? undefined} />
-            {/* Stands in for the organisation's logo: an avatar, not decoration. */}
-            <AvatarFallback data-keep-icon className="rounded-xl bg-primary/10 text-primary-accessible">
-              <TypeIcon className="icon-lg" aria-hidden="true" />
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="min-w-0 flex-1 space-y-1">
-            <h3 className="font-display text-base font-semibold text-foreground">{program.title}</h3>
-            <FactLine
-              className="w-full justify-start text-left"
-              items={[
-                program.organization?.name,
-                <BilingualText key="type" en={badgeType(program.programType).en} el={badgeType(program.programType).el} compact />,
-              ]}
-            />
-          </div>
-        </div>
-
-        {program.description && (
-          <p className="card-copy text-left text-sm text-muted-foreground leading-relaxed line-clamp-2">{program.description}</p>
-        )}
-
-        <div className="flex w-full flex-wrap items-center justify-start gap-x-4 gap-y-1 text-left text-xs text-muted-foreground">
-          <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
-            <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
-          </Badge>
-          {program.applicationDeadline && acceptsApplications(program) && deadline !== null && (
-            <span className={cn('flex items-center gap-1', deadline !== null && deadline <= 7 && deadlineUrgencyClass(deadline))}>
-              <Clock className="icon-sm" />
-              {deadline > 0 ? `${deadline}d to apply` : 'Deadline today'}
-            </span>
-          )}
-          {program.startDate && (
-            <span className="flex items-center gap-1">
-              <Calendar className="icon-sm" />
-              <BilingualText en={`Starts ${fmtDate(program.startDate, PROGRAM_DATE)}`} el={`Ξεκινά ${fmtDate(program.startDate, PROGRAM_DATE)}`} compact />
-            </span>
-          )}
-          <span className="flex items-center gap-1">
-            {program.isRemote ? <Globe className="icon-sm" /> : <MapPin className="icon-sm" />}
-            {program.isRemote ? 'Remote' : (program.location ?? 'On-site')}
-          </span>
-          {spotsLeft !== null && (
-            <span className={cn(
-              'flex items-center gap-1',
-              isFull ? cn('font-medium', STATUS.danger.icon) : spotsLeft <= 3 ? cn('font-medium', STATUS.warning.icon) : 'text-muted-foreground',
-            )}>
-              <Users className="icon-sm" />
-              {isFull ? 'Full' : `${spotsLeft} spot${spotsLeft !== 1 ? 's' : ''} left`}
-            </span>
-          )}
-        </div>
-
-        <FactLine className="w-full justify-start text-left" items={(program.industries ?? []).slice(0, 5)} />
-
-        {(program.benefits as string[] | undefined)?.length ? (
-          <FactLine
-            className="w-full justify-start text-left"
-            label={bilingualAria('Benefits', 'Οφέλη')}
-            items={(program.benefits as string[]).slice(0, 3)}
-          />
-        ) : null}
-
-        <div className="flex flex-wrap items-center justify-start gap-2 pt-1">
+    <ListRowCard
+      className={cn(isEnrolled && 'border-primary/40')}
+      mark={(
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          <AvatarImage src={program.organization?.logoUrl ?? undefined} />
+          <AvatarFallback data-keep-icon className="bg-primary/10 text-primary-accessible">
+            <TypeIcon className="icon-lg" aria-hidden="true" />
+          </AvatarFallback>
+        </Avatar>
+      )}
+      title={program.title}
+      titleHref={`/programs/${program.id}`}
+      badge={(
+        <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
+          <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
+        </Badge>
+      )}
+      headline={[program.organization?.name, badgeType(program.programType).en, place, when, spots, industries].filter(Boolean).join(' · ')}
+      detail={[program.description, benefits].filter(Boolean).join(' · ')}
+      actions={(
+        <>
           {acceptsApplications(program) && !isEnrolled && !isFull && (
-            <Button size="sm" className="gap-1.5 text-xs" onClick={(e) => { e.preventDefault(); onApply(program); }}>
+            <Button size="sm" className="gap-1" onClick={(e) => { e.preventDefault(); onApply(program); }}>
               <Zap className="icon-sm" aria-hidden="true" />
               <BilingualText en={programsEn('apply_now')} el={programsEl('apply_now')} compact />
             </Button>
           )}
           {isEnrolled && (
-            // A state, not an action: it looked like a button and did
-            // nothing. Disabled, so it reads as "Applied, unavailable".
-            <Button size="sm" variant="outline" className="gap-1.5 text-xs text-primary-accessible border-primary/40" disabled>
+            <Button size="sm" variant="outline" className="gap-1 text-primary-accessible border-primary/40" disabled>
               <CheckCircle2 className="icon-sm" aria-hidden="true" />
               <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
             </Button>
           )}
-          <Button size="sm" variant="ghost" className="gap-1.5 text-xs" asChild>
-            <Link href={`/programs/${program.id}`}>
-              View Details <ArrowRight className="icon-sm" />
-            </Link>
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      )}
+    />
   );
 }
 

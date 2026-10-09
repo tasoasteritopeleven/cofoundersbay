@@ -221,42 +221,32 @@ function ResultCard({ result }: { result: SearchResult }) {
                 </Badge>
               </div>
 
-              <div className="space-y-1">
-              {result.subtitle && (
-                <p className="text-sm text-muted-foreground truncate">{result.subtitle}</p>
-              )}
-
-              {result.description && (
-                <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2 mt-1">
+              {result.subtitle ? (
+                <p className="row-ellipsis text-sm text-muted-foreground">{result.subtitle}</p>
+              ) : null}
+              {(result.description || result.highlight || result.meta?.location || result.meta?.date || (result.tags && result.tags.length > 0)) ? (
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
                   {result.highlight ? (
                     <SanitizedHtml as="span" profile="highlight" html={result.highlight} />
-                  ) : (
-                    result.description
-                  )}
+                  ) : result.description}
+                  {[
+                    result.meta?.location,
+                    result.meta?.date,
+                    ...(result.tags ?? []).slice(0, 3),
+                    (result.tags?.length ?? 0) > 3 ? `+${(result.tags?.length ?? 0) - 3}` : null,
+                  ].filter(Boolean).length > 0 ? (
+                    <>
+                      {(result.description || result.highlight) ? ' · ' : null}
+                      {[
+                        result.meta?.location,
+                        result.meta?.date,
+                        ...(result.tags ?? []).slice(0, 3),
+                        (result.tags?.length ?? 0) > 3 ? `+${(result.tags?.length ?? 0) - 3}` : null,
+                      ].filter(Boolean).join(' · ')}
+                    </>
+                  ) : null}
                 </p>
-              )}
-
-              {result.meta && Object.keys(result.meta).length > 0 && (
-                <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
-                  {result.meta.location && (
-                    <span className="flex items-center gap-1">
-                      <MapPin className="icon-sm" />
-                      {result.meta.location}
-                    </span>
-                  )}
-                  {result.meta.date && (
-                    <span className="flex items-center gap-1">
-                      <Clock className="icon-sm" />
-                      {result.meta.date}
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {result.tags && result.tags.length > 0 && (
-                <FactLine className="mt-2" items={[...result.tags.slice(0, 3), result.tags.length > 3 ? `+${result.tags.length - 3}` : null]} />
-              )}
-              </div>
+              ) : null}
             </div>
 
             <ArrowRight className="icon-sm text-muted-foreground opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0" />

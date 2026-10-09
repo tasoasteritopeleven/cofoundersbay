@@ -261,122 +261,46 @@ function ReviewCard({ review }: { review: ExpertReview }) {
   const [expanded, setExpanded] = useState(false);
   const status = STATUS_CONFIG[review.status];
   const type = REVIEW_TYPE_CONFIG[review.reviewType];
-  const StatusIcon = status.icon;
-  const TypeIcon = type.icon;
 
+  const due = review.dueDate && review.status !== 'submitted'
+    ? new Date(review.dueDate).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short' })
+    : null;
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
-      <div className="p-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-            <AvatarFallback className="bg-primary/10 text-primary-accessible text-xs font-semibold">
-              {initialsOf(review.expertName)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="person-name font-semibold text-foreground">{review.expertName}</p>
-                <p className="text-sm text-muted-foreground truncate">{review.expertTitle}</p>
-              </div>
-              <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-medium shrink-0', STATUS[status.tone].chip)}>
-                <StatusIcon className="icon-sm" />
-                <BilingualText en={status.label} el={status.labelEl} compact />
-              </span>
-            </div>
-
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-medium', STATUS[type.tone].chip)}>
-                <TypeIcon className="icon-sm" />
-                <BilingualText en={type.label} el={type.labelEl} compact />
-              </span>
-              {review.isPaid && review.agreedFee && (
-                <span className="text-2xs text-muted-foreground flex items-center gap-1">
-                  <DollarSign className="icon-sm" /> €{review.agreedFee}
-                </span>
-              )}
-              {!review.isPaid && (
-                <Badge variant="outline" className="text-2xs h-4 px-1.5">
-                  <BilingualText en="Free" el="Δωρεάν" compact />
-                </Badge>
-              )}
-              {review.dueDate && review.status !== 'submitted' && (
-                <span className={cn('text-2xs flex items-center gap-1', STATUS.warning.icon)}>
-                  <Clock className="icon-sm" />
-                  {/* Pinned to UTC on both sides so the server pass and
-                      hydration agree on the day. */}
-                  <BilingualText
-                    en={`Due ${new Date(review.dueDate).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short' })}`}
-                    el={`Προθεσμία ${new Date(review.dueDate).toLocaleDateString('el-GR', { timeZone: 'UTC', day: 'numeric', month: 'short' })}`}
-                    compact
-                  />
-                </span>
-              )}
-            </div>
-
-            {/* Score */}
-            {review.scoreOverall && (
-              <div className="mt-2 flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-muted-foreground">
-                    <BilingualText en="Overall score:" el="Συνολική βαθμολογία:" compact />
-                  </span>
-                  <span className={cn('text-sm font-bold', scoreTenPointClass(review.scoreOverall))}>
-                    {review.scoreOverall}/10
-                  </span>
-                </div>
-                {review.rating && (
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={cn('h-3 w-3', i < review.rating! ? cn('fill-current', STATUS.warning.icon) : 'text-muted-foreground/30')} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {review.summaryFeedback && (
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2 italic">
-                "{review.summaryFeedback}"
-              </p>
-            )}
-
-            <div className="mt-3 flex items-center justify-between">
-              <div className="flex gap-2">
-                {/* A review carries the expert's name but no user id, so there
-                    is no conversation to open. Disabled and labelled beats a
-                    button that looks live. */}
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-7 gap-1 text-xs"
-                  disabled
-                  title={MESSAGE_HINT}
-                  aria-label={MESSAGE_HINT}
-                >
-                  <MessageCircle className="icon-sm" aria-hidden="true" />
-                  <BilingualText en="Message expert" el="Μήνυμα στον ειδικό" compact wrap />
-                </Button>
-                {/* "View full review" is gone rather than wired: the control
-                    immediately to its right — "See feedback" — already expands
-                    the full review in place, and did so while this one did
-                    nothing. Two buttons for one action is the defect. */}
-              </div>
-              {review.strengthsJson || review.improvementsJson ? (
-                <button
-                  onClick={() => setExpanded((v) => !v)}
-                  className="text-2xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-0.5"
-                >
-                  <BilingualText
-                    en={expanded ? 'Collapse' : 'See feedback'}
-                    el={expanded ? 'Σύμπτυξη' : 'Δείτε την ανατροφοδότηση'}
-                    compact
-                  />
-                  <ChevronRight className={cn('icon-sm transition-transform', expanded && 'rotate-90')} />
-                </button>
-              ) : null}
-            </div>
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex items-center gap-4 p-4">
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+            {initialsOf(review.expertName)}
+          </AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="person-name font-display text-base font-semibold text-foreground">{review.expertName}</p>
+            <Badge variant="outline" className="text-xs">
+              <BilingualText en={status.label} el={status.labelEl} compact />
+            </Badge>
           </div>
+          <p className="row-ellipsis text-sm text-muted-foreground">{review.expertTitle}</p>
+          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+            {[
+              type.label,
+              review.isPaid && review.agreedFee ? `€${review.agreedFee}` : 'Free',
+              due ? `Due ${due}` : null,
+              review.scoreOverall ? `${review.scoreOverall}/10` : null,
+              review.rating ? `${review.rating}/5` : null,
+              review.summaryFeedback ? `“${review.summaryFeedback}”` : null,
+            ].filter(Boolean).join(' · ')}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {(review.strengthsJson || review.improvementsJson) ? (
+            <Button size="sm" variant="secondary" className="gap-1" onClick={() => setExpanded((v) => !v)}>
+              <BilingualText en={expanded ? 'Collapse' : 'Feedback'} el={expanded ? 'Σύμπτυξη' : 'Σχόλια'} compact />
+            </Button>
+          ) : null}
+          <Button size="sm" variant="ghost" disabled title={MESSAGE_HINT} aria-label={MESSAGE_HINT}>
+            <MessageCircle className="icon-sm" aria-hidden="true" />
+          </Button>
         </div>
       </div>
 
@@ -437,88 +361,47 @@ function ReviewCard({ review }: { review: ExpertReview }) {
 }
 
 function ExpertCard({ expert }: { expert: ExpertProfile }) {
+  const fee = expert.feeFrom != null
+    ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: expert.currency || 'USD', maximumFractionDigits: 0 }).format(expert.feeFrom)
+    : null;
   return (
-    <div className="rounded-xl border border-border bg-card p-4 hover:shadow-sm hover:border-border transition-all">
-      <div className="flex items-start gap-4">
+    <div className="card-interactive rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-4">
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
             {initialsOf(expert.name)}
           </AvatarFallback>
         </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <p className="person-name font-semibold text-foreground">{expert.name}</p>
-                {expert.isVerified && (
-                  <Badge className="h-4 rounded-full px-1.5 text-2xs bg-primary/10 text-primary-accessible border-primary/20"><BilingualText en="Verified" el="Επαληθευμένος" compact /></Badge>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground truncate">{expert.title}</p>
-              <FactLine className="mt-0.5" items={expert.badges ?? []} />
-            </div>
-            {expert.feeFrom != null && (
-              <p className="text-sm font-semibold text-foreground shrink-0">
-                {/* The euro sign used to be written in, whatever the expert
-                    charges in. */}
-                <BilingualText en="From" el="Από" compact />{' '}
-                {new Intl.NumberFormat('en-GB', {
-                  style: 'currency',
-                  currency: expert.currency || 'USD',
-                  maximumFractionDigits: 0,
-                }).format(expert.feeFrom)}
-              </p>
-            )}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="person-name font-display text-base font-semibold text-foreground">{expert.name}</p>
+            {expert.isVerified ? (
+              <Badge variant="outline" className="text-xs"><BilingualText en="Verified" el="Επαληθευμένος" compact /></Badge>
+            ) : null}
           </div>
-
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2">{expert.bio}</p>
-
-          <div className="mt-2 flex flex-wrap gap-1">
-            {expert.domains.slice(0, 3).map((d) => {
-              const cfg = REVIEW_TYPE_CONFIG[d];
-              return (
-                <span key={d} className={cn('rounded-full px-2 py-0.5 text-2xs font-medium', STATUS[cfg.tone].chip)}>
-                  <BilingualText en={cfg.label} el={cfg.labelEl} compact />
-                </span>
-              );
-            })}
-          </div>
-
-          <div className="mt-2 flex items-center gap-3 text-2xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Star className={cn('icon-sm fill-current', STATUS.warning.icon)} />{' '}
-              {expert.rating ?? '\u2014'}{' '}
-              <BilingualText
-                en={`(${expert.completedReviews} ${expert.completedReviews === 1 ? 'review' : 'reviews'})`}
-                el={`(${expert.completedReviews} ${expert.completedReviews === 1 ? 'αξιολόγηση' : 'αξιολογήσεις'})`}
-                compact
-              />
-            </span>
-            {expert.responseTime && (
-              <span className="flex items-center gap-1">
-                <Clock className="icon-sm" />{' '}
-                <BilingualText en="Turnaround:" el="Χρόνος παράδοσης:" compact /> {expert.responseTime}
-              </span>
-            )}
-          </div>
-
-          {/* These experts are constants. Mentors are real, bookable and
-              messageable, and a structured review is one of the things they
-              do — so that is where both buttons lead. */}
-          <div className="mt-3 flex gap-2">
-            <Button size="sm" className="h-auto min-h-7 flex-1 gap-1 py-1 text-xs leading-snug" asChild>
-              <Link href="/mentoring">
-                <Plus className="icon-sm shrink-0" aria-hidden="true" />
-                <BilingualText en="Request a review" el="Αίτημα αξιολόγησης" compact wrap />
-              </Link>
-            </Button>
-            <Button size="sm" variant="outline" className="h-auto min-h-7 gap-1 py-1 text-xs leading-snug" asChild>
-              <Link href="/mentoring">
-                <MessageCircle className="icon-sm shrink-0" aria-hidden="true" />
-                <BilingualText en="Browse" el="Περιήγηση" compact wrap />
-              </Link>
-            </Button>
-          </div>
+          <p className="row-ellipsis text-sm text-muted-foreground">{expert.title}</p>
+          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+            {[
+              expert.bio,
+              ...expert.domains.slice(0, 3).map((d) => REVIEW_TYPE_CONFIG[d].label),
+              ...(expert.badges ?? []).slice(0, 2),
+              expert.rating != null ? `${expert.rating} (${expert.completedReviews})` : null,
+              fee ? `From ${fee}` : null,
+              expert.responseTime,
+            ].filter(Boolean).join(' · ')}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button size="sm" className="gap-1" asChild>
+            <Link href="/mentoring">
+              <BilingualText en="Request" el="Αίτημα" compact />
+            </Link>
+          </Button>
+          <Button size="sm" variant="secondary" asChild>
+            <Link href="/mentoring">
+              <BilingualText en="Browse" el="Περιήγηση" compact />
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

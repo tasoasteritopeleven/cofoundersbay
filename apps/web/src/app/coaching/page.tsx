@@ -6,7 +6,6 @@ import { useQuery, useQueries, useMutation, useQueryClient } from '@tanstack/rea
 import { useStoredUser } from '@/hooks/useStoredUser';
 import { useToast } from '@/components/ui/toast';
 import { BookingCard } from '@/components/mentoring/BookingCard';
-import { SessionDateTile } from '@/components/mentoring/SessionDateTile';
 import { fromBooking, isUpcoming, type UnifiedSession } from '@/lib/mentoring/sessions';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -278,156 +277,87 @@ function SessionCard({ session }: { session: CoachingSession }) {
   const isSample = isDemoSessionId(session.id);
   const status = STATUS_CONFIG[session.status];
   const type = session.sessionType ? SESSION_TYPE_CONFIG[session.sessionType] : null;
-  const StatusIcon = status.icon;
-  const TypeIcon = type?.icon;
   const completedActions = session.actionItems?.filter((a) => a.done).length ?? 0;
   const totalActions = session.actionItems?.length ?? 0;
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
-      <div className="p-4">
-        <div className="flex items-start gap-3">
-          <SessionDateTile date={new Date(session.scheduledAt)} />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0 space-y-1">
-                <p className="font-display text-base font-semibold text-foreground">{session.title}</p>
-                <p className="text-xs text-muted-foreground">with {session.coachName} · {session.coachTitle}</p>
-              </div>
-              <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium shrink-0', status.color)}>
-                <StatusIcon className="icon-sm" />
-                <BilingualText en={status.label} el={status.labelEl} compact />
-              </span>
-            </div>
-
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              {type && TypeIcon && (
-                <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', type.color)}>
-                  <TypeIcon className="icon-sm" />
-                  <BilingualText en={type.label} el={type.labelEl} compact />
-                </span>
-              )}
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="icon-sm" />
-                <LocalWhen iso={session.scheduledAt} variant="card" />
-              </span>
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Calendar className="icon-sm" aria-hidden="true" />
-                <BilingualText
-                  en={`${session.durationMinutes} min`}
-                  el={`${session.durationMinutes} λεπτά`}
-                  compact
-                />
-              </span>
-              {session.meetingUrl && (
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Video className="icon-sm" aria-hidden="true" />{' '}
-                  <BilingualText en="Video" el="Βιντεοκλήση" compact />
-                </span>
-              )}
-            </div>
-
-            {/* Action items progress */}
-            {totalActions > 0 && (
-              <div className="mt-2 space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground flex items-center gap-1">
-                    <ListChecks className="icon-sm" aria-hidden="true" />{' '}
-                    <BilingualText en="Action items" el="Ενέργειες" compact />
-                  </span>
-                  <span className="font-semibold text-foreground">{completedActions}/{totalActions}</span>
-                </div>
-                <Progress value={(completedActions / totalActions) * 100} className="h-1.5" />
-              </div>
-            )}
-
-            {/* Rating */}
-            {session.rating && (
-              <div className="mt-2 flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={cn('icon-sm', i < session.rating! ? 'fill-status-warning text-status-warning' : 'text-muted-foreground/30')} />
-                ))}
-                <span className="text-xs text-muted-foreground ml-1">
-                  <BilingualText en="Your rating" el="Η βαθμολογία σας" compact />
-                </span>
-              </div>
-            )}
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex items-center gap-4 p-4">
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          {session.coachAvatar ? <AvatarImage src={session.coachAvatar} /> : null}
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+            {initialsOf(session.coachName)}
+          </AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="person-name font-display text-base font-semibold text-foreground">{session.title}</p>
+            <Badge variant="outline" className="text-xs">
+              <BilingualText en={status.label} el={status.labelEl} compact />
+            </Badge>
           </div>
+          <p className="row-ellipsis text-sm text-muted-foreground">
+            {session.coachName} · {session.coachTitle} · <LocalWhen iso={session.scheduledAt} variant="card" />
+          </p>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {[
+              type?.label,
+              `${session.durationMinutes} min`,
+              session.meetingUrl ? 'Video' : null,
+              totalActions > 0 ? `${completedActions}/${totalActions} actions` : null,
+              session.rating ? `${session.rating}/5` : null,
+            ].filter(Boolean).join(' · ')}
+          </p>
         </div>
-
-        {/* Actions row */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap gap-2 sm:ml-auto sm:justify-end">
-            {session.status === 'scheduled' && session.meetingUrl && (
-              isSample ? (
-                <Button size="sm" className="gap-1" disabled title={JOIN_HINT} aria-label={JOIN_HINT}>
-                  <Video className="icon-sm" aria-hidden="true" />
-                  <BilingualText en="Join session" el="Σύνδεση στη συνεδρία" compact wrap />
-                </Button>
-              ) : (
-                <Button size="sm" className="gap-1" asChild>
-                  <a href={session.meetingUrl} target="_blank" rel="noopener noreferrer">
-                    <Video className="icon-sm" aria-hidden="true" />
-                    <BilingualText en="Join session" el="Σύνδεση στη συνεδρία" compact wrap />
-                  </a>
-                </Button>
-              )
-            )}
-            {session.status === 'completed' && !session.rating && (
-              isSample ? (
-                <Button size="sm" variant="outline" className="gap-1" disabled title={RATE_HINT} aria-label={RATE_HINT}>
-                  <Star className="icon-sm" aria-hidden="true" />
-                  <BilingualText en="Rate session" el="Βαθμολόγηση" compact wrap />
-                </Button>
-              ) : rating ? (
-                /* Five buttons rather than a dialog: the whole interaction is
-                   one click, and a dialog would be three. */
-                <div className="flex items-center gap-0.5" role="group" aria-label={bilingualAria('Rate this session', 'Βαθμολογήστε τη συνεδρία')}>
-                  {[1, 2, 3, 4, 5].map((score) => (
-                    <button
-                      key={score}
-                      type="button"
-                      disabled={rate.isPending}
-                      onClick={() => rate.mutate(score)}
-                      className="rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-status-warning focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-50 disabled:cursor-not-allowed"
-                      aria-label={bilingualAria(`${score} of 5`, `${score} από 5`)}
-                    >
-                      <Star className="icon-sm" aria-hidden="true" />
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => setRating(false)}
-                    className="ml-1 text-xs text-muted-foreground underline underline-offset-2"
-                  >
-                    <BilingualText en="Cancel" el="Ακύρωση" compact />
-                  </button>
-                </div>
-              ) : (
-                <Button size="sm" variant="outline" className="gap-1" onClick={() => setRating(true)}>
-                  <Star className="icon-sm" aria-hidden="true" />
-                  <BilingualText en="Rate session" el="Βαθμολόγηση" compact wrap />
-                </Button>
-              )
-            )}
-            {/* Messaging is real, and it lives with the mentors a founder can
-                actually reach today. */}
-            <Button size="sm" variant="ghost" className="gap-1" asChild>
-              <Link href="/mentoring">
-                <MessageCircle className="icon-sm" aria-hidden="true" />
-                <BilingualText en="Find a mentor" el="Εύρεση μέντορα" compact wrap />
-              </Link>
-            </Button>
-          </div>
-          <button
-            onClick={() => setExpanded((v) => !v)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-0.5"
-          >
-            {expanded ? 'Collapse' : 'Details'}
-            <ChevronRight className={cn('icon-sm transition-transform', expanded && 'rotate-90')} aria-hidden="true" />
-          </button>
+        <div className="flex shrink-0 items-center gap-2">
+          {session.status === 'scheduled' && session.meetingUrl && (
+            isSample ? (
+              <Button size="sm" disabled title={JOIN_HINT} aria-label={JOIN_HINT}>
+                <BilingualText en="Join" el="Σύνδεση" compact />
+              </Button>
+            ) : (
+              <Button size="sm" asChild>
+                <a href={session.meetingUrl} target="_blank" rel="noopener noreferrer">
+                  <BilingualText en="Join" el="Σύνδεση" compact />
+                </a>
+              </Button>
+            )
+          )}
+          {session.status === 'completed' && !session.rating && !rating && (
+            isSample ? (
+              <Button size="sm" variant="secondary" disabled title={RATE_HINT} aria-label={RATE_HINT}>
+                <BilingualText en="Rate" el="Βαθμός" compact />
+              </Button>
+            ) : (
+              <Button size="sm" variant="secondary" onClick={() => setRating(true)}>
+                <BilingualText en="Rate" el="Βαθμός" compact />
+              </Button>
+            )
+          )}
+          <Button size="sm" variant="ghost" onClick={() => setExpanded((v) => !v)}>
+            {expanded ? 'Hide' : 'Details'}
+          </Button>
         </div>
       </div>
+      {rating && !isSample && (
+        <div className="flex items-center gap-1 px-4 pb-4" role="group" aria-label={bilingualAria('Rate this session', 'Βαθμολογήστε τη συνεδρία')}>
+          {[1, 2, 3, 4, 5].map((score) => (
+            <button
+              key={score}
+              type="button"
+              disabled={rate.isPending}
+              onClick={() => rate.mutate(score)}
+              className="rounded-sm p-0.5 text-muted-foreground transition-colors hover:text-status-warning focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-50"
+              aria-label={bilingualAria(`${score} of 5`, `${score} από 5`)}
+            >
+              <Star className="icon-sm" aria-hidden="true" />
+            </button>
+          ))}
+          <button type="button" onClick={() => setRating(false)} className="ml-1 text-xs text-muted-foreground underline underline-offset-2">
+            <BilingualText en="Cancel" el="Ακύρωση" compact />
+          </button>
+        </div>
+      )}
 
       {/* Expanded details */}
       {expanded && (
@@ -441,7 +371,7 @@ function SessionCard({ session }: { session: CoachingSession }) {
           {session.keyInsights && (
             <div>
               <p className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Key Insights</p>
-              <p className="text-xs text-foreground/80 italic">"{session.keyInsights}"</p>
+              <p className="text-xs text-foreground/80 italic">&ldquo;{session.keyInsights}&rdquo;</p>
             </div>
           )}
           {session.actionItems && session.actionItems.length > 0 && (
@@ -464,87 +394,45 @@ function SessionCard({ session }: { session: CoachingSession }) {
 }
 
 function CoachCard({ coach }: { coach: CoachProfile }) {
+  const rate = coach.pricePerHour != null
+    ? `${new Intl.NumberFormat('en-GB', { style: 'currency', currency: coach.currency || 'USD', maximumFractionDigits: 0 }).format(coach.pricePerHour)}/hr`
+    : null;
   return (
-    <div className="rounded-xl border border-border bg-card p-4 hover:shadow-sm hover:border-border transition-all">
-      <div className="flex items-start gap-4">
+    <div className="card-interactive rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-4">
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           {coach.avatar && <AvatarImage src={coach.avatar} />}
-          <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
             {initialsOf(coach.name)}
           </AvatarFallback>
         </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-1.5">
-                <p className="person-name font-semibold text-foreground">{coach.name}</p>
-                {coach.isVerified && (
-                  <Badge size="sm" className="rounded-full px-1.5 bg-primary/10 text-primary-accessible border-primary/20">Verified</Badge>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground truncate">{coach.title}</p>
-            </div>
-            {coach.pricePerHour != null && (
-              <p className="text-sm font-semibold text-foreground shrink-0">
-                {/* The dollar sign used to be written in. A mentor records a
-                    currency beside the rate; bill them in it. */}
-                {new Intl.NumberFormat('en-GB', {
-                  style: 'currency',
-                  currency: coach.currency || 'USD',
-                  maximumFractionDigits: 0,
-                }).format(coach.pricePerHour)}
-                /hr
-              </p>
-            )}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="person-name font-display text-base font-semibold text-foreground">{coach.name}</p>
+            {coach.isVerified ? <Badge variant="outline" className="text-xs">Verified</Badge> : null}
           </div>
-
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground line-clamp-2">{coach.bio}</p>
-
-          <div className="mt-2 flex flex-wrap gap-1">
-            {coach.specialties.slice(0, 3).map((s) => {
-              const cfg = SESSION_TYPE_CONFIG[s];
-              return (
-                <span key={s} className={cn('rounded-full px-2 py-0.5 text-xs font-medium', cfg.color)}>
-                  <BilingualText en={cfg.label} el={cfg.labelEl} compact />
-                </span>
-              );
-            })}
-          </div>
-
-          <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Star className="icon-sm fill-status-warning text-status-warning" />{' '}
-              {coach.rating > 0 ? coach.rating : '—'}{' '}
-              <BilingualText
-                en={`(${coach.sessionCount} sessions)`}
-                el={`(${coach.sessionCount} ${coach.sessionCount === 1 ? 'συνεδρία' : 'συνεδρίες'})`}
-                compact
-              />
-            </span>
-            {coach.responseTime && (
-              <span className="flex items-center gap-1">
-                <Clock className="icon-sm" /> Responds {coach.responseTime}
-              </span>
-            )}
-          </div>
-
-          {/* These coaches are constants with demo ids, so neither booking nor
-              a conversation can be opened with them. `/mentoring` is the same
-              offer against real people. */}
-          <div className="mt-3 flex gap-2">
-            <Button size="sm" className="flex-1 gap-1" asChild>
-              <Link href="/mentoring">
-                <Calendar className="icon-sm" aria-hidden="true" />
-                <BilingualText en="Book with a mentor" el="Κράτηση με μέντορα" compact wrap />
-              </Link>
-            </Button>
-            <Button size="sm" variant="outline" className="gap-1" asChild>
-              <Link href="/mentoring">
-                <MessageCircle className="icon-sm" aria-hidden="true" />
-                <BilingualText en="Browse" el="Περιήγηση" compact wrap />
-              </Link>
-            </Button>
-          </div>
+          <p className="row-ellipsis text-sm text-muted-foreground">{coach.title}</p>
+          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+            {[
+              coach.bio,
+              ...coach.specialties.slice(0, 3).map((s) => SESSION_TYPE_CONFIG[s].label),
+              coach.rating > 0 ? `${coach.rating} (${coach.sessionCount})` : null,
+              rate,
+              coach.responseTime ? `Responds ${coach.responseTime}` : null,
+            ].filter(Boolean).join(' · ')}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button size="sm" className="gap-1" asChild>
+            <Link href="/mentoring">
+              <BilingualText en="Book" el="Κράτηση" compact />
+            </Link>
+          </Button>
+          <Button size="sm" variant="secondary" asChild>
+            <Link href="/mentoring">
+              <BilingualText en="Browse" el="Περιήγηση" compact />
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
@@ -1214,7 +1102,7 @@ export default function CoachingPage() {
                 <CardContent className="space-y-3">
                   {sessions.filter((s) => s.keyInsights).map((s) => (
                     <div key={s.id} className="rounded-lg bg-muted/50 px-3 py-2 border-l-2 border-status-warning-border">
-                      <p className="text-xs text-foreground/80 italic">"{s.keyInsights}"</p>
+                      <p className="text-xs text-foreground/80 italic">&ldquo;{s.keyInsights}&rdquo;</p>
                       <p className="text-2xs text-muted-foreground mt-1">— {s.title}</p>
                     </div>
                   ))}

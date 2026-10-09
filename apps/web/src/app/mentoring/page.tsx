@@ -26,7 +26,6 @@ import {
 } from 'lucide-react';
 import { listMentorBookings, updateMentorBooking, createMentorBooking, searchProfiles, getMyMentorships, getMentorshipSessions, type MentorBookingItem, type MentorshipRelationshipItem, type MentorshipSessionItem, type SearchHit } from '@/lib/api';
 import { BookingCard, MEETING_TYPE_LABEL } from '@/components/mentoring/BookingCard';
-import { SessionDateTile } from '@/components/mentoring/SessionDateTile';
 import { StatusText } from '@/components/common/StatusText';
 import { fromBooking, fromMentorshipSession, isUpcoming, mergeSessions } from '@/lib/mentoring/sessions';
 import { AppShell } from '@/components/layout/AppShell';
@@ -67,6 +66,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { LocalTime } from '@/components/common/LocalTime';
 import { qk } from '@/lib/query-keys';
 import { FactLine } from '@/components/common/FactLine';
+import { ListRowCard } from '@/components/common/ListRowCard';
 
 interface Mentor {
   id: string;
@@ -131,109 +131,42 @@ const EXPERTISE_FILTERS = [
 ];
 
 function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) {
-  // Shown only when known: search results carry no availability, and a green
-  // "Available" on every card was a claim nothing had checked.
-  const availCfg = mentor.availabilityStatus ? AVAIL_CONFIG[mentor.availabilityStatus] : null;
   // No invented fallback: a mentor the engine has not scored shows no pill,
   // rather than a number between 70 and 95 that changes on every render.
   const matchPct = mentor.matchScore ?? null;
 
+  const rate = mentor.hourlyRate ? `${mentor.hourlyRate}/hr` : null;
   return (
-    <Card className="card-interactive hover-lift group transition-all duration-300">
-      <CardContent className="space-y-3">
-        {/* Header row */}
-        <div className="flex items-center gap-4">
-          <div className="relative shrink-0">
-            <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-              <AvatarImage src={mentor.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-sm">
-                {initialsOf(mentor.displayName)}
-              </AvatarFallback>
-            </Avatar>
-            {availCfg && <span className={cn('absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full ring-2 ring-background', availCfg.dot)} aria-hidden="true" />}
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <Link href={`/profiles/${mentor.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                {mentor.displayName}
-              </Link>
-              {mentor.isVerified && <BadgeCheck className="icon-sm text-muted-foreground shrink-0" aria-label={bilingualInline('Verified', 'Επαληθευμένος')} />}
-              {mentor.isFeatured && (
-                <Badge variant="secondary" className="gap-1 text-xs px-1.5 py-0.5">
-                  <TrendingUp className="h-2.5 w-2.5" aria-hidden="true" />
-                  <BilingualText en="Featured" el="Προτεινόμενος" compact />
-                </Badge>
-              )}
-            </div>
-
-            <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-              {/* Search results carry no rating, so a star with "New" beside
-                  every mentor claimed each one was unreviewed. The slot shows
-                  a rating only when one is known. */}
-              {mentor.rating > 0 && (
-                <span className="flex items-center gap-0.5">
-                  <Star className="icon-sm fill-status-warning text-status-warning" aria-hidden="true" />
-                  <span className="font-semibold text-foreground">{mentor.rating.toFixed(1)}</span>
-                  {mentor.totalSessions > 0 && <span>({mentor.totalSessions})</span>}
-                </span>
-              )}
-              {mentor.location && (
-                <span className="flex items-center gap-1"><MapPin className="icon-sm" aria-hidden="true" />{mentor.location}</span>
-              )}
-              {mentor.isRemote && (
-                <span className="flex items-center gap-1"><Globe className="icon-sm text-status-info" aria-hidden="true" /><BilingualText en="Remote" el="Εξ αποστάσεως" compact /></span>
-              )}
-            </div>
-          </div>
-
-          {/* Match score pill */}
-          {matchPct != null && (
-            <div className="shrink-0 flex flex-col items-center gap-0.5">
-              <div className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold ring-2',
-                matchPct >= 85 ? 'bg-primary/15 text-primary-accessible ring-primary/30'
-                : matchPct >= 70 ? 'bg-status-success-bg text-status-success ring-status-success'
-                : 'bg-muted text-muted-foreground ring-border',
-              )}>
-                {matchPct}%
-              </div>
-              <span className="text-xs text-muted-foreground"><BilingualText en="match" el="ταίριασμα" compact /></span>
-            </div>
-          )}
-        </div>
-
-        <p className="card-copy text-sm leading-relaxed text-muted-foreground line-clamp-2">{mentor.bio}</p>
-
-        {/* Expertise: one fact line */}
-        <FactLine items={[...mentor.expertise.slice(0, 4), mentor.expertise.length > 4 ? `+${mentor.expertise.length - 4}` : null]} />
-
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-2 border-t border-border">
-          <div className="flex items-center gap-2">
-            {mentor.hourlyRate ? (
-              <span className="flex items-center gap-0.5 text-sm font-semibold text-foreground">
-                <DollarSign className="icon-sm text-muted-foreground" aria-hidden="true" />{mentor.hourlyRate}
-                <BilingualText en="/hr" el="/ώρα" compact />
-              </span>
-            ) : (
-              <Badge variant="outline" className="text-xs border-status-success-border text-status-success bg-status-success-bg">
-                <BilingualText en="Free" el="Δωρεάν" compact />
-              </Badge>
-            )}
-            {availCfg && (
-              <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', availCfg.bg, availCfg.color)}>
-                <BilingualText en={availCfg.en} el={availCfg.el} compact />
-              </span>
-            )}
-          </div>
-          <Button size="sm" onClick={onBook} className="gap-1.5 h-8 text-xs" aria-label={bilingualInline(`Book a session with ${mentor.displayName}`, `Κράτηση συνεδρίας με ${mentor.displayName}`)}>
-            <Calendar className="icon-sm" aria-hidden="true" />
-            <BilingualText en="Book" el="Κράτηση" compact />
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+    <ListRowCard
+      mark={(
+        <Link href={`/profiles/${mentor.id}`}>
+          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+            <AvatarImage src={mentor.avatarUrl ?? undefined} />
+            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+              {initialsOf(mentor.displayName)}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+      )}
+      title={mentor.displayName}
+      titleHref={`/profiles/${mentor.id}`}
+      badge={mentor.isFeatured ? <Badge variant="outline" className="text-xs"><BilingualText en="Featured" el="Προτεινόμενος" compact /></Badge> : undefined}
+      headline={[
+        mentor.location,
+        mentor.isRemote ? 'Remote' : null,
+        mentor.rating > 0 ? mentor.rating.toFixed(1) : null,
+        rate,
+        matchPct != null ? `${matchPct}%` : null,
+        ...mentor.expertise.slice(0, 3),
+      ].filter(Boolean).join(' · ')}
+      detail={mentor.bio}
+      actions={(
+        <Button size="sm" onClick={onBook} className="gap-1" aria-label={bilingualInline(`Book a session with ${mentor.displayName}`, `Κράτηση συνεδρίας με ${mentor.displayName}`)}>
+          <Calendar className="icon-sm" aria-hidden="true" />
+          <BilingualText en="Book" el="Κράτηση" compact />
+        </Button>
+      )}
+    />
   );
 }
 
@@ -408,57 +341,41 @@ function MentorshipSessionRow({ rel, session, userId }: { rel: MentorshipRelatio
   const other = u.counterpart;
   const home = rel.mentorId === userId ? '/mentor/sessions' : '/coaching';
   return (
-    <Card>
-      <CardContent>
-        <div className="flex gap-3 sm:gap-4">
-          <SessionDateTile date={start} />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-x-2">
-                  <Link href={`/profiles/${other.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                    {other.displayName}
-                  </Link>
-                  <span className="text-xs text-muted-foreground">
-                    {rel.mentorId === userId
-                      ? <BilingualText en="(mentee)" el="(μαθητευόμενος)" compact />
-                      : <BilingualText en="(mentor)" el="(μέντορας)" compact />}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  <LocalTime value={start} />
-                  {end ? <> {' – '} <LocalTime value={end} /> </> : null}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center justify-end gap-1.5">
-                <Badge variant="outline" className="text-xs">
-                  <StatusText value={u.status} />
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  <BilingualText en="Mentorship" el="Σχέση καθοδήγησης" compact />
-                </Badge>
-              </div>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-              {u.durationMin != null && (
-                <span className="flex items-center gap-1">
-                  <Clock className="icon-sm" aria-hidden="true" />
-                  {u.durationMin} min
-                </span>
-              )}
-              {u.title && <span className="text-muted-foreground">{u.title}</span>}
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2 sm:justify-end">
-              <Button size="sm" variant="outline" className="h-7 text-xs" asChild>
-                <Link href={home}>
-                  {rel.mentorId === userId
-                    ? <BilingualText en="Open in Mentor sessions" el="Άνοιγμα στις συνεδρίες μέντορα" compact />
-                    : <BilingualText en="Open in Coaching" el="Άνοιγμα στο Coaching" compact />}
-                </Link>
-              </Button>
-            </div>
+    <Card className="card-interactive">
+      <CardContent className="flex items-center gap-4">
+        <Link href={`/profiles/${other.id}`}>
+          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+              {initialsOf(other.displayName)}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href={`/profiles/${other.id}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
+              {other.displayName}
+            </Link>
+            <Badge variant="outline" className="text-xs">
+              <StatusText value={u.status} />
+            </Badge>
           </div>
+          <p className="row-ellipsis text-sm text-muted-foreground">
+            {rel.mentorId === userId ? 'Mentee' : 'Mentor'}
+            {' · '}
+            <LocalTime value={start} />
+            {end ? <>{' – '}<LocalTime value={end} /></> : null}
+          </p>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {[u.title, u.durationMin != null ? `${u.durationMin} min` : null].filter(Boolean).join(' · ')}
+          </p>
         </div>
+        <Button size="sm" variant="secondary" asChild>
+          <Link href={home}>
+            {rel.mentorId === userId
+              ? <BilingualText en="Sessions" el="Συνεδρίες" compact />
+              : <BilingualText en="Coaching" el="Coaching" compact />}
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );

@@ -3631,6 +3631,14 @@ textarea[class~="border-input"]:focus,
     text-overflow: clip;
   }
 
+  /* The connection subtitle stays one line. Joined facts use this class
+     so a long line ellipsizes instead of stacking into a second card. */
+  #main-content [data-card] p.row-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* Titles that inherit the body step (15.520) are the same size as
      "Discover People". On a phone they sit on the text-base step (14.243)
      so they stay under that body size and above a text-sm subtitle.

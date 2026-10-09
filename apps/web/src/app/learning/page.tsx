@@ -14,10 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FactLine } from '@/components/common/FactLine';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getMeProfile, listLearningResources, getLearningCategories, type LearningResourceItem } from '@/lib/api';
 import { queryKeys, qk } from '@/lib/query-keys';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { bilingualAria } from '@/lib/i18n/format';
@@ -183,127 +183,74 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
   const difficultyConfig = DIFFICULTY_CONFIG[resource.difficulty] ?? DIFFICULTY_CONFIG.beginner;
 
   return (
-    <Card className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30 flex flex-col">
-      <CardContent className="flex flex-col flex-1 gap-3">
-        {/* Type icon + title */}
-        <div className="flex items-start gap-3">
-          <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', typeConfig.bg, typeConfig.color)}>
-            <typeConfig.icon className="icon-md" />
-          </div>
-          <div className="flex-1 min-w-0 space-y-1">
-            <h3 className="font-display text-base font-semibold text-foreground line-clamp-2">
-              {resource.title}
-            </h3>
-            {/* Type and level are facts (one muted line); "Featured" is the
-                card's one pill. All three were tinted badges. */}
-            <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
-              <FactLine
-                items={[
-                  <BilingualText key="type" en={learningEn(typeConfig.labelKey)} el={learningEl(typeConfig.labelKey)} compact />,
-                  <BilingualText key="level" en={learningEn(difficultyConfig.labelKey)} el={learningEl(difficultyConfig.labelKey)} compact />,
-                ]}
-              />
-              {resource.isFeatured && (
-                <Badge variant="secondary" className="text-2xs h-4 px-1.5 bg-primary/10 text-primary-accessible">
-                  <BilingualText en={learningEn('featured_badge')} el={learningEl('featured_badge')} compact />
-                </Badge>
-              )}
-            </div>
-          </div>
+    <ListRowCard
+      mark={(
+        <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full ring-2 ring-primary/20', typeConfig.bg, typeConfig.color)}>
+          <typeConfig.icon className="icon-md" />
+        </div>
+      )}
+      title={resource.title}
+      badge={resource.isFeatured ? (
+        <Badge variant="outline" className="text-xs">
+          <BilingualText en={learningEn('featured_badge')} el={learningEl('featured_badge')} compact />
+        </Badge>
+      ) : undefined}
+      headline={[
+        learningEn(typeConfig.labelKey),
+        learningEn(difficultyConfig.labelKey),
+        resource.author,
+        resource.duration,
+        ...(resource.tags ?? []).slice(0, 3),
+      ].filter(Boolean).join(' · ')}
+      detail={resource.description}
+      actions={(
+        <>
           <button
             type="button"
             onClick={() => onToggleSave(resource.id)}
             aria-pressed={saved}
-            aria-label={
-              saved
-                ? bilingualAria(`Saved: ${resource.title}`, `Αποθηκευμένο: ${resource.title}`)
-                : bilingualAria(`Save ${resource.title}`, `Αποθήκευση: ${resource.title}`)
-            }
-            // WCAG 2.5.8 wants 24x24 CSS px. The icon stays 16px; the negative margin cancels the extra 8px so nothing moves, only the hit area grows.
-            // Unsaved was text-muted-foreground/40: an icon that is the whole
-            // control needs 3:1 against the card (WCAG 1.4.11), and 40% of the
-            // muted tone is well under it in every theme.
-            className={cn(
-              'shrink-0 -m-1 mt-0.5 inline-flex tap-target items-center justify-center transition-colors',
-              saved ? 'text-primary-accessible' : 'text-muted-foreground hover:text-foreground',
-            )}
+            aria-label={saved
+              ? bilingualAria(`Saved: ${resource.title}`, `Αποθηκευμένο: ${resource.title}`)
+              : bilingualAria(`Save ${resource.title}`, `Αποθήκευση: ${resource.title}`)}
+            className={cn('tap-target inline-flex items-center justify-center', saved ? 'text-primary-accessible' : 'text-muted-foreground')}
           >
             <Bookmark className={cn('icon-sm', saved && 'fill-current')} aria-hidden="true" />
-            <span className="hidden sm:inline text-xs"><BilingualText en={saved ? 'Saved' : 'Save'} el={saved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
           </button>
-        </div>
-
-        <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2 flex-1">
-          {resource.description}
-        </p>
-
-        <FactLine label={bilingualAria('Topics', 'Θέματα')} items={(resource.tags ?? []).slice(0, 3)} />
-
-        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-          <span className="truncate font-medium text-foreground">{resource.author}</span>
-          {resource.duration && (
-            <span className="flex items-center gap-1"><Clock className="icon-sm" />{resource.duration}</span>
-          )}
-          {resource.completedBy && (
-            <span className="flex items-center gap-1"><CheckCircle2 className="icon-sm text-status-success" />{resource.completedBy.toLocaleString('en-GB')}</span>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Button variant="default" size="sm" className="gap-1 text-xs" onClick={() => window.open(resource.url, '_blank')}>
-            {resource.type === 'video' || resource.type === 'course' ? (
-              <><Play className="icon-sm" /><BilingualText en={learningEn('start')} el={learningEl('start')} compact /></>
-            ) : (
-              <><ExternalLink className="icon-sm" /><BilingualText en={learningEn('open')} el={learningEl('open')} compact /></>
-            )}
+          <Button size="sm" className="gap-1" onClick={() => window.open(resource.url, '_blank')}>
+            <BilingualText en={learningEn(resource.type === 'video' || resource.type === 'course' ? 'start' : 'open')} el={learningEl(resource.type === 'video' || resource.type === 'course' ? 'start' : 'open')} compact />
           </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      )}
+    />
   );
 }
 
 function LearningPathCard({ path, onSelect }: { path: LearningPath; onSelect: (category: string) => void }) {
   return (
-    <button
-      type="button"
+    <ListRowCard
       onClick={() => onSelect(path.category)}
-      className={cn('relative w-full min-w-0 rounded-xl border p-4 text-left transition-all hover:border-primary/30', path.color)}
-    >
-      <div className="mb-3 flex min-w-0 items-start gap-3">
-        <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-background/60 ring-2 ring-border/60')}>
-          <CfbGlyph name={path.glyph} className="icon-md text-foreground" />
+      mark={(
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
+          <CfbGlyph name={path.glyph} className="icon-md" />
         </div>
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-display text-base font-semibold text-foreground">
-              <BilingualText en={learningEn(path.titleKey)} el={learningEl(path.titleKey)} compact />
-            </h3>
-            {path.progress > 0 && (
-              <Badge variant="secondary" className="shrink-0 whitespace-nowrap text-2xs bg-background/60">
-                {learningEn('percent_done').replace('{n}', String(path.progress))}
-              </Badge>
-            )}
-          </div>
-        </div>
-      </div>
-      <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
-        <BilingualText en={learningEn(path.descKey)} el={learningEl(path.descKey)} wrap />
-      </p>
-      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mb-2">
-        <span className="flex items-center gap-0.5">
-          <BookOpen className="icon-sm" />
-          {learningEn('modules').replace('{n}', String(path.steps))}
-        </span>
-        <span className="flex items-center gap-0.5"><Clock className="icon-sm" />{path.duration}</span>
-      </div>
-      {path.progress > 0 && <Progress value={path.progress} className="h-1.5" />}
-      <div className="mt-2 flex items-center gap-1 text-xs font-medium text-primary-accessible">
-        {path.progress > 0
-          ? <BilingualText en={learningEn('continue_path')} el={learningEl('continue_path')} compact />
-          : <BilingualText en={learningEn('start_path')} el={learningEl('start_path')} compact />}
-        <ChevronRight className="icon-sm" />
-      </div>
-    </button>
+      )}
+      title={<BilingualText en={learningEn(path.titleKey)} el={learningEl(path.titleKey)} compact />}
+      badge={path.progress > 0 ? (
+        <Badge variant="outline" className="text-xs">
+          {learningEn('percent_done').replace('{n}', String(path.progress))}
+        </Badge>
+      ) : undefined}
+      headline={[learningEn('modules').replace('{n}', String(path.steps)), path.duration].filter(Boolean).join(' · ')}
+      detail={<BilingualText en={learningEn(path.descKey)} el={learningEl(path.descKey)} compact />}
+      actions={(
+        <Button size="sm" className="gap-1" onClick={() => onSelect(path.category)}>
+          {path.progress > 0
+            ? <BilingualText en={learningEn('continue_path')} el={learningEl('continue_path')} compact />
+            : <BilingualText en={learningEn('start_path')} el={learningEl('start_path')} compact />}
+          <ChevronRight className="icon-sm" />
+        </Button>
+      )}
+    />
   );
 }
 

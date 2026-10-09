@@ -73,12 +73,15 @@ function SearchCard({
   const timeAgo = lastRunDate ? formatTimeAgo(lastRunDate) : fill('never_run');
 
   return (
-    <Card className="group hover:border-primary/30 transition-colors">
-      <CardContent>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="person-name font-semibold text-foreground truncate">{search.name}</h3>
+    <Card className="card-interactive">
+      <CardContent className="flex items-center gap-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
+          <Search className="icon-md" aria-hidden="true" />
+        </div>
+        <div className="flex min-w-0 flex-1 items-center gap-4">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="person-name font-display text-base font-semibold text-foreground truncate">{search.name}</h3>
               {search.newResults && search.newResults > 0 && (
                 <Badge variant="default" className="bg-primary text-primary-foreground">
                   <BilingualText {...fill('new_badge', { n: search.newResults })} compact />
@@ -86,64 +89,23 @@ function SearchCard({
               )}
             </div>
 
-            <p className="text-sm text-muted-foreground flex items-center gap-1 truncate">
-              <Search className="icon-sm" aria-hidden="true" />
-              <span className="truncate">{search.query}</span>
-            </p>
-
-            {/* Filters: what the search holds, as one fact line (they were
-                up to seven badges, each with its own glyph). */}
-            <FactLine
-              className="mt-3"
-              label={bilingualAria('Filters', 'Φίλτρα')}
-              items={[
-                search.scope === 'need_cards' ? <BilingualText key="scope" en="Need cards" el="Κάρτες ανάγκης" compact /> : null,
-                ...(search.filters?.kinds ?? []).map((k) => <StatusText key={`kind-${k}`} value={k} />),
-                search.filters?.remote?.length ? <BilingualText key="remote" en="Remote" el="Εξ αποστάσεως" compact /> : null,
+            <p className="row-ellipsis text-sm text-muted-foreground">{search.query}</p>
+            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+              {[
+                search.scope === 'need_cards' ? 'Need cards' : null,
+                ...(search.filters?.kinds ?? []),
+                search.filters?.remote?.length ? 'Remote' : null,
                 ...(search.filters?.roles ?? []),
                 ...(search.filters?.industries ?? []).slice(0, 2),
                 ...(search.filters?.locations ?? []).slice(0, 1),
-                filterCount > 3 ? <BilingualText key="more" {...fill('more_filters', { n: filterCount - 3 })} compact /> : null,
-              ]}
-            />
-
-            {/* Stats */}
-            <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-              <span className="flex min-w-0 items-center gap-1">
-                <Target className="icon-sm shrink-0" aria-hidden="true" />
-                <BilingualText {...fill('results_count', { n: search.resultCount ?? 0 })} compact wrap />
-              </span>
-              <span className="flex min-w-0 items-center gap-1">
-                <Clock className="icon-sm shrink-0" aria-hidden="true" />
-                {lastRunDate ? (
-                  <RelativeTime
-                    date={lastRunDate}
-                    format={(d) => {
-                      const ago = formatTimeAgo(d);
-                      return (
-                        <BilingualText
-                          en={fill('last_run', { when: ago.en }).en}
-                          el={fill('last_run', { when: ago.el }).el}
-                          compact
-                          wrap
-                        />
-                      );
-                    }}
-                  />
-                ) : (
-                  <BilingualText
-                    en={fill('last_run', { when: timeAgo.en }).en}
-                    el={fill('last_run', { when: timeAgo.el }).el}
-                    compact
-                    wrap
-                  />
-                )}
-              </span>
-            </div>
+                filterCount > 3 ? `+${filterCount - 3}` : null,
+                `${search.resultCount ?? 0}`,
+                timeAgo.en,
+              ].filter(Boolean).join(' · ')}
+            </p>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <div className="flex items-center gap-2">
               <Switch
                 checked={search.alertsEnabled}

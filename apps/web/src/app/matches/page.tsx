@@ -284,109 +284,61 @@ function MatchListRow({
   const score = hit.matchScore ?? 50;
   const tier = getTier(score);
   const colors = tierStyle(tier);
-  const stroke = TIER_STROKE[tier];
   const initials = hit.displayName.slice(0, 2).toUpperCase();
 
+  const skills = hit.skillNames ?? [];
+  const facts = [
+    hit.location,
+    ...skills.slice(0, 3),
+    skills.length > 3 ? `+${skills.length - 3}` : null,
+    ...matchReasons.slice(0, 2).map((r) => r.text),
+    commitment ? commitment.step : null,
+  ].filter(Boolean).join(' · ');
+
   return (
-    <Card className="shadow-sm border-border hover:border-primary/30 transition-all group">
-      <CardContent>
-        <div className="flex items-start gap-4">
-          {/* Score ring + avatar */}
-          <div className="relative shrink-0">
-            <svg width={52} height={52} viewBox="0 0 52 52" className="absolute inset-0">
-              <circle cx={26} cy={26} r={23} fill="none" stroke="hsl(var(--border))" strokeWidth={3} />
-              <circle cx={26} cy={26} r={23} fill="none" stroke={stroke} strokeWidth={3}
-                strokeDasharray={`${(score / 100) * 2 * Math.PI * 23} ${2 * Math.PI * 23}`}
-                strokeDashoffset={2 * Math.PI * 23 * 0.25}
-                strokeLinecap="round" />
-            </svg>
-            <Link href={`/profiles/${hit.userId}`}>
-              <Avatar className="h-10 w-10 border-2 border-background m-0.5">
-                <AvatarImage src={hit.avatarUrl ?? undefined} />
-                <AvatarFallback className="text-sm font-semibold">{initials}</AvatarFallback>
-              </Avatar>
+    <Card className="card-interactive">
+      <CardContent className="flex items-center gap-4">
+        <Link href={`/profiles/${hit.userId}`}>
+          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+            <AvatarImage src={hit.avatarUrl ?? undefined} />
+            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{initials}</AvatarFallback>
+          </Avatar>
+        </Link>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href={`/profiles/${hit.userId}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
+              {hit.displayName}
             </Link>
+            <Badge variant="outline" className={cn('text-xs', colors.chip)}>
+              {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
+            </Badge>
           </div>
-
-          {/* Main info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <Link href={`/profiles/${hit.userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                  {hit.displayName}
-                </Link>
-                <div className="mt-1 flex items-center gap-2 flex-wrap">
-                  <Badge variant="outline" className={cn('text-2xs h-5 border', colors.chip)}>
-                    {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
-                  </Badge>
-                  {commitment ? (
-                    <Link href={commitment.href} className="rounded-full"><StepChip step={commitment.step} /></Link>
-                  ) : null}
-                </div>
-              </div>
-              {/* Score text */}
-              <div className="text-right shrink-0">
-                <p className={cn('text-lg font-bold tabular-nums leading-none', colors.icon)}>{score}%</p>
-                <p className="text-2xs text-muted-foreground mt-0.5">match</p>
-              </div>
-            </div>
-
-            <div className="mt-1 space-y-2">
-            {hit.location && (
-              <p className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="icon-sm" />{hit.location}
-              </p>
-            )}
-            {hit.headline && <p className="mt-1 text-sm text-muted-foreground truncate">{hit.headline}</p>}
-            <FactLine
-              className="mt-2"
-              items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}
-            />
-
-            {/* Match reasons inline */}
-            {matchReasons.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {matchReasons.slice(0, 3).map((r, i) => (
-                  <span key={i} className="flex items-center gap-1 text-2xs text-muted-foreground">
-                    <Zap className={cn('h-2.5 w-2.5 shrink-0', colors.icon)} />
-                    {r.text}
-                  </span>
-                ))}
-              </div>
-            )}
-            </div>
-          </div>
+          {hit.headline ? <p className="row-ellipsis text-sm text-muted-foreground">{hit.headline}</p> : null}
+          {facts ? <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{facts}</p> : null}
         </div>
-
-        {/* Actions */}
-        <div className="mt-3 flex flex-wrap items-center gap-2 pt-1">
-          <div className="flex items-center gap-1.5">
-            <button onClick={onPass}
-              className="flex h-10 w-10 items-center justify-center gap-1.5 rounded-full border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-accessible sm:w-auto sm:px-3"
-              aria-label={`Pass on ${hit.displayName}`}>
-              <X className="icon-sm" />
-              <span className="hidden sm:inline text-xs"><BilingualText en="Pass" el="Παράβλεψη" compact /></span>
-            </button>
-            <button onClick={onSave}
-              className={cn('flex h-10 w-10 items-center justify-center gap-1.5 rounded-full transition-colors sm:w-auto sm:px-3', isSaved ? STATUS.warning.icon : 'border border-border text-muted-foreground hover:text-status-warning')}
-              aria-pressed={isSaved}
-              aria-label={isSaved ? `${hit.displayName} is on your shortlist` : `Save ${hit.displayName} to your shortlist`}>
-              {isSaved ? <BookmarkCheck className="icon-sm" /> : <Bookmark className="icon-sm" />}
-              <span className="hidden sm:inline text-xs"><BilingualText en={isSaved ? 'Saved' : 'Save'} el={isSaved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
-            </button>
-          </div>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
-            <button onClick={onBreakdown}
-              className="flex min-h-10 items-center gap-1.5 rounded-xl px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-primary-accessible">
-              <BarChart3 className="icon-sm" /> <BilingualText en="Breakdown" el="Ανάλυση" compact />
-            </button>
-            <Button size="sm" variant="outline" onClick={onMessage} className="h-10 gap-1.5 px-3 text-xs">
-              <MessageCircle className="icon-sm" /> <BilingualText en="Message" el="Μήνυμα" compact />
-            </Button>
-            <Button size="sm" onClick={onConnect} className="h-10 gap-1.5 px-3 text-xs">
-              <Heart className="icon-sm" /> <BilingualText en="Connect" el="Σύνδεση" compact />
-            </Button>
-          </div>
+        <div className="flex shrink-0 items-center gap-1">
+          <button type="button" onClick={onPass} className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:text-destructive-accessible" aria-label={`Pass on ${hit.displayName}`}>
+            <X className="icon-sm" />
+          </button>
+          <button
+            type="button"
+            onClick={onSave}
+            aria-pressed={isSaved}
+            aria-label={isSaved ? `${hit.displayName} is on your shortlist` : `Save ${hit.displayName} to your shortlist`}
+            className={cn('flex h-8 w-8 items-center justify-center rounded-full', isSaved ? STATUS.warning.icon : 'text-muted-foreground')}
+          >
+            {isSaved ? <BookmarkCheck className="icon-sm" /> : <Bookmark className="icon-sm" />}
+          </button>
+          <button type="button" onClick={onBreakdown} className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground" aria-label="Breakdown">
+            <BarChart3 className="icon-sm" />
+          </button>
+          <Button size="sm" variant="secondary" onClick={onMessage} aria-label="Message">
+            <MessageCircle className="icon-sm" />
+          </Button>
+          <Button size="sm" onClick={onConnect} className="gap-1">
+            <Heart className="icon-sm" />
+            <BilingualText en="Connect" el="Σύνδεση" compact />
+          </Button>
         </div>
       </CardContent>
     </Card>

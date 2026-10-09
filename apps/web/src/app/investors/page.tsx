@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FactLine } from '@/components/common/FactLine';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
@@ -223,141 +224,67 @@ function InvestorCard({
     investor.viewCount != null && { key: 'views', icon: Eye, en: `${investor.viewCount.toLocaleString('en-GB')} views`, el: `${investor.viewCount.toLocaleString('el-GR')} προβολές` },
   ].filter(Boolean) as { key: string; icon: typeof Briefcase; en: string; el: string }[];
 
+  const headline = [
+    type?.en,
+    investor.firmName,
+    investor.firmRole,
+    investor.headline,
+    ...investor.stages.map((s) => STAGE_LABEL[s] ?? s),
+    checkSize,
+    place,
+    ...investor.industries.slice(0, 3),
+    ...facts.map((fact) => fact.en),
+  ].filter(Boolean).join(' · ');
+
   return (
-    <Card className="group transition-all hover:border-primary/30">
-      <CardContent className="space-y-3">
-        <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
-            <AvatarImage src={investor.avatarUrl} alt="" />
-            <AvatarFallback className="bg-primary/10 text-sm font-bold text-primary-accessible">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {/* Wraps on a phone, where the type badge and bookmark leave
-                      the name ~120px; truncates from `sm` up. */}
-                  <h3 className="break-words font-display text-base font-semibold sm:truncate">{investor.displayName}</h3>
-                  {investor.isVerified && (
-                    <BadgeCheck
-                      className={cn('icon-sm shrink-0', STATUS.info.icon)}
-                      aria-label={bilingualInline('Verified', 'Επαληθευμένος')}
-                    />
-                  )}
-                  {investor.isActivelyScouting && (
-                    <Badge className={cn('border text-2xs', STATUS.success.chip)}>
-                      <Zap className="mr-1 h-2.5 w-2.5" aria-hidden="true" />
-                      <BilingualText en="Actively scouting" el="Αναζητά ενεργά" compact />
-                    </Badge>
-                  )}
-                </div>
-                {/* One text run, never cut: the investor type, then firm and
-                    role (as separate flex items they broke into ragged
-                    columns, "Horizon / Capital · Principal"). The type was a
-                    pill beside the bookmark; it is a fact about the person. */}
-                {type || investor.firmName || investor.firmRole || investor.headline ? (
-                  <p className="min-w-0 text-xs text-muted-foreground">
-                    {type ? <BilingualText en={type.en} el={type.el} compact /> : null}
-                    {type && (investor.firmName || investor.firmRole || investor.headline) ? ' · ' : null}
-                    {investor.firmName || investor.firmRole
-                      ? [investor.firmName, investor.firmRole].filter(Boolean).join(' · ')
-                      : investor.headline}
-                  </p>
-                ) : null}
-              </div>
-              <div className="flex shrink-0 items-center gap-1.5">
-                <button
-                  aria-label={saved
-                    ? bilingualInline(`Remove ${investor.displayName} from your shortlist`, `Αφαίρεση ${investor.displayName} από τη λίστα σας`)
-                    : bilingualInline(`Save ${investor.displayName} to your shortlist`, `Αποθήκευση ${investor.displayName} στη λίστα σας`)}
-                  aria-pressed={saved}
-                  type="button"
-                  onClick={onToggleSave}
-                  className="tap-target flex items-center gap-1 rounded-md p-1 transition-colors hover:bg-muted sm:px-1.5"
-                >
-                  <Bookmark className={cn('icon-sm', saved ? 'fill-primary text-primary-accessible' : 'text-muted-foreground')} aria-hidden="true" />
-                  <span className="hidden sm:inline text-xs"><BilingualText en={saved ? 'Saved' : 'Save'} el={saved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <div className="space-y-3">
-            {investor.thesisSummary && (
-              <p className="card-copy line-clamp-2 text-sm leading-relaxed text-muted-foreground">{investor.thesisSummary}</p>
-            )}
-
-            {/* What they invest in, then in which sectors: two fact lines,
-                dot-separated, where stages, cheque, place and sectors were up
-                to eight tinted pills. */}
-            <FactLine
-              className="mt-2.5"
-              label={bilingualInline('Stages, cheque size and place', 'Στάδια, εύρος επένδυσης και τόπος')}
-              items={[
-                ...investor.stages.map((s) => STAGE_LABEL[s] ?? s),
-                checkSize,
-                place,
-              ]}
-            />
-            <FactLine
-              className="mt-1"
-              label={bilingualInline('Sectors', 'Τομείς')}
-              items={investor.industries}
-            />
-
-            <div className="mt-3 flex flex-col items-start gap-2 border-t border-border pt-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-4">
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                {facts.map(({ key, icon: Icon, en, el }) => (
-                  <span key={key} className="flex items-center gap-1">
-                    <Icon className="icon-sm" aria-hidden="true" />
-                    <BilingualText en={en} el={el} compact />
-                  </span>
-                ))}
-              </div>
-              {/* Three actions wrap on a phone instead of widening the page,
-                  from the card's left edge (right-aligned they stacked into a
-                  ragged column). */}
-              <div className="flex min-w-0 max-w-full flex-wrap gap-2 sm:ml-auto sm:justify-end">
-                {investor.sample ? (
-                  <>
-                    <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" disabled title={sampleReason}>
-                      <Eye className="icon-sm" aria-hidden="true" />
-                      <BilingualText en="Profile" el="Προφίλ" compact />
-                    </Button>
-                    <Button size="sm" className="h-7 gap-1 text-xs" disabled title={sampleReason}>
-                      <UserPlus className="icon-sm" aria-hidden="true" />
-                      <BilingualText en="Message directly" el="Απευθείας μήνυμα" compact />
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" asChild>
-                      <Link href={`/profiles/${investor.userId}`}>
-                        <Eye className="icon-sm" aria-hidden="true" />
-                        <BilingualText en="Profile" el="Προφίλ" compact />
-                      </Link>
-                    </Button>
-                    {/* A warm path first: who you know who knows them (the
-                        intermediary decides whether to forward). The direct
-                        message stays beside it, named for what it is. */}
-                    <AskIntroButton targetId={investor.userId} targetName={investor.displayName} className="h-7 gap-1 text-xs" />
-                    <Button size="sm" className="h-7 gap-1 text-xs" asChild>
-                      <Link href={`/messages?to=${investor.userId}`}>
-                        <UserPlus className="icon-sm" aria-hidden="true" />
-                        <BilingualText en="Message directly" el="Απευθείας μήνυμα" compact />
-                      </Link>
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-        </div>
-      </CardContent>
-    </Card>
+    <ListRowCard
+      mark={(
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          <AvatarImage src={investor.avatarUrl} alt="" />
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
+      )}
+      title={investor.displayName}
+      titleHref={investor.sample ? undefined : `/profiles/${investor.userId}`}
+      badge={investor.isActivelyScouting ? (
+        <Badge variant="outline" className="text-xs">
+          <BilingualText en="Scouting" el="Αναζητά" compact />
+        </Badge>
+      ) : undefined}
+      headline={headline}
+      detail={investor.thesisSummary}
+      actions={(
+        <>
+          <button
+            type="button"
+            aria-pressed={saved}
+            aria-label={saved
+              ? bilingualInline(`Remove ${investor.displayName} from your shortlist`, `Αφαίρεση ${investor.displayName} από τη λίστα σας`)
+              : bilingualInline(`Save ${investor.displayName} to your shortlist`, `Αποθήκευση ${investor.displayName} στη λίστα σας`)}
+            onClick={onToggleSave}
+            className="tap-target inline-flex items-center justify-center text-muted-foreground"
+          >
+            <Bookmark className={cn('icon-sm', saved && 'fill-primary text-primary-accessible')} aria-hidden="true" />
+          </button>
+          {investor.sample ? (
+            <Button size="sm" disabled title={sampleReason}>
+              <BilingualText en="Message" el="Μήνυμα" compact />
+            </Button>
+          ) : (
+            <>
+              <AskIntroButton targetId={investor.userId} targetName={investor.displayName} className="gap-1" />
+              <Button size="sm" className="gap-1" asChild>
+                <Link href={`/messages?to=${investor.userId}`}>
+                  <BilingualText en="Message" el="Μήνυμα" compact />
+                </Link>
+              </Button>
+            </>
+          )}
+        </>
+      )}
+    />
   );
 }
 

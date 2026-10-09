@@ -46,6 +46,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { StatusText } from '@/components/common/StatusText';
 import { SaveItemButton } from '@/components/common/SaveItemButton';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { jobsEn, jobsEl } from '@/lib/i18n/strings-jobs';
 import { bilingualInline } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
@@ -72,70 +73,26 @@ const EMPLOYMENT_TYPES = [
 ] as const;
 
 function JobCard({ job, featured = false }: { job: JobPostingView; featured?: boolean }) {
+  const place = job.isRemote
+    ? jobsEn('remote')
+    : (job.location ?? jobsEn('location_unknown'));
   return (
-    <Card className={cn(
-      'card-interactive hover-lift group transition-all duration-200',
-      featured && 'border-primary/15 bg-primary/[0.03]'
-    )}>
-      <CardContent className="space-y-3">
-        <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
-            <AvatarImage src={job.creator?.avatarUrl ?? undefined} />
-            <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-bold text-sm">
-              {initialsOf(job.creator.displayName)}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="min-w-0 flex-1 space-y-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="font-display text-base font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                {job.title}
-              </h3>
-              {featured && <Star className="icon-sm text-status-warning fill-status-warning" />}
-              {job.role && (
-                <Badge variant="secondary" className="text-xs"><StatusText value={job.role} /></Badge>
-              )}
-              {job.type && (
-                <Badge variant="outline" className="text-xs"><StatusText value={job.type} /></Badge>
-              )}
-              {job.isRemote && (
-                <Badge variant="outline" className="text-xs border-status-success-border text-status-success bg-status-success-bg">
-                  <Wifi className="mr-1 icon-sm" />
-                  <BilingualText en={jobsEn('remote')} el={jobsEl('remote')} compact />
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground">{job.creator.displayName}</p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-          {job.location && (
-            <span className="flex items-center gap-1"><MapPin className="icon-sm" />{job.location}</span>
-          )}
-          {!job.location && !job.isRemote && (
-            <span className="flex items-center gap-1">
-              <Building2 className="icon-sm" />
-              <BilingualText en={jobsEn('location_unknown')} el={jobsEl('location_unknown')} compact />
-            </span>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-            <SaveItemButton kind="job" itemId={job.id} title={job.title} />
-            {/* "View" linked to /discover (API) or back to /jobs (demo) for
-                every role; it opens the poster's profile when the poster is known. */}
-            {job.creator?.id ? (
-              <Button variant="ghost" size="sm" className="gap-1" asChild>
-                <Link href={`/profiles/${job.creator.id}`}>
-                  <ExternalLink className="icon-sm" />
-                  <BilingualText en="View poster" el="Προβολή εκδότη" compact />
-                </Link>
-              </Button>
-            ) : null}
-        </div>
-      </CardContent>
-    </Card>
+    <ListRowCard
+      className={featured ? 'border-primary/15' : undefined}
+      mark={(
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          <AvatarImage src={job.creator?.avatarUrl ?? undefined} />
+          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+            {initialsOf(job.creator.displayName)}
+          </AvatarFallback>
+        </Avatar>
+      )}
+      title={job.title}
+      titleHref={job.creator?.id ? `/profiles/${job.creator.id}` : undefined}
+      badge={job.role ? <Badge variant="outline" className="text-xs"><StatusText value={job.role} /></Badge> : undefined}
+      headline={[job.creator.displayName, job.type, place].filter(Boolean).join(' · ')}
+      actions={<SaveItemButton kind="job" itemId={job.id} title={job.title} />}
+    />
   );
 }
 

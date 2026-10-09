@@ -33,9 +33,11 @@ import { RailAction, RailOptions, RailStats } from '@/components/layout/RailPart
 import { usePageRail } from '@/components/layout/PageRailContext';
 import Link from 'next/link';
 import { BilingualText } from '@/components/common/BilingualText';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
@@ -77,7 +79,7 @@ function GroupCard({
   group,
   onToggle,
   loading,
-  index = 0,
+  index: _index = 0,
 }: {
   group: GroupView;
   onToggle: (id: string, isMember: boolean) => void;
@@ -85,105 +87,35 @@ function GroupCard({
   index?: number;
 }) {
   const router = useRouter();
-  const coverTone = COVER_TONES[index % COVER_TONES.length];
-  const groupType = (group.category?.toLowerCase() ?? 'industry') as string;
-  const typeColor = categoryChip(groupType);
   return (
-    <Card
-      className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30 cursor-pointer overflow-hidden"
+    <ListRowCard
+      className="cursor-pointer"
       onClick={() => router.push(`/groups/${group.id}`)}
-      {...pressableProps({ role: 'link', label: group.name })}
-    >
-      {/* Cover Image */}
-      {group.coverImageUrl ? (
-        <div
-          className="h-28 w-full bg-cover bg-center relative"
-          style={{ backgroundImage: `url(${group.coverImageUrl})` }}
-        >
-          <div className="absolute top-2 left-2">
-            <span className={cn('rounded-full px-2 py-0.5 text-xs font-semibold capitalize', typeColor.chip)}>
-              {groupType}
-            </span>
-          </div>
-          {group.privacy === 'private' && (
-            <div className="absolute top-2 right-2">
-              <Globe className="icon-sm text-white/80" />
-            </div>
+      mark={(
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 text-primary-accessible ring-2 ring-primary/20">
+          {group.avatarUrl ? (
+            <img src={group.avatarUrl} alt="" className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
+          ) : (
+            <Users className="icon-md" />
           )}
         </div>
-      ) : (
-        // No cover image: a thin tinted band carries the type chip. A 112px
-        // block with a faint icon was the tallest thing on the card and said
-        // nothing the card's own icon does not.
-        <div className={cn('h-10 w-full rounded-t-xl relative', coverTone)}>
-          <div className="absolute top-2 left-2">
-            <span className={cn('rounded-full px-2 py-0.5 text-xs font-semibold capitalize', typeColor.chip)}>
-              {groupType}
-            </span>
-          </div>
-        </div>
       )}
-      <CardContent className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1 min-w-0">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground ring-2 ring-border/60">
-              {group.avatarUrl ? (
-                <img src={group.avatarUrl} alt={group.name} className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
-              ) : (
-                <Users className="icon-md" />
-              )}
-            </div>
-            <div className="flex-1 min-w-0 space-y-1">
-              <div className="flex items-center gap-1.5">
-                <h3 className="font-display text-base font-semibold text-foreground">{group.name}</h3>
-              </div>
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                {group.privacy === 'public' ? <Globe className="icon-sm" /> : <Lock className="icon-sm" />}
-                <span className="capitalize">{group.category ? `${group.category} · ${group.privacy}` : group.privacy}</span>
-              </p>
-            </div>
-          </div>
-          {group.isMember && <CheckCircle2 className={cn('icon-sm shrink-0 mt-0.5', STATUS.success.icon)} />}
-        </div>
-
-        {group.description && (
-          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{group.description}</p>
-        )}
-
-        <FactLine items={group.tags.slice(0, 4)} />
-
-        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Users className="icon-sm" />
-            {group.memberCount.toLocaleString('en-GB')}
-          </span>
-          <span className="flex items-center gap-1">
-            <MessageCircle className="icon-sm" />
-            {group.postCount.toLocaleString('en-GB')}
-          </span>
-        </div>
-        <div
-          className="flex flex-wrap gap-2 pt-1"
-          onClick={(e) => e.stopPropagation()}
+      title={group.name}
+      badge={group.isMember ? <Badge variant="outline" className="text-xs">Joined</Badge> : undefined}
+      headline={[group.category, group.privacy, `${group.memberCount.toLocaleString('en-GB')} members`, ...group.tags.slice(0, 3)].filter(Boolean).join(' · ')}
+      detail={group.description}
+      actions={(
+        <Button
+          variant={group.isMember ? 'outline' : 'default'}
+          size="sm"
+          className="gap-1"
+          disabled={loading}
+          onClick={(e) => { e.stopPropagation(); onToggle(group.id, group.isMember); }}
         >
-          <Button
-            variant={group.isMember ? 'outline' : 'default'}
-            size="sm"
-            className="gap-1 text-xs h-7 px-3"
-            disabled={loading}
-            onClick={() => onToggle(group.id, group.isMember)}
-          >
-            {loading ? (
-              <Loader2 className="icon-sm animate-spin" />
-            ) : group.isMember ? (
-              <><LogOut className="icon-sm" /> Leave</>
-            ) : (
-              <><UserPlus className="icon-sm" /> Join</>
-            )}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+          {loading ? <Loader2 className="icon-sm animate-spin" /> : group.isMember ? 'Leave' : 'Join'}
+        </Button>
+      )}
+    />
   );
 }
 

@@ -6,12 +6,10 @@ import {
   CheckCircle,
   ChevronDown,
   ChevronUp,
-  Clock,
   ExternalLink,
   FileText,
   Loader2,
   Sparkles,
-  Video,
   XCircle,
 } from 'lucide-react';
 import { summarizeMeetingNotes, type MeetingNotesSummary, type MentorBookingItem } from '@/lib/api';
@@ -19,14 +17,13 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { StatusText } from '@/components/common/StatusText';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/toast';
 import { bilingualInline } from '@/lib/i18n/format';
-import { cn } from '@/lib/utils';
+import { cn, initialsOf } from '@/lib/utils';
 import { LocalTime } from '@/components/common/LocalTime';
-import { SessionDateTile } from './SessionDateTile';
-
 export const MEETING_TYPE_LABEL: Record<string, { en: string; el: string }> = {
   video: { en: 'Video call', el: 'Βιντεοκλήση' },
   chat: { en: 'Chat', el: 'Συνομιλία' },
@@ -93,8 +90,15 @@ export function BookingCard({
   return (
     <Card className="card-interactive">
       <CardContent>
-        <div className="flex gap-3 sm:gap-4">
-          <SessionDateTile date={start} />
+        <div className="flex items-center gap-4">
+          <Link href={`/profiles/${otherUserId}`} className="shrink-0">
+            <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+              <AvatarImage src={other.avatarUrl ?? undefined} alt="" />
+              <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+                {initialsOf(other.displayName)}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
@@ -114,10 +118,16 @@ export function BookingCard({
                       : <BilingualText en="(mentor)" el="(μέντορας)" compact />}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="row-ellipsis text-sm text-muted-foreground">
                   <LocalTime value={start} />
                   {' – '}
                   <LocalTime value={end} />
+                  {' · '}
+                  {Math.max(0, Math.round((end.getTime() - start.getTime()) / 60000))} min
+                  {' · '}
+                  {MEETING_TYPE_LABEL[booking.meetingType]
+                    ? MEETING_TYPE_LABEL[booking.meetingType].en
+                    : booking.meetingType}
                 </p>
               </div>
               <div className="flex flex-wrap items-center justify-end gap-1.5">
@@ -140,19 +150,6 @@ export function BookingCard({
                 <BilingualText en="Awaiting your confirmation" el="Περιμένει την επιβεβαίωσή σας" compact />
               </p>
             )}
-
-            <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Clock className="icon-sm" aria-hidden="true" />
-                {Math.max(0, Math.round((end.getTime() - start.getTime()) / 60000))} min
-              </span>
-              <span className="flex items-center gap-1">
-                <Video className="icon-sm" aria-hidden="true" />
-                {MEETING_TYPE_LABEL[booking.meetingType]
-                  ? <BilingualText en={MEETING_TYPE_LABEL[booking.meetingType].en} el={MEETING_TYPE_LABEL[booking.meetingType].el} compact />
-                  : booking.meetingType}
-              </span>
-            </div>
 
             {booking.notes && (
               <p className="mt-2 text-xs text-muted-foreground italic line-clamp-2">

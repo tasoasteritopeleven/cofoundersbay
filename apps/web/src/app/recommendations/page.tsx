@@ -277,9 +277,15 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
     explanation,
   } = normaliseHit(hit);
 
-  const RoleIcon = ROLE_ICON[role ?? 'founder'] ?? Users;
-  const [showExplanation, setShowExplanation] = useState(false);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
+  const facts = [
+    location,
+    score > 0 ? `${score}%` : null,
+    confidence !== null ? `${confidence}% confidence` : null,
+    ...skills.slice(0, 3),
+    skills.length > 3 ? `+${skills.length - 3}` : null,
+    ...reasons.slice(0, 2),
+  ].filter(Boolean).join(' · ');
 
   return (
     <>
@@ -291,122 +297,44 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
       explanation={explanation}
       reasons={reasons}
     />
-    <Card className="group hover:border-primary/30 transition-colors">
-      <CardContent>
-        <div className="flex items-center gap-4">
-          <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
-            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-              <AvatarImage src={avatarUrl ?? undefined} />
-              <AvatarFallback className="text-sm font-semibold bg-primary/10 text-primary-accessible">
-                {displayName?.[0]?.toUpperCase() ?? '?'}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                {displayName}
-              </Link>
-              {role && (
-                <Badge variant="outline" className={cn('text-xs capitalize', ROLE_COLOR[role ?? 'founder'])}>
-                  <RoleIcon className="icon-sm mr-1" />
-                  {role}
-                </Badge>
-              )}
-            </div>
-            {headline && (
-              <p className="text-sm text-muted-foreground truncate">{headline}</p>
-            )}
+    <Card className="card-interactive">
+      <CardContent className="flex items-center gap-4">
+        <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
+          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+            <AvatarImage src={avatarUrl ?? undefined} />
+            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+              {displayName?.[0]?.toUpperCase() ?? '?'}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
+              {displayName}
+            </Link>
+            {role ? <Badge variant="outline" className="text-xs capitalize">{role}</Badge> : null}
           </div>
-          <div className="flex shrink-0 items-center gap-2">
-                {score > 0 && <MatchScoreBadge score={score} />}
-                {confidence !== null && (
-                  <span title={`Confidence: ${confidence}%`} className="flex items-center gap-0.5 text-xs text-muted-foreground">
-                    <ShieldCheck className="icon-sm" />
-                    {confidence}%
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-3 space-y-1">
-            {location && (
-              <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                <MapPin className="icon-sm" />
-                {location}
-              </p>
-            )}
-
-            {/* Reason chips */}
-            {reasons.length > 0 && (
-              <div className="mt-2 mb-2 space-y-1">
-                <FactLine items={reasons.slice(0, 3)} />
-                <button
-                  type="button"
-                  aria-expanded={showExplanation}
-                  onClick={() => setShowExplanation(p => !p)}
-                  className="text-xs text-muted-foreground underline-offset-2 hover:underline flex items-center gap-0.5"
-                >
-                  <Info className="icon-sm" aria-hidden="true" />
-                  {showExplanation
-                    ? <BilingualText en="Hide the reasons" el="Απόκρυψη αιτιών" compact />
-                    : <BilingualText en="Why this match?" el="Γιατί αυτή η αντιστοίχιση;" compact />}
-                </button>
-              </div>
-            )}
-
-            {/* Explanation bars */}
-            {showExplanation && <ExplanationBar items={explanation} />}
-
-            {/* Skills */}
-            {skills.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
-                {skills.slice(0, 4).map((skill) => (
-                  <span key={skill} className="text-xs bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md">
-                    {skill}
-                  </span>
-                ))}
-                {skills.length > 4 && (
-                  <span className="text-xs text-muted-foreground px-1">+{skills.length - 4}</span>
-                )}
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-2">
-              <Button size="sm" className="gap-1.5" onClick={() => onConnect(userId)}>
-                <UserPlus className="icon-sm" />
-                Connect
-              </Button>
-              <Button size="sm" variant="outline" className="gap-1.5" onClick={() => setBreakdownOpen(true)}>
-                <TrendingUp className="icon-sm" />
-                Score Breakdown
-              </Button>
-              <div className="ml-auto flex items-center gap-1">
-                {onSave && (
-                  <Button aria-label="Save match"
-                    size="icon"
-                    variant="ghost"
-                    className="h-7 w-7 text-muted-foreground hover:text-primary-accessible"
-                    title="Save match"
-                    onClick={() => onSave(userId)}
-                  >
-                    <BookmarkPlus className="icon-sm" />
-                  </Button>
-                )}
-                <Button aria-label="Good match"
-                  size="icon"
-                  variant="ghost"
-                  className="h-7 w-7 text-muted-foreground hover:text-status-success"
-                  title="Good match"
-                  onClick={() => onFeedback(userId, 'accepted')}
-                >
-                  <ThumbsUp className="icon-sm" />
-                </Button>
-                <FeedbackMenu onFeedback={(fb) => onFeedback(userId, fb)} />
-              </div>
-            </div>
-            </div>
+          {headline ? <p className="row-ellipsis text-sm text-muted-foreground">{headline}</p> : null}
+          {facts ? <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{facts}</p> : null}
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button size="sm" className="gap-1" onClick={() => onConnect(userId)}>
+            <UserPlus className="icon-sm" />
+            Connect
+          </Button>
+          <Button aria-label="Score breakdown" size="icon" variant="ghost" className="h-8 w-8" onClick={() => setBreakdownOpen(true)}>
+            <TrendingUp className="icon-sm" />
+          </Button>
+          {onSave ? (
+            <Button aria-label="Save match" size="icon" variant="ghost" className="h-8 w-8" onClick={() => onSave(userId)}>
+              <BookmarkPlus className="icon-sm" />
+            </Button>
+          ) : null}
+          <Button aria-label="Good match" size="icon" variant="ghost" className="h-8 w-8" onClick={() => onFeedback(userId, 'accepted')}>
+            <ThumbsUp className="icon-sm" />
+          </Button>
+          <FeedbackMenu onFeedback={(fb) => onFeedback(userId, fb)} />
+        </div>
       </CardContent>
     </Card>
     </>
