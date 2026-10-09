@@ -185,7 +185,7 @@ function CommunityCard({
             </div>
 
             {community.description && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+              <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">
                 {community.description}
               </p>
             )}

@@ -113,7 +113,7 @@ function SessionCard({ session, onReschedule, onCancel, onNotes }: { session: Me
             </div>
 
             {session.agenda && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+              <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">
                 {session.agenda}
               </p>
             )}

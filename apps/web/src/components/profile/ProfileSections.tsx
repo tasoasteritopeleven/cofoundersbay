@@ -122,7 +122,7 @@ export function ProfileActivity({ userId, own }: { userId: string; own: boolean 
                       <p className="min-w-0 text-sm font-medium text-foreground">{u.title}</p>
                       {u.createdAt ? <span className="shrink-0 text-xs text-muted-foreground"><RelativeTime date={u.createdAt} /></span> : null}
                     </div>
-                    <p className="line-clamp-2 text-sm text-muted-foreground">{u.body}</p>
+                    <p className="card-copy line-clamp-2 text-sm text-muted-foreground">{u.body}</p>
                   </li>
                 ))}
               </ul>
@@ -324,7 +324,7 @@ export function ProfileRecommendations({ userId }: { userId: string }) {
                   <span className="font-medium">{e.fromUser?.displayName ?? 'Member'}</span>
                   {e.skill ? <span className="text-muted-foreground"> · {e.skill}</span> : null}
                 </p>
-                {e.content ? <p className="line-clamp-3 text-sm text-muted-foreground">“{e.content}”</p> : null}
+                {e.content ? <p className="card-copy line-clamp-3 text-sm text-muted-foreground">“{e.content}”</p> : null}
                 {basis.length ? (
                   <p className="text-xs text-status-success">
                     <BilingualText

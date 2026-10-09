@@ -203,7 +203,7 @@ function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) 
           )}
         </div>
 
-        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">{mentor.bio}</p>
+        <p className="card-copy text-sm leading-relaxed text-muted-foreground line-clamp-2">{mentor.bio}</p>
 
         {/* Expertise: one fact line */}
         <FactLine items={[...mentor.expertise.slice(0, 4), mentor.expertise.length > 4 ? `+${mentor.expertise.length - 4}` : null]} />

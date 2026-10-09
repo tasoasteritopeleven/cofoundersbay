@@ -234,7 +234,7 @@ function ProfileCardInner({
 
           {/* Bio */}
           {profile.bio && (
-            <p className="mt-4 text-sm text-foreground/80 line-clamp-3">{profile.bio}</p>
+            <p className="card-copy mt-4 text-sm text-foreground/80 line-clamp-3">{profile.bio}</p>
           )}
 
           {/* Meta */}

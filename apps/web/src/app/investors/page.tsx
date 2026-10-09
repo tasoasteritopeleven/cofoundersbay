@@ -226,7 +226,7 @@ function InvestorCard({
   return (
     <Card className="group transition-all hover:border-primary/30">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.75rem' }}>
           <Avatar className="h-11 w-11 shrink-0">
             <AvatarImage src={investor.avatarUrl} alt="" />
             <AvatarFallback className="bg-primary/10 text-sm font-bold text-primary-accessible">
@@ -284,8 +284,9 @@ function InvestorCard({
               </div>
             </div>
 
+            <div className="card-axis">
             {investor.thesisSummary && (
-              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{investor.thesisSummary}</p>
+              <p className="card-copy mt-2 line-clamp-2 text-sm text-muted-foreground">{investor.thesisSummary}</p>
             )}
 
             {/* What they invest in, then in which sectors: two fact lines,
@@ -351,6 +352,7 @@ function InvestorCard({
                   </>
                 )}
               </div>
+            </div>
             </div>
           </div>
         </div>

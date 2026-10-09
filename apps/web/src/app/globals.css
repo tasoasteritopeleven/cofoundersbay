@@ -3647,6 +3647,25 @@ textarea[class~="border-input"]:focus,
     font-size: 12.921px;
     line-height: 1.45;
   }
+
+  /* A card's sentence ("Invests in Mediterranean…") sits on the lead step
+     (12.921) so it is under the card title and under the subtitle above it.
+     The subtitle itself is not this class. From 640px the sentence keeps
+     text-sm. */
+  #main-content [data-card] .card-copy,
+  #main-content [data-card] p.card-copy {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+
+  /* Central copy shares the left edge of the identity row. The row sets
+     --card-rail to the mark plus the gap. On a phone the copy shifts back
+     by that rail and starts under the circular mark. The title and the
+     subtitle stay beside the mark. From 640px this rule does not apply. */
+  #main-content [data-card] .card-axis {
+    margin-left: calc(-1 * var(--card-rail, 0px));
+    width: calc(100% + var(--card-rail, 0px));
+  }
 }
 
 /* Landing intro. On a phone the headline and the line under it use the

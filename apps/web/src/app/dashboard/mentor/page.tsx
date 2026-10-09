@@ -111,7 +111,7 @@ function RequestRowItem({ request }: { request: RequestRow }) {
       </Avatar>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{request.name}</p>
-        {request.message ? <p className="line-clamp-2 text-sm text-muted-foreground">{request.message}</p> : null}
+        {request.message ? <p className="card-copy line-clamp-2 text-sm text-muted-foreground">{request.message}</p> : null}
       </div>
       <Button size="sm" variant="outline" className="shrink-0" asChild>
         <Link href="/mentor/requests">Review</Link>

@@ -313,7 +313,7 @@ export default function ProviderDashboard() {
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground">{inquiry.service}</p>
-                    <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{inquiry.message}</p>
+                    <p className="card-copy mt-1 line-clamp-2 text-sm text-muted-foreground">{inquiry.message}</p>
                   </div>
                   <Button variant="outline" size="sm" className="shrink-0" asChild>
                     <Link href="/provider/inquiries">Reply</Link>

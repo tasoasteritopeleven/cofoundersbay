@@ -276,7 +276,7 @@ function ProgramCard({
             </div>
 
             {program.description && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
+              <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
             )}
 
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-muted-foreground">

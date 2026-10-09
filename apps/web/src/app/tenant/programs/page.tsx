@@ -165,7 +165,7 @@ function ProgramCard({
                 <StatusText value={program.status} />
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+            <p className="card-copy text-sm text-muted-foreground mt-1 line-clamp-2">
               {program.description}
             </p>
             <div className="flex flex-wrap gap-3 mt-3 text-sm text-muted-foreground">

@@ -73,6 +73,8 @@ describe('phone reading scale', () => {
     expect(fontSize('.text-4xl')).toBe('14.148px');
     expect(fontSize('.text-7xl')).toBe('14.148px');
     expect(fontSize('#main-content .score-emblem-figure')).toBe('15.520px');
+    expect(fontSize('#main-content [data-card] p.card-copy')).toBe('12.921px');
+    expect(BLOCK).toMatch(/#main-content \[data-card\] \.card-axis/);
     expect(BLOCK).not.toMatch(/min-width/);
     expect(BLOCK).not.toMatch(/12\.2412px/);
   });

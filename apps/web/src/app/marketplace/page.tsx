@@ -215,7 +215,7 @@ function ProviderCard({ provider, featured }: { provider: ServiceProvider; featu
             <CatIcon className={cn('icon-sm shrink-0', catCfg.color)} />
             <h3 className="font-semibold text-sm">{provider.title}</h3>
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">{provider.description}</p>
+          <p className="card-copy text-sm leading-relaxed text-muted-foreground line-clamp-2">{provider.description}</p>
         </div>
 
         {/* Specialties */}

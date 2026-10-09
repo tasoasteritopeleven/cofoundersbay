@@ -173,7 +173,7 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
         </div>
 
         {opportunity.description && (
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{opportunity.description}</p>
+          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{opportunity.description}</p>
         )}
 
         <FactLine items={opportunity.tags ?? []} />

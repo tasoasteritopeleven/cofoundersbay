@@ -96,7 +96,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
               </Badge>
             </div>
 
-            <p className="text-sm mt-2 text-muted-foreground line-clamp-2">
+            <p className="card-copy text-sm mt-2 text-muted-foreground line-clamp-2">
               "{request.message}"
             </p>
 

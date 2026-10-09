@@ -192,7 +192,7 @@ export const ProfileCard = React.forwardRef<
       className={className}
       {...props}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
         <div className="relative">
           <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold">
             {initialsOf(profile.name).toUpperCase()}
@@ -214,8 +214,9 @@ export const ProfileCard = React.forwardRef<
             )}
           </div>
           <p className="text-sm text-muted-foreground mb-1">{profile.role}</p>
+          <div className="card-axis">
           {profile.headline && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+            <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-2">
               {profile.headline}
             </p>
           )}
@@ -225,6 +226,7 @@ export const ProfileCard = React.forwardRef<
           {profile.skills && profile.skills.length > 0 && (
             <FactLine items={[...profile.skills.slice(0, 3), profile.skills.length > 3 ? `+${profile.skills.length - 3}` : null]} />
           )}
+          </div>
         </div>
       </div>
       
@@ -336,7 +338,7 @@ export const ActivityCard = React.forwardRef<
       className={className}
       {...props}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3" style={user ? { ['--card-rail' as string]: '2.75rem' } : undefined}>
         {user && (
           <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-semibold flex-shrink-0">
             {initialsOf(user.name).toUpperCase()}
@@ -345,12 +347,14 @@ export const ActivityCard = React.forwardRef<
         
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-sm mb-1">{title}</h4>
+          <div className={user ? 'card-axis' : undefined}>
           <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2 mb-2">
             {description}
           </p>
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">{timestamp}</span>
             {action && <div>{action}</div>}
+          </div>
           </div>
         </div>
       </div>

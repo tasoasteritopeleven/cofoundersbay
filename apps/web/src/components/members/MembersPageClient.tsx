@@ -167,7 +167,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
             )}
 
             {member.bio && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+              <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-3">
                 {member.bio}
               </p>
             )}
@@ -225,7 +225,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
   return (
     <Card className="card-interactive hover-lift group transition-all duration-300">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
           <Link href={`/profiles/${member.userId}`} className="relative shrink-0">
             <Avatar className="h-12 w-12 ring-2 ring-primary/20">
               <AvatarImage src={member.avatarUrl ?? undefined} />
@@ -267,8 +267,9 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
               </div>
             </div>
 
+            <div className="card-axis">
             {member.bio && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+              <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-3">
                 {member.bio}
               </p>
             )}
@@ -295,6 +296,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
                 <Activity className="icon-sm" />
                 <span className={scoreColor(completeness)}>{completeness}% complete</span>
               </div>
+            </div>
             </div>
           </div>
         </div>

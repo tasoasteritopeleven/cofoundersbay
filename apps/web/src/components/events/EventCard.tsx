@@ -218,7 +218,7 @@ export function EventCard({
             {event.title}
           </Link>
           
-          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+          <p className="card-copy mt-2 text-sm text-muted-foreground line-clamp-2">
             {event.description}
           </p>
           

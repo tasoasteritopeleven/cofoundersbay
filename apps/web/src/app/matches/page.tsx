@@ -290,7 +290,7 @@ function MatchListRow({
   return (
     <Card className="shadow-sm border-border hover:border-primary/30 transition-all group">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: 'calc(52px + 1rem)' }}>
           {/* Score ring + avatar */}
           <div className="relative shrink-0">
             <svg width={52} height={52} viewBox="0 0 52 52" className="absolute inset-0">
@@ -337,7 +337,7 @@ function MatchListRow({
               </div>
             </div>
 
-            {/* Skills + reasons */}
+            <div className="card-axis">
             <FactLine
               className="mt-2"
               items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}
@@ -354,6 +354,7 @@ function MatchListRow({
                 ))}
               </div>
             )}
+            </div>
           </div>
         </div>
 

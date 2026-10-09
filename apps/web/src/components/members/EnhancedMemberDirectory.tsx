@@ -332,7 +332,7 @@ export function EnhancedMemberDirectory() {
               <div className={cn(
                 "flex gap-4",
                 viewMode === 'list' ? "items-center" : "flex-col items-center text-center"
-              )}>
+              )} style={viewMode === 'list' ? { ['--card-rail' as string]: '4rem' } : undefined}>
                 <div className="relative">
                   <Avatar className={cn(viewMode === 'list' ? "h-12 w-12" : "h-16 w-16")}>
                     <AvatarImage src={member.avatar} />
@@ -364,7 +364,8 @@ export function EnhancedMemberDirectory() {
                     </Badge>
                   </div>
 
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <div className={viewMode === 'list' ? 'card-axis space-y-2' : 'space-y-2'}>
+                  <p className="card-copy text-sm text-muted-foreground line-clamp-2">
                     {member.headline}
                   </p>
 
@@ -403,6 +404,7 @@ export function EnhancedMemberDirectory() {
                         <BilingualText en="Message" el="Μήνυμα" compact />
                       </Link>
                     </Button>
+                  </div>
                   </div>
                 </div>
               </div>

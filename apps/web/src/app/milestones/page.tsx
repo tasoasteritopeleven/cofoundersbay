@@ -250,7 +250,7 @@ function MilestoneCard({
             </div>
 
             {item.description && (
-              <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+              <p className="card-copy mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
                 {previewEl?.description
                   ? <BilingualText en={item.description} el={previewEl.description} wrap />
                   : item.description}

@@ -131,7 +131,7 @@ function ProgramCard({ program }: { program: Program }) {
             </div>
             <p className="text-sm text-muted-foreground mt-1 capitalize"><StatusText value={program.type} /></p>
             {program.description && (
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
+              <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
             )}
             <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
               {program.startDate && (

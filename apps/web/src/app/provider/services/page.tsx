@@ -90,7 +90,7 @@ function ServiceCard({ service, onActive, onEdit, onDelete }: { service: Service
                 {isActive ? <BilingualText en="Active" el="Ενεργή" compact /> : <BilingualText en="Inactive" el="Ανενεργή" compact />}
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+            <p className="card-copy text-sm text-muted-foreground mt-1 line-clamp-2">
               {service.description}
             </p>
             <div className="flex flex-wrap gap-3 mt-3 text-sm">

@@ -112,7 +112,7 @@ function ReportCard({ report }: { report: ModerationReport }) {
                 <Badge variant="destructive" className="text-xs"><BilingualText en="High Priority" el="Υψηλή προτεραιότητα" compact /></Badge>
               )}
             </div>
-            <p className="text-sm text-muted-foreground mt-2 line-clamp-2 italic">
+            <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2 italic">
               &ldquo;{report.contentPreview}&rdquo;
             </p>
             <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">

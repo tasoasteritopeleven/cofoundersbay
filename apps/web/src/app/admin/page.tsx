@@ -1181,7 +1181,7 @@ export default function AdminPage() {
                         <h3 className="font-semibold text-foreground truncate">{cohort.name}</h3>
                         <p className="text-xs text-muted-foreground mt-0.5">/{cohort.slug}</p>
                         {cohort.description && (
-                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
+                          <p className="card-copy mt-2 text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
                         )}
                         <div className="mt-3 flex flex-wrap gap-2">
                           <Badge variant="secondary" className="gap-1 text-xs">

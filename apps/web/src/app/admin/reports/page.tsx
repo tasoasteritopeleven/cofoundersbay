@@ -167,7 +167,7 @@ function ReportCard({
                   Reported: <span className="font-medium">{report.targetName}</span> ({report.targetType})
                 </p>
                 {report.description && (
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                  <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">
                     {report.description}
                   </p>
                 )}

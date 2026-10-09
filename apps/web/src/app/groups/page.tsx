@@ -153,7 +153,7 @@ function GroupCard({
         </div>
 
         {group.description && (
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{group.description}</p>
+          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{group.description}</p>
         )}
 
         <FactLine items={group.tags.slice(0, 4)} />
