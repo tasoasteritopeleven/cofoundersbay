@@ -205,7 +205,7 @@ function ShortlistCard({
           {profile?.avatarUrl ? (
             <img src={profile.avatarUrl} alt={profile.displayName ?? ''} className="h-10 w-10 rounded-full object-cover ring-2 ring-primary/20 hover:ring-primary/40 transition-all" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted ring-2 ring-primary/20">
+            <div data-keep-icon="" className="flex h-10 w-10 items-center justify-center rounded-full bg-muted ring-2 ring-primary/20">
               <User className="icon-md text-muted-foreground" />
             </div>
           )}

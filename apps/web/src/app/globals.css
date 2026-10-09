@@ -3712,16 +3712,50 @@ textarea[class~="border-input"]:focus,
     line-height: 1.45;
   }
 
-  /* Body copy that starts below the mark shares the mark's left edge.
-     The row sets --card-rail to the mark plus the gap. On a phone that
-     copy shifts back by the rail. A line that still shares the mark's
-     height stays in the column beside it the way an endorsement subtitle
-     and a connection name do so it cannot cover the circle or leave the
-     card. From 640px this rule does not apply. */
+  /* A sentence under a card title used to shift back by the mark's width,
+     so it started a tab left of the title. It now stays on the title's
+     left edge, beside the circle, and cannot cover the circle or leave
+     the card. From 640px the class is unused. */
   #main-content [data-card] .card-axis,
   #main-content .card-axis {
-    margin-left: calc(-1 * var(--card-rail, 0px));
-    width: calc(100% + var(--card-rail, 0px));
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* A round name and a milestone title used the section label (12.663)
+     while the money line and the description used text-sm (14.170).
+     The row title takes the member-name step. Section headings that are
+     not a row title stay on the section label. */
+  #main-content :is(h2, h3).page-section.page-section--row {
+    font-size: 14.148px;
+    line-height: 1.3;
+  }
+
+  /* In-card sentences and figures sit under that title, on the lead step.
+     A pure stat (page-stat), a member name, a card-copy line, a control
+     and the rail keep their own steps. An italic quote is one step under
+     that sentence. */
+  #main-content [data-card] :is(p, div, span, li, dd, dt).text-sm:not(:is(.page-stat, .person-name, .card-copy, .page-stat-label, .page-stat-meta, button, a, [role='button'], [role='tab'], input, textarea, select)),
+  #main-content [data-card] :is(p, dd, li).text-base:not(:is(.page-stat, .page-figure, .person-name, .font-display)),
+  #main-content [data-card] :is(p, dd, li).text-lg:not(.page-section) {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+  /* An italic quote sits under the subtitle. The rail keeps the body step. */
+  #main-content [data-card] p.text-sm.italic {
+    font-size: 12.663px;
+    line-height: 1.45;
+  }
+  #main-content [data-rail-content] [data-card] :is(p, div, span, li, dd, dt).text-sm {
+    font-size: 14.170px;
+    line-height: 1.45;
+  }
+
+  /* A sentence that opens in lowercase ("invests in…") reads as a label
+     that lost its capital. The first letter takes a capital; a stat figure
+     is not a sentence. */
+  #main-content [data-card] p:not(:is(.page-stat, .page-stat-label, .page-stat-meta))::first-letter {
+    text-transform: uppercase;
   }
 }
 

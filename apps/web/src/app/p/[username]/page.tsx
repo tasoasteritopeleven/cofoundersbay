@@ -51,8 +51,8 @@ function deriveProfileFields(profile: PublicProfile) {
 
 function EndorsementCard({ endorsement }: { endorsement: EndorsementItem }) {
   return (
-    <div className="rounded-lg border border-border p-4">
-      <p className="text-muted-foreground italic">"{endorsement.content}"</p>
+    <div data-card="" data-surface="card" className="rounded-lg border border-border p-4">
+      <p className="text-sm italic leading-relaxed text-muted-foreground">"{endorsement.content}"</p>
       {endorsement.skill && (
         <Badge variant="secondary" className="mt-2 text-xs">
           {endorsement.skill}
@@ -66,7 +66,7 @@ function EndorsementCard({ endorsement }: { endorsement: EndorsementItem }) {
           </AvatarFallback>
         </Avatar>
         <div>
-          <p className="font-medium text-sm text-foreground">{endorsement.fromUser.displayName}</p>
+          <p className="person-name font-semibold text-foreground">{endorsement.fromUser.displayName}</p>
           <EndorsementBasisLine basis={endorsement.basis} />
           {endorsement.relationship && (
             <p className="text-xs text-muted-foreground">{endorsement.relationship}</p>

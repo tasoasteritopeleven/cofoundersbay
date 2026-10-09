@@ -395,12 +395,12 @@ function PipelineView({
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0">
-                          <LeadName lead={lead} className="truncate text-xs font-semibold" />
-                          {lead.firm && <p className="truncate text-2xs text-muted-foreground">{lead.firm}</p>}
+                          <LeadName lead={lead} className="person-name truncate font-semibold" />
+                          {lead.firm && <p className="truncate text-xs text-muted-foreground">{lead.firm}</p>}
                         </div>
                         {lead.isVerified && <CfbGlyph name="award" className={cn('ml-auto icon-sm shrink-0', STATUS.info.icon)} />}
                       </div>
-                      <div className="flex items-center gap-1 text-2xs text-muted-foreground">
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <CfbGlyph name="wallet" className="icon-sm" />
                         {lead.checkSizeEl
                           ? <BilingualText en={lead.checkSize} el={lead.checkSizeEl} compact />
@@ -414,7 +414,7 @@ function PipelineView({
                         </p>
                       )}
                       {lead.lastContact && (
-                        <p className="flex items-center gap-1 text-2xs text-muted-foreground">
+                        <p className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="icon-sm" />
                           <BilingualText en={fundraisingEn('last_contact')} el={fundraisingEl('last_contact')} compact />
                           : {formatShortDate(lead.lastContact, primary)}
@@ -651,10 +651,10 @@ function InvestorListView({
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
-                    <LeadName lead={lead} className="text-sm font-semibold" />
+                    <LeadName lead={lead} className="person-name font-semibold" />
                     {lead.isVerified && <CfbGlyph name="award" className={cn('icon-sm', STATUS.info.icon)} />}
                   </div>
-                  <p className="text-2xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {lead.firm ? `${lead.firm} · ` : ''}
                     <BilingualText en={lead.type} el={INVESTOR_TYPE_EL[lead.type] ?? lead.type} compact />
                     {' · '}
@@ -663,7 +663,7 @@ function InvestorListView({
                       : lead.checkSize}
                   </p>
                   {lead.notes && (
-                    <p className="mt-0.5 line-clamp-2 text-2xs text-muted-foreground">
+                    <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
                       {lead.notesEl
                         ? <BilingualText en={lead.notes} el={lead.notesEl} wrap />
                         : lead.notes}
@@ -676,7 +676,7 @@ function InvestorListView({
                   /* `mr-auto` pins the date to the left edge of the controls row so
                      the status select and the actions stay right-aligned whether or
                      not a lead has a last-contact date. */
-                  <p className="mr-auto text-2xs text-muted-foreground sm:mr-0">
+                  <p className="mr-auto text-xs text-muted-foreground sm:mr-0">
                     <Clock className="mr-1 inline icon-sm" />
                     {formatShortDate(lead.lastContact, primary)}
                   </p>

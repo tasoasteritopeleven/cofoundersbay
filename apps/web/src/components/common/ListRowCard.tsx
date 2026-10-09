@@ -8,10 +8,9 @@ import { cn } from '@/lib/utils';
 /**
  * The connection row, used by every browse card.
  * A 40px mark, the name and one badge on the first line, the action at the
- * end of that line, then the subtitle and one smaller sentence. On a phone
- * those two lines share the mark's left edge (the connection card-axis),
- * so they sit under the circle instead of covering it or staying trapped
- * beside the buttons.
+ * end of that line, then the subtitle and one smaller sentence.
+ * Those two lines start on the title's left edge, beside the mark, so
+ * they never cover the circle or leave the card.
  */
 export const rowTitleClass =
   'person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible';
@@ -65,7 +64,7 @@ export function ListRowCard({
           }
         : undefined}
     >
-      <CardContent className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+      <CardContent className="flex items-start gap-4">
         {keptMark(mark)}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -82,7 +81,7 @@ export function ListRowCard({
             ) : null}
           </div>
           {headline || detail ? (
-            <div className="card-axis">
+            <div>
               {headline ? <p className="text-sm text-muted-foreground truncate">{leadIn(headline)}</p> : null}
               {detail ? <p className="card-copy mt-1 text-xs text-muted-foreground line-clamp-2">{leadIn(detail)}</p> : null}
             </div>

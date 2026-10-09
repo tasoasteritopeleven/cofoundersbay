@@ -177,7 +177,7 @@ function EndorsementCard({
               </Avatar>
             </Link>
             <div className="min-w-0">
-              <Link href={`/profiles/${user.id}`} className="text-sm font-semibold transition-colors hover:text-primary-accessible">
+              <Link href={`/profiles/${user.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
                 {user.name}
               </Link>
               {user.role && <p className="text-xs text-muted-foreground">{user.role}</p>}

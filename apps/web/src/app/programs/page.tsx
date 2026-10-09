@@ -515,12 +515,12 @@ export default function ProgramsPage() {
               {featuredPrograms.slice(0, 4).map((p) => {
                 const d = daysUntil(p.applicationDeadline);
                 return (
-                  <div key={p.id} className="shrink-0 rounded-xl border border-border bg-card p-3 w-56 hover:border-primary/30 transition-colors cursor-pointer" onClick={() => setApplyTarget(p)} {...pressableProps()}>
-                    <p className="text-xs font-semibold text-foreground line-clamp-1">{p.title}</p>
-                    <p className="text-2xs text-muted-foreground mt-0.5 truncate">{p.organization?.name}</p>
+                  <div key={p.id} data-card="" data-surface="card" className="shrink-0 rounded-xl border border-border bg-card p-3 w-56 hover:border-primary/30 transition-colors cursor-pointer text-left" onClick={() => setApplyTarget(p)} {...pressableProps()}>
+                    <p className="person-name font-semibold text-foreground line-clamp-1">{p.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 truncate">{p.organization?.name}</p>
                     <div className="mt-2 flex items-center justify-between">
                       {d !== null && d >= 0 ? (
-                        <span className={cn('text-2xs font-medium', d <= 3 ? cn(STATUS.danger.icon) : cn(STATUS.warning.icon))}>
+                        <span className={cn('text-xs font-medium', d <= 3 ? cn(STATUS.danger.icon) : cn(STATUS.warning.icon))}>
                           {d === 0
                             ? <BilingualText en="Today!" el="Σήμερα!" compact />
                             : <BilingualText en={`${d}d left`} el={`${d} ημ. ακόμη`} compact />}

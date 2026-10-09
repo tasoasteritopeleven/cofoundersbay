@@ -138,6 +138,8 @@ function MilestoneCard({
 
   return (
     <div
+      data-card=""
+      data-surface="card"
       className={cn(
         'group relative rounded-xl border bg-card transition-all hover:shadow-sm',
         // No opacity fade on a completed row. Fading the container fades its text
@@ -162,7 +164,7 @@ function MilestoneCard({
       <div className="px-5 py-4">
         <div className="flex items-start gap-3">
           {/* Status icon */}
-          <div className={cn('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', statusColors.bg)}>
+          <div data-keep-icon="" className={cn('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', statusColors.bg)}>
             <CfbGlyph name={status.glyph} className={cn('icon-sm', statusColors.icon)} />
           </div>
 

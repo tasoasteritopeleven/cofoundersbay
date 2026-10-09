@@ -33,6 +33,8 @@ export function UpdateCard({
   return (
     <article
       id={update.id ? `update-${update.id}` : undefined}
+      data-card=""
+      data-surface="card"
       className={highlight ? 'space-y-3 rounded-2xl border border-primary/40 bg-card p-4 sm:p-5' : 'space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5'}
       aria-labelledby={update.id ? `update-title-${update.id}` : undefined}
     >
