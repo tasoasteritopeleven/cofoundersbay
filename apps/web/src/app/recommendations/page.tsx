@@ -60,6 +60,7 @@ import { cn } from '@/lib/utils';
 import { STATUS } from '@/lib/semantic-colors';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
+import { FactLine } from '@/components/common/FactLine';
 
 const ROLE_ICON: Record<string, typeof Users> = {
   founder: Briefcase,
@@ -337,18 +338,18 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
 
             {/* Reason chips */}
             {reasons.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2 mb-2">
-                {reasons.slice(0, 3).map((r, i) => (
-                  <Badge key={i} variant="secondary" className="text-xs">
-                    {r}
-                  </Badge>
-                ))}
+              <div className="mt-2 mb-2 space-y-1">
+                <FactLine items={reasons.slice(0, 3)} />
                 <button
+                  type="button"
+                  aria-expanded={showExplanation}
                   onClick={() => setShowExplanation(p => !p)}
                   className="text-xs text-muted-foreground underline-offset-2 hover:underline flex items-center gap-0.5"
                 >
-                  <Info className="icon-sm" />
-                  {showExplanation ? 'Hide' : 'Why this match?'}
+                  <Info className="icon-sm" aria-hidden="true" />
+                  {showExplanation
+                    ? <BilingualText en="Hide the reasons" el="Απόκρυψη αιτιών" compact />
+                    : <BilingualText en="Why this match?" el="Γιατί αυτή η αντιστοίχιση;" compact />}
                 </button>
               </div>
             )}

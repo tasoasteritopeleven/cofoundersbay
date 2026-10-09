@@ -442,7 +442,7 @@ export default function OrgAnalyticsPage() {
           <div className="flex flex-wrap gap-2 pt-2">
             {programs.filter((p) => p.status === 'upcoming').map((p) => (
               <Badge key={p.id} variant="info" size="sm">
-                {p.title}: taking applications
+                <BilingualText en={`${p.title}: taking applications`} el={`${p.title}: δέχεται αιτήσεις`} compact />
               </Badge>
             ))}
           </div>

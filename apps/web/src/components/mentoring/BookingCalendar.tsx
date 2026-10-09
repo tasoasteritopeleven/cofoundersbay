@@ -20,6 +20,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { useLocalDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 export type TimeSlot = {
   id: string;
@@ -179,13 +180,7 @@ export function BookingCalendar({
                 {mentor.headline && (
                   <p className="text-sm text-muted-foreground mt-1">{mentor.headline}</p>
                 )}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {mentor.expertise.slice(0, 4).map((exp) => (
-                    <Badge key={exp} variant="secondary" className="text-xs">
-                      {exp}
-                    </Badge>
-                  ))}
-                </div>
+                <FactLine className="mt-3" items={mentor.expertise.slice(0, 4)} />
                 {mentor.hourlyRate && (
                   <p className="mt-3 text-sm font-medium text-primary-accessible">{mentor.hourlyRate}</p>
                 )}

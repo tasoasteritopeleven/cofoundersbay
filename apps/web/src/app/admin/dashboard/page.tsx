@@ -296,6 +296,8 @@ export default function AdminDashboardPage() {
                       a.tone === 'danger' ? 'bg-status-danger-bg text-status-danger' : 'bg-status-warning-bg text-status-warning',
                     )}
                     aria-hidden="true"
+                    // A severity mark (its colour and glyph say how urgent), not decoration.
+                    data-keep-icon=""
                   >
                     {a.id === 'reports' ? <Flag className="icon-sm" /> : a.id === 'flags' ? <ShieldAlert className="icon-sm" /> : <Database className="icon-sm" />}
                   </span>

@@ -7,7 +7,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RoleBadge } from './RoleBadge';
-import { SkillChip } from './SkillChip';
 import { BilingualText } from './BilingualText';
 import { cn } from '@/lib/utils';
 import { bilingualAria } from '@/lib/i18n/format';
@@ -16,6 +15,7 @@ import { STATUS, type StatusTone } from '@/lib/semantic-colors';
 import { pressableProps } from '@/lib/pressable';
 import type { CommitmentStep } from '@cofounderbay/shared';
 import { StepChip } from '@/components/commitments/OutcomeChip';
+import { FactLine } from '@/components/common/FactLine';
 type MatchReason = {
   type: 'skills' | 'location' | 'stage' | 'industry' | 'availability' | 'values';
   text: string;
@@ -251,14 +251,7 @@ function MatchCardInner({
 
         {/* Skills */}
         {skills.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {skills.slice(0, 4).map((skill) => (
-              <SkillChip key={skill} label={skill} size="sm" />
-            ))}
-            {skills.length > 4 && (
-              <span className="text-xs text-muted-foreground self-center font-mono">+{skills.length - 4}</span>
-            )}
-          </div>
+          <FactLine className="mt-3" items={[...skills.slice(0, 4), skills.length > 4 ? `+${skills.length - 4}` : null]} />
         )}
 
         {/* Match reasons toggle */}

@@ -33,6 +33,7 @@ import {
 import { isUpcoming, fromBooking } from '@/lib/mentoring/sessions';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: MentorshipRelationshipItem; upcomingBookings?: number }) {
   const fmtDate = useDateFormat();
@@ -87,18 +88,7 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
               </Badge>
             </div>
 
-            {relationship.focusAreas && relationship.focusAreas.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {relationship.focusAreas.map((area: string) => (
-                  <span
-                    key={area}
-                    className="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground"
-                  >
-                    {area}
-                  </span>
-                ))}
-              </div>
-            )}
+            <FactLine className="mt-2" items={relationship.focusAreas ?? []} />
 
             <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">

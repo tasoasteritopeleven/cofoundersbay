@@ -43,6 +43,7 @@ import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 type OrgEvent = {
   id: string;
@@ -229,13 +230,7 @@ function EventCard({ event, onDuplicate }: { event: OrgEvent; onDuplicate?: (e: 
               </span>
             </div>
             <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{event.description}</p>
-            {event.speakers && event.speakers.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {event.speakers.map(sp => (
-                  <Badge key={sp} variant="secondary" className="text-xs">{sp}</Badge>
-                ))}
-              </div>
-            )}
+            <FactLine className="mt-2" label={bilingualInline('Speakers', 'Ομιλητές')} items={event.speakers ?? []} />
             <div className="flex items-center gap-3 mt-3">
               <Badge variant="secondary" className={cn('text-xs border', typeColors.chip)}><BilingualText en={typeCfg.label} el={typeCfg.labelEl} compact /></Badge>
               <span className="text-xs text-muted-foreground">

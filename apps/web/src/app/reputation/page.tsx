@@ -506,10 +506,8 @@ export default function ReputationPage() {
                   { icon: Zap, tone: 'text-status-accent bg-status-accent-bg', title: 'tip_feedback_title', desc: 'tip_feedback_desc', href: '/expert-reviews' },
                 ] as const
               ).map((tip) => {
-                const TipIcon = tip.icon;
                 return (
                   <Link key={tip.title} href={tip.href} className="axis-row flex gap-3 rounded-md py-2.5 transition-colors hover:bg-accent">
-                    <span className={cn('h-fit rounded-lg p-2', tip.tone)}><TipIcon className="icon-sm" aria-hidden /></span>
                     <span className="min-w-0">
                       <span className="block text-sm font-medium"><BilingualText en={reputationEn(tip.title)} el={reputationEl(tip.title)} /></span>
                       <span className="mt-0.5 block text-xs text-muted-foreground"><BilingualText en={reputationEn(tip.desc)} el={reputationEl(tip.desc)} /></span>

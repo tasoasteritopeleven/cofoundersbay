@@ -52,6 +52,7 @@ import {
   type FeedPost,
   type FeedPreferences,
 } from '@/lib/api';
+import { FactLine } from '@/components/common/FactLine';
 
 type PostType = 'update' | 'milestone' | 'question' | 'announcement' | 'achievement';
 
@@ -290,13 +291,7 @@ function PostCard({
         <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
 
         {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {post.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                #{tag}
-              </Badge>
-            ))}
-          </div>
+          <FactLine className="mt-3" items={post.tags.map((tag) => `#${tag}`)} />
         )}
 
         {/* Engagement Stats */}

@@ -277,12 +277,12 @@ export default function IncubatorDashboard() {
                       </p>
                       <p className="truncate text-xs text-muted-foreground">
                         {program.title} · <RelativeTime date={row.appliedAt} format={formatRelativeTime} />
-                        {row.score != null ? ` · score ${row.score}` : ''}
+                        {row.score != null ? <> · <BilingualText en={`score ${row.score}`} el={`βαθμός ${row.score}`} compact /></> : null}
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-1.5">
                       <Button size="sm" variant="outline" asChild>
-                        <Link href="/org/applications">Review</Link>
+                        <Link href="/org/applications"><BilingualText en="Review" el="Αξιολόγηση" compact /></Link>
                       </Button>
                       <Button size="icon" variant="ghost" aria-label={`Message ${name} to schedule a call`} asChild>
                         <Link href={`/messages?to=${row.userId}`}>

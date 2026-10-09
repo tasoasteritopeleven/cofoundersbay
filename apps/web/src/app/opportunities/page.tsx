@@ -65,6 +65,7 @@ import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SaveItemButton, useSavedItems, useSaveToggle } from '@/components/common/SaveItemButton';
 import { MessageButton } from '@/components/common/PersonActions';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -153,20 +154,16 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
             </Avatar>
             <div>
               <h3 className="font-display text-base font-semibold text-foreground">{opportunity.title}</h3>
-              <div className="mt-1 flex items-center gap-2 flex-wrap">
-                {opportunity.company && (
-                  <span className="text-sm text-muted-foreground">{opportunity.company}</span>
-                )}
-                <Badge variant="outline" className={cn('text-2xs px-1.5', cfg.className)}>
-                  <cfg.icon className="mr-1 icon-sm" />
-                  <BilingualText en={opportunitiesEn(cfg.labelKey)} el={opportunitiesEl(cfg.labelKey)} compact />
-                </Badge>
-                {opportunity.isRemote && (
-                  <Badge variant="secondary" className="text-2xs bg-status-success-bg text-status-success ">
-                    <BilingualText en={opportunitiesEn('remote')} el={opportunitiesEl('remote')} compact />
-                  </Badge>
-                )}
-              </div>
+              {/* Company, type and remote are facts about the listing: one
+                  line, where the type and remote were two tinted pills. */}
+              <FactLine
+                className="mt-1 text-sm"
+                items={[
+                  opportunity.company,
+                  <BilingualText key="type" en={opportunitiesEn(cfg.labelKey)} el={opportunitiesEl(cfg.labelKey)} compact />,
+                  opportunity.isRemote ? <BilingualText key="remote" en={opportunitiesEn('remote')} el={opportunitiesEl('remote')} compact /> : null,
+                ]}
+              />
             </div>
           </div>
           <span className="text-xs text-muted-foreground shrink-0 flex items-center gap-1">
@@ -179,15 +176,7 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{opportunity.description}</p>
         )}
 
-        {opportunity.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {opportunity.tags.map((tag: string) => (
-              <span key={tag} className="chip rounded-md bg-secondary/60 px-2 py-0.5 text-2xs text-secondary-foreground">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <FactLine items={opportunity.tags ?? []} />
 
         <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
           {opportunity.location && (

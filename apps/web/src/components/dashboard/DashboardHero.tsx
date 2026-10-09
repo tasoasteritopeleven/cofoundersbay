@@ -5,6 +5,7 @@ import { Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { FactLine } from '@/components/common/FactLine';
 
 type BlogCard = {
   id: string;
@@ -51,13 +52,7 @@ export function DashboardHero({
         <CardContent className="space-y-4 text-sm text-muted-foreground">
           <p>{mom.description}</p>
           {mom.badges && mom.badges.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {mom.badges.map((label) => (
-                <Badge key={label} variant="outline">
-                  {label}
-                </Badge>
-              ))}
-            </div>
+            <FactLine items={mom.badges} />
           )}
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" asChild>

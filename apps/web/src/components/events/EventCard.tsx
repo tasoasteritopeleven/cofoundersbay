@@ -20,6 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 export type EventData = {
   id: string;
@@ -251,13 +252,7 @@ export function EventCard({
           
           {/* Tags */}
           {event.tags && event.tags.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1">
-              {event.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+            <FactLine className="mt-4" items={event.tags} />
           )}
           
           {/* Actions */}

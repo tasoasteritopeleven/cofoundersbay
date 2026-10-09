@@ -60,6 +60,7 @@ import {
   type DemoRole,
   type ProjectStatus,
 } from '@/lib/projects-demo';
+import { FactLine } from '@/components/common/FactLine';
 
 const STATUS_COLOR: Record<ProjectStatus, string> = {
   idea: 'bg-status-accent-bg text-status-accent border-status-accent-border',
@@ -152,13 +153,7 @@ function ProjectCard({
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">{project.teamSize}</span>/{project.maxTeamSize}
               </div>
-              <div className="flex max-w-[200px] flex-wrap gap-1">
-                {project.rolesNeeded.slice(0, 2).map((role) => (
-                  <Badge key={role.title} variant="secondary" className="rounded-full text-2xs">
-                    {roleLabel(role)}
-                  </Badge>
-                ))}
-              </div>
+              <FactLine className="max-w-[200px]" items={project.rolesNeeded.slice(0, 2).map((role) => roleLabel(role))} />
               <Button variant="outline" size="sm" className={BUILDER_BTN} asChild>
                 <Link href={`/projects/${project.id}`}>
                   <BilingualText en={projectEn('view')} el={projectEl('view')} compact />
@@ -224,13 +219,7 @@ function ProjectCard({
       <CardContent className="flex min-w-0 flex-1 flex-col gap-3">
         <ProjectBlurb project={project} clamp="line-clamp-2" />
 
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.slice(0, 4).map((tag) => (
-            <Badge key={tag} variant="secondary" className="rounded-full text-2xs">
-              {tag}
-            </Badge>
-          ))}
-        </div>
+        <FactLine items={project.tags.slice(0, 4)} />
 
         {project.progress !== undefined && (
           <div className="space-y-1">
@@ -279,13 +268,9 @@ function ProjectCard({
               <p className="text-2xs font-medium text-muted-foreground">
                 <BilingualText en={projectEn('looking_for')} el={projectEl('looking_for')} compact />
               </p>
-              <div className="flex flex-wrap gap-1">
-                {project.rolesNeeded.map((role) => (
-                  <Badge key={role.title} variant="outline" className="max-w-full whitespace-normal break-words rounded-md bg-primary/5 text-left text-2xs text-primary-accessible">
-                    {roleLabel(role)}
-                  </Badge>
-                ))}
-              </div>
+              {/* The roles are what the card is looking for: body text under
+                  their caption, not accent pills. */}
+              <FactLine className="text-sm text-foreground" items={project.rolesNeeded.map((role) => roleLabel(role))} />
             </div>
           )}
         </div>

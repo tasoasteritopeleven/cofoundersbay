@@ -68,6 +68,7 @@ import { profileEn, profileEl } from '@/lib/i18n/strings-profile';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { profilePost, useSuggestedPost } from '@/lib/share-text';
 import { linkedInShareUrl } from '@/lib/commitments-links';
+import { FactLine } from '@/components/common/FactLine';
 
 type ProfileData = Awaited<ReturnType<typeof getMeProfile>>['profile'];
 
@@ -175,11 +176,7 @@ function RoleDetails({ role, payload }: { role: string; payload: Record<string, 
     return (
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <div className="flex flex-wrap gap-1.5">
-          {(arr as string[]).map((item) => (
-            <Badge key={item} variant="secondary" className="text-xs"><StatusText value={item} /></Badge>
-          ))}
-        </div>
+        <FactLine className="text-sm text-foreground" items={(arr as string[]).map((item) => <StatusText key={item} value={item} />)} />
       </div>
     );
   };

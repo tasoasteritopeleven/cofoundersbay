@@ -32,6 +32,7 @@ import {
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 interface Member {
   id: string;
@@ -384,25 +385,8 @@ export function EnhancedMemberDirectory() {
 
                   {viewMode === 'list' && (
                     <>
-                      <div className="flex flex-wrap gap-1">
-                        {member.skills.slice(0, 3).map((skill, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {skill}
-                          </Badge>
-                        ))}
-                        {member.skills.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{member.skills.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {member.industries.map((industry, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {industry}
-                          </Badge>
-                        ))}
-                      </div>
+                      <FactLine items={[...member.skills.slice(0, 3), member.skills.length > 3 ? `+${member.skills.length - 3}` : null]} />
+                      <FactLine items={member.industries} />
                     </>
                   )}
 

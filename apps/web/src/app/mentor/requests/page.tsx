@@ -32,6 +32,7 @@ import {
   respondToMentorRequest,
   type MentorRequestItem,
 } from '@/lib/api';
+import { FactLine } from '@/components/common/FactLine';
 
 type RequestCardProps = {
   request: MentorRequestItem;
@@ -99,18 +100,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
               "{request.message}"
             </p>
 
-            {request.focusAreas && request.focusAreas.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {request.focusAreas.map((area: string) => (
-                  <span
-                    key={area}
-                    className="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground"
-                  >
-                    {area}
-                  </span>
-                ))}
-              </div>
-            )}
+            <FactLine className="mt-2" items={request.focusAreas ?? []} />
 
             {/* Wraps: at 390px the date and three buttons were 15px wider
                 than the card, and the page scrolled sideways. */}

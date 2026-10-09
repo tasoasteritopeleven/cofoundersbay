@@ -371,14 +371,9 @@ function UserStatsCard({ stats }: { stats: UserStats }) {
       <CardContent>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/20">
-                <Trophy className="icon-lg text-muted-foreground" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground"><BilingualText en={achievementsEn('current_level')} el={achievementsEl('current_level')} compact /></p>
-                <h2 className="text-xl font-semibold">Level {stats.level}</h2>
-              </div>
+            <div>
+              <p className="text-sm text-muted-foreground"><BilingualText en={achievementsEn('current_level')} el={achievementsEl('current_level')} compact /></p>
+              <h2 className="text-xl font-semibold"><BilingualText en={`Level ${stats.level}`} el={`Επίπεδο ${stats.level}`} compact /></h2>
             </div>
 
             <div className="space-y-2">

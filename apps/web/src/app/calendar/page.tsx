@@ -226,7 +226,6 @@ function formatUpcomingDate(iso: string, lang: 'en' | 'el'): string {
 
 function EventChip({ event }: { event: CalendarEvent }) {
   const cfg = TYPE_CONFIG[event.type];
-  const Icon = cfg.icon;
   const Wrapper = event.href ? Link : 'div';
   const wrapperProps = event.href ? { href: event.href } : {};
 
@@ -238,9 +237,6 @@ function EventChip({ event }: { event: CalendarEvent }) {
         cfg.bg,
       )}
     >
-      <div className={cn('mt-0.5 rounded-md p-1.5', cfg.bg)}>
-        <Icon className={cn('icon-sm', cfg.color)} />
-      </div>
       <div className="flex-1 min-w-0 space-y-0.5">
         <div className="flex items-center gap-2">
           <span className="min-w-0 truncate text-sm font-medium">

@@ -63,6 +63,7 @@ import {
 
 import { pressableProps } from '@/lib/pressable';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const PROGRAM_STATUS_TONE: Record<string, StatusTone> = {
   open: 'success',
@@ -306,13 +307,7 @@ function ProgramCard({
               )}
             </div>
 
-            {program.industries?.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-3">
-                {program.industries.slice(0, 5).map((ind) => (
-                  <span key={ind} className="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{ind}</span>
-                ))}
-              </div>
-            )}
+            <FactLine className="mt-3" items={(program.industries ?? []).slice(0, 5)} />
 
             {(program.benefits as string[] | undefined)?.length ? (
               <div className="flex flex-wrap gap-1 mt-2">

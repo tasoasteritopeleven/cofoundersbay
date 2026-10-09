@@ -33,6 +33,7 @@ import { qk } from '@/lib/query-keys';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -218,14 +219,7 @@ function ProviderCard({ provider, featured }: { provider: ServiceProvider; featu
         </div>
 
         {/* Specialties */}
-        <div className="flex flex-wrap gap-1">
-          {provider.specialties.slice(0, 3).map(s => (
-            <Badge key={s} variant="secondary" className="text-2xs">{s}</Badge>
-          ))}
-          {provider.specialties.length > 3 && (
-            <Badge variant="secondary" className="text-2xs">+{provider.specialties.length - 3}</Badge>
-          )}
-        </div>
+        <FactLine items={[...provider.specialties.slice(0, 3), provider.specialties.length > 3 ? `+${provider.specialties.length - 3}` : null]} />
 
         {/* Meta */}
         <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted-foreground">

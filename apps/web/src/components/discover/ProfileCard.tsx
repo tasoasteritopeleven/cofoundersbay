@@ -28,11 +28,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { RoleBadge } from '@/components/common/RoleBadge';
-import { SkillChip } from '@/components/common/SkillChip';
 import { AIInsightButton } from '@/components/ai/AIInsightButton';
 import { cn, initialsOf, relativeTimeLabel } from '@/lib/utils';
 import { useToast } from '@/components/ui/toast';
 import { ReportBlockModal } from '@/components/common/ReportBlockModal';
+import { FactLine } from '@/components/common/FactLine';
 
 export type ProfileCardData = {
   id: string;
@@ -255,15 +255,8 @@ function ProfileCardInner({
 
           {/* Skills */}
           {profile.skills.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {profile.skills.slice(0, 5).map((skill) => (
-                <SkillChip key={skill} label={skill} size="sm" />
-              ))}
-              {profile.skills.length > 5 && (
-                <span className="text-xs text-muted-foreground self-center">
-                  +{profile.skills.length - 5}
-                </span>
-              )}
+            <div className="mt-4">
+              <FactLine items={[...profile.skills.slice(0, 5), profile.skills.length > 5 ? `+${profile.skills.length - 5}` : null]} />
             </div>
           )}
 
@@ -446,14 +439,7 @@ function ProfileCardInner({
 
         {/* Skills */}
         {profile.skills.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {profile.skills.slice(0, 4).map((skill) => (
-              <SkillChip key={skill} label={skill} size="sm" />
-            ))}
-            {profile.skills.length > 4 && (
-              <span className="text-xs text-muted-foreground self-center">+{profile.skills.length - 4}</span>
-            )}
-          </div>
+          <FactLine className="mt-3" items={[...profile.skills.slice(0, 4), profile.skills.length > 4 ? `+${profile.skills.length - 4}` : null]} />
         )}
 
         {/* AI Insight for matches */}

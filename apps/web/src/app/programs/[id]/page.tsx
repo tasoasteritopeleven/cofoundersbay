@@ -21,6 +21,7 @@ import { usePageControls } from '@/lib/page-controls';
 import { StatusText } from '@/components/common/StatusText';
 import type { ReactNode } from 'react';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { FactLine } from '@/components/common/FactLine';
 
 /**
  * One labelled fact. No icon: the calm-surface rule hides decorative glyphs
@@ -200,11 +201,7 @@ export default function ProgramDetailPage() {
           {(program.industries?.length ?? 0) > 0 && (
             <section aria-labelledby="program-industries" className="space-y-2">
               <h2 id="program-industries" className="text-xs font-medium uppercase tracking-wide text-muted-foreground"><BilingualText en="Industries" el="Κλάδοι" compact /></h2>
-              <div className="flex flex-wrap gap-2">
-              {program.industries.map((i) => (
-                <Badge key={i} variant="secondary">{i}</Badge>
-              ))}
-              </div>
+              <FactLine className="text-sm text-foreground" items={program.industries} />
             </section>
           )}
           {(program.benefits?.length ?? 0) > 0 && (

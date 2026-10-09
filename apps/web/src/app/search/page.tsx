@@ -40,6 +40,7 @@ import { SanitizedHtml } from '@/components/common/SanitizedHtml';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, rowOptions, usePageControls, usePageList } from '@/lib/page-controls';
 import { usePopupChat } from '@/contexts/PopupChatContext';
+import { FactLine } from '@/components/common/FactLine';
 
 type SearchCategory = SearchCategoryKey;
 
@@ -252,18 +253,7 @@ function ResultCard({ result }: { result: SearchResult }) {
               )}
 
               {result.tags && result.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {result.tags.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-2xs h-5">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {result.tags.length > 3 && (
-                    <Badge variant="outline" className="text-2xs h-5">
-                      +{result.tags.length - 3}
-                    </Badge>
-                  )}
-                </div>
+                <FactLine className="mt-2" items={[...result.tags.slice(0, 3), result.tags.length > 3 ? `+${result.tags.length - 3}` : null]} />
               )}
             </div>
 

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  Search, TrendingUp, Building2, MapPin, DollarSign, Briefcase,
-  Bookmark, UserPlus, Zap, Globe, ArrowUpDown, Users, Eye, BadgeCheck, Telescope,
+  Search, TrendingUp, Briefcase,
+  Bookmark, UserPlus, Zap, ArrowUpDown, Users, Eye, BadgeCheck, Telescope,
   BarChart3, Layers, X,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { FactLine } from '@/components/common/FactLine';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
@@ -33,7 +34,7 @@ import { bilingualInline } from '@/lib/i18n/format';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { qk } from '@/lib/query-keys';
 import { cn, initialsOf } from '@/lib/utils';
-import { STATUS, type StatusTone } from '@/lib/semantic-colors';
+import { STATUS } from '@/lib/semantic-colors';
 import { AskIntroButton } from '@/components/intros/AskIntroDialog';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -125,15 +126,6 @@ const TYPE_LABEL: Record<InvestorType, { en: string; el: string }> = Object.from
 ) as Record<InvestorType, { en: string; el: string }>;
 
 const STAGE_LABEL: Record<string, string> = Object.fromEntries(STAGE_OPTIONS.map((o) => [o.value, o.en]));
-
-const STAGE_TONE: Record<string, StatusTone> = {
-  'pre-seed': 'accent',
-  seed: 'info',
-  'series-a': 'success',
-  'series-b': 'warning',
-  'series-c': 'danger',
-  growth: 'warning',
-};
 
 function hitToInvestor(hit: SearchHit): Investor {
   return {
@@ -262,25 +254,21 @@ function InvestorCard({
                     </Badge>
                   )}
                 </div>
-                {investor.firmName || investor.firmRole ? (
-                  <p className="mt-0.5 flex min-w-0 items-start gap-1 text-sm text-muted-foreground sm:items-center">
-                    <Building2 className="mt-0.5 icon-sm shrink-0 sm:mt-0" aria-hidden="true" />
-                    {/* One text run: firm and role as separate flex items broke
-                        into ragged columns ("Horizon / Capital · Principal"). */}
-                    <span className="min-w-0 sm:truncate">
-                      {[investor.firmName, investor.firmRole].filter(Boolean).join(' · ')}
-                    </span>
+                {/* One text run, never cut: the investor type, then firm and
+                    role (as separate flex items they broke into ragged
+                    columns, "Horizon / Capital · Principal"). The type was a
+                    pill beside the bookmark; it is a fact about the person. */}
+                {type || investor.firmName || investor.firmRole || investor.headline ? (
+                  <p className="mt-0.5 min-w-0 text-sm text-muted-foreground">
+                    {type ? <BilingualText en={type.en} el={type.el} compact /> : null}
+                    {type && (investor.firmName || investor.firmRole || investor.headline) ? ' · ' : null}
+                    {investor.firmName || investor.firmRole
+                      ? [investor.firmName, investor.firmRole].filter(Boolean).join(' · ')
+                      : investor.headline}
                   </p>
-                ) : investor.headline ? (
-                  <p className="mt-0.5 truncate text-sm text-muted-foreground">{investor.headline}</p>
                 ) : null}
               </div>
               <div className="flex shrink-0 items-center gap-1.5">
-                {type && (
-                  <Badge variant="outline" className="text-xs font-normal">
-                    <BilingualText en={type.en} el={type.el} compact />
-                  </Badge>
-                )}
                 <button
                   aria-label={saved
                     ? bilingualInline(`Remove ${investor.displayName} from your shortlist`, `Αφαίρεση ${investor.displayName} από τη λίστα σας`)
@@ -300,36 +288,25 @@ function InvestorCard({
               <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{investor.thesisSummary}</p>
             )}
 
-            {(investor.stages.length > 0 || checkSize || place) && (
-              <div className="mt-2.5 flex flex-wrap gap-1.5">
-                {investor.stages.map((s) => (
-                  <Badge key={s} variant="outline" className={cn('border text-2xs', STATUS[STAGE_TONE[s] ?? 'neutral'].chip)}>
-                    {STAGE_LABEL[s] ?? s}
-                  </Badge>
-                ))}
-                {checkSize && (
-                  <Badge variant="outline" className="text-2xs">
-                    <DollarSign className="mr-0.5 h-2.5 w-2.5" aria-hidden="true" />{checkSize}
-                  </Badge>
-                )}
-                {place && (
-                  <Badge variant="outline" className="text-2xs">
-                    {investor.geographies.length ? <Globe className="mr-0.5 h-2.5 w-2.5" aria-hidden="true" /> : <MapPin className="mr-0.5 h-2.5 w-2.5" aria-hidden="true" />}
-                    {place}
-                  </Badge>
-                )}
-              </div>
-            )}
+            {/* What they invest in, then in which sectors: two fact lines,
+                dot-separated, where stages, cheque, place and sectors were up
+                to eight tinted pills. */}
+            <FactLine
+              className="mt-2.5"
+              label={bilingualInline('Stages, cheque size and place', 'Στάδια, εύρος επένδυσης και τόπος')}
+              items={[
+                ...investor.stages.map((s) => STAGE_LABEL[s] ?? s),
+                checkSize,
+                place,
+              ]}
+            />
+            <FactLine
+              className="mt-1"
+              label={bilingualInline('Sectors', 'Τομείς')}
+              items={investor.industries}
+            />
 
-            {investor.industries.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {investor.industries.map((ind) => (
-                  <span key={ind} className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">{ind}</span>
-                ))}
-              </div>
-            )}
-
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-border pt-3">
+            <div className="mt-3 flex flex-col items-start gap-2 border-t border-border pt-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-4">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 {facts.map(({ key, icon: Icon, en, el }) => (
                   <span key={key} className="flex items-center gap-1">
@@ -338,8 +315,10 @@ function InvestorCard({
                   </span>
                 ))}
               </div>
-              {/* Three actions wrap on a phone instead of widening the page. */}
-              <div className="ml-auto flex min-w-0 max-w-full flex-wrap justify-end gap-2">
+              {/* Three actions wrap on a phone instead of widening the page,
+                  from the card's left edge (right-aligned they stacked into a
+                  ragged column). */}
+              <div className="flex min-w-0 max-w-full flex-wrap gap-2 sm:ml-auto sm:justify-end">
                 {investor.sample ? (
                   <>
                     <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" disabled title={sampleReason}>

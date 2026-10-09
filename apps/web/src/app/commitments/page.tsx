@@ -87,8 +87,8 @@ function ResponseRow({ thread, now }: { thread: CommitmentThreadSummary; now: nu
   return (
     <Card>
       <CardContent className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="rounded-full bg-muted px-2 py-0.5 text-2xs font-medium text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+          <span className="text-xs text-muted-foreground">
             <BilingualText en={kind.en} el={kind.el} compact />
           </span>
           <StepChip step={thread.step} />
@@ -438,6 +438,7 @@ export default function CommitmentsPage() {
                   <NeedCard
                     card={card}
                     compact
+                    showOwner={false}
                     footer={<HistoryNote settled={card.settledAt} now={at} />}
                     actions={
                       <>

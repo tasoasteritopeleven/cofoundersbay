@@ -3204,12 +3204,12 @@ a[class~="inline-flex"].bg-destructive {
 }
 #main-content [data-surface="card"] :not(button):not(a):not([role="button"]):not([data-slot="button"]):not([role="checkbox"]):not([role="combobox"]):not([role="menuitem"]):not([role="switch"]):not([role="tab"]) > svg.cfb-glyph:not([data-keep-icon] > *),
 #main-content [data-surface="card"] :not(button):not(a):not([role="button"]):not([data-slot="button"]):not([role="checkbox"]):not([role="combobox"]):not([role="menuitem"]):not([role="switch"]):not([role="tab"]) > svg.lucide:not(.lucide-check):not(.lucide-circle-check):not(.lucide-circle-check-big):not(.lucide-circle):not(.lucide-lock):not(.lucide-loader-2):not(.lucide-loader-circle):not([data-keep-icon] > *),
-#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
-#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
-#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
-#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x),
-#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
-#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x),
+#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
 #main-content [role="tab"] svg.cfb-glyph,
 #main-content [role="tab"] svg.lucide {
   display: none;
@@ -3218,8 +3218,9 @@ a[class~="inline-flex"].bg-destructive {
    reads as a missing image (181 of them on 37 routes). Same reach as the
    rule above - a non-control element whose only children are icons that
    rule hides. A well holding a state glyph (check, empty circle, lock,
-   spinner) or marked data-keep-icon (an achievement's badge) keeps both. */
-#main-content [data-surface="card"] :is(div, span):not([data-keep-icon]):not(:is(button, a, [role="button"], [role="checkbox"]) > *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle))) {
+   spinner) or marked data-keep-icon (an achievement's badge) keeps both.
+   Only a fixed-size box counts as a well: see the size guard below. */
+#main-content [data-surface="card"] :is(div, span):is(:is([class^="h-"], [class*=" h-"]):is([class^="w-"], [class*=" w-"]), [class^="size-"], [class*=" size-"], [class~="p-0.5"], [class~="p-1"], [class~="p-1.5"], [class~="p-2"], [class~="p-2.5"]):not([data-keep-icon]):not(:is(button, a, [role="button"], [role="checkbox"]) > *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle))) {
   display: none;
 }
 
@@ -3234,25 +3235,41 @@ a[class~="inline-flex"].bg-destructive {
 #main-content svg.cfb-glyph:not(.absolute):not([data-keep-icon]):not([data-keep-icon] *):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="combobox"], [role="option"], [role="status"], [role="alert"], [role="img"], [data-slot="button"], [data-rail-surface]) *) {
   display: none;
 }
+/* The data glyphs the rule above keeps (a trend arrow, a star) are only data
+   beside a figure or a rating. Beside a section heading ("Featured
+   Providers") they are decoration like any other. Warnings and notes stay. */
+#main-content svg:is(.lucide-trending-up, .lucide-trending-down, .lucide-star):has(+ :is(h1, h2, h3, h4)),
+#main-content :is(h1, h2, h3, h4) + svg:is(.lucide-trending-up, .lucide-trending-down, .lucide-star) {
+  display: none;
+}
+
 /* ...and the well each one sat in, as inside cards: a box whose only
-   children are glyphs that rule hides. */
-#main-content :is(div, span):not([data-keep-icon]):not([data-keep-icon] *):not([role="img"]):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="status"], [role="alert"], [data-slot="button"], [data-rail-surface]) *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.absolute, .lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-check-circle, .lucide-check-circle-2, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle, .lucide-x, .lucide-star, .lucide-star-half, .lucide-trending-up, .lucide-trending-down, .lucide-triangle-alert, .lucide-alert-triangle, .lucide-circle-alert, .lucide-alert-circle, .lucide-info, .lucide-chevron-down, .lucide-chevron-right, .lucide-chevron-left, .lucide-chevron-up))) {
+   children are glyphs that rule hides.
+
+   A well is a fixed-size box (height and width classes, or size-*) or a
+   box held open by a small padding (p-0.5 to p-2.5, as tokens). The
+   `:has(> :not(svg))` test sees element children only, never a text node,
+   so without the size guard `<span><Clock/>45 min</span>` counted as "icons
+   only" and its text went with the glyph: durations, places, event dates
+   and attendance on 2026-10-09 (`.probes/hidden_text.mjs`). A text row has
+   no fixed size; it keeps its words and loses only the glyph. */
+#main-content :is(div, span):is(:is([class^="h-"], [class*=" h-"]):is([class^="w-"], [class*=" w-"]), [class^="size-"], [class*=" size-"], [class~="p-0.5"], [class~="p-1"], [class~="p-1.5"], [class~="p-2"], [class~="p-2.5"]):not([data-keep-icon]):not([data-keep-icon] *):not([role="img"]):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="status"], [role="alert"], [data-slot="button"], [data-rail-surface]) *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.absolute, .lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-check-circle, .lucide-check-circle-2, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle, .lucide-x, .lucide-star, .lucide-star-half, .lucide-trending-up, .lucide-trending-down, .lucide-triangle-alert, .lucide-alert-triangle, .lucide-circle-alert, .lucide-alert-circle, .lucide-info, .lucide-chevron-down, .lucide-chevron-right, .lucide-chevron-left, .lucide-chevron-up))) {
   display: none;
 }
 
 /* Labeled action buttons on every page (header Invite / New Document, asChild
    links, dialogs). Icon-only controls have only an svg child and are skipped. */
 button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
-button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
 button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) .cfb-glyph,
 button:not([data-keep-icon]):has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
 button:not([data-keep-icon]):has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > .cfb-glyph,
 a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
-a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
-button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
-a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
-#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph,
-#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x) {
+a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x) {
   display: none;
 }
 
@@ -3308,15 +3325,15 @@ textarea[class~="border-input"]:focus,
      caption 13.044 · support 12.663 · body 14.170 · lead 12.921 · figure 15.520 · section 13.816 · title 14.148
 
    Captions, the line under a page title, and the body subtitle stay put.
-   The support step (chips, dimension rows, in-card actions, and the muted
-   sentence under a title) is 12.663, a little under that subtitle. Every larger
-   phone step is another 2% under the previous phone size: body 14.459 ×
-   0.98, the root and figures 15.837 × 0.98, stat numbers 14.883 × 0.98,
-   the page title 14.437 × 0.98, section headings 14.098 × 0.98. The same
-   steps apply on every page. Search bars, Ask AI and other text fields
-   use the title step (14.148), the same size as the page title, so a
-   field does not sit above the text around it. The discover query stays
-   on that step too.
+   The support step (chips, dimension rows, in-card actions, labels, facts
+   and the muted sentence under a title) is 12.663, a little under that
+   subtitle. Every larger phone step is another 2% under the previous phone
+   size: body 14.459 × 0.98, the root and figures 15.837 × 0.98, stat
+   numbers 14.883 × 0.98, the page title 14.437 × 0.98, section headings
+   14.098 × 0.98. The same steps apply on every page. Search bars, Ask AI
+   and other text fields use the title step (14.148), the same size as the
+   page title, so a field does not sit above the text around it. The
+   discover query stays on that step too.
 
    The dashboard is the phone standard for the same role on every page.
    text-xl through text-7xl, including pages and dialogs outside
@@ -3379,7 +3396,27 @@ textarea[class~="border-input"]:focus,
   #main-content .type-support,
   #main-content .type-support.type-caption,
   #main-content .type-support.text-xs,
-  #main-content .type-support.text-sm,
+  #main-content .type-support.text-sm {
+    font-size: 12.663px;
+    line-height: 1.4;
+  }
+
+  /* A button, tab or field set in text-xs stays on the support step, under
+     the title. Text fields themselves are pinned to the title step above. */
+  .text-xs[data-slot='button'],
+  button.text-xs,
+  [role='button'].text-xs,
+  [role='tab'].text-xs,
+  input.text-xs,
+  select.text-xs,
+  textarea.text-xs,
+  #main-content .text-xs[data-slot='button'],
+  #main-content button.text-xs,
+  #main-content [role='button'].text-xs,
+  #main-content [role='tab'].text-xs,
+  #main-content input.text-xs,
+  #main-content select.text-xs,
+  #main-content textarea.text-xs,
   #main-content .type-ui,
   #main-content .type-ui.text-2xs,
   #main-content .type-ui.text-xs,
@@ -3564,6 +3601,17 @@ textarea[class~="border-input"]:focus,
     font-size: 14.148px !important;
   }
 
+  /* A paragraph a card cuts with an ellipsis wraps on a phone instead:
+     "Pre-seed Bootcamp · Spring 2027 · 1d" lost its age and a byline its
+     place (132 cut texts across 836 cards, 2026-10-09). Names and labels
+     inside a flex row (spans) keep their single line; from 640px the cut
+     returns where the row is wide enough to need it. */
+  #main-content [data-card] p.truncate {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
   /* Long tokens and pictures stay inside the viewport. A wide table scrolls
      inside itself instead of dragging the page sideways. */
   #main-content {
@@ -3702,9 +3750,24 @@ textarea[class~="border-input"]:focus,
 /* Facts on one wrapping line (a profile's place, time zone, languages,
    joined) read apart by a middle dot now that their decorative glyphs are
    gone; the dot is drawn, not spoken. */
-.facts-dotted > li + li::before {
+/* The dot rides at the end of the item before it, so a wrapped line ends
+   on "Idea ·" and the next one starts on a word, never on a dot (a Greek
+   facts line wrapped onto "· Μερική απασχόληση", 2026-10-09). The flex gap
+   is the space after the dot. */
+.facts-dotted > li:not(:last-child)::after {
   content: "·";
-  margin-right: 0.5rem;
-  margin-left: 0.35rem;
+  margin-left: 0.5rem;
   color: hsl(var(--muted-foreground));
+}
+/* Inside a fact line the dot means "next fact", so a bilingual pair there
+   joins its two languages with a thin slash instead of BilingualText's own
+   dot: "Guide / Οδηγός · Intermediate / Μέσο", not four dotted words. */
+.facts-dotted .bilingual-separator {
+  font-size: 0;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+.facts-dotted .bilingual-separator::before {
+  content: "/";
+  font-size: 0.75rem;
 }

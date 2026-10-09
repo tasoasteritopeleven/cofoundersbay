@@ -26,7 +26,6 @@ import { MatchCard } from '@/components/common/MatchCard';
 import type { CommitmentStep } from '@cofounderbay/shared';
 import { StepChip } from '@/components/commitments/OutcomeChip';
 import { listCommitmentThreads } from '@/lib/commitments-api';
-import { SkillChip } from '@/components/common/SkillChip';
 import { RoleBadge } from '@/components/common/RoleBadge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/toast';
@@ -42,6 +41,7 @@ import { qk } from '@/lib/query-keys';
 import { bilingualInline } from '@/lib/i18n/format';
 import { FirstRunTour, type TourStep } from '@/components/common/FirstRunTour';
 import { CfbGlyph } from '@/components/icons/CfbGlyph';
+import { FactLine } from '@/components/common/FactLine';
 
 const MATCHES_TOUR: TourStep[] = [
   {
@@ -338,16 +338,10 @@ function MatchListRow({
             </div>
 
             {/* Skills + reasons */}
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {(hit.skillNames ?? []).slice(0, 5).map(s => (
-                <span key={s} className="rounded-md bg-secondary/50 px-2 py-0.5 text-2xs text-muted-foreground">
-                  {s}
-                </span>
-              ))}
-              {(hit.skillNames ?? []).length > 5 && (
-                <span className="text-xs text-muted-foreground self-center">+{(hit.skillNames ?? []).length - 5}</span>
-              )}
-            </div>
+            <FactLine
+              className="mt-2"
+              items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}
+            />
 
             {/* Match reasons inline */}
             {matchReasons.length > 0 && (
@@ -476,9 +470,7 @@ function MatchPreviewPanel({
           {(hit.skillNames ?? []).length > 0 && (
             <div>
               <p className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
-              <div className="flex flex-wrap gap-1.5">
-                {(hit.skillNames ?? []).map(s => <SkillChip key={s} label={s} size="sm" />)}
-              </div>
+              <FactLine className="text-sm text-foreground" items={hit.skillNames ?? []} />
             </div>
           )}
 

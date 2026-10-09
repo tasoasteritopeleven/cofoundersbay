@@ -614,21 +614,23 @@ function DimensionCard({
 
             {dim.recommendations.length > 0 && status !== 'excellent' && (
               <div className="mt-auto space-y-2.5 border-t border-border pt-3">
-                <p className="mb-1.5 flex items-center gap-2 text-xs font-semibold">
-                  <CfbGlyph name="spark" className={cn('icon-sm shrink-0', STATUS.warning.icon)} />
+                {/* Caption, the recommendation as the body, then the next
+                    criterion as a secondary line: three levels where a
+                    semibold label, a semibold lead-in and muted body were five. */}
+                <p className="text-xs text-muted-foreground">
                   <BilingualText en={readinessEn('recommendation')} el={readinessEl('recommendation')} compact />
                 </p>
-                {remaining[0] && (
-                  <p className="text-xs leading-snug">
-                    <span className="font-semibold"><BilingualText en={readinessEn('next_open')} el={readinessEl('next_open')} wrap /></span>
-                    {': '}
-                    <BilingualText en={remaining[0].name} el={remaining[0].nameEl ?? remaining[0].name} wrap />
-                    <span className="ml-1 font-normal text-muted-foreground">· {remaining[0].weight}%</span>
-                  </p>
-                )}
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-sm leading-relaxed text-foreground">
                   <BilingualText en={dim.recommendations[0].en} el={dim.recommendations[0].el} />
                 </p>
+                {remaining[0] && (
+                  <p className="text-xs leading-snug text-muted-foreground">
+                    <BilingualText en={readinessEn('next_open')} el={readinessEl('next_open')} wrap />
+                    {': '}
+                    <BilingualText en={remaining[0].name} el={remaining[0].nameEl ?? remaining[0].name} wrap />
+                    {` · ${remaining[0].weight}%`}
+                  </p>
+                )}
                 <AIInsightButton prompt={recPrompt} className="h-8" />
               </div>
             )}

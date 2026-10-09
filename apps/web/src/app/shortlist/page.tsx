@@ -71,6 +71,7 @@ import {
   getRecommendations,
   type ShortlistItem,
 } from '@/lib/api';
+import { FactLine } from '@/components/common/FactLine';
 
 type ViewMode = 'list' | 'grid';
 type SortBy = 'saved_newest' | 'saved_oldest' | 'name_az' | 'match_score';
@@ -280,14 +281,7 @@ function ShortlistCard({
 
           {/* Skills */}
           {profile?.skills && profile.skills.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {profile.skills.slice(0, 5).map((s) => (
-                <Badge key={s} variant="secondary" className="h-5 rounded-full px-2 text-2xs font-normal">{s}</Badge>
-              ))}
-              {profile.skills.length > 5 && (
-                <Badge variant="outline" className="h-5 rounded-full px-2 text-2xs">+{profile.skills.length - 5}</Badge>
-              )}
-            </div>
+            <FactLine className="mt-2" items={[...profile.skills.slice(0, 5), profile.skills.length > 5 ? `+${profile.skills.length - 5}` : null]} />
           )}
 
           {/* Working state: the label the reader gave this person, their note

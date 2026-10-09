@@ -37,6 +37,7 @@ import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
+import { FactLine } from '@/components/common/FactLine';
 
 /**
  * The page's own row from the pool row.
@@ -146,18 +147,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
               </div>
             </div>
 
-            {mentor.expertise.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {mentor.expertise.slice(0, 4).map((exp) => (
-                  <span
-                    key={exp}
-                    className="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground"
-                  >
-                    {exp}
-                  </span>
-                ))}
-              </div>
-            )}
+            <FactLine className="mt-2" items={mentor.expertise.slice(0, 4)} />
 
             <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">

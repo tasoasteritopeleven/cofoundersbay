@@ -42,6 +42,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 type ViewMode = 'grid' | 'list';
 type SortBy = 'relevance' | 'recent' | 'active';
@@ -171,21 +172,10 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
               </p>
             )}
 
-            <div className="flex flex-wrap gap-1.5 justify-center mb-3">
-              {member.skills?.slice(0, 3).map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground"
-                >
-                  {skill}
-                </span>
-              ))}
-              {member.skills && member.skills.length > 3 && (
-                <span className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground">
-                  +{member.skills.length - 3}
-                </span>
-              )}
-            </div>
+            <FactLine
+              className="mb-3 justify-center"
+              items={[...(member.skills ?? []).slice(0, 3), (member.skills?.length ?? 0) > 3 ? `+${(member.skills?.length ?? 0) - 3}` : null]}
+            />
 
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
               {member.location && (
@@ -283,21 +273,10 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
               </p>
             )}
 
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {member.skills?.slice(0, 5).map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground"
-                >
-                  {skill}
-                </span>
-              ))}
-              {member.skills && member.skills.length > 5 && (
-                <span className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground">
-                  +{member.skills.length - 5} more
-                </span>
-              )}
-            </div>
+            <FactLine
+              className="mb-3"
+              items={[...(member.skills ?? []).slice(0, 5), (member.skills?.length ?? 0) > 5 ? `+${(member.skills?.length ?? 0) - 5}` : null]}
+            />
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               {member.location && (

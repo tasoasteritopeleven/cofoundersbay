@@ -52,6 +52,7 @@ describe('phone reading scale', () => {
     expect(fontSize('.text-xs')).toBe('12.663px');
     expect(fontSize('#main-content .text-xs')).toBe('12.663px');
     expect(fontSize('#main-content a.text-sm')).toBe('12.663px');
+    expect(fontSize('#main-content button.text-xs')).toBe('12.663px');
     expect(BLOCK).toMatch(/font-size:\s*12\.663px/);
     expect(BLOCK).toMatch(/div\.text-xs\.text-muted-foreground:is\(\.leading-snug, \.leading-relaxed\)/);
     expect(BLOCK).toMatch(/\.type-ui\.text-muted-foreground:not\(\.truncate\)/);

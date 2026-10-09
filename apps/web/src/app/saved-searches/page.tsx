@@ -53,6 +53,7 @@ import { useRouter } from 'next/navigation';
 import { qk } from '@/lib/query-keys';
 import { CANCELLED, ROW_GONE, rowOptions, settle, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { savedFiltersToParams } from '@/lib/need-card-wall';
+import { FactLine } from '@/components/common/FactLine';
 
 function SearchCard({
   search,
@@ -90,47 +91,21 @@ function SearchCard({
               <span className="truncate">{search.query}</span>
             </p>
 
-            {/* Filters */}
-            <div className="flex flex-wrap gap-1.5 mt-3">
-              {search.scope === 'need_cards' && (
-                <Badge variant="secondary" className="text-xs">
-                  <BilingualText en="Need cards" el="Κάρτες ανάγκης" compact />
-                </Badge>
-              )}
-              {search.filters?.kinds?.map((k) => (
-                <Badge key={k} variant="outline" className="text-xs">
-                  <StatusText value={k} />
-                </Badge>
-              ))}
-              {search.filters?.remote?.length ? (
-                <Badge variant="outline" className="text-xs">
-                  <BilingualText en="Remote" el="Εξ αποστάσεως" compact />
-                </Badge>
-              ) : null}
-              {search.filters.roles?.map((role) => (
-                <Badge key={role} variant="secondary" className="text-xs">
-                  <Users className="icon-sm mr-1" aria-hidden="true" />
-                  {role}
-                </Badge>
-              ))}
-              {search.filters.industries?.slice(0, 2).map((ind) => (
-                <Badge key={ind} variant="outline" className="text-xs">
-                  <Briefcase className="icon-sm mr-1" aria-hidden="true" />
-                  {ind}
-                </Badge>
-              ))}
-              {search.filters.locations?.slice(0, 1).map((loc) => (
-                <Badge key={loc} variant="outline" className="text-xs">
-                  <MapPin className="icon-sm mr-1" aria-hidden="true" />
-                  {loc}
-                </Badge>
-              ))}
-              {filterCount > 3 && (
-                <Badge variant="outline" className="text-xs">
-                  <BilingualText {...fill('more_filters', { n: filterCount - 3 })} compact />
-                </Badge>
-              )}
-            </div>
+            {/* Filters: what the search holds, as one fact line (they were
+                up to seven badges, each with its own glyph). */}
+            <FactLine
+              className="mt-3"
+              label={bilingualAria('Filters', 'Φίλτρα')}
+              items={[
+                search.scope === 'need_cards' ? <BilingualText key="scope" en="Need cards" el="Κάρτες ανάγκης" compact /> : null,
+                ...(search.filters?.kinds ?? []).map((k) => <StatusText key={`kind-${k}`} value={k} />),
+                search.filters?.remote?.length ? <BilingualText key="remote" en="Remote" el="Εξ αποστάσεως" compact /> : null,
+                ...(search.filters?.roles ?? []),
+                ...(search.filters?.industries ?? []).slice(0, 2),
+                ...(search.filters?.locations ?? []).slice(0, 1),
+                filterCount > 3 ? <BilingualText key="more" {...fill('more_filters', { n: filterCount - 3 })} compact /> : null,
+              ]}
+            />
 
             {/* Stats */}
             <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">

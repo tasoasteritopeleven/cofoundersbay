@@ -63,6 +63,7 @@ import { qk } from '@/lib/query-keys';
 import { choiceControl, ROW_GONE, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 type Startup = {
   id: string;
@@ -225,13 +226,10 @@ function StartupCard({ startup, compact = false }: { startup: Startup; compact?:
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              <Badge variant="outline" className="text-2xs h-4 px-1.5"><StatusText value={startup.stage} /></Badge>
-              <Badge variant="secondary" className="text-2xs h-4 px-1.5">{startup.businessModel}</Badge>
-              {startup.tags.slice(0, 2).map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-2xs h-4 px-1.5">{tag}</Badge>
-              ))}
-            </div>
+            <FactLine
+              className="mt-2"
+              items={[<StatusText key="stage" value={startup.stage} />, startup.businessModel, ...startup.tags.slice(0, 2)]}
+            />
 
             <div className="flex flex-wrap gap-4 mt-2.5 text-sm text-muted-foreground">
               <span className="flex items-center gap-1"><MapPin className="icon-sm" />{startup.location}</span>
@@ -463,7 +461,7 @@ export default function InvestorScoutingPage() {
           </div>
           {activeFilters.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-muted-foreground">Active filters:</span>
+              <span className="text-xs text-muted-foreground"><BilingualText en="Active filters" el="Ενεργά φίλτρα" compact /></span>
               {activeFilters.map(f => (
                 <Badge key={f} variant="secondary" className="gap-1 text-xs">
                   {f}

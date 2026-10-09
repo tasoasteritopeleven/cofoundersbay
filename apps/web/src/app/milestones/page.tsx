@@ -277,7 +277,7 @@ function MilestoneCard({
               </div>
 
               {item.category && (
-                <span className="rounded-full bg-secondary/60 px-2 py-0.5 text-2xs text-muted-foreground">
+                <span className="text-2xs text-muted-foreground">
                   {catKey
                     ? <BilingualText en={milestoneEn(catKey)} el={milestoneEl(catKey)} compact />
                     : item.category}

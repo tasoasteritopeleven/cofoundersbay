@@ -26,6 +26,7 @@ import { MainLandmark } from '@/components/layout/AppShell';
 import { ProfileHero } from '@/components/profile/ProfileHero';
 import { ProfileExperience } from '@/components/profile/ProfileSections';
 import { formatDate } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 function deriveProfileFields(profile: PublicProfile) {
   const rp = (profile.rolePayload ?? {}) as Record<string, unknown>;
@@ -285,13 +286,7 @@ export default function PublicProfilePage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {lookingFor.map((role) => (
-                      <Badge key={role} variant="outline" className="bg-primary/5 border-primary/15 text-primary-accessible">
-                        {role}
-                      </Badge>
-                    ))}
-                  </div>
+                  <FactLine className="text-sm text-foreground" items={lookingFor} />
                 </CardContent>
               </Card>
             )}
@@ -369,9 +364,7 @@ export default function PublicProfilePage() {
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {skills.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></p>}
-                  {skills.map((skill) => (
-                    <Badge key={skill} variant="secondary">{skill}</Badge>
-                  ))}
+                  <FactLine className="text-sm text-foreground" items={skills} />
                 </div>
               </CardContent>
             </Card>
@@ -384,9 +377,7 @@ export default function PublicProfilePage() {
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {interests.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No interests listed" el="Δεν έχουν καταχωριστεί ενδιαφέροντα" compact /></p>}
-                  {interests.map((interest) => (
-                    <Badge key={interest} variant="outline">{interest}</Badge>
-                  ))}
+                  <FactLine className="text-sm text-foreground" items={interests} />
                 </div>
               </CardContent>
             </Card>

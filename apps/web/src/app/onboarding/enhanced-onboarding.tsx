@@ -48,6 +48,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 
 import { pressableProps } from '@/lib/pressable';
+import { FactLine } from '@/components/common/FactLine';
 const STEPS = [
   { id: 'welcome', title: 'Welcome to CoFounderBay', icon: Sparkles },
   { id: 'role', title: 'What\'s your role?', icon: Target },
@@ -1008,19 +1009,8 @@ function ReviewStep({
 
           {data.skills.length > 0 && (
             <div>
-              <h4 className="font-medium mb-1">Skills ({data.skills.length})</h4>
-              <div className="flex flex-wrap gap-1">
-                {data.skills.slice(0, 10).map(skillId => (
-                  <Badge key={skillId} variant="secondary" className="text-xs">
-                    {skillId}
-                  </Badge>
-                ))}
-                {data.skills.length > 10 && (
-                  <Badge variant="secondary" className="text-xs">
-                    +{data.skills.length - 10} more
-                  </Badge>
-                )}
-              </div>
+              <h4 className="font-medium mb-1"><BilingualText en={`Skills (${data.skills.length})`} el={`Δεξιότητες (${data.skills.length})`} compact /></h4>
+              <FactLine className="text-sm text-foreground" items={[...data.skills.slice(0, 10), data.skills.length > 10 ? `+${data.skills.length - 10}` : null]} />
             </div>
           )}
         </div>
@@ -1031,27 +1021,20 @@ function ReviewStep({
             <h4 className="font-medium"><BilingualText en="Values & Work Style" el="Αξίες & τρόπος δουλειάς" compact /></h4>
             {data.values.availability && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Availability:</span>
+                <span className="text-muted-foreground"><BilingualText en="Availability" el="Διαθεσιμότητα" compact /></span>
                 <span>{AVAILABILITY_OPTIONS.find(a => a.value === data.values.availability)?.label ?? data.values.availability}</span>
               </div>
             )}
             {data.values.workStyle.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Work style" el="Τρόπος δουλειάς" compact /></p>
-                <div className="flex flex-wrap gap-1">
-                  {data.values.workStyle.map(id => {
-                    const ws = WORK_STYLES.find(w => w.id === id);
-                    return <Badge key={id} variant="secondary" className="text-xs">{ws?.icon} {ws?.label ?? id}</Badge>;
-                  })}
-                </div>
+                <FactLine className="text-sm text-foreground" items={data.values.workStyle.map(id => WORK_STYLES.find(w => w.id === id)?.label ?? id)} />
               </div>
             )}
             {data.values.coreValues.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Core values" el="Βασικές αξίες" compact /></p>
-                <div className="flex flex-wrap gap-1">
-                  {data.values.coreValues.map(v => <Badge key={v} variant="outline" className="text-xs">{v}</Badge>)}
-                </div>
+                <FactLine className="text-sm text-foreground" items={data.values.coreValues} />
               </div>
             )}
           </div>
@@ -1064,25 +1047,19 @@ function ReviewStep({
             {data.matchPrefs.lookingFor.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Looking for" el="Αναζητά" compact /></p>
-                <div className="flex flex-wrap gap-1">
-                  {data.matchPrefs.lookingFor.map(r => <Badge key={r} variant="secondary" className="text-xs">{r}</Badge>)}
-                </div>
+                <FactLine className="text-sm text-foreground" items={data.matchPrefs.lookingFor} />
               </div>
             )}
             {data.matchPrefs.industries.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
-                <div className="flex flex-wrap gap-1">
-                  {data.matchPrefs.industries.map(i => <Badge key={i} variant="outline" className="text-xs">{i}</Badge>)}
-                </div>
+                <FactLine className="text-sm text-foreground" items={data.matchPrefs.industries} />
               </div>
             )}
             {data.matchPrefs.stages.length > 0 && (
               <div>
                 <p className="text-xs text-muted-foreground mb-1"><BilingualText en="Startup stages" el="Στάδια startup" compact /></p>
-                <div className="flex flex-wrap gap-1">
-                  {data.matchPrefs.stages.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
-                </div>
+                <FactLine className="text-sm text-foreground" items={data.matchPrefs.stages} />
               </div>
             )}
           </div>

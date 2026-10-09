@@ -21,6 +21,7 @@ import { getPublicProfile, getMatchBreakdown, sendConnectionRequest } from '@/li
 import { qk } from '@/lib/query-keys';
 import { rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
+import { FactLine } from '@/components/common/FactLine';
 
 const ComparisonChart = dynamic(
   () => import('./ComparisonChart').then((m) => ({ default: m.ComparisonChart })),
@@ -136,24 +137,16 @@ function ProfileColumn({
       {/* Skills */}
       <div className="mb-4">
         <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
-        <div className="flex flex-wrap gap-1">
-          {profile.skills?.slice(0, 5).map((skill) => (
-            <Badge key={skill.name} variant="secondary" className="text-xs">
-              {skill.name}
-            </Badge>
-          )) || <span className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></span>}
+        <div>
+          {(profile.skills?.length ?? 0) > 0 ? <FactLine className="text-sm text-foreground" items={(profile.skills ?? []).slice(0, 5).map((skill) => skill.name)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></span>}
         </div>
       </div>
 
       {/* Industries */}
       <div className="mb-4">
         <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
-        <div className="flex flex-wrap gap-1">
-          {profile.industries?.slice(0, 3).map((ind) => (
-            <Badge key={ind} variant="outline" className="text-xs">
-              {ind}
-            </Badge>
-          )) || <span className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></span>}
+        <div>
+          {(profile.industries?.length ?? 0) > 0 ? <FactLine className="text-sm text-foreground" items={(profile.industries ?? []).slice(0, 3)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></span>}
         </div>
       </div>
 

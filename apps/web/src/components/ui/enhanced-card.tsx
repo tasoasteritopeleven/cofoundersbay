@@ -223,18 +223,7 @@ export const ProfileCard = React.forwardRef<
             <p className="text-xs text-muted-foreground mb-2">📍 {profile.location}</p>
           )}
           {profile.skills && profile.skills.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {profile.skills.slice(0, 3).map((skill, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {skill}
-                </Badge>
-              ))}
-              {profile.skills.length > 3 && (
-                <Badge variant="outline" className="text-xs">
-                  +{profile.skills.length - 3}
-                </Badge>
-              )}
-            </div>
+            <FactLine items={[...profile.skills.slice(0, 3), profile.skills.length > 3 ? `+${profile.skills.length - 3}` : null]} />
           )}
         </div>
       </div>
@@ -371,3 +360,4 @@ export const ActivityCard = React.forwardRef<
 ActivityCard.displayName = 'ActivityCard';
 
 import { MessageCircle } from 'lucide-react';
+import { FactLine } from '@/components/common/FactLine';

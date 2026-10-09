@@ -22,6 +22,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { bilingualInline } from '@/lib/i18n/format';
 import { matchAxisEl } from '@/lib/i18n/strings-matches';
 import { bilingualAria } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 /*
  * Matches side by side.
@@ -279,11 +280,7 @@ export default function MatchComparePage() {
                   <th scope="row" className="p-4 text-left align-top text-xs font-medium text-muted-foreground"><BilingualText en="Skills" el="Δεξιότητες" compact /></th>
                   {people.map((person) => (
                     <td key={person.userId} className="p-4 align-top">
-                      <div className="flex flex-wrap gap-1.5">
-                        {(person.skillNames.length ? person.skillNames : person.skills ?? []).slice(0, 6).map((skill) => (
-                          <Badge key={skill} variant="secondary" size="sm" className="bg-muted/60">{skill}</Badge>
-                        ))}
-                      </div>
+                      <FactLine className="text-sm text-foreground" items={(person.skillNames.length ? person.skillNames : person.skills ?? []).slice(0, 6)} />
                     </td>
                   ))}
                 </tr>

@@ -53,6 +53,7 @@ import { bilingualAria } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { bilingualInline } from '@/lib/i18n/format';
+import { FactLine } from '@/components/common/FactLine';
 
 /** Why the one disabled control is disabled, in both languages. */
 const MESSAGE_HINT = bilingualAria(
@@ -452,11 +453,9 @@ function ExpertCard({ expert }: { expert: ExpertProfile }) {
                 {expert.isVerified && (
                   <Badge className="h-4 rounded-full px-1.5 text-2xs bg-primary/10 text-primary-accessible border-primary/20"><BilingualText en="Verified" el="Επαληθευμένος" compact /></Badge>
                 )}
-                {expert.badges?.map((b) => (
-                  <Badge key={b} variant="secondary" className="h-4 rounded-full px-1.5 text-2xs">{b}</Badge>
-                ))}
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">{expert.title}</p>
+              <FactLine className="mt-0.5" items={expert.badges ?? []} />
             </div>
             {expert.feeFrom != null && (
               <p className="text-sm font-semibold text-foreground shrink-0">

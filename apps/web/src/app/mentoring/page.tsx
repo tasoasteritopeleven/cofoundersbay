@@ -66,6 +66,7 @@ import {
 import { cn, initialsOf } from '@/lib/utils';
 import { LocalTime } from '@/components/common/LocalTime';
 import { qk } from '@/lib/query-keys';
+import { FactLine } from '@/components/common/FactLine';
 
 interface Mentor {
   id: string;
@@ -204,15 +205,8 @@ function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) 
 
         <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">{mentor.bio}</p>
 
-        {/* Expertise tags */}
-        <div className="flex flex-wrap gap-1">
-          {mentor.expertise.slice(0, 4).map((skill) => (
-            <span key={skill} className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground">{skill}</span>
-          ))}
-          {mentor.expertise.length > 4 && (
-            <span className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">+{mentor.expertise.length - 4}</span>
-          )}
-        </div>
+        {/* Expertise: one fact line */}
+        <FactLine items={[...mentor.expertise.slice(0, 4), mentor.expertise.length > 4 ? `+${mentor.expertise.length - 4}` : null]} />
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-border">

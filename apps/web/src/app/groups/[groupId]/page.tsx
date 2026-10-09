@@ -36,6 +36,7 @@ import {
 } from '@/lib/api';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { choiceControl, rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
+import { FactLine } from '@/components/common/FactLine';
 
 const REACTIONS = ['👍', '❤️', '🔥', '🎉', '💡'];
 
@@ -484,20 +485,11 @@ export default function GroupDetailPage() {
               <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-2xl">{group.description}</p>
             )}
 
-            {((group.tags?.length ?? 0) > 0 || group.category) && (
-              <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                {/* Category first, then tags: one row of descriptors instead of
-                    a lone badge on a line of its own below them. */}
-                {group.category && (
-                  <Badge variant="secondary"><StatusText value={group.category} /></Badge>
-                )}
-                {(group.tags ?? []).map((tag) => (
-                  <span key={tag} className="rounded-full bg-secondary/60 px-2.5 py-0.5 text-xs text-muted-foreground">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
+            {/* Category first, then tags: one line of descriptors. */}
+            <FactLine
+              className="mt-3"
+              items={[group.category ? <StatusText key="category" value={group.category} /> : null, ...(group.tags ?? []).map((tag) => `#${tag}`)]}
+            />
 
           </div>
         </div>

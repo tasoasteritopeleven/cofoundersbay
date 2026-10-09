@@ -54,6 +54,7 @@ import { CreateGroupModal } from './components/CreateGroupModal';
 import { qk } from '@/lib/query-keys';
 
 import { pressableProps } from '@/lib/pressable';
+import { FactLine } from '@/components/common/FactLine';
 const CATEGORIES = ['All', 'Founders', 'Tech', 'Marketing', 'Design', 'Finance', 'Product', 'Operations', 'Legal'];
 
 const TYPE_FILTERS = [
@@ -155,15 +156,7 @@ function GroupCard({
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{group.description}</p>
         )}
 
-        {group.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {group.tags.slice(0, 4).map((tag) => (
-              <span key={tag} className="rounded-md bg-secondary/60 px-2 py-0.5 text-xs text-secondary-foreground">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <FactLine items={group.tags.slice(0, 4)} />
 
         <div
           className="flex items-center justify-between pt-2 border-t border-border"

@@ -13,6 +13,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { FactLine } from '@/components/common/FactLine';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getMeProfile, listLearningResources, getLearningCategories, type LearningResourceItem } from '@/lib/api';
 import { queryKeys, qk } from '@/lib/query-keys';
@@ -193,13 +194,15 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
             <h3 className="font-semibold text-sm text-foreground line-clamp-2 mb-1.5 leading-snug">
               {resource.title}
             </h3>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <Badge variant="outline" className={cn('text-2xs h-4 px-1.5 border-0', typeConfig.bg, typeConfig.color)}>
-                <BilingualText en={learningEn(typeConfig.labelKey)} el={learningEl(typeConfig.labelKey)} compact />
-              </Badge>
-              <Badge variant="secondary" className={cn('text-2xs h-4 px-1.5', difficultyConfig.color)}>
-                <BilingualText en={learningEn(difficultyConfig.labelKey)} el={learningEl(difficultyConfig.labelKey)} compact />
-              </Badge>
+            {/* Type and level are facts (one muted line); "Featured" is the
+                card's one pill. All three were tinted badges. */}
+            <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+              <FactLine
+                items={[
+                  <BilingualText key="type" en={learningEn(typeConfig.labelKey)} el={learningEl(typeConfig.labelKey)} compact />,
+                  <BilingualText key="level" en={learningEn(difficultyConfig.labelKey)} el={learningEl(difficultyConfig.labelKey)} compact />,
+                ]}
+              />
               {resource.isFeatured && (
                 <Badge variant="secondary" className="text-2xs h-4 px-1.5 bg-primary/10 text-primary-accessible">
                   <BilingualText en={learningEn('featured_badge')} el={learningEl('featured_badge')} compact />
@@ -234,13 +237,7 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
           {resource.description}
         </p>
 
-        {resource.tags && resource.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {resource.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-md bg-secondary/60 px-2 py-0.5 text-2xs text-secondary-foreground">{tag}</span>
-            ))}
-          </div>
-        )}
+        <FactLine label={bilingualAria('Topics', 'Θέματα')} items={(resource.tags ?? []).slice(0, 3)} />
 
         <div className="flex items-center justify-between pt-2 border-t border-border mt-auto">
           <div className="min-w-0">

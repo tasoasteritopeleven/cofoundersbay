@@ -31,14 +31,13 @@ export type NeedCardView = {
   owner?: { displayName: string; headline: string | null; verifiedMethods?: readonly VerificationMethod[] };
 };
 
-function Sentence({ label, text }: { label: { en: string; el: string }; text: string }) {
-  if (!text) return null;
+function Field({ label, children }: { label: { en: string; el: string }; children: ReactNode }) {
   return (
-    <div className="space-y-0.5">
-      <dt className="text-xs font-medium text-muted-foreground">
+    <div>
+      <dt className="text-xs text-muted-foreground">
         <BilingualText en={label.en} el={label.el} compact wrap />
       </dt>
-      <dd className="text-pretty text-sm leading-relaxed text-foreground">{text}</dd>
+      <dd className="mt-0.5 text-sm leading-relaxed text-foreground">{children}</dd>
     </div>
   );
 }
@@ -50,10 +49,21 @@ function Sentence({ label, text }: { label: { en: string; el: string }; text: st
  * on the public link and as the posting guide's live preview, so what an
  * author previews is exactly what a reader sees. Equity and funding words
  * always come with the non-guarantee sentence.
+ *
+ * Anatomy (one left axis, five text styles and one pill):
+ *   meta     kind · version as plain text, the outcome as the card's only pill
+ *   title    semibold
+ *   byline   avatar, name with the verified mark, headline under it (never cut)
+ *   fields   caption label over body text: missing (and exists, goal), offer
+ *   facts    one muted line, dot-separated (category, remote, place, stage, commitment)
+ *   footer   above a hairline: the non-guarantee sentence, the page's footer, actions
+ * A phone sets captions a full step under the body, so a label never reads
+ * as the same size as its sentence.
  */
 export function NeedCard({
   card,
   compact = false,
+  showOwner = true,
   actions,
   footer,
   className,
@@ -61,6 +71,8 @@ export function NeedCard({
 }: {
   card: NeedCardView;
   compact?: boolean;
+  /** False where the reader is the author (their own list): the byline would only repeat them. */
+  showOwner?: boolean;
   actions?: ReactNode;
   footer?: ReactNode;
   className?: string;
@@ -74,85 +86,79 @@ export function NeedCard({
     card.offer.equity ? card.offer.equity : null,
     card.offer.hoursPerWeek ? `${card.offer.hoursPerWeek} ${CMT.per_week.en}` : null,
   ].filter(Boolean);
+  const version = card.version && card.version > 1 ? card.version : null;
+  const owner = showOwner ? card.owner : undefined;
 
   return (
-    <article data-need-card="" className={cn('flex flex-col gap-3', className)}>
+    <article data-need-card="" className={cn('space-y-4', className)}>
       <header className="space-y-1.5">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="chip rounded-full bg-muted px-2 py-0.5 text-2xs font-medium text-muted-foreground">
-            <BilingualText en={kind.en} el={kind.el} compact />
-          </span>
+        <div className="flex items-start justify-between gap-3">
+          <p className="min-w-0 pt-0.5 text-xs text-muted-foreground">
+            <BilingualText
+              en={version ? `${kind.en} · ${CMT.version.en} ${version}` : kind.en}
+              el={version ? `${kind.el} · ${CMT.version.el} ${version}` : kind.el}
+              compact
+              wrap
+            />
+          </p>
           {card.outcome ? <OutcomeChip outcome={card.outcome} reason={card.closedReason} /> : null}
-          {card.version && card.version > 1 ? (
-            <span className="text-2xs text-muted-foreground tabular-nums">
-              <BilingualText en={`${CMT.version.en} ${card.version}`} el={`${CMT.version.el} ${card.version}`} compact />
-            </span>
-          ) : null}
         </div>
-        <Heading className={cn('text-balance font-semibold leading-snug text-foreground', compact ? 'text-base' : 'text-lg')}>{card.title || '—'}</Heading>
-        {card.owner ? (
-          <div className="flex min-w-0 items-start gap-2">
-            <Avatar className="mt-0.5 h-6 w-6 shrink-0" data-keep-icon="">
-              <AvatarFallback className="bg-primary/15 text-2xs text-foreground">{initialsOf(card.owner.displayName)}</AvatarFallback>
+        <Heading className="text-base font-semibold leading-snug text-foreground">{card.title || '—'}</Heading>
+        {owner ? (
+          <div className="flex min-w-0 items-center gap-2.5 pt-1.5">
+            <Avatar className="h-8 w-8" data-keep-icon="">
+              <AvatarFallback className="bg-primary/15 text-2xs text-foreground">{initialsOf(owner.displayName)}</AvatarFallback>
             </Avatar>
-            <p className="min-w-0 flex-1 text-xs leading-snug text-muted-foreground">
-              <span className="font-medium text-foreground">{card.owner.displayName}</span>
-              {card.owner.headline ? <span>{` · ${card.owner.headline}`}</span> : null}
-            </p>
-            <VerifiedBadge methods={card.owner?.verifiedMethods ?? []} className="mt-0.5" />
+            <div className="min-w-0">
+              <p className="flex min-w-0 items-center gap-1 text-sm font-medium text-foreground">
+                <span className="min-w-0 truncate">{owner.displayName}</span>
+                <VerifiedBadge methods={owner.verifiedMethods ?? []} variant="mark" />
+              </p>
+              {owner.headline ? <p className="text-xs text-muted-foreground">{owner.headline}</p> : null}
+            </div>
           </div>
         ) : null}
       </header>
 
       <dl className="space-y-3">
-        {compact ? (
-          <Sentence label={CMT.missing} text={card.missing} />
-        ) : (
+        {compact ? null : (
           <>
-            <Sentence label={CMT.exists} text={card.exists} />
-            <Sentence label={CMT.goal} text={card.goal} />
-            <Sentence label={CMT.missing} text={card.missing} />
+            {card.exists ? <Field label={CMT.exists}>{card.exists}</Field> : null}
+            {card.goal ? <Field label={CMT.goal}>{card.goal}</Field> : null}
           </>
         )}
+        {card.missing ? <Field label={CMT.missing}>{card.missing}</Field> : null}
+        <Field label={CMT.offer}>
+          <span className="block font-medium">{card.offer?.role || '—'}</span>
+          {offerLine.length ? <span className="block tabular-nums">{offerLine.join(' · ')}</span> : null}
+          {!compact && card.offer.scope ? <span className="mt-1 block">{card.offer.scope}</span> : null}
+        </Field>
+        {!compact && evidence.length ? (
+          <Field label={CMT.evidence}>
+            <ul className="facts-dotted flex flex-wrap gap-x-2">
+              {evidence.map((pair) => (
+                <li key={pair.en}><BilingualText en={pair.en} el={pair.el} compact /></li>
+              ))}
+            </ul>
+          </Field>
+        ) : null}
       </dl>
 
-      {/* The offer reads by its label, on the card's axis: a box around it
-          inset the text 13px off the title and added a second frame. */}
-      <section data-need-offer="" aria-label={`${CMT.offer.en} · ${CMT.offer.el}`} className="space-y-0.5">
-        <p className="text-xs font-medium text-muted-foreground">
-          <BilingualText en={CMT.offer.en} el={CMT.offer.el} compact />
-        </p>
-        <p className="text-sm font-semibold text-foreground">{card.offer?.role || '—'}</p>
-        {offerLine.length ? <p className="text-sm tabular-nums text-foreground">{offerLine.join(' · ')}</p> : null}
-        {!compact && card.offer.scope ? <p className="text-sm leading-relaxed text-muted-foreground">{card.offer.scope}</p> : null}
-      </section>
-
-      <ul aria-label={`${CMT.filters.en} · ${CMT.filters.el}`} className="facts-dotted flex flex-wrap items-baseline text-xs leading-snug text-muted-foreground">
+      <ul aria-label={`${CMT.filters.en} · ${CMT.filters.el}`} className="facts-dotted flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
         {card.category ? <li>{card.category}</li> : null}
-        {card.isRemote ? (
-          <li><BilingualText en={CMT.remote.en} el={CMT.remote.el} compact /></li>
-        ) : null}
+        {card.isRemote ? <li><BilingualText en={CMT.remote.en} el={CMT.remote.el} compact /></li> : null}
         {card.place ? <li>{card.place}</li> : null}
         {card.stage ? <li><StatusText value={card.stage} /></li> : null}
         {card.commitment ? <li><StatusText value={card.commitment} /></li> : null}
       </ul>
 
-      {!compact && evidence.length ? (
-        <div className="space-y-1">
-          <p className="text-xs font-medium text-muted-foreground"><BilingualText en={CMT.evidence.en} el={CMT.evidence.el} compact /></p>
-          <ul className="flex flex-wrap gap-1.5">
-            {evidence.map((pair) => (
-              <li key={pair.en} className="chip rounded-full bg-status-success-bg px-2 py-0.5 text-2xs text-status-success">
-                <BilingualText en={pair.en} el={pair.el} compact />
-              </li>
-            ))}
-          </ul>
-        </div>
+      {showsMoney || footer || actions ? (
+        <footer className="space-y-3 border-t border-border pt-3">
+          {showsMoney ? <NonGuaranteeNote /> : null}
+          {footer}
+          {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+        </footer>
       ) : null}
-
-      {showsMoney ? <NonGuaranteeNote /> : null}
-      {footer}
-      {actions ? <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-border pt-3">{actions}</div> : null}
     </article>
   );
 }

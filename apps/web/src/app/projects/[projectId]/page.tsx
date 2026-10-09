@@ -52,6 +52,7 @@ import {
   PROJECT_STATUS_GLYPH,
   type ProjectStatus,
 } from '@/lib/projects-demo';
+import { FactLine } from '@/components/common/FactLine';
 
 const STATUS_COLOR: Record<ProjectStatus, string> = {
   idea: 'bg-status-accent-bg text-status-accent border-status-accent-border',
@@ -289,11 +290,7 @@ export default function ProjectDetailPage() {
                         ));
                       })()}
                     </div>
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="rounded-full">{tag}</Badge>
-                      ))}
-                    </div>
+                    <FactLine className="mt-4" items={project.tags} />
                   </CardContent>
                 </Card>
 

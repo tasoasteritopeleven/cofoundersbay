@@ -53,6 +53,7 @@ export function ProjectNeedCard({ projectId, owned }: { projectId: string; owned
         <NeedCard
           card={card}
           compact
+          showOwner={!card.isMine}
           actions={
             <Button size="sm" asChild>
               <Link href={`/commitments/${encodeURIComponent(card.id)}`}>

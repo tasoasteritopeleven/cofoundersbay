@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { FactLine } from '@/components/common/FactLine';
 
 interface Recommendation {
   id: string;
@@ -278,24 +279,12 @@ export function SmartRecommendations() {
 
               {/* Metadata */}
               {rec.metadata && (
-                <div className="flex flex-wrap gap-2">
-                  {Object.entries(rec.metadata).map(([key, value]) => (
-                    <Badge key={key} variant="secondary" className="text-xs">
-                      {key}: {value}
-                    </Badge>
-                  ))}
-                </div>
+                <FactLine items={Object.entries(rec.metadata).map(([key, value]) => `${key}: ${value}`)} />
               )}
 
               {/* Tags */}
               {rec.tags && rec.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {rec.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+                <FactLine items={rec.tags} />
               )}
 
               {/* Match Reasons */}
