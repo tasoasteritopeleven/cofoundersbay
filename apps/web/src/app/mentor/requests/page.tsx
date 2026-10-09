@@ -67,7 +67,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
       request.status === 'pending' && 'border-status-warning-border'
     )}>
       <CardContent>
-        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+        <div className="flex gap-4">
           <Link href={`/profiles/${request.requesterId}`} aria-label={`${displayName}`}>
             <Avatar className="h-10 w-10">
               <AvatarImage src={request.requester?.avatarUrl || undefined} />
@@ -91,7 +91,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
               </Badge>
             </div>
 
-            <div className="card-axis">
+            <div className="mt-1 space-y-2">
             {request.requester?.headline && (
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
                 {request.requester.headline}

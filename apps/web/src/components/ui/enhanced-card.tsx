@@ -192,7 +192,7 @@ export const ProfileCard = React.forwardRef<
       className={className}
       {...props}
     >
-      <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
+      <div className="flex items-start gap-4">
         <div className="relative">
           <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold">
             {initialsOf(profile.name).toUpperCase()}
@@ -213,8 +213,8 @@ export const ProfileCard = React.forwardRef<
               </Badge>
             )}
           </div>
-          <p className="text-sm text-muted-foreground mb-1">{profile.role}</p>
-          <div className="card-axis">
+          <p className="text-sm text-muted-foreground mb-1"><StatusText value={profile.role} /></p>
+          <div className="space-y-1">
           {profile.headline && (
             <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-2">
               {profile.headline}
@@ -338,7 +338,7 @@ export const ActivityCard = React.forwardRef<
       className={className}
       {...props}
     >
-      <div className="flex items-start gap-3" style={user ? { ['--card-rail' as string]: '2.75rem' } : undefined}>
+      <div className="flex items-start gap-3">
         {user && (
           <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-semibold flex-shrink-0">
             {initialsOf(user.name).toUpperCase()}
@@ -347,7 +347,7 @@ export const ActivityCard = React.forwardRef<
         
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-sm mb-1">{title}</h4>
-          <div className={user ? 'card-axis' : undefined}>
+          <div className="space-y-1">
           <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2 mb-2">
             {description}
           </p>
@@ -365,3 +365,4 @@ ActivityCard.displayName = 'ActivityCard';
 
 import { MessageCircle } from 'lucide-react';
 import { FactLine } from '@/components/common/FactLine';
+import { StatusText } from '@/components/common/StatusText';

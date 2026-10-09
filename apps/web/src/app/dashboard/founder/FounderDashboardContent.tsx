@@ -293,16 +293,16 @@ function MatchPreviewCard({ match }: { match: SearchHit }) {
   const score = match.matchScore ?? 0;
   const scoreColor = score >= 85 ? STATUS.success.icon : score >= 70 ? 'text-primary-accessible' : STATUS.warning.icon;
   return (
-    <Link href={`/matches/${match.userId}`} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-colors hover:border-border hover:bg-muted/30" style={{ ['--card-rail' as string]: '3.25rem' }}>
+    <Link href={`/matches/${match.userId}`} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-colors hover:border-border hover:bg-muted/30">
       <Avatar className="h-10 w-10 shrink-0">
         <AvatarImage src={match.avatarUrl ?? undefined} />
         <AvatarFallback className="bg-muted text-sm font-medium text-muted-foreground">
           {match.displayName?.[0]?.toUpperCase() ?? '?'}
         </AvatarFallback>
       </Avatar>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 space-y-1">
         <p className="truncate text-sm font-medium">{match.displayName}</p>
-        <p className="card-axis truncate text-xs text-muted-foreground max-sm:line-clamp-2 max-sm:whitespace-normal">
+        <p className="truncate text-xs text-muted-foreground max-sm:line-clamp-2 max-sm:whitespace-normal">
           {match.headline && PREVIEW_HEADLINE_EL[match.headline]
             ? <BilingualText en={match.headline} el={PREVIEW_HEADLINE_EL[match.headline]} compact />
             : match.headline}

@@ -178,7 +178,7 @@ function ShortlistCard({
       'group rounded-xl border bg-card p-4 transition-all hover:shadow-sm',
       isSelected ? 'border-primary ring-1 ring-primary/30' : 'border-border hover:border-border',
     )}>
-      <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
+      <div className="flex items-start gap-3">
         {/* Checkbox (compare mode) */}
         {compareMode && (
           <button
@@ -262,10 +262,10 @@ function ShortlistCard({
             </div>
           </div>
 
-          <div className="card-axis">
-          {profile?.headline && <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{profile.headline}</p>}
+          <div className="mt-1 space-y-1">
+          {profile?.headline && <p className="text-xs text-muted-foreground line-clamp-1">{profile.headline}</p>}
           {(profile?.role || profile?.location) && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {profile?.role && (
                 <div className="flex items-center gap-1 text-2xs text-muted-foreground">
                   <Briefcase className="icon-sm" />

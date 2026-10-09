@@ -21,6 +21,7 @@ import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
 import { FactLine } from '@/components/common/FactLine';
+import { StatusText } from '@/components/common/StatusText';
 
 export type EventData = {
   id: string;
@@ -237,16 +238,16 @@ export function EventCard({
           </div>
           
           {/* Host */}
-          <div className="mt-4 flex items-center gap-3" style={{ ['--card-rail' as string]: '2.75rem' }}>
+          <div className="mt-4 flex items-center gap-3">
             <Avatar className="h-8 w-8">
               <AvatarImage src={event.hostAvatar || undefined} />
               <AvatarFallback className="bg-primary/20 text-primary-accessible text-xs">
                 {initialsOf(event.hostName)}
               </AvatarFallback>
             </Avatar>
-            <div>
+            <div className="min-w-0 space-y-1">
               <p className="text-sm font-medium text-foreground">{event.hostName}</p>
-              <p className="card-axis text-xs text-muted-foreground">{event.hostRole}</p>
+              <p className="text-xs text-muted-foreground"><StatusText value={event.hostRole} /></p>
             </div>
           </div>
           

@@ -165,7 +165,7 @@ export function BookingCalendar({
         {/* Mentor info */}
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
+            <div className="flex items-start gap-4">
               <Avatar className="h-12 w-12">
                 <AvatarImage src={mentor.avatarUrl || undefined} />
                 <AvatarFallback className="bg-primary/20 text-primary-accessible text-sm">
@@ -177,9 +177,9 @@ export function BookingCalendar({
                   <h2 className="text-xl font-semibold text-foreground">{mentor.displayName}</h2>
                   <RoleBadge role="mentor" size="sm" />
                 </div>
-                <div className="card-axis">
+                <div className="mt-1 space-y-2">
                 {mentor.headline && (
-                  <p className="text-sm text-muted-foreground mt-1">{mentor.headline}</p>
+                  <p className="text-sm text-muted-foreground">{mentor.headline}</p>
                 )}
                 <FactLine className="mt-3" items={mentor.expertise.slice(0, 4)} />
                 {mentor.hourlyRate && (

@@ -293,7 +293,7 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
     />
     <Card className="group hover:border-primary/30 transition-colors">
       <CardContent>
-        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+        <div className="flex items-start gap-4">
           <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
             <Avatar className="h-10 w-10 shrink-0 ring-2 ring-border group-hover:ring-primary/20 transition-all">
               <AvatarImage src={avatarUrl ?? undefined} />
@@ -327,9 +327,9 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
               </div>
             </div>
 
-            <div className="card-axis">
+            <div className="space-y-1">
             {headline && (
-              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{headline}</p>
+              <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{headline}</p>
             )}
             {location && (
               <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">

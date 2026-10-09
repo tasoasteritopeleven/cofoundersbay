@@ -3334,7 +3334,9 @@ textarea[class~="border-input"]:focus,
    14.098 × 0.98. The same steps apply on every page. Search bars, Ask AI
    and other text fields are 12.410, one step under the field subtitle
    (12.663) and under the field title (14.170). Card copy and stat figures
-   are not fields and stay on their own steps.
+   are not fields and stay on their own steps. A title with no size utility
+   that inherited the body step (15.520), the same size as Discover People,
+   sits on the text-base step (14.243).
 
    The dashboard is the phone standard for the same role on every page.
    text-xl through text-7xl, including pages and dialogs outside
@@ -3603,15 +3605,43 @@ textarea[class~="border-input"]:focus,
     font-size: 12.410px !important;
   }
 
-  /* A paragraph a card cuts with an ellipsis wraps on a phone instead:
-     "Pre-seed Bootcamp · Spring 2027 · 1d" lost its age and a byline its
-     place (132 cut texts across 836 cards, 2026-10-09). Names and labels
-     inside a flex row (spans) keep their single line; from 640px the cut
-     returns where the row is wide enough to need it. */
-  #main-content [data-card] p.truncate {
+  /* A paragraph or a card title a card cuts with an ellipsis wraps on a
+     phone instead: "Pre-seed Bootcamp · Spring 2027 · 1d" lost its age and
+     a saved search was left as "Commerci…". Names and labels inside a flex
+     row (spans) keep their single line; from 640px the cut returns where
+     the row is wide enough to need it. */
+  #main-content [data-card] p.truncate,
+  #main-content [data-card] h3.truncate {
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
+  }
+
+  /* Titles that inherit the body step (15.520) are the same size as
+     "Discover People". On a phone they sit on the text-base step (14.243)
+     so they stay under that body size and above a text-sm subtitle.
+     A sized utility a stat a lead or a person name does not match.
+     :where keeps this under the need-card title rule. */
+  #main-content p.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
+  #main-content h3.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
+  #main-content p.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.person-name):not(.page-title)),
+  #main-content h3.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.person-name):not(.page-title)) {
+    font-size: 14.243px;
+    line-height: 1.45;
+  }
+
+  /* Wrapped lines inside a card and a snug or tight line outside one use
+     the endorsement subtitle and the connection headline (1.45). A score
+     that asks for leading-none stays tight. */
+  #main-content p.leading-snug,
+  #main-content h3.leading-snug,
+  #main-content li.leading-snug,
+  #main-content p.leading-tight,
+  #main-content h3.leading-tight,
+  #main-content [data-card] p:not(.page-stat):not(.leading-none),
+  #main-content [data-card] h3:not(.page-stat):not(.leading-none),
+  #main-content [data-card] li:not(.page-stat):not(.leading-none) {
+    line-height: 1.45;
   }
 
   /* Long tokens and pictures stay inside the viewport. A wide table scrolls
@@ -3660,10 +3690,12 @@ textarea[class~="border-input"]:focus,
     line-height: 1.45;
   }
 
-  /* Central copy shares the left edge of the identity row. The row sets
-     --card-rail to the mark plus the gap. On a phone the copy shifts back
-     by that rail and starts under the circular mark. The title and the
-     subtitle stay beside the mark. From 640px this rule does not apply. */
+  /* Body copy that starts below the mark shares the mark's left edge.
+     The row sets --card-rail to the mark plus the gap. On a phone that
+     copy shifts back by the rail. A line that still shares the mark's
+     height stays in the column beside it the way an endorsement subtitle
+     and a connection name do so it cannot cover the circle or leave the
+     card. From 640px this rule does not apply. */
   #main-content [data-card] .card-axis,
   #main-content .card-axis {
     margin-left: calc(-1 * var(--card-rail, 0px));

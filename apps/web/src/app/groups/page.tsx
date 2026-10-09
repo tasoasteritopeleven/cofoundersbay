@@ -126,7 +126,7 @@ function GroupCard({
       )}
       <CardContent className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1 min-w-0" style={{ ['--card-rail' as string]: '3.5rem' }}>
+          <div className="flex items-start gap-3 flex-1 min-w-0">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
               {group.avatarUrl ? (
                 <img src={group.avatarUrl} alt={group.name} className="h-11 w-11 rounded-lg object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={44} height={44} />
@@ -134,11 +134,11 @@ function GroupCard({
                 <Users className="icon-md" />
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 mb-0.5">
+            <div className="flex-1 min-w-0 space-y-1">
+              <div className="flex items-center gap-1.5">
                 <h3 className="font-display text-sm font-semibold text-foreground truncate">{group.name}</h3>
               </div>
-              <div className="card-axis flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 {group.category && (
                   <Badge variant="secondary" className="text-xs">{group.category}</Badge>
                 )}

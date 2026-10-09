@@ -189,7 +189,7 @@ function ResultCard({ result }: { result: SearchResult }) {
     >
       <Card className="group hover:border-primary/50 transition-all duration-150">
         <CardContent>
-          <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+          <div className="flex items-start gap-4">
             {result.imageUrl ? (
               <Avatar className="h-10 w-10 shrink-0">
                 <AvatarImage src={result.imageUrl} />
@@ -221,7 +221,7 @@ function ResultCard({ result }: { result: SearchResult }) {
                 </Badge>
               </div>
 
-              <div className="card-axis">
+              <div className="space-y-1">
               {result.subtitle && (
                 <p className="text-sm text-muted-foreground truncate">{result.subtitle}</p>
               )}

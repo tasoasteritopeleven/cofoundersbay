@@ -142,7 +142,7 @@ function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) 
     <Card className="card-interactive hover-lift group transition-all duration-300">
       <CardContent className="space-y-3">
         {/* Header row */}
-        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.5rem' }}>
+        <div className="flex items-start gap-3">
           <div className="relative shrink-0">
             <Avatar className="h-11 w-11 ring-2 ring-primary/20">
               <AvatarImage src={mentor.avatarUrl ?? undefined} />
@@ -167,7 +167,7 @@ function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) 
               )}
             </div>
 
-            <div className="card-axis mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {/* Search results carry no rating, so a star with "New" beside
                   every mentor claimed each one was unreviewed. The slot shows
                   a rating only when one is known. */}

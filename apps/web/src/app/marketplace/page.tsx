@@ -173,14 +173,14 @@ function ProviderCard({ provider, featured }: { provider: ServiceProvider; featu
       <CardContent className="flex flex-1 flex-col gap-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1 min-w-0" style={{ ['--card-rail' as string]: '3.5rem' }}>
+          <div className="flex items-start gap-3 flex-1 min-w-0">
             <Avatar className="h-11 w-11 shrink-0 rounded-lg">
               <AvatarImage src={provider.providerAvatar} />
               <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-semibold">
                 {provider.providerName[0]}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 space-y-1">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <p className="text-sm font-semibold leading-snug">{provider.providerName}</p>
                 {provider.isVerified && <BadgeCheck className="icon-sm text-status-info shrink-0" />}
@@ -189,9 +189,9 @@ function ProviderCard({ provider, featured }: { provider: ServiceProvider; featu
               {/* "Growth Marketing Strategist" is 170px against the 102px
                   this column gives it at 1024px — the trade an ellipsis makes
                   here is the whole specialism for one line. */}
-              <div className="card-axis">
+              <div className="space-y-1">
               <p className="text-xs leading-snug text-muted-foreground">{provider.providerTitle}</p>
-              <div className="flex items-center gap-1 mt-1">
+              <div className="flex items-center gap-1">
                 <Star className="icon-sm fill-status-warning text-status-warning" />
                 <span className="text-xs font-medium">{provider.avgRating.toFixed(1)}</span>
                 <span className="text-xs text-muted-foreground">({provider.reviewCount})</span>

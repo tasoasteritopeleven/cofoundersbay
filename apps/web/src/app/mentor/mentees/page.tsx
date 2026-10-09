@@ -62,7 +62,7 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
   return (
     <Card className="transition-all hover:border-primary/30">
       <CardContent>
-        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+        <div className="flex gap-4">
           <Link href={`/p/${relationship.menteeId}`}>
             <Avatar className="h-10 w-10">
               <AvatarImage src={mentee?.avatarUrl || undefined} />
@@ -83,7 +83,7 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
               </Badge>
             </div>
 
-            <div className="card-axis">
+            <div className="mt-1 space-y-2">
             {mentee?.headline && (
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
                 {mentee.headline}

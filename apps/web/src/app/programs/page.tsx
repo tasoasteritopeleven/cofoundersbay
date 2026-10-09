@@ -260,7 +260,7 @@ function ProgramCard({
                     </Badge>
                   )}
                 </div>
-                <p className="card-axis mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
+                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                   <Building2 className="icon-sm flex-shrink-0" />
                   <span className="truncate">{program.organization?.name}</span>
                 </p>

@@ -186,17 +186,17 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
     <Card className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30 flex flex-col">
       <CardContent className="flex flex-col flex-1 gap-3">
         {/* Type icon + title */}
-        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
+        <div className="flex items-start gap-3">
           <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', typeConfig.bg, typeConfig.color)}>
             <typeConfig.icon className="icon-md" />
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm text-foreground line-clamp-2 mb-1.5 leading-snug">
+          <div className="flex-1 min-w-0 space-y-1">
+            <h3 className="font-semibold text-sm text-foreground line-clamp-2 leading-snug">
               {resource.title}
             </h3>
             {/* Type and level are facts (one muted line); "Featured" is the
                 card's one pill. All three were tinted badges. */}
-            <div className="card-axis flex items-center gap-x-2 gap-y-1 flex-wrap">
+            <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
               <FactLine
                 items={[
                   <BilingualText key="type" en={learningEn(typeConfig.labelKey)} el={learningEl(typeConfig.labelKey)} compact />,
@@ -269,14 +269,14 @@ function LearningPathCard({ path, onSelect }: { path: LearningPath; onSelect: (c
     <button
       type="button"
       onClick={() => onSelect(path.category)}
-      className={cn('relative rounded-xl border p-4 text-left transition-all hover:border-primary/30', path.color)}
+      className={cn('relative w-full min-w-0 rounded-xl border p-4 text-left transition-all hover:border-primary/30', path.color)}
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg bg-background/60')}>
+      <div className="mb-3 flex min-w-0 items-start justify-between gap-3">
+        <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-background/60')}>
           <CfbGlyph name={path.glyph} className="icon-md text-foreground" />
         </div>
         {path.progress > 0 && (
-          <Badge variant="secondary" className="text-2xs bg-background/60">
+          <Badge variant="secondary" className="shrink-0 whitespace-nowrap text-2xs bg-background/60">
             {learningEn('percent_done').replace('{n}', String(path.progress))}
           </Badge>
         )}

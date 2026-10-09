@@ -206,7 +206,7 @@ function MatchCardInner({
 
       <CardContent className="pl-5 pr-4 py-5">
         {/* Profile header */}
-        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.5rem' }}>
+        <div className="flex items-start gap-3">
           <Link href={`/profiles/${userId}`}>
             <Avatar className="h-11 w-11 border border-border transition-transform group-hover:scale-105 shrink-0">
               <AvatarImage src={avatarUrl || undefined} alt={displayName} />
@@ -222,11 +222,11 @@ function MatchCardInner({
             >
               {displayName}
             </Link>
-            <div className="mt-0.5 flex items-center gap-2">
+            <div className="mt-1 flex items-center gap-2">
               <RoleBadge role={role} size="sm" showIcon />
             </div>
             {headline && (
-              <p className="card-axis mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">{headline}</p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">{headline}</p>
             )}
           </div>
         </div>

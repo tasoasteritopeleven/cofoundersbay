@@ -151,7 +151,7 @@ function ProfileCardInner({
     return (
       <Card className={cn('group hover:border-primary/30 transition-colors', className)}>
         <CardContent>
-          <div className="flex items-center gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
+          <div className="flex items-center gap-3">
             <Link href={`/profiles/${profile.userId}`}>
               <Avatar className="h-10 w-10">
                 <AvatarImage src={profile.avatarUrl || undefined} />
@@ -160,7 +160,7 @@ function ProfileCardInner({
                 </AvatarFallback>
               </Avatar>
             </Link>
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1 space-y-1">
               <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                 <Link
                   href={`/profiles/${profile.userId}`}
@@ -172,7 +172,7 @@ function ProfileCardInner({
                 <RoleBadge role={profile.role} size="sm" />
               </div>
               {profile.headline && (
-                <p className="card-axis text-xs text-muted-foreground truncate">{profile.headline}</p>
+                <p className="text-xs text-muted-foreground truncate">{profile.headline}</p>
               )}
             </div>
             <Button aria-label="Connect · Σύνδεση" size="sm" variant="ghost" onClick={onConnect}>
@@ -200,7 +200,7 @@ function ProfileCardInner({
 
         <CardContent className="relative pt-6 pb-4">
           {/* Header */}
-          <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
+          <div className="flex items-start gap-4">
             <Link href={`/profiles/${profile.userId}`}>
               <Avatar className="h-12 w-12 ring-2 ring-border/40 group-hover:ring-primary/40 transition-all">
                 <AvatarImage src={profile.avatarUrl || undefined} />
@@ -209,28 +209,24 @@ function ProfileCardInner({
                 </AvatarFallback>
               </Avatar>
             </Link>
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1 space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <Link
                   href={`/profiles/${profile.userId}`}
-                  className="text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
+                  className="person-name text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
                 >
                   {profile.displayName}
                 </Link>
+                <RoleBadge role={profile.role} showIcon />
                 {profile.isVerified && (
                   <Badge variant="secondary" size="sm" className="bg-status-success-bg text-status-success border-status-success-border">
                     Verified
                   </Badge>
                 )}
               </div>
-              <div className="card-axis">
-              <div className="mt-1 flex items-center gap-2">
-                <RoleBadge role={profile.role} showIcon />
-              </div>
               {profile.headline && (
-                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{profile.headline}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2">{profile.headline}</p>
               )}
-              </div>
             </div>
           </div>
 
@@ -374,7 +370,7 @@ function ProfileCardInner({
     <Card className={cn('group hover:border-primary/30 transition-all hover:-translate-y-0.5', className)}>
       <CardContent className="pt-5">
         {/* Header */}
-        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
+        <div className="flex items-start gap-3">
           <Link href={`/profiles/${profile.userId}`}>
             <div className="relative">
               <Avatar className={cn('h-10 w-10 ring-2', ROLE_RING_COLORS[profile.role] || 'ring-border/40')}>
@@ -427,12 +423,12 @@ function ProfileCardInner({
                 </Button>
               </div>
             </div>
-            <div className="card-axis">
+            <div className="space-y-1">
             {profile.headline && (
               <p className="person-subtitle mt-1 text-sm text-muted-foreground dark:text-muted-foreground line-clamp-2">{profile.headline}</p>
             )}
             {profile.location && (
-              <div className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground dark:text-muted-foreground">
+              <div className="flex items-center gap-1 text-xs text-muted-foreground dark:text-muted-foreground">
                 <MapPin className="icon-sm" />
                 {profile.location}
               </div>

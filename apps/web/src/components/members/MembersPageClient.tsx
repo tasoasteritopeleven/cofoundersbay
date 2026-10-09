@@ -43,6 +43,7 @@ import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { FactLine } from '@/components/common/FactLine';
+import { StatusText } from '@/components/common/StatusText';
 
 type ViewMode = 'grid' | 'list';
 type SortBy = 'relevance' | 'recent' | 'active';
@@ -162,7 +163,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
 
             {member.role && (
               <Badge variant="secondary" className="mb-2">
-                {member.role}
+                <StatusText value={member.role} />
               </Badge>
             )}
 
@@ -225,7 +226,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
   return (
     <Card className="card-interactive hover-lift group transition-all duration-300">
       <CardContent>
-        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
+        <div className="flex items-start gap-4">
           <Link href={`/profiles/${member.userId}`} className="relative shrink-0">
             <Avatar className="h-12 w-12 ring-2 ring-primary/20">
               <AvatarImage src={member.avatarUrl ?? undefined} />
@@ -251,7 +252,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
                 </Link>
                 {member.role && (
                   <Badge variant="secondary" className="ml-2">
-                    {member.role}
+                    <StatusText value={member.role} />
                   </Badge>
                 )}
               </div>
@@ -267,7 +268,7 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
               </div>
             </div>
 
-            <div className="card-axis">
+            <div className="mt-1 space-y-2">
             {member.bio && (
               <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-3">
                 {member.bio}

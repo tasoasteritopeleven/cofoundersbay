@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { FactLine } from '@/components/common/FactLine';
+import { StatusText } from '@/components/common/StatusText';
 
 interface Member {
   id: string;
@@ -332,7 +333,7 @@ export function EnhancedMemberDirectory() {
               <div className={cn(
                 "flex gap-4",
                 viewMode === 'list' ? "items-center" : "flex-col items-center text-center"
-              )} style={viewMode === 'list' ? { ['--card-rail' as string]: '4rem' } : undefined}>
+              )}>
                 <div className="relative">
                   <Avatar className={cn(viewMode === 'list' ? "h-12 w-12" : "h-16 w-16")}>
                     <AvatarImage src={member.avatar} />
@@ -360,11 +361,11 @@ export function EnhancedMemberDirectory() {
                       )}
                     </div>
                     <Badge variant="outline" className="mt-1">
-                      {member.role}
+                      <StatusText value={member.role} />
                     </Badge>
                   </div>
 
-                  <div className={viewMode === 'list' ? 'card-axis space-y-2' : 'space-y-2'}>
+                  <div className="space-y-2">
                   <p className="card-copy text-sm text-muted-foreground line-clamp-2">
                     {member.headline}
                   </p>

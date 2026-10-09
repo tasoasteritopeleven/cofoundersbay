@@ -290,7 +290,7 @@ function MatchListRow({
   return (
     <Card className="shadow-sm border-border hover:border-primary/30 transition-all group">
       <CardContent>
-        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: 'calc(52px + 1rem)' }}>
+        <div className="flex items-start gap-4">
           {/* Score ring + avatar */}
           <div className="relative shrink-0">
             <svg width={52} height={52} viewBox="0 0 52 52" className="absolute inset-0">
@@ -315,7 +315,7 @@ function MatchListRow({
                 <Link href={`/profiles/${hit.userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
                   {hit.displayName}
                 </Link>
-                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                <div className="mt-1 flex items-center gap-2 flex-wrap">
                   <Badge variant="outline" className={cn('text-2xs h-5 border', colors.chip)}>
                     {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
                   </Badge>
@@ -331,7 +331,7 @@ function MatchListRow({
               </div>
             </div>
 
-            <div className="card-axis">
+            <div className="mt-1 space-y-2">
             {hit.location && (
               <p className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="icon-sm" />{hit.location}
