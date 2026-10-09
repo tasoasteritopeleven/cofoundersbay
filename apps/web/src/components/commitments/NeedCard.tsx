@@ -38,7 +38,7 @@ function Sentence({ label, text }: { label: { en: string; el: string }; text: st
       <dt className="text-xs font-medium text-muted-foreground">
         <BilingualText en={label.en} el={label.el} compact wrap />
       </dt>
-      <dd className="text-sm leading-relaxed text-foreground">{text}</dd>
+      <dd className="text-pretty text-sm leading-relaxed text-foreground">{text}</dd>
     </div>
   );
 }
@@ -76,8 +76,8 @@ export function NeedCard({
   ].filter(Boolean);
 
   return (
-    <article data-need-card="" className={cn('space-y-4', className)}>
-      <header className="space-y-2">
+    <article data-need-card="" className={cn('flex flex-col gap-3', className)}>
+      <header className="space-y-1.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="chip rounded-full bg-muted px-2 py-0.5 text-2xs font-medium text-muted-foreground">
             <BilingualText en={kind.en} el={kind.el} compact />
@@ -89,22 +89,22 @@ export function NeedCard({
             </span>
           ) : null}
         </div>
-        <Heading className={cn('font-semibold leading-snug text-foreground', compact ? 'text-base' : 'text-lg')}>{card.title || '—'}</Heading>
+        <Heading className={cn('text-balance font-semibold leading-snug text-foreground', compact ? 'text-base' : 'text-lg')}>{card.title || '—'}</Heading>
         {card.owner ? (
-          <div className="flex min-w-0 items-center gap-2">
-            <Avatar className="h-6 w-6" data-keep-icon="">
+          <div className="flex min-w-0 items-start gap-2">
+            <Avatar className="mt-0.5 h-6 w-6 shrink-0" data-keep-icon="">
               <AvatarFallback className="bg-primary/15 text-2xs text-foreground">{initialsOf(card.owner.displayName)}</AvatarFallback>
             </Avatar>
-            <p className="min-w-0 truncate text-xs text-muted-foreground">
+            <p className="min-w-0 flex-1 text-xs leading-snug text-muted-foreground">
               <span className="font-medium text-foreground">{card.owner.displayName}</span>
-              {card.owner.headline ? ` · ${card.owner.headline}` : ''}
+              {card.owner.headline ? <span>{` · ${card.owner.headline}`}</span> : null}
             </p>
-            <VerifiedBadge methods={card.owner?.verifiedMethods ?? []} />
+            <VerifiedBadge methods={card.owner?.verifiedMethods ?? []} className="mt-0.5" />
           </div>
         ) : null}
       </header>
 
-      <dl className="space-y-2.5">
+      <dl className="space-y-3">
         {compact ? (
           <Sentence label={CMT.missing} text={card.missing} />
         ) : (
@@ -118,7 +118,7 @@ export function NeedCard({
 
       {/* The offer reads by its label, on the card's axis: a box around it
           inset the text 13px off the title and added a second frame. */}
-      <section aria-label={`${CMT.offer.en} · ${CMT.offer.el}`} className="space-y-1">
+      <section data-need-offer="" aria-label={`${CMT.offer.en} · ${CMT.offer.el}`} className="space-y-0.5">
         <p className="text-xs font-medium text-muted-foreground">
           <BilingualText en={CMT.offer.en} el={CMT.offer.el} compact />
         </p>
@@ -127,14 +127,14 @@ export function NeedCard({
         {!compact && card.offer.scope ? <p className="text-sm leading-relaxed text-muted-foreground">{card.offer.scope}</p> : null}
       </section>
 
-      <ul aria-label={`${CMT.filters.en} · ${CMT.filters.el}`} className="flex flex-wrap gap-1.5">
-        {card.category ? <li className="chip rounded-full border border-border px-2 py-0.5 text-2xs text-foreground">{card.category}</li> : null}
+      <ul aria-label={`${CMT.filters.en} · ${CMT.filters.el}`} className="facts-dotted flex flex-wrap items-baseline text-xs leading-snug text-muted-foreground">
+        {card.category ? <li>{card.category}</li> : null}
         {card.isRemote ? (
-          <li className="chip rounded-full border border-border px-2 py-0.5 text-2xs text-foreground"><BilingualText en={CMT.remote.en} el={CMT.remote.el} compact /></li>
+          <li><BilingualText en={CMT.remote.en} el={CMT.remote.el} compact /></li>
         ) : null}
-        {card.place ? <li className="chip rounded-full border border-border px-2 py-0.5 text-2xs text-foreground">{card.place}</li> : null}
-        {card.stage ? <li className="chip rounded-full border border-border px-2 py-0.5 text-2xs text-foreground"><StatusText value={card.stage} /></li> : null}
-        {card.commitment ? <li className="chip rounded-full border border-border px-2 py-0.5 text-2xs text-foreground"><StatusText value={card.commitment} /></li> : null}
+        {card.place ? <li>{card.place}</li> : null}
+        {card.stage ? <li><StatusText value={card.stage} /></li> : null}
+        {card.commitment ? <li><StatusText value={card.commitment} /></li> : null}
       </ul>
 
       {!compact && evidence.length ? (
@@ -152,7 +152,7 @@ export function NeedCard({
 
       {showsMoney ? <NonGuaranteeNote /> : null}
       {footer}
-      {actions ? <div className="flex flex-wrap items-center gap-2 pt-1">{actions}</div> : null}
+      {actions ? <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-border pt-3">{actions}</div> : null}
     </article>
   );
 }

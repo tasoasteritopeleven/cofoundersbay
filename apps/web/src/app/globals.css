@@ -35,15 +35,16 @@ html {
 }
 
 @layer base {
-  /* iOS Safari zooms the whole page whenever a focused form control renders
-     below 16px. Primitives already use `text-base sm:text-sm`; this catches
-     raw <input>/<select>/<textarea> that bypass them. `!important` because a
-     Tailwind text utility on the element would otherwise win. */
+  /* A focused field below 16px can make iOS Safari zoom the page. On this
+     phone the reading text sits at 12.6–14.1px, and a 16px field read as a
+     shout next to it. Fields use the title step so a search bar and a form
+     match the heading beside them. `!important` because a Tailwind text
+     utility on the element would otherwise win. */
   @media (max-width: 639.98px) {
     input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
     select,
     textarea {
-      font-size: 16.16px !important;
+      font-size: 14.148px !important;
     }
   }
 
@@ -3312,9 +3313,10 @@ textarea[class~="border-input"]:focus,
    phone step is another 2% under the previous phone size: body 14.459 ×
    0.98, the root and figures 15.837 × 0.98, stat numbers 14.883 × 0.98,
    the page title 14.437 × 0.98, section headings 14.098 × 0.98. The same
-   steps apply on every page. Fields such as Ask AI stay at 16.16px,
-   above the iOS zoom floor. The discover query stays on the title step,
-   so it does not sit above the page title.
+   steps apply on every page. Search bars, Ask AI and other text fields
+   use the title step (14.148), the same size as the page title, so a
+   field does not sit above the text around it. The discover query stays
+   on that step too.
 
    The dashboard is the phone standard for the same role on every page.
    text-xl through text-7xl, including pages and dialogs outside
@@ -3558,9 +3560,7 @@ textarea[class~="border-input"]:focus,
 
   input[data-filter-field]:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
   select[data-filter-field] {
-    /* The discover query and its sort control used the 16.16px field floor
-       and sat above the title. Login fields stay on that floor. The query
-       follows the title step. */
+    /* Discover's query shares the title step with every other text field. */
     font-size: 14.148px !important;
   }
 
@@ -3584,6 +3584,20 @@ textarea[class~="border-input"]:focus,
   [role='alertdialog'] {
     font-size: 15.520px;
     line-height: 1.5;
+  }
+
+  /* A need card's title and its sentences were a tenth of a pixel apart,
+     so the title, the ask, the offer and the facts all shouted at once.
+     The title takes the page-title step. The sentences sit on the subtitle
+     step, under it. Labels stay on the support step. */
+  #main-content [data-need-card] :is(h1, h2, h3) {
+    font-size: 14.148px;
+    line-height: 1.3;
+  }
+  #main-content [data-need-card] dd,
+  #main-content [data-need-card] [data-need-offer] p.text-sm {
+    font-size: 12.921px;
+    line-height: 1.45;
   }
 }
 
@@ -3691,5 +3705,6 @@ textarea[class~="border-input"]:focus,
 .facts-dotted > li + li::before {
   content: "·";
   margin-right: 0.5rem;
+  margin-left: 0.35rem;
   color: hsl(var(--muted-foreground));
 }
