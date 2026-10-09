@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { rowTitleClass } from '@/components/common/ListRowCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BilingualText } from '@/components/common/BilingualText';
@@ -188,44 +189,41 @@ function ResultCard({ result }: { result: SearchResult }) {
       className="block rounded-xl focus-visible:outline-none"
     >
       <Card className="group hover:border-primary/50 transition-all duration-150">
-        <CardContent>
-          <div className="flex items-center gap-4">
+        <CardContent className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
+          <div className="shrink-0">
             {result.imageUrl ? (
-              <Avatar className="h-10 w-10 shrink-0">
+              <Avatar data-keep-icon="" className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
                 <AvatarImage src={result.imageUrl} />
                 <AvatarFallback className="bg-primary/10 text-primary-accessible">
                   {result.title[0]?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             ) : (
-              <div className={cn(
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-full',
-                'bg-muted'
-              )}>
+              <div data-keep-icon="" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
                 <Icon className={cn('icon-md', config.color)} />
               </div>
             )}
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="person-name font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                  {result.title}
-                </h3>
-                <Badge variant="secondary" className="text-2xs shrink-0">
-                  <BilingualText
-                    en={resultTypeEn(result.type as SearchResultTypeKey)}
-                    el={resultTypeEl(result.type as SearchResultTypeKey)}
-                    compact
-                    secondaryFrom="lg"
-                  />
-                </Badge>
-              </div>
-
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className={rowTitleClass}>
+                {result.title}
+              </h3>
+              <Badge variant="secondary" className="text-2xs shrink-0">
+                <BilingualText
+                  en={resultTypeEn(result.type as SearchResultTypeKey)}
+                  el={resultTypeEl(result.type as SearchResultTypeKey)}
+                  compact
+                  secondaryFrom="lg"
+                />
+              </Badge>
+            </div>
+            <div className="card-axis">
               {result.subtitle ? (
-                <p className="row-ellipsis text-sm text-muted-foreground">{result.subtitle}</p>
+                <p className="truncate text-sm text-muted-foreground">{result.subtitle}</p>
               ) : null}
               {(result.description || result.highlight || result.meta?.location || result.meta?.date || (result.tags && result.tags.length > 0)) ? (
-                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+                <p className="card-copy mt-1 line-clamp-2 text-xs text-muted-foreground">
                   {result.highlight ? (
                     <SanitizedHtml as="span" profile="highlight" html={result.highlight} />
                   ) : result.description}
@@ -248,8 +246,6 @@ function ResultCard({ result }: { result: SearchResult }) {
                 </p>
               ) : null}
             </div>
-
-            <ArrowRight className="icon-sm text-muted-foreground opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0" />
           </div>
         </CardContent>
       </Card>
@@ -648,7 +644,7 @@ export default function SearchPage() {
                       <Users className="icon-md text-status-info" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground group-hover:text-primary-accessible transition-colors">
+                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
                         <BilingualText
                           en={searchEn('discover_people_title')}
                           el={searchEl('discover_people_title')}
@@ -671,7 +667,7 @@ export default function SearchPage() {
                       <GraduationCap className="icon-md text-status-accent" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground group-hover:text-primary-accessible transition-colors">
+                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
                         <BilingualText
                           en={searchEn('find_mentors_title')}
                           el={searchEl('find_mentors_title')}
@@ -694,7 +690,7 @@ export default function SearchPage() {
                       <Briefcase className="icon-md text-status-success" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground group-hover:text-primary-accessible transition-colors">
+                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
                         <BilingualText
                           en={searchEn('browse_jobs_title')}
                           el={searchEl('browse_jobs_title')}
@@ -717,7 +713,7 @@ export default function SearchPage() {
                       <Calendar className="icon-md text-status-warning" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground group-hover:text-primary-accessible transition-colors">
+                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
                         <BilingualText
                           en={searchEn('upcoming_events_title')}
                           el={searchEl('upcoming_events_title')}

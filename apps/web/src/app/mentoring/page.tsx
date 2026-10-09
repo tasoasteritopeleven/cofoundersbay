@@ -341,8 +341,8 @@ function MentorshipSessionRow({ rel, session, userId }: { rel: MentorshipRelatio
   const other = u.counterpart;
   const home = rel.mentorId === userId ? '/mentor/sessions' : '/coaching';
   return (
-    <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4">
+    <ListRowCard
+      mark={(
         <Link href={`/profiles/${other.id}`}>
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
             <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
@@ -350,25 +350,24 @@ function MentorshipSessionRow({ rel, session, userId }: { rel: MentorshipRelatio
             </AvatarFallback>
           </Avatar>
         </Link>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href={`/profiles/${other.id}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
-              {other.displayName}
-            </Link>
-            <Badge variant="outline" className="text-xs">
-              <StatusText value={u.status} />
-            </Badge>
-          </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">
-            {rel.mentorId === userId ? 'Mentee' : 'Mentor'}
-            {' · '}
-            <LocalTime value={start} />
-            {end ? <>{' – '}<LocalTime value={end} /></> : null}
-          </p>
-          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-            {[u.title, u.durationMin != null ? `${u.durationMin} min` : null].filter(Boolean).join(' · ')}
-          </p>
-        </div>
+      )}
+      title={other.displayName}
+      titleHref={`/profiles/${other.id}`}
+      badge={(
+        <Badge variant="outline" className="text-xs">
+          <StatusText value={u.status} />
+        </Badge>
+      )}
+      headline={(
+        <>
+          {rel.mentorId === userId ? 'Mentee' : 'Mentor'}
+          {' · '}
+          <LocalTime value={start} />
+          {end ? <>{' – '}<LocalTime value={end} /></> : null}
+        </>
+      )}
+      detail={[u.title, u.durationMin != null ? `${u.durationMin} min` : null].filter(Boolean).join(' · ')}
+      actions={(
         <Button size="sm" variant="secondary" asChild>
           <Link href={home}>
             {rel.mentorId === userId
@@ -376,8 +375,8 @@ function MentorshipSessionRow({ rel, session, userId }: { rel: MentorshipRelatio
               : <BilingualText en="Coaching" el="Coaching" compact />}
           </Link>
         </Button>
-      </CardContent>
-    </Card>
+      )}
+    />
   );
 }
 

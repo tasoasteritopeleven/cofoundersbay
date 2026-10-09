@@ -266,8 +266,8 @@ function ReviewCard({ review }: { review: ExpertReview }) {
     ? new Date(review.dueDate).toLocaleDateString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short' })
     : null;
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
-      <div className="flex items-center gap-4 p-4">
+    <div data-card="" data-surface="card" className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex flex-wrap items-start gap-4 p-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
             {initialsOf(review.expertName)}
@@ -275,13 +275,14 @@ function ReviewCard({ review }: { review: ExpertReview }) {
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="person-name font-display text-base font-semibold text-foreground">{review.expertName}</p>
+            <p className="person-name inline-flex tap-target-y items-center font-semibold text-foreground">{review.expertName}</p>
             <Badge variant="outline" className="text-xs">
               <BilingualText en={status.label} el={status.labelEl} compact />
             </Badge>
           </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">{review.expertTitle}</p>
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+          <div className="card-axis">
+          <p className="truncate text-sm text-muted-foreground">{review.expertTitle}</p>
+          <p className="card-copy mt-1 text-xs text-muted-foreground line-clamp-2">
             {[
               type.label,
               review.isPaid && review.agreedFee ? `€${review.agreedFee}` : 'Free',
@@ -291,8 +292,9 @@ function ReviewCard({ review }: { review: ExpertReview }) {
               review.summaryFeedback ? `“${review.summaryFeedback}”` : null,
             ].filter(Boolean).join(' · ')}
           </p>
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
           {(review.strengthsJson || review.improvementsJson) ? (
             <Button size="sm" variant="secondary" className="gap-1" onClick={() => setExpanded((v) => !v)}>
               <BilingualText en={expanded ? 'Collapse' : 'Feedback'} el={expanded ? 'Σύμπτυξη' : 'Σχόλια'} compact />
@@ -365,8 +367,8 @@ function ExpertCard({ expert }: { expert: ExpertProfile }) {
     ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: expert.currency || 'USD', maximumFractionDigits: 0 }).format(expert.feeFrom)
     : null;
   return (
-    <div className="card-interactive rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-4">
+    <div data-card="" data-surface="card" className="card-interactive rounded-xl border border-border bg-card p-4">
+      <div className="flex flex-wrap items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
             {initialsOf(expert.name)}
@@ -374,13 +376,14 @@ function ExpertCard({ expert }: { expert: ExpertProfile }) {
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="person-name font-display text-base font-semibold text-foreground">{expert.name}</p>
+            <p className="person-name inline-flex tap-target-y items-center font-semibold text-foreground">{expert.name}</p>
             {expert.isVerified ? (
               <Badge variant="outline" className="text-xs"><BilingualText en="Verified" el="Επαληθευμένος" compact /></Badge>
             ) : null}
           </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">{expert.title}</p>
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+          <div className="card-axis">
+          <p className="truncate text-sm text-muted-foreground">{expert.title}</p>
+          <p className="card-copy mt-1 text-xs text-muted-foreground line-clamp-2">
             {[
               expert.bio,
               ...expert.domains.slice(0, 3).map((d) => REVIEW_TYPE_CONFIG[d].label),
@@ -390,8 +393,9 @@ function ExpertCard({ expert }: { expert: ExpertProfile }) {
               expert.responseTime,
             ].filter(Boolean).join(' · ')}
           </p>
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
           <Button size="sm" className="gap-1" asChild>
             <Link href="/mentoring">
               <BilingualText en="Request" el="Αίτημα" compact />

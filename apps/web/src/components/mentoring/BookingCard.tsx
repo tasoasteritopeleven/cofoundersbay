@@ -90,7 +90,7 @@ export function BookingCard({
   return (
     <Card className="card-interactive">
       <CardContent>
-        <div className="flex items-center gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
           <Link href={`/profiles/${otherUserId}`} className="shrink-0">
             <Avatar className="h-10 w-10 ring-2 ring-primary/20">
               <AvatarImage src={other.avatarUrl ?? undefined} alt="" />
@@ -118,7 +118,7 @@ export function BookingCard({
                       : <BilingualText en="(mentor)" el="(μέντορας)" compact />}
                   </span>
                 </div>
-                <p className="row-ellipsis text-sm text-muted-foreground">
+                <p className="card-axis truncate text-sm text-muted-foreground">
                   <LocalTime value={start} />
                   {' – '}
                   <LocalTime value={end} />

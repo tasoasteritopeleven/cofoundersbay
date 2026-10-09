@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { UserPlus, X, MessageCircle, Bookmark, MapPin, Clock, Sparkles, TrendingUp, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RoleBadge } from './RoleBadge';
@@ -143,215 +145,117 @@ function MatchCardInner({
   commitment,
 }: MatchCardProps) {
   const [bookmarked, setBookmarked] = useState(isBookmarked);
-  const [showReasons, setShowReasons] = useState(false);
-  const { stroke, glow, colors } = getScoreTier(compatibilityScore);
+  const { colors } = getScoreTier(compatibilityScore);
 
   const handleBookmark = () => {
     setBookmarked(!bookmarked);
     onBookmark?.();
   };
 
+  const facts = [
+    location,
+    timezone,
+    ...skills.slice(0, 4),
+    skills.length > 4 ? `+${skills.length - 4}` : null,
+    ...matchReasons.slice(0, 2).map((reason) => reason.text),
+    commitment ? commitment.step : null,
+  ].filter(Boolean).join(' · ');
+
   return (
-    <Card
-      className={cn(
-        'group relative overflow-hidden transition-all duration-200',
-        'hover:border-primary/30',
-        isSelected && 'ring-2 ring-primary ring-offset-1',
-        onClick && 'cursor-pointer',
-        className
-      )}
-      style={{ '--hover-glow': glow } as React.CSSProperties}
-      onClick={(e) => {
-        if (onClick && !(e.target as HTMLElement).closest('button, a')) {
-          onClick();
-        }
-      }}
-      // A link role keeps the inner action buttons announced (role="button"
-      // would flatten them); the label keeps the card's name from becoming
-      // its entire text content.
-      {...(onClick ? pressableProps({ role: 'link', label: bilingualAria(`Preview ${displayName}`, `Προεπισκόπηση: ${displayName}`) }) : {})}
-    >
-      {/* Left score-color border strip */}
-      <div
-        className="absolute left-0 inset-y-0 w-0.5 transition-all duration-200 group-hover:w-1"
-        style={{ background: stroke }}
-      />
-
-      {/* Selection checkbox */}
-      {onSelect && (
-        <button
-          onClick={(e) => { e.stopPropagation(); onSelect(); }}
-          className="absolute left-3 top-3 z-20"
-          aria-pressed={Boolean(isSelected)}
-          aria-label={bilingualAria(`Select ${displayName}`, `Επιλογή: ${displayName}`)}
-        >
-          <div className={cn(
-            'h-5 w-5 rounded-sm border-2 flex items-center justify-center transition-colors',
-            isSelected ? 'bg-primary border-primary' : 'bg-background/80 border-border hover:border-primary'
-          )}>
-            {isSelected && <Check className="icon-sm text-primary-foreground" />}
-          </div>
-        </button>
-      )}
-
-      {/* Score badge top-right */}
-      <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-1">
-        <ScoreBadge score={compatibilityScore} />
-        {commitment ? (
-          <Link href={commitment.href} onClick={(e) => e.stopPropagation()} className="rounded-full" aria-label={bilingualAria(`Commitment with ${displayName}`, `Δέσμευση με ${displayName}`)}>
-            <StepChip step={commitment.step} />
-          </Link>
-        ) : null}
-      </div>
-
-      <CardContent className="pl-5 pr-4 py-5">
-        {/* Profile header */}
-        <div className="flex items-start gap-3">
+    <ListRowCard
+      className={cn(isSelected && 'ring-2 ring-primary', onClick && 'cursor-pointer', className)}
+      onClick={onClick}
+      mark={(
+        <span className="flex items-center gap-2">
+          {onSelect ? (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onSelect(); }}
+              aria-pressed={Boolean(isSelected)}
+              aria-label={bilingualAria(`Select ${displayName}`, `Επιλογή: ${displayName}`)}
+              className={cn(
+                'flex h-5 w-5 items-center justify-center rounded-sm border-2',
+                isSelected ? 'border-primary bg-primary' : 'border-border bg-background',
+              )}
+            >
+              {isSelected ? <Check className="icon-sm text-primary-foreground" /> : null}
+            </button>
+          ) : null}
           <Link href={`/profiles/${userId}`}>
-            <Avatar className="h-11 w-11 border border-border transition-transform group-hover:scale-105 shrink-0">
-              <AvatarImage src={avatarUrl || undefined} alt={displayName} />
-              <AvatarFallback className="bg-muted text-foreground text-sm font-semibold">
+            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+              <AvatarImage src={avatarUrl || undefined} alt="" />
+              <AvatarFallback className="bg-primary/20 font-semibold text-primary-accessible">
                 {displayName.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </Link>
-          <div className="flex-1 min-w-0 pr-14">
-            <Link
-              href={`/profiles/${userId}`}
-              className="text-base font-semibold text-foreground hover:text-primary-accessible transition-colors line-clamp-1"
-            >
-              {displayName}
+        </span>
+      )}
+      title={displayName}
+      titleHref={`/profiles/${userId}`}
+      badge={(
+        <>
+          <RoleBadge role={role} size="sm" />
+          <Badge variant="outline" className={cn('text-xs', colors.chip)}>
+            {compatibilityScore}%
+          </Badge>
+        </>
+      )}
+      headline={headline}
+      detail={facts}
+      actions={(
+        <>
+          {commitment ? (
+            <Link href={commitment.href} className="rounded-full" aria-label={bilingualAria(`Commitment with ${displayName}`, `Δέσμευση με ${displayName}`)}>
+              <StepChip step={commitment.step} />
             </Link>
-            <div className="mt-1 flex items-center gap-2">
-              <RoleBadge role={role} size="sm" showIcon />
-            </div>
-            {headline && (
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">{headline}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Location & timezone */}
-        {(location || timezone) && (
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            {location && (
-              <span className="flex items-center gap-1">
-                <MapPin className="icon-sm shrink-0" />
-                {location}
-              </span>
-            )}
-            {timezone && (
-              <span className="flex items-center gap-1">
-                <Clock className="icon-sm shrink-0" />
-                {timezone}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Skills */}
-        {skills.length > 0 && (
-          <FactLine className="mt-3" items={[...skills.slice(0, 4), skills.length > 4 ? `+${skills.length - 4}` : null]} />
-        )}
-
-        {/* Match reasons toggle */}
-        <button
-          onClick={() => setShowReasons(!showReasons)}
-          aria-expanded={showReasons}
-          // tap-target-y: a 16px-tall disclosure is under the 24px target minimum.
-          className={cn('mt-3 flex tap-target-y items-center gap-1.5 text-xs font-medium transition-colors', colors.text)}
-        >
-          <Sparkles className="icon-sm" />
-          {showReasons
-            ? <BilingualText en="Hide reasons" el="Απόκρυψη λόγων" compact />
-            : <BilingualText en="Why this match?" el="Γιατί ταιριάζετε;" compact />}
-          {showReasons ? <ChevronUp className="icon-sm" /> : <ChevronDown className="icon-sm" />}
-        </button>
-
-        {/* Match reasons (collapsible) */}
-        {showReasons && (
-          <div className="mt-2 space-y-1.5">
-            {matchReasons.map((reason, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs bg-muted/60">
-                <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: stroke }} />
-                <span className="text-foreground flex-1">{reason.text}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Divider */}
-        <div className="mt-4 border-t border-border" />
-
-        {/* Action buttons */}
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          {onPass && (
+          ) : null}
+          {onPass ? (
             <button
+              type="button"
               onClick={onPass}
               aria-label={bilingualAria(`Pass on ${displayName}`, `Παράλειψη: ${displayName}`)}
-              title={bilingualAria(`Pass on ${displayName}`, `Παράλειψη: ${displayName}`)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-accessible"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:text-destructive-accessible"
             >
               <X className="icon-sm" />
             </button>
-          )}
-          {onLike && (
-            <button
-              onClick={onLike}
-              aria-label={bilingualAria(`Connect with ${displayName}`, `Σύνδεση με ${displayName}`)}
-              title={bilingualAria(`Connect with ${displayName}`, `Σύνδεση με ${displayName}`)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-status-accent-border/40 hover:text-status-accent"
-            >
-              <UserPlus className="icon-sm" />
-            </button>
-          )}
+          ) : null}
           <button
+            type="button"
             onClick={handleBookmark}
             aria-pressed={bookmarked}
-            aria-label={
-              bookmarked
-                ? bilingualAria(`${displayName} is on your shortlist`, `${displayName}: στη λίστα επιλογών`)
-                : bilingualAria(`Save ${displayName} to shortlist`, `Αποθήκευση ${displayName} στη λίστα`)
-            }
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-full transition-colors',
-              bookmarked ? STATUS.warning.icon : cn('text-muted-foreground', 'hover:text-status-warning')
-            )}
+            aria-label={bookmarked
+              ? bilingualAria(`${displayName} is on your shortlist`, `${displayName}: στη λίστα επιλογών`)
+              : bilingualAria(`Save ${displayName} to shortlist`, `Αποθήκευση ${displayName} στη λίστα`)}
+            className={cn('flex h-8 w-8 items-center justify-center rounded-full', bookmarked ? STATUS.warning.icon : 'text-muted-foreground')}
           >
             <Bookmark className={cn('icon-sm', bookmarked && 'fill-current')} />
           </button>
-
-          <div className="flex min-w-0 flex-1 basis-full flex-wrap items-center justify-end gap-1.5 sm:basis-auto">
           {onBreakdown ? (
-            <Button
-              size="sm"
-              variant="outline"
-              className={cn('h-10 gap-1.5 px-2.5 text-xs font-medium', colors.border, colors.text)}
-              style={{ borderColor: `color-mix(in srgb, ${stroke} 25%, transparent)` }}
-              onClick={onBreakdown}
-            >
-              <TrendingUp className="icon-sm" />
+            <Button size="sm" variant="outline" className="gap-1" onClick={onBreakdown}>
               <BilingualText en="Breakdown" el="Ανάλυση" compact />
             </Button>
           ) : (
-            <Button size="sm" variant="outline" className={cn('h-10 gap-1.5 px-2.5 text-xs font-medium', colors.text)} style={{ borderColor: `color-mix(in srgb, ${stroke} 25%, transparent)` }} asChild>
+            <Button size="sm" variant="outline" className="gap-1" asChild>
               <Link href={`/matches/${userId}`}>
-                <TrendingUp className="icon-sm" />
                 <BilingualText en="Compatibility" el="Συμβατότητα" compact />
               </Link>
             </Button>
           )}
-
-          {onMessage && (
-            <Button onClick={onMessage} size="sm" className="h-10 gap-1.5 px-2.5 text-xs">
+          {onMessage ? (
+            <Button onClick={onMessage} size="sm" variant="secondary" aria-label={bilingualAria('Message', 'Μήνυμα')}>
               <MessageCircle className="icon-sm" />
-              <BilingualText en="Message" el="Μήνυμα" compact />
             </Button>
-          )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          ) : null}
+          {onLike ? (
+            <Button onClick={onLike} size="sm" className="gap-1">
+              <UserPlus className="icon-sm" />
+              <BilingualText en="Connect" el="Σύνδεση" compact />
+            </Button>
+          ) : null}
+        </>
+      )}
+    />
   );
 }
 

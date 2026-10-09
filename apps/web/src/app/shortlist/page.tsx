@@ -174,11 +174,14 @@ function ShortlistCard({
 
 
   return (
-    <div className={cn(
-      'group rounded-xl border bg-card p-4 transition-all hover:shadow-sm',
+    <div
+      data-card=""
+      data-surface="card"
+      className={cn(
+      'group rounded-xl border bg-card p-4 transition-all',
       isSelected ? 'border-primary ring-1 ring-primary/30' : 'border-border hover:border-border',
     )}>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         {compareMode && (
           <button
             type="button"
@@ -226,8 +229,9 @@ function ShortlistCard({
               </span>
             )}
           </div>
-          {profile?.headline && <p className="row-ellipsis text-sm text-muted-foreground">{profile.headline}</p>}
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+          <div className="card-axis">
+          {profile?.headline && <p className="truncate text-sm text-muted-foreground">{profile.headline}</p>}
+          <p className="card-copy mt-1 text-xs text-muted-foreground line-clamp-2">
             {[
               profile?.role,
               profile?.location,
@@ -235,9 +239,10 @@ function ShortlistCard({
               (profile?.skills?.length ?? 0) > 4 ? `+${(profile?.skills?.length ?? 0) - 4}` : null,
             ].filter(Boolean).join(' · ')}
           </p>
+          </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="flex w-full flex-wrap items-center justify-end gap-1 sm:w-auto">
           <button onClick={() => setEditingNote((v) => !v)} title={say(shortlistEn('note_edit'), shortlistEl('note_edit'))} aria-label={say(shortlistEn('note_edit'), shortlistEl('note_edit'))} className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
             <Edit2 className="icon-sm" />
           </button>

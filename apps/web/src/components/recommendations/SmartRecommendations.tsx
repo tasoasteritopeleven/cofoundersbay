@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -228,45 +229,40 @@ export function SmartRecommendations() {
       {/* Recommendations Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {filteredRecommendations.map((rec) => (
-          <Card key={rec.id} className="card-interactive">
-            <CardContent className="flex items-center gap-4">
-              {rec.type === 'person' ? (
-                <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-                  <AvatarImage src={rec.image} />
-                  <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{rec.title[0]}</AvatarFallback>
-                </Avatar>
-              ) : (
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
-                  {getTypeIcon(rec.type)}
-                </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="person-name font-display text-base font-semibold text-foreground">{rec.title}</h3>
-                  <Badge variant="outline" className="text-xs">{getTypeLabel(rec.type)}</Badge>
-                </div>
-                <p className="row-ellipsis text-sm text-muted-foreground">{rec.subtitle}</p>
-                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                  {[
-                    rec.description,
-                    `${rec.matchScore}%`,
-                    rec.location,
-                    ...(rec.tags ?? []).slice(0, 3),
-                    ...Object.values(rec.metadata ?? {}).slice(0, 2).map(String),
-                    ...rec.matchReasons.slice(0, 2),
-                  ].filter(Boolean).join(' · ')}
-                </p>
+          <ListRowCard
+            key={rec.id}
+            mark={rec.type === 'person' ? (
+              <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+                <AvatarImage src={rec.image} />
+                <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{rec.title[0]}</AvatarFallback>
+              </Avatar>
+            ) : (
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
+                {getTypeIcon(rec.type)}
               </div>
-              <div className="flex shrink-0 items-center gap-2">
+            )}
+            title={rec.title}
+            badge={<Badge variant="outline" className="text-xs">{getTypeLabel(rec.type)}</Badge>}
+            headline={rec.subtitle}
+            detail={[
+              rec.description,
+              `${rec.matchScore}%`,
+              rec.location,
+              ...(rec.tags ?? []).slice(0, 3),
+              ...Object.values(rec.metadata ?? {}).slice(0, 2).map(String),
+              ...rec.matchReasons.slice(0, 2),
+            ].filter(Boolean).join(' · ')}
+            actions={(
+              <>
                 <Button size="sm" onClick={() => handleAccept(rec.id)}>
                   {rec.type === 'person' ? 'Connect' : rec.type === 'opportunity' ? 'Apply' : rec.type === 'event' ? 'Register' : 'Join'}
                 </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Dismiss" onClick={() => handleDismiss(rec.id)}>
                   <X className="icon-sm" />
                 </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </>
+            )}
+          />
         ))}
       </div>
 

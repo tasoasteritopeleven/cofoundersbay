@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MatchCard } from '@/components/common/MatchCard';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import type { CommitmentStep } from '@cofounderbay/shared';
 import { StepChip } from '@/components/commitments/OutcomeChip';
 import { listCommitmentThreads } from '@/lib/commitments-api';
@@ -296,27 +297,26 @@ function MatchListRow({
   ].filter(Boolean).join(' · ');
 
   return (
-    <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4">
+    <ListRowCard
+      mark={(
         <Link href={`/profiles/${hit.userId}`}>
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
             <AvatarImage src={hit.avatarUrl ?? undefined} />
             <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{initials}</AvatarFallback>
           </Avatar>
         </Link>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href={`/profiles/${hit.userId}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
-              {hit.displayName}
-            </Link>
-            <Badge variant="outline" className={cn('text-xs', colors.chip)}>
-              {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
-            </Badge>
-          </div>
-          {hit.headline ? <p className="row-ellipsis text-sm text-muted-foreground">{hit.headline}</p> : null}
-          {facts ? <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{facts}</p> : null}
-        </div>
-        <div className="flex shrink-0 items-center gap-1">
+      )}
+      title={hit.displayName}
+      titleHref={`/profiles/${hit.userId}`}
+      badge={(
+        <Badge variant="outline" className={cn('text-xs', colors.chip)}>
+          {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
+        </Badge>
+      )}
+      headline={hit.headline}
+      detail={facts}
+      actions={(
+        <>
           <button type="button" onClick={onPass} className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:text-destructive-accessible" aria-label={`Pass on ${hit.displayName}`}>
             <X className="icon-sm" />
           </button>
@@ -339,9 +339,9 @@ function MatchListRow({
             <Heart className="icon-sm" />
             <BilingualText en="Connect" el="Σύνδεση" compact />
           </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      )}
+    />
   );
 }
 

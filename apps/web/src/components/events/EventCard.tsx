@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
@@ -76,43 +76,37 @@ export function EventCard({
   const when = `${fmtDate(event.startDate, { weekday: 'short', month: 'short', day: 'numeric' })} · ${formatEventTime(event.startDate, event.endDate)}`;
   const place = event.location ?? (event.type === 'online' ? 'Online' : null);
   return (
-    <Card className={cn('card-interactive', className)}>
-      <CardContent className="flex items-center gap-4">
+    <ListRowCard
+      className={className}
+      mark={(
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           <AvatarImage src={event.hostAvatar || undefined} />
           <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
             {initialsOf(event.hostName)}
           </AvatarFallback>
         </Avatar>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href={`/events/${event.id}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
-              {event.title}
-            </Link>
-            <Badge variant="outline" className="text-xs gap-1">
-              <EventTypeLabel type={event.type} />
-            </Badge>
-          </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">
-            {[event.hostName, when, place, `${event.attendeesCount} attending`, ...(event.tags ?? []).slice(0, 3)].filter(Boolean).join(' · ')}
-          </p>
-          {event.description ? (
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{event.description}</p>
-          ) : null}
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <Button
-            variant={rsvped ? 'secondary' : 'default'}
-            size="sm"
-            className="gap-1"
-            onClick={handleRsvp}
-            disabled={isFull && !rsvped}
-          >
-            {rsvped ? 'Going' : isFull ? 'Full' : 'RSVP'}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      )}
+      title={event.title}
+      titleHref={`/events/${event.id}`}
+      badge={(
+        <Badge variant="outline" className="text-xs gap-1">
+          <EventTypeLabel type={event.type} />
+        </Badge>
+      )}
+      headline={[event.hostName, when, place, `${event.attendeesCount} attending`, ...(event.tags ?? []).slice(0, 3)].filter(Boolean).join(' · ')}
+      detail={event.description}
+      actions={(
+        <Button
+          variant={rsvped ? 'secondary' : 'default'}
+          size="sm"
+          className="gap-1"
+          onClick={handleRsvp}
+          disabled={isFull && !rsvped}
+        >
+          {rsvped ? 'Going' : isFull ? 'Full' : 'RSVP'}
+        </Button>
+      )}
+    />
   );
 }
 

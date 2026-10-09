@@ -35,6 +35,7 @@ import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailStats } from '@/components/layout/RailParts';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Card, CardContent } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -297,8 +298,8 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
       explanation={explanation}
       reasons={reasons}
     />
-    <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4">
+    <ListRowCard
+      mark={(
         <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
             <AvatarImage src={avatarUrl ?? undefined} />
@@ -307,17 +308,14 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
             </AvatarFallback>
           </Avatar>
         </Link>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible">
-              {displayName}
-            </Link>
-            {role ? <Badge variant="outline" className="text-xs capitalize">{role}</Badge> : null}
-          </div>
-          {headline ? <p className="row-ellipsis text-sm text-muted-foreground">{headline}</p> : null}
-          {facts ? <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{facts}</p> : null}
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
+      )}
+      title={displayName}
+      titleHref={`/profiles/${userId}`}
+      badge={role ? <Badge variant="outline" className="text-xs capitalize">{role}</Badge> : undefined}
+      headline={headline}
+      detail={facts}
+      actions={(
+        <>
           <Button size="sm" className="gap-1" onClick={() => onConnect(userId)}>
             <UserPlus className="icon-sm" />
             Connect
@@ -334,9 +332,9 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
             <ThumbsUp className="icon-sm" />
           </Button>
           <FeedbackMenu onFeedback={(fb) => onFeedback(userId, fb)} />
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      )}
+    />
     </>
   );
 }

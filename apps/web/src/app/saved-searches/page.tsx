@@ -19,6 +19,7 @@ import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailStats } from '@/components/layout/RailParts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -73,39 +74,32 @@ function SearchCard({
   const timeAgo = lastRunDate ? formatTimeAgo(lastRunDate) : fill('never_run');
 
   return (
-    <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4">
+    <ListRowCard
+      mark={(
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
           <Search className="icon-md" aria-hidden="true" />
         </div>
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="person-name font-display text-base font-semibold text-foreground truncate">{search.name}</h3>
-              {search.newResults && search.newResults > 0 && (
-                <Badge variant="default" className="bg-primary text-primary-foreground">
-                  <BilingualText {...fill('new_badge', { n: search.newResults })} compact />
-                </Badge>
-              )}
-            </div>
-
-            <p className="row-ellipsis text-sm text-muted-foreground">{search.query}</p>
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-              {[
-                search.scope === 'need_cards' ? 'Need cards' : null,
-                ...(search.filters?.kinds ?? []),
-                search.filters?.remote?.length ? 'Remote' : null,
-                ...(search.filters?.roles ?? []),
-                ...(search.filters?.industries ?? []).slice(0, 2),
-                ...(search.filters?.locations ?? []).slice(0, 1),
-                filterCount > 3 ? `+${filterCount - 3}` : null,
-                `${search.resultCount ?? 0}`,
-                timeAgo.en,
-              ].filter(Boolean).join(' · ')}
-            </p>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-2">
+      )}
+      title={search.name}
+      badge={search.newResults && search.newResults > 0 ? (
+        <Badge variant="default" className="bg-primary text-primary-foreground">
+          <BilingualText {...fill('new_badge', { n: search.newResults })} compact />
+        </Badge>
+      ) : undefined}
+      headline={search.query}
+      detail={[
+        search.scope === 'need_cards' ? 'Need cards' : null,
+        ...(search.filters?.kinds ?? []),
+        search.filters?.remote?.length ? 'Remote' : null,
+        ...(search.filters?.roles ?? []),
+        ...(search.filters?.industries ?? []).slice(0, 2),
+        ...(search.filters?.locations ?? []).slice(0, 1),
+        filterCount > 3 ? `+${filterCount - 3}` : null,
+        `${search.resultCount ?? 0}`,
+        timeAgo.en,
+      ].filter(Boolean).join(' · ')}
+      actions={(
+        <>
             <div className="flex items-center gap-2">
               <Switch
                 checked={search.alertsEnabled}
@@ -146,10 +140,9 @@ function SearchCard({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </>
+      )}
+    />
   );
 }
 

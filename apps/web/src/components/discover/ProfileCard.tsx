@@ -12,6 +12,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { ListRowCard } from '@/components/common/ListRowCard';
 import { Button } from '@/components/ui/button';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -121,82 +122,54 @@ function ProfileCardInner({
     onBookmark?.();
   };
 
+  const mark = (
+    <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+      <AvatarImage src={profile.avatarUrl || undefined} />
+      <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+        {initialsOf(profile.displayName)}
+      </AvatarFallback>
+    </Avatar>
+  );
+
   if (variant === 'compact') {
     return (
-      <Card className={cn('group hover:border-primary/30 transition-colors', className)}>
-        <CardContent>
-          <div className="flex items-center gap-4">
-            <Link href={`/profiles/${profile.userId}`}>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={profile.avatarUrl || undefined} />
-                <AvatarFallback className="bg-primary/20 text-primary-accessible text-sm font-semibold">
-                  {initialsOf(profile.displayName)}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
-            <div className="min-w-0 flex-1 space-y-1">
-              <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-                <Link
-                  href={`/profiles/${profile.userId}`}
-                  // tap-target-y + inline-flex: the name link measured 23px tall, a hair under the 24px target minimum, and inline-flex already takes it out of the inline flow so SC 2.5.8's inline-link exception does not apply.
-                  className="person-name inline-flex tap-target-y items-center font-semibold leading-snug text-foreground transition-colors hover:text-primary-accessible"
-                >
-                  {profile.displayName}
-                </Link>
-                <RoleBadge role={profile.role} size="sm" />
-              </div>
-              {profile.headline && (
-                <p className="row-ellipsis text-sm text-muted-foreground">{profile.headline}</p>
-              )}
-            </div>
-            <Button aria-label="Connect · Σύνδεση" size="sm" variant="ghost" onClick={onConnect}>
-              <UserPlus className="icon-sm" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <ListRowCard
+        className={className}
+        mark={mark}
+        title={profile.displayName}
+        titleHref={`/profiles/${profile.userId}`}
+        badge={<RoleBadge role={profile.role} size="sm" />}
+        headline={profile.headline}
+        actions={(
+          <Button aria-label="Connect · Σύνδεση" size="sm" variant="ghost" onClick={onConnect}>
+            <UserPlus className="icon-sm" />
+          </Button>
+        )}
+      />
     );
   }
 
   if (variant === 'featured') {
     return (
-      <Card className={cn('card-interactive', className)}>
-        <CardContent className="flex items-center gap-4">
-          <Link href={`/profiles/${profile.userId}`}>
-            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-              <AvatarImage src={profile.avatarUrl || undefined} />
-              <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-                {initialsOf(profile.displayName)}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href={`/profiles/${profile.userId}`}
-                className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible"
-              >
-                {profile.displayName}
-              </Link>
-              <RoleBadge role={profile.role} size="sm" />
-            </div>
-            {profile.headline ? (
-              <p className="row-ellipsis text-sm text-muted-foreground">{profile.headline}</p>
-            ) : null}
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-              {[
-                profile.bio,
-                profile.location,
-                profile.isVerified ? 'Verified' : null,
-                profile.matchScore ? `${profile.matchScore}% match` : null,
-                profile.lookingFor ? `Looking for ${profile.lookingFor}` : null,
-                profile.availability,
-                ...profile.skills.slice(0, 3),
-                profile.skills.length > 3 ? `+${profile.skills.length - 3}` : null,
-              ].filter(Boolean).join(' · ')}
-            </p>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
+      <ListRowCard
+        className={className}
+        mark={mark}
+        title={profile.displayName}
+        titleHref={`/profiles/${profile.userId}`}
+        badge={<RoleBadge role={profile.role} size="sm" />}
+        headline={profile.headline}
+        detail={[
+          profile.bio,
+          profile.location,
+          profile.isVerified ? 'Verified' : null,
+          profile.matchScore ? `${profile.matchScore}% match` : null,
+          profile.lookingFor ? `Looking for ${profile.lookingFor}` : null,
+          profile.availability,
+          ...profile.skills.slice(0, 3),
+          profile.skills.length > 3 ? `+${profile.skills.length - 3}` : null,
+        ].filter(Boolean).join(' · ')}
+        actions={(
+          <>
             {profile.matchScore && profile.matchScore > 0 ? (
               <AIInsightButton
                 prompt={`Analyze why ${profile.displayName} would be a good match. Their role is ${profile.role}, skills: ${profile.skills.slice(0, 5).join(', ')}. ${profile.headline || ''} ${profile.lookingFor ? `Looking for: ${profile.lookingFor}` : ''}`}
@@ -262,74 +235,44 @@ function ProfileCardInner({
                 mode="report"
               />
             )}
-          </div>
-        </CardContent>
-      </Card>
+          </>
+        )}
+      />
     );
   }
 
-  // Default variant
   return (
-    <Card className={cn('card-interactive', className)}>
-      <CardContent className="flex items-center gap-4">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <Link href={`/profiles/${profile.userId}`}>
-            <div className="relative">
-              <Avatar className={cn('h-10 w-10 ring-2', ROLE_RING_COLORS[profile.role] || 'ring-border/40')}>
-                <AvatarImage src={profile.avatarUrl || undefined} />
-                <AvatarFallback className="bg-primary/10 text-primary-accessible font-semibold">
-                  {initialsOf(profile.displayName)}
-                </AvatarFallback>
-              </Avatar>
-              {profile.isVerified && (
-                <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-status-success-mark flex items-center justify-center ring-2 ring-card">
-                  <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              )}
-            </div>
-          </Link>
-          <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <Link
-                href={`/profiles/${profile.userId}`}
-                className="person-name inline-flex tap-target-y items-center font-display text-base font-semibold text-foreground transition-colors hover:text-primary-accessible"
-              >
-                {profile.displayName}
-              </Link>
-              <RoleBadge role={profile.role} size="sm" />
-            </div>
-            {profile.headline && (
-              <p className="row-ellipsis text-sm text-muted-foreground">{profile.headline}</p>
-            )}
-            <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-              {[
-                profile.location,
-                profile.matchScore ? `${profile.matchScore}% match` : null,
-                ...profile.skills.slice(0, 4),
-              ].filter(Boolean).join(' · ')}
-            </p>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <Button
-              aria-label="Save"
-              variant="ghost"
-              size="icon"
-              onClick={handleBookmark}
-              className={cn('h-8 w-8', bookmarked ? 'text-status-warning' : 'text-muted-foreground')}
-            >
-              <Bookmark className={cn('icon-sm', bookmarked && 'fill-current')} />
-            </Button>
-            <Button onClick={onConnect} size="sm" className="gap-1">
-              <UserPlus className="icon-sm" />
-              <BilingualText en="Connect" el="Σύνδεση" compact />
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <ListRowCard
+      className={className}
+      mark={mark}
+      title={profile.displayName}
+      titleHref={`/profiles/${profile.userId}`}
+      badge={<RoleBadge role={profile.role} size="sm" />}
+      headline={profile.headline}
+      detail={[
+        profile.location,
+        profile.isVerified ? 'Verified' : null,
+        profile.matchScore ? `${profile.matchScore}% match` : null,
+        ...profile.skills.slice(0, 4),
+      ].filter(Boolean).join(' · ')}
+      actions={(
+        <>
+          <Button
+            aria-label="Save"
+            variant="ghost"
+            size="icon"
+            onClick={handleBookmark}
+            className={cn('h-8 w-8', bookmarked ? 'text-status-warning' : 'text-muted-foreground')}
+          >
+            <Bookmark className={cn('icon-sm', bookmarked && 'fill-current')} />
+          </Button>
+          <Button onClick={onConnect} size="sm" className="gap-1">
+            <UserPlus className="icon-sm" />
+            <BilingualText en="Connect" el="Σύνδεση" compact />
+          </Button>
+        </>
+      )}
+    />
   );
 }
 

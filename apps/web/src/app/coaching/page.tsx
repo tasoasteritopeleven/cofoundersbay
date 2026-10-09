@@ -281,8 +281,8 @@ function SessionCard({ session }: { session: CoachingSession }) {
   const totalActions = session.actionItems?.length ?? 0;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
-      <div className="flex items-center gap-4 p-4">
+    <div data-card="" data-surface="card" className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex flex-wrap items-start gap-4 p-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           {session.coachAvatar ? <AvatarImage src={session.coachAvatar} /> : null}
           <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
@@ -291,15 +291,16 @@ function SessionCard({ session }: { session: CoachingSession }) {
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="person-name font-display text-base font-semibold text-foreground">{session.title}</p>
+            <p className="person-name inline-flex tap-target-y items-center font-semibold text-foreground">{session.title}</p>
             <Badge variant="outline" className="text-xs">
               <BilingualText en={status.label} el={status.labelEl} compact />
             </Badge>
           </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">
+          <div className="card-axis">
+          <p className="truncate text-sm text-muted-foreground">
             {session.coachName} · {session.coachTitle} · <LocalWhen iso={session.scheduledAt} variant="card" />
           </p>
-          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+          <p className="card-copy mt-1 line-clamp-2 text-xs text-muted-foreground">
             {[
               type?.label,
               `${session.durationMinutes} min`,
@@ -308,8 +309,9 @@ function SessionCard({ session }: { session: CoachingSession }) {
               session.rating ? `${session.rating}/5` : null,
             ].filter(Boolean).join(' · ')}
           </p>
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
           {session.status === 'scheduled' && session.meetingUrl && (
             isSample ? (
               <Button size="sm" disabled title={JOIN_HINT} aria-label={JOIN_HINT}>
@@ -398,8 +400,8 @@ function CoachCard({ coach }: { coach: CoachProfile }) {
     ? `${new Intl.NumberFormat('en-GB', { style: 'currency', currency: coach.currency || 'USD', maximumFractionDigits: 0 }).format(coach.pricePerHour)}/hr`
     : null;
   return (
-    <div className="card-interactive rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-4">
+    <div data-card="" data-surface="card" className="card-interactive rounded-xl border border-border bg-card p-4">
+      <div className="flex flex-wrap items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           {coach.avatar && <AvatarImage src={coach.avatar} />}
           <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
@@ -408,11 +410,12 @@ function CoachCard({ coach }: { coach: CoachProfile }) {
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="person-name font-display text-base font-semibold text-foreground">{coach.name}</p>
+            <p className="person-name inline-flex tap-target-y items-center font-semibold text-foreground">{coach.name}</p>
             {coach.isVerified ? <Badge variant="outline" className="text-xs">Verified</Badge> : null}
           </div>
-          <p className="row-ellipsis text-sm text-muted-foreground">{coach.title}</p>
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
+          <div className="card-axis">
+          <p className="truncate text-sm text-muted-foreground">{coach.title}</p>
+          <p className="card-copy mt-1 text-xs text-muted-foreground line-clamp-2">
             {[
               coach.bio,
               ...coach.specialties.slice(0, 3).map((s) => SESSION_TYPE_CONFIG[s].label),
@@ -421,8 +424,9 @@ function CoachCard({ coach }: { coach: CoachProfile }) {
               coach.responseTime ? `Responds ${coach.responseTime}` : null,
             ].filter(Boolean).join(' · ')}
           </p>
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
           <Button size="sm" className="gap-1" asChild>
             <Link href="/mentoring">
               <BilingualText en="Book" el="Κράτηση" compact />
