@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -237,43 +237,38 @@ export function SmartRecommendations() {
               </Badge>
             </div>
 
-            <CardHeader className="pb-3">
-              <div className="flex items-start gap-4">
+            <CardContent className="space-y-3">
+              <div className="flex items-start gap-3">
                 {rec.type === 'person' ? (
-                  <Avatar className="h-12 w-12">
+                  <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
                     <AvatarImage src={rec.image} />
-                    <AvatarFallback>{rec.title[0]}</AvatarFallback>
+                    <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-bold text-sm">{rec.title[0]}</AvatarFallback>
                   </Avatar>
                 ) : (
-                  <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted ring-2 ring-border/60">
                     {getTypeIcon(rec.type)}
                   </div>
                 )}
                 <div className="min-w-0 flex-1 space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="gap-1">
-                      {getTypeIcon(rec.type)}
-                      {getTypeLabel(rec.type)}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{rec.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {rec.subtitle}
-                  </CardDescription>
+                  <h3 className="font-display text-base font-semibold text-foreground">{rec.title}</h3>
+                  <p className="text-xs text-muted-foreground">{rec.subtitle}</p>
                 </div>
+                <Badge variant="outline" className="shrink-0 gap-1 text-xs">
+                  {getTypeIcon(rec.type)}
+                  {getTypeLabel(rec.type)}
+                </Badge>
               </div>
-            </CardHeader>
 
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">
                 {rec.description}
               </p>
 
-              {/* Location */}
               {rec.location && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="icon-sm" />
-                  {rec.location}
+                <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="icon-sm" />
+                    {rec.location}
+                  </span>
                 </div>
               )}
 
@@ -289,13 +284,13 @@ export function SmartRecommendations() {
 
               {/* Match Reasons */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm font-medium">
+                <div className="flex items-center gap-2 text-xs font-medium">
                   <Zap className="icon-sm text-muted-foreground" />
                   Why this matches you:
                 </div>
                 <ul className="space-y-1">
                   {rec.matchReasons.slice(0, 3).map((reason, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <li key={index} className="flex items-start gap-2 text-xs text-muted-foreground">
                       <Check className="icon-sm text-primary-accessible mt-0.5 flex-shrink-0" />
                       <span>{reason}</span>
                     </li>
@@ -304,7 +299,7 @@ export function SmartRecommendations() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-2 pt-2">
+              <div className="flex flex-wrap gap-2 pt-1">
                 <Button
                   onClick={() => handleAccept(rec.id)}
                   className="flex-1 gap-2"

@@ -142,9 +142,9 @@ function MentorCard({ mentor, onBook }: { mentor: Mentor; onBook: () => void }) 
     <Card className="card-interactive hover-lift group transition-all duration-300">
       <CardContent className="space-y-3">
         {/* Header row */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-4">
           <div className="relative shrink-0">
-            <Avatar className="h-11 w-11 ring-2 ring-primary/20">
+            <Avatar className="h-10 w-10 ring-2 ring-primary/20">
               <AvatarImage src={mentor.avatarUrl ?? undefined} />
               <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-sm">
                 {initialsOf(mentor.displayName)}

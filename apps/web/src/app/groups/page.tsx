@@ -36,7 +36,6 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
@@ -127,26 +126,21 @@ function GroupCard({
       <CardContent className="space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-3 flex-1 min-w-0">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground ring-2 ring-border/60">
               {group.avatarUrl ? (
-                <img src={group.avatarUrl} alt={group.name} className="h-11 w-11 rounded-lg object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={44} height={44} />
+                <img src={group.avatarUrl} alt={group.name} className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
               ) : (
                 <Users className="icon-md" />
               )}
             </div>
             <div className="flex-1 min-w-0 space-y-1">
               <div className="flex items-center gap-1.5">
-                <h3 className="font-display text-sm font-semibold text-foreground truncate">{group.name}</h3>
+                <h3 className="font-display text-base font-semibold text-foreground">{group.name}</h3>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                {group.category && (
-                  <Badge variant="secondary" className="text-xs">{group.category}</Badge>
-                )}
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  {group.privacy === 'public' ? <Globe className="icon-sm" /> : <Lock className="icon-sm" />}
-                  <span className="capitalize">{group.privacy}</span>
-                </div>
-              </div>
+              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                {group.privacy === 'public' ? <Globe className="icon-sm" /> : <Lock className="icon-sm" />}
+                <span className="capitalize">{group.category ? `${group.category} · ${group.privacy}` : group.privacy}</span>
+              </p>
             </div>
           </div>
           {group.isMember && <CheckCircle2 className={cn('icon-sm shrink-0 mt-0.5', STATUS.success.icon)} />}
@@ -158,20 +152,20 @@ function GroupCard({
 
         <FactLine items={group.tags.slice(0, 4)} />
 
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <Users className="icon-sm" />
+            {group.memberCount.toLocaleString('en-GB')}
+          </span>
+          <span className="flex items-center gap-1">
+            <MessageCircle className="icon-sm" />
+            {group.postCount.toLocaleString('en-GB')}
+          </span>
+        </div>
         <div
-          className="flex items-center justify-between pt-2 border-t border-border"
+          className="flex flex-wrap gap-2 pt-1"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Users className="icon-sm" />
-              {group.memberCount.toLocaleString('en-GB')}
-            </span>
-            <span className="flex items-center gap-1">
-              <MessageCircle className="icon-sm" />
-              {group.postCount.toLocaleString('en-GB')}
-            </span>
-          </div>
           <Button
             variant={group.isMember ? 'outline' : 'default'}
             size="sm"

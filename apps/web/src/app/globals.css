@@ -3484,29 +3484,41 @@ textarea[class~="border-input"]:focus,
   }
 
   .text-lg,
-  #main-content .text-lg,
-  #main-content p.page-section,
-  #main-content h2.page-section,
-  #main-content h3.page-section,
-  #main-content h3.founder-dash-section,
-  h3.page-section,
-  h3.founder-dash-section {
+  #main-content .text-lg {
     font-size: 13.816px;
     line-height: 1.35;
   }
 
-  /* Compact and rail headings are 2% under the previous rail size
-     (14.025), so they stay under the section title. */
-  #main-content h3.page-section.page-section--compact,
-  #main-content [data-rail-content] h3.page-section,
-  #main-content [data-rail-content] h3.founder-dash-section,
+  /* A section label on the member directory is the support step.
+     Every page section heading including text-lg sections uses it. */
+  #main-content p.page-section,
+  #main-content h2.page-section,
+  #main-content h3.page-section,
+  #main-content h3.founder-dash-section,
+  #main-content h2.uppercase,
+  h3.page-section,
+  h3.founder-dash-section,
+  #main-content h2.text-lg,
+  #main-content h3.text-lg {
+    font-size: 12.663px;
+    line-height: 1.4;
+  }
+
+  /* Compact and rail headings stay under the section label. The rail's
+     own display type is unchanged. */
   #main-content [data-rail-content] .text-lg,
   #main-content [data-rail-content] .text-xl,
   #main-content [data-rail-content] .text-2xl,
-  #main-content [data-rail-content] .text-3xl,
-  h3.page-section.page-section--compact {
+  #main-content [data-rail-content] .text-3xl {
     font-size: 13.745px;
     line-height: 1.45;
+  }
+  #main-content h3.page-section.page-section--compact,
+  #main-content [data-rail-content] h3.page-section,
+  #main-content [data-rail-content] h3.founder-dash-section,
+  h3.page-section.page-section--compact {
+    font-size: 12.410px;
+    line-height: 1.4;
   }
 
   /* The line under the page title, on every page. 3% under 13.321px. */
@@ -3541,7 +3553,9 @@ textarea[class~="border-input"]:focus,
   }
 
   #main-content .person-subtitle {
-    font-size: 14.025px;
+    /* The line under a featured member's name ("Founder & CEO at Harbor")
+       is the caption step. A person subtitle on every page uses it. */
+    font-size: 13.044px;
     line-height: 1.4;
   }
 

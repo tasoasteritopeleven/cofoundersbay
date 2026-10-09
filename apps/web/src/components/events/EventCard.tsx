@@ -211,41 +211,40 @@ export function EventCard({
           </div>
         )}
         
-        <CardContent className="pt-4">
+        <CardContent className="space-y-3 pt-4">
           <Link
             href={`/events/${event.id}`}
-            className="text-xl font-bold text-foreground hover:text-primary-accessible transition-colors"
+            className="font-display text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
           >
             {event.title}
           </Link>
           
-          <p className="card-copy mt-2 text-sm text-muted-foreground line-clamp-2">
+          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {event.description}
           </p>
           
-          {/* Meta */}
-          <div className="mt-4 space-y-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
               <Clock className="icon-sm" />
               {fmtDate(event.startDate, { weekday: 'short', month: 'short', day: 'numeric' })} • {formatEventTime(event.startDate, event.endDate)}
-            </div>
+            </span>
             {event.location && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1">
                 <MapPin className="icon-sm" />
                 {event.location}
-              </div>
+              </span>
             )}
           </div>
           
-          {/* Host */}
-          <div className="mt-4 flex items-center gap-3">
-            <Avatar className="h-8 w-8">
+          {/* Host: the small identity row used on Connections. */}
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
               <AvatarImage src={event.hostAvatar || undefined} />
-              <AvatarFallback className="bg-primary/20 text-primary-accessible text-xs">
+              <AvatarFallback className="bg-primary/20 text-primary-accessible text-sm">
                 {initialsOf(event.hostName)}
               </AvatarFallback>
             </Avatar>
-            <div className="min-w-0 space-y-1">
+            <div className="min-w-0">
               <p className="text-sm font-medium text-foreground">{event.hostName}</p>
               <p className="text-xs text-muted-foreground"><StatusText value={event.hostRole} /></p>
             </div>
@@ -253,19 +252,20 @@ export function EventCard({
           
           {/* Tags */}
           {event.tags && event.tags.length > 0 && (
-            <FactLine className="mt-4" items={event.tags} />
+            <FactLine items={event.tags} />
           )}
-          
-          {/* Actions */}
-          <div className="mt-5 flex items-center justify-between pt-4 border-t border-border">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
               <Users className="icon-sm" />
               {event.attendeesCount} attending
-              {spotsLeft !== null && spotsLeft > 0 && spotsLeft <= 10 && (
-                <span className="text-status-warning ">• {spotsLeft} spots left</span>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
+            </span>
+            {spotsLeft !== null && spotsLeft > 0 && spotsLeft <= 10 && (
+              <span className="text-status-warning">{spotsLeft} spots left</span>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-1">
               <Button aria-label="Save"
                 variant="ghost"
                 size="icon"
@@ -295,100 +295,88 @@ export function EventCard({
                   'RSVP'
                 )}
               </Button>
-            </div>
           </div>
         </CardContent>
       </Card>
     );
   }
 
-  // Default variant
+  // Default variant — the same stack as an opportunity card. The date
+  // mark takes the avatar's place.
   return (
     <Card className={cn('group hover:border-primary/30 transition-colors', className)}>
-      <CardContent className="pt-5">
-        <div className="flex gap-4">
-          {/* Date box */}
-          <div className="flex-shrink-0 text-center">
-            <div className="w-16 h-16 rounded-xl bg-muted flex flex-col items-center justify-center">
-              <span className="text-xs text-primary-accessible">
-                {fmtDate(event.startDate, { month: 'short' })}
-              </span>
-              <span className="text-2xl font-semibold text-primary-accessible">
-                {event.startDate.getDate()}
-              </span>
-            </div>
+      <CardContent className="space-y-3">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-xl bg-muted ring-2 ring-border/60">
+            <span className="text-2xs leading-none text-primary-accessible">
+              {fmtDate(event.startDate, { month: 'short' })}
+            </span>
+            <span className="text-sm font-semibold leading-none text-foreground">
+              {event.startDate.getDate()}
+            </span>
           </div>
-          
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            {/* Wraps rather than squeezing: in a narrow card the type badge used
-                to take the title's width and cut it to two words. */}
-            <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
-              <h3 className="min-w-0 flex-1 basis-32">
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-display text-base font-semibold text-foreground">
                 <Link
                   href={`/events/${event.id}`}
-                  className="font-semibold text-foreground hover:text-primary-accessible transition-colors line-clamp-2"
+                  className="hover:text-primary-accessible transition-colors"
                 >
                   {event.title}
                 </Link>
               </h3>
-              <Badge variant="outline" className="flex-shrink-0 gap-1">
+              <Badge variant="outline" className="shrink-0 gap-1">
                 <EventTypeIcon type={event.type} />
                 <EventTypeLabel type={event.type} />
               </Badge>
             </div>
-            
-            <div className="mt-2 space-y-1">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="icon-sm" />
-                {formatEventTime(event.startDate, event.endDate)}
-              </div>
-              {event.location && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="icon-sm" />
-                  <span className="truncate">{event.location}</span>
-                </div>
-              )}
-            </div>
-            
-            {/* Host & attendees */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-              <div className="flex min-w-0 items-center gap-2">
-                <Avatar className="h-6 w-6 shrink-0">
-                  <AvatarImage src={event.hostAvatar || undefined} />
-                  <AvatarFallback className="bg-primary/10 text-primary-accessible text-xs">
-                    {initialsOf(event.hostName)}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="min-w-0 truncate text-xs text-muted-foreground">by {event.hostName}</span>
-              </div>
-              <span className="shrink-0 whitespace-nowrap text-xs text-muted-foreground">
-                {event.attendeesCount} attending
-              </span>
-            </div>
+            <p className="text-xs text-muted-foreground">by {event.hostName}</p>
           </div>
         </div>
-        
-        {/* Actions */}
-        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-border">
+
+        {event.description && (
+          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">
+            {event.description}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <Clock className="icon-sm" />
+            {formatEventTime(event.startDate, event.endDate)}
+          </span>
+          {event.location && (
+            <span className="flex items-center gap-1">
+              <MapPin className="icon-sm" />
+              {event.location}
+            </span>
+          )}
+          <span className="flex items-center gap-1">
+            <Users className="icon-sm" />
+            {event.attendeesCount} attending
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-2 pt-1">
           <Button aria-label="Save"
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={handleBookmark}
-            className={cn('h-8 w-8 gap-1.5 sm:w-auto sm:px-3', bookmarked && 'text-status-warning ')}
+            className={cn('gap-1.5 text-xs', bookmarked && 'text-status-warning')}
           >
             <Bookmark className={cn('icon-sm', bookmarked && 'fill-current')} />
-            <span className="hidden sm:inline"><BilingualText en="Save" el="Αποθήκευση" compact /></span>
+            <BilingualText en="Save" el="Αποθήκευση" compact />
           </Button>
           <Button
             variant={rsvped ? 'secondary' : 'default'}
             size="sm"
+            className="gap-1.5 text-xs"
             onClick={handleRsvp}
             disabled={isFull && !rsvped}
           >
             {rsvped ? (
               <>
-                <CheckCircle className="icon-sm mr-1" />
+                <CheckCircle className="icon-sm" />
                 Going
               </>
             ) : isFull ? (

@@ -225,9 +225,9 @@ function InvestorCard({
 
   return (
     <Card className="group transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.75rem' }}>
-          <Avatar className="h-11 w-11 shrink-0">
+      <CardContent className="space-y-3">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
             <AvatarImage src={investor.avatarUrl} alt="" />
             <AvatarFallback className="bg-primary/10 text-sm font-bold text-primary-accessible">
               {initials}
@@ -240,7 +240,7 @@ function InvestorCard({
                 <div className="flex flex-wrap items-center gap-1.5">
                   {/* Wraps on a phone, where the type badge and bookmark leave
                       the name ~120px; truncates from `sm` up. */}
-                  <h3 className="break-words font-semibold sm:truncate">{investor.displayName}</h3>
+                  <h3 className="break-words font-display text-base font-semibold sm:truncate">{investor.displayName}</h3>
                   {investor.isVerified && (
                     <BadgeCheck
                       className={cn('icon-sm shrink-0', STATUS.info.icon)}
@@ -259,7 +259,7 @@ function InvestorCard({
                     columns, "Horizon / Capital · Principal"). The type was a
                     pill beside the bookmark; it is a fact about the person. */}
                 {type || investor.firmName || investor.firmRole || investor.headline ? (
-                  <p className="mt-0.5 min-w-0 text-sm text-muted-foreground">
+                  <p className="min-w-0 text-xs text-muted-foreground">
                     {type ? <BilingualText en={type.en} el={type.el} compact /> : null}
                     {type && (investor.firmName || investor.firmRole || investor.headline) ? ' · ' : null}
                     {investor.firmName || investor.firmRole
@@ -284,9 +284,11 @@ function InvestorCard({
               </div>
             </div>
 
-            <div className="card-axis">
+          </div>
+        </div>
+        <div className="space-y-3">
             {investor.thesisSummary && (
-              <p className="card-copy mt-2 line-clamp-2 text-sm text-muted-foreground">{investor.thesisSummary}</p>
+              <p className="card-copy line-clamp-2 text-sm leading-relaxed text-muted-foreground">{investor.thesisSummary}</p>
             )}
 
             {/* What they invest in, then in which sectors: two fact lines,
@@ -353,8 +355,6 @@ function InvestorCard({
                 )}
               </div>
             </div>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>

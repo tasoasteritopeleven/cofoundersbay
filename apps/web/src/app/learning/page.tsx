@@ -191,7 +191,7 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
             <typeConfig.icon className="icon-md" />
           </div>
           <div className="flex-1 min-w-0 space-y-1">
-            <h3 className="font-semibold text-sm text-foreground line-clamp-2 leading-snug">
+            <h3 className="font-display text-base font-semibold text-foreground line-clamp-2">
               {resource.title}
             </h3>
             {/* Type and level are facts (one muted line); "Featured" is the
@@ -239,19 +239,17 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
 
         <FactLine label={bilingualAria('Topics', 'Θέματα')} items={(resource.tags ?? []).slice(0, 3)} />
 
-        <div className="flex items-center justify-between pt-2 border-t border-border mt-auto">
-          <div className="min-w-0">
-            <p className="text-xs font-medium text-foreground truncate">{resource.author}</p>
-            <div className="flex items-center gap-2 text-2xs text-muted-foreground mt-0.5">
-              {resource.duration && (
-                <span className="flex items-center gap-0.5"><Clock className="icon-sm" />{resource.duration}</span>
-              )}
-              {resource.completedBy && (
-                <span className="flex items-center gap-0.5"><CheckCircle2 className="icon-sm text-status-success" />{resource.completedBy.toLocaleString('en-GB')}</span>
-              )}
-            </div>
-          </div>
-          <Button variant="default" size="sm" className="gap-1 h-7 text-xs shrink-0" onClick={() => window.open(resource.url, '_blank')}>
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          <span className="truncate font-medium text-foreground">{resource.author}</span>
+          {resource.duration && (
+            <span className="flex items-center gap-1"><Clock className="icon-sm" />{resource.duration}</span>
+          )}
+          {resource.completedBy && (
+            <span className="flex items-center gap-1"><CheckCircle2 className="icon-sm text-status-success" />{resource.completedBy.toLocaleString('en-GB')}</span>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <Button variant="default" size="sm" className="gap-1 text-xs" onClick={() => window.open(resource.url, '_blank')}>
             {resource.type === 'video' || resource.type === 'course' ? (
               <><Play className="icon-sm" /><BilingualText en={learningEn('start')} el={learningEl('start')} compact /></>
             ) : (
@@ -271,23 +269,27 @@ function LearningPathCard({ path, onSelect }: { path: LearningPath; onSelect: (c
       onClick={() => onSelect(path.category)}
       className={cn('relative w-full min-w-0 rounded-xl border p-4 text-left transition-all hover:border-primary/30', path.color)}
     >
-      <div className="mb-3 flex min-w-0 items-start justify-between gap-3">
-        <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-background/60')}>
+      <div className="mb-3 flex min-w-0 items-start gap-3">
+        <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-background/60 ring-2 ring-border/60')}>
           <CfbGlyph name={path.glyph} className="icon-md text-foreground" />
         </div>
-        {path.progress > 0 && (
-          <Badge variant="secondary" className="shrink-0 whitespace-nowrap text-2xs bg-background/60">
-            {learningEn('percent_done').replace('{n}', String(path.progress))}
-          </Badge>
-        )}
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-display text-base font-semibold text-foreground">
+              <BilingualText en={learningEn(path.titleKey)} el={learningEl(path.titleKey)} compact />
+            </h3>
+            {path.progress > 0 && (
+              <Badge variant="secondary" className="shrink-0 whitespace-nowrap text-2xs bg-background/60">
+                {learningEn('percent_done').replace('{n}', String(path.progress))}
+              </Badge>
+            )}
+          </div>
+        </div>
       </div>
-      <h3 className="font-semibold text-sm text-foreground mb-1">
-        <BilingualText en={learningEn(path.titleKey)} el={learningEl(path.titleKey)} compact />
-      </h3>
-      <p className="text-2xs text-muted-foreground line-clamp-2 mb-3">
+      <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
         <BilingualText en={learningEn(path.descKey)} el={learningEl(path.descKey)} wrap />
       </p>
-      <div className="flex items-center gap-3 text-2xs text-muted-foreground mb-2">
+      <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mb-2">
         <span className="flex items-center gap-0.5">
           <BookOpen className="icon-sm" />
           {learningEn('modules').replace('{n}', String(path.steps))}
@@ -295,7 +297,7 @@ function LearningPathCard({ path, onSelect }: { path: LearningPath; onSelect: (c
         <span className="flex items-center gap-0.5"><Clock className="icon-sm" />{path.duration}</span>
       </div>
       {path.progress > 0 && <Progress value={path.progress} className="h-1.5" />}
-      <div className="mt-2 flex items-center gap-1 text-2xs font-medium text-primary-accessible">
+      <div className="mt-2 flex items-center gap-1 text-xs font-medium text-primary-accessible">
         {path.progress > 0
           ? <BilingualText en={learningEn('continue_path')} el={learningEl('continue_path')} compact />
           : <BilingualText en={learningEn('start_path')} el={learningEl('start_path')} compact />}

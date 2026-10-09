@@ -267,8 +267,8 @@ function ReviewCard({ review }: { review: ExpertReview }) {
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
       <div className="p-4">
-        <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10 shrink-0">
+        <div className="flex items-start gap-4">
+          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
             <AvatarFallback className="bg-primary/10 text-primary-accessible text-xs font-semibold">
               {initialsOf(review.expertName)}
             </AvatarFallback>
@@ -276,8 +276,8 @@ function ReviewCard({ review }: { review: ExpertReview }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-sm font-semibold text-foreground">{review.expertName}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{review.expertTitle}</p>
+                <p className="person-name font-semibold text-foreground">{review.expertName}</p>
+                <p className="text-sm text-muted-foreground truncate">{review.expertTitle}</p>
               </div>
               <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-medium shrink-0', STATUS[status.tone].chip)}>
                 <StatusIcon className="icon-sm" />
@@ -439,8 +439,8 @@ function ReviewCard({ review }: { review: ExpertReview }) {
 function ExpertCard({ expert }: { expert: ExpertProfile }) {
   return (
     <div className="rounded-xl border border-border bg-card p-4 hover:shadow-sm hover:border-border transition-all">
-      <div className="flex items-start gap-3">
-        <Avatar className="h-10 w-10 shrink-0">
+      <div className="flex items-start gap-4">
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
             {initialsOf(expert.name)}
           </AvatarFallback>
@@ -449,12 +449,12 @@ function ExpertCard({ expert }: { expert: ExpertProfile }) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <p className="text-sm font-semibold text-foreground">{expert.name}</p>
+                <p className="person-name font-semibold text-foreground">{expert.name}</p>
                 {expert.isVerified && (
                   <Badge className="h-4 rounded-full px-1.5 text-2xs bg-primary/10 text-primary-accessible border-primary/20"><BilingualText en="Verified" el="Επαληθευμένος" compact /></Badge>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{expert.title}</p>
+              <p className="text-sm text-muted-foreground truncate">{expert.title}</p>
               <FactLine className="mt-0.5" items={expert.badges ?? []} />
             </div>
             {expert.feeFrom != null && (

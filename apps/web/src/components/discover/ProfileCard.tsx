@@ -151,7 +151,7 @@ function ProfileCardInner({
     return (
       <Card className={cn('group hover:border-primary/30 transition-colors', className)}>
         <CardContent>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Link href={`/profiles/${profile.userId}`}>
               <Avatar className="h-10 w-10">
                 <AvatarImage src={profile.avatarUrl || undefined} />
@@ -172,7 +172,7 @@ function ProfileCardInner({
                 <RoleBadge role={profile.role} size="sm" />
               </div>
               {profile.headline && (
-                <p className="text-xs text-muted-foreground truncate">{profile.headline}</p>
+                <p className="text-sm text-muted-foreground truncate">{profile.headline}</p>
               )}
             </div>
             <Button aria-label="Connect · Σύνδεση" size="sm" variant="ghost" onClick={onConnect}>
@@ -198,11 +198,11 @@ function ProfileCardInner({
           </div>
         )}
 
-        <CardContent className="relative pt-6 pb-4">
+        <CardContent className="relative space-y-3 pt-6 pb-4">
           {/* Header */}
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3">
             <Link href={`/profiles/${profile.userId}`}>
-              <Avatar className="h-12 w-12 ring-2 ring-border/40 group-hover:ring-primary/40 transition-all">
+              <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60 group-hover:ring-primary/40 transition-all">
                 <AvatarImage src={profile.avatarUrl || undefined} />
                 <AvatarFallback className="bg-primary/20 text-primary-accessible text-base font-semibold">
                   {initialsOf(profile.displayName)}
@@ -213,7 +213,7 @@ function ProfileCardInner({
               <div className="flex items-center gap-2 flex-wrap">
                 <Link
                   href={`/profiles/${profile.userId}`}
-                  className="person-name text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
+                  className="font-display text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
                 >
                   {profile.displayName}
                 </Link>
@@ -225,18 +225,17 @@ function ProfileCardInner({
                 )}
               </div>
               {profile.headline && (
-                <p className="text-sm text-muted-foreground line-clamp-2">{profile.headline}</p>
+                <p className="text-xs text-muted-foreground line-clamp-2">{profile.headline}</p>
               )}
             </div>
           </div>
 
           {/* Bio */}
           {profile.bio && (
-            <p className="card-copy mt-4 text-sm text-foreground/80 line-clamp-3">{profile.bio}</p>
+            <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{profile.bio}</p>
           )}
 
-          {/* Meta */}
-          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             {profile.location && (
               <span className="flex items-center gap-1">
                 <MapPin className="icon-sm" />
@@ -253,9 +252,7 @@ function ProfileCardInner({
 
           {/* Skills */}
           {profile.skills.length > 0 && (
-            <div className="mt-4">
-              <FactLine items={[...profile.skills.slice(0, 5), profile.skills.length > 5 ? `+${profile.skills.length - 5}` : null]} />
-            </div>
+            <FactLine items={[...profile.skills.slice(0, 5), profile.skills.length > 5 ? `+${profile.skills.length - 5}` : null]} />
           )}
 
           {/* Looking for / availability */}
@@ -301,7 +298,7 @@ function ProfileCardInner({
           )}
 
           {/* Actions */}
-          <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+          <div className="flex flex-wrap items-center gap-2 pt-1">
             <Button onClick={onConnect} size="sm" className="min-h-10 flex-1 gap-2">
               <UserPlus className="icon-sm" />
               <BilingualText en="Connect" el="Σύνδεση" compact />
@@ -370,7 +367,7 @@ function ProfileCardInner({
     <Card className={cn('group hover:border-primary/30 transition-all hover:-translate-y-0.5', className)}>
       <CardContent className="pt-5">
         {/* Header */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-4">
           <Link href={`/profiles/${profile.userId}`}>
             <div className="relative">
               <Avatar className={cn('h-10 w-10 ring-2', ROLE_RING_COLORS[profile.role] || 'ring-border/40')}>
@@ -425,7 +422,7 @@ function ProfileCardInner({
             </div>
             <div className="space-y-1">
             {profile.headline && (
-              <p className="person-subtitle mt-1 text-sm text-muted-foreground dark:text-muted-foreground line-clamp-2">{profile.headline}</p>
+              <p className="text-sm text-muted-foreground line-clamp-2">{profile.headline}</p>
             )}
             {profile.location && (
               <div className="flex items-center gap-1 text-xs text-muted-foreground dark:text-muted-foreground">

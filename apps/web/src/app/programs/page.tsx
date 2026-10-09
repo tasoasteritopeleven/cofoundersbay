@@ -238,9 +238,9 @@ function ProgramCard({
 
   return (
     <Card className={cn('transition-all hover:border-primary/30 group', isEnrolled && 'border-primary/40 bg-primary/2')}>
-      <CardContent>
-        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.75rem' }}>
-          <Avatar className="h-11 w-11 rounded-lg flex-shrink-0 border border-border">
+      <CardContent className="space-y-3">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
             <AvatarImage src={program.organization?.logoUrl ?? undefined} />
             {/* Stands in for the organisation's logo: an avatar, not decoration. */}
             <AvatarFallback data-keep-icon className="rounded-xl bg-primary/10 text-primary-accessible">
@@ -248,39 +248,36 @@ function ProgramCard({
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start gap-2 justify-between flex-wrap">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-semibold truncate">{program.title}</h3>
-                  {isEnrolled && (
-                    <Badge variant="outline" className="text-xs bg-primary/10 text-primary-accessible border-primary/30 gap-1">
-                      <CheckCircle2 className="icon-sm" aria-hidden="true" />
-                      <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
-                    </Badge>
-                  )}
-                </div>
-                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                  <Building2 className="icon-sm flex-shrink-0" />
-                  <span className="truncate">{program.organization?.name}</span>
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 items-center">
-                <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
-                  <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-display text-base font-semibold text-foreground">{program.title}</h3>
+              {isEnrolled && (
+                <Badge variant="outline" className="text-xs bg-primary/10 text-primary-accessible border-primary/30 gap-1">
+                  <CheckCircle2 className="icon-sm" aria-hidden="true" />
+                  <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
                 </Badge>
-                <Badge variant="outline" className="text-xs capitalize text-muted-foreground">
-                  <BilingualText en={badgeType(program.programType).en} el={badgeType(program.programType).el} compact />
-                </Badge>
-              </div>
+              )}
+              <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
+                <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
+              </Badge>
+              <Badge variant="outline" className="text-xs capitalize text-muted-foreground">
+                <BilingualText en={badgeType(program.programType).en} el={badgeType(program.programType).el} compact />
+              </Badge>
             </div>
-
-            <div className="card-axis">
-            {program.description && (
-              <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
+            {program.organization?.name && (
+              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Building2 className="icon-sm flex-shrink-0" />
+                <span className="truncate">{program.organization.name}</span>
+              </p>
             )}
+          </div>
+        </div>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-muted-foreground">
+        {program.description && (
+          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{program.description}</p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
               {program.applicationDeadline && acceptsApplications(program) && deadline !== null && (
                 <span className={cn('flex items-center gap-1', deadline !== null && deadline <= 7 && deadlineUrgencyClass(deadline))}>
                   <Clock className="icon-sm" />
@@ -308,10 +305,10 @@ function ProgramCard({
               )}
             </div>
 
-            <FactLine className="mt-3" items={(program.industries ?? []).slice(0, 5)} />
+            <FactLine items={(program.industries ?? []).slice(0, 5)} />
 
             {(program.benefits as string[] | undefined)?.length ? (
-              <div className="flex flex-wrap gap-1 mt-2">
+              <div className="flex flex-wrap gap-1">
                 {(program.benefits as string[]).slice(0, 3).map((b, i) => (
                   <span key={i} className={cn('text-xs flex items-center gap-1', STATUS.success.text)}>
                     <Star className="icon-sm" />{b}
@@ -320,7 +317,7 @@ function ProgramCard({
               </div>
             ) : null}
 
-            <div className="flex items-center gap-2 mt-4">
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               {acceptsApplications(program) && !isEnrolled && !isFull && (
                 <Button size="sm" onClick={(e) => { e.preventDefault(); onApply(program); }}>
                   <Zap className="icon-sm mr-1.5" aria-hidden="true" />
@@ -341,9 +338,6 @@ function ProgramCard({
                 </Link>
               </Button>
             </div>
-            </div>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

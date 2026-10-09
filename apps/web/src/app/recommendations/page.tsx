@@ -293,9 +293,9 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
     />
     <Card className="group hover:border-primary/30 transition-colors">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-center gap-4">
           <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
-            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-border group-hover:ring-primary/20 transition-all">
+            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
               <AvatarImage src={avatarUrl ?? undefined} />
               <AvatarFallback className="text-sm font-semibold bg-primary/10 text-primary-accessible">
                 {displayName?.[0]?.toUpperCase() ?? '?'}
@@ -304,13 +304,22 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
           </Link>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <div>
-                <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                  {displayName}
-                </Link>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
+                {displayName}
+              </Link>
+              {role && (
+                <Badge variant="outline" className={cn('text-xs capitalize', ROLE_COLOR[role ?? 'founder'])}>
+                  <RoleIcon className="icon-sm mr-1" />
+                  {role}
+                </Badge>
+              )}
+            </div>
+            {headline && (
+              <p className="text-sm text-muted-foreground truncate">{headline}</p>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
                 {score > 0 && <MatchScoreBadge score={score} />}
                 {confidence !== null && (
                   <span title={`Confidence: ${confidence}%`} className="flex items-center gap-0.5 text-xs text-muted-foreground">
@@ -318,19 +327,10 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
                     {confidence}%
                   </span>
                 )}
-                {role && (
-                  <Badge variant="outline" className={cn('text-xs capitalize hidden sm:flex', ROLE_COLOR[role ?? 'founder'])}>
-                    <RoleIcon className="icon-sm mr-1" />
-                    {role}
-                  </Badge>
-                )}
               </div>
             </div>
 
-            <div className="space-y-1">
-            {headline && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{headline}</p>
-            )}
+            <div className="mt-3 space-y-1">
             {location && (
               <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
                 <MapPin className="icon-sm" />
@@ -407,8 +407,6 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
               </div>
             </div>
             </div>
-          </div>
-        </div>
       </CardContent>
     </Card>
     </>

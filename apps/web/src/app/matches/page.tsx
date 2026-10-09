@@ -337,7 +337,7 @@ function MatchListRow({
                 <MapPin className="icon-sm" />{hit.location}
               </p>
             )}
-            {hit.headline && <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{hit.headline}</p>}
+            {hit.headline && <p className="mt-1 text-sm text-muted-foreground truncate">{hit.headline}</p>}
             <FactLine
               className="mt-2"
               items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}
@@ -359,7 +359,7 @@ function MatchListRow({
         </div>
 
         {/* Actions */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-2 pt-1">
           <div className="flex items-center gap-1.5">
             <button onClick={onPass}
               className="flex h-10 w-10 items-center justify-center gap-1.5 rounded-full border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-accessible sm:w-auto sm:px-3"
@@ -436,7 +436,7 @@ function MatchPreviewPanel({
                 {hit.displayName.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <h3 className="mt-3 text-lg font-semibold text-foreground">{hit.displayName}</h3>
+            <h3 className="person-name mt-3 font-display text-base font-semibold text-foreground">{hit.displayName}</h3>
             <RoleBadge role={hit.role} size="sm" showIcon className="mt-1" />
             {hit.headline && (
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{hit.headline}</p>

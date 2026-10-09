@@ -286,13 +286,13 @@ function SessionCard({ session }: { session: CoachingSession }) {
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
       <div className="p-4">
-        <div className="flex items-start gap-3 sm:gap-4">
+        <div className="flex items-start gap-3">
           <SessionDateTile date={new Date(session.scheduledAt)} />
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="text-sm font-semibold text-foreground">{session.title}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">with {session.coachName} · {session.coachTitle}</p>
+              <div className="min-w-0 space-y-1">
+                <p className="font-display text-base font-semibold text-foreground">{session.title}</p>
+                <p className="text-xs text-muted-foreground">with {session.coachName} · {session.coachTitle}</p>
               </div>
               <span className={cn('flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium shrink-0', status.color)}>
                 <StatusIcon className="icon-sm" />
@@ -466,8 +466,8 @@ function SessionCard({ session }: { session: CoachingSession }) {
 function CoachCard({ coach }: { coach: CoachProfile }) {
   return (
     <div className="rounded-xl border border-border bg-card p-4 hover:shadow-sm hover:border-border transition-all">
-      <div className="flex items-start gap-3">
-        <Avatar className="h-10 w-10 shrink-0">
+      <div className="flex items-start gap-4">
+        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
           {coach.avatar && <AvatarImage src={coach.avatar} />}
           <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
             {initialsOf(coach.name)}
@@ -477,12 +477,12 @@ function CoachCard({ coach }: { coach: CoachProfile }) {
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-1.5">
-                <p className="text-sm font-semibold text-foreground">{coach.name}</p>
+                <p className="person-name font-semibold text-foreground">{coach.name}</p>
                 {coach.isVerified && (
                   <Badge size="sm" className="rounded-full px-1.5 bg-primary/10 text-primary-accessible border-primary/20">Verified</Badge>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">{coach.title}</p>
+              <p className="text-sm text-muted-foreground truncate">{coach.title}</p>
             </div>
             {coach.pricePerHour != null && (
               <p className="text-sm font-semibold text-foreground shrink-0">

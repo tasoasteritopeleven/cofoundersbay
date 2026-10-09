@@ -77,57 +77,51 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
       'card-interactive hover-lift group transition-all duration-200',
       featured && 'border-primary/15 bg-primary/[0.03]'
     )}>
-      <CardContent>
-        <div className="flex items-start gap-4">
-          {/* Company avatar */}
-          <Avatar className="h-11 w-11 shrink-0 rounded-xl ring-2 ring-border/60">
+      <CardContent className="space-y-3">
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
             <AvatarImage src={job.creator?.avatarUrl ?? undefined} />
             <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-bold text-sm">
               {initialsOf(job.creator.displayName)}
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                    {job.title}
-                  </h3>
-                  {featured && <Star className="icon-sm text-status-warning fill-status-warning" />}
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{job.creator.displayName}</p>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {job.role && (
-                  <Badge variant="secondary" className="text-xs"><StatusText value={job.role} /></Badge>
-                )}
-                {job.type && (
-                  <Badge variant="outline" className="text-xs"><StatusText value={job.type} /></Badge>
-                )}
-                {job.isRemote && (
-                  <Badge variant="outline" className="text-xs border-status-success-border text-status-success bg-status-success-bg">
-                    <Wifi className="mr-1 icon-sm" />
-                    <BilingualText en={jobsEn('remote')} el={jobsEl('remote')} compact />
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-              {job.location && (
-                <span className="flex items-center gap-1"><MapPin className="icon-sm" />{job.location}</span>
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-display text-base font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
+                {job.title}
+              </h3>
+              {featured && <Star className="icon-sm text-status-warning fill-status-warning" />}
+              {job.role && (
+                <Badge variant="secondary" className="text-xs"><StatusText value={job.role} /></Badge>
               )}
-              {!job.location && !job.isRemote && (
-                <span className="flex items-center gap-1">
-                  <Building2 className="icon-sm" />
-                  <BilingualText en={jobsEn('location_unknown')} el={jobsEl('location_unknown')} compact />
-                </span>
+              {job.type && (
+                <Badge variant="outline" className="text-xs"><StatusText value={job.type} /></Badge>
+              )}
+              {job.isRemote && (
+                <Badge variant="outline" className="text-xs border-status-success-border text-status-success bg-status-success-bg">
+                  <Wifi className="mr-1 icon-sm" />
+                  <BilingualText en={jobsEn('remote')} el={jobsEl('remote')} compact />
+                </Badge>
               )}
             </div>
+            <p className="text-xs text-muted-foreground">{job.creator.displayName}</p>
           </div>
+        </div>
 
-          <div className="ml-auto flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+          {job.location && (
+            <span className="flex items-center gap-1"><MapPin className="icon-sm" />{job.location}</span>
+          )}
+          {!job.location && !job.isRemote && (
+            <span className="flex items-center gap-1">
+              <Building2 className="icon-sm" />
+              <BilingualText en={jobsEn('location_unknown')} el={jobsEl('location_unknown')} compact />
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 pt-1">
             <SaveItemButton kind="job" itemId={job.id} title={job.title} />
             {/* "View" linked to /discover (API) or back to /jobs (demo) for
                 every role; it opens the poster's profile when the poster is known. */}
@@ -139,7 +133,6 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
                 </Link>
               </Button>
             ) : null}
-          </div>
         </div>
       </CardContent>
     </Card>

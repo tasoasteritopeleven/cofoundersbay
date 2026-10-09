@@ -189,7 +189,7 @@ function ResultCard({ result }: { result: SearchResult }) {
     >
       <Card className="group hover:border-primary/50 transition-all duration-150">
         <CardContent>
-          <div className="flex items-start gap-4">
+          <div className="flex items-center gap-4">
             {result.imageUrl ? (
               <Avatar className="h-10 w-10 shrink-0">
                 <AvatarImage src={result.imageUrl} />
@@ -208,7 +208,7 @@ function ResultCard({ result }: { result: SearchResult }) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-medium text-foreground group-hover:text-primary-accessible transition-colors truncate">
+                <h3 className="person-name font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
                   {result.title}
                 </h3>
                 <Badge variant="secondary" className="text-2xs shrink-0">
