@@ -35,16 +35,17 @@ html {
 }
 
 @layer base {
-  /* A focused field below 16px can make iOS Safari zoom the page. On this
-     phone the reading text sits at 12.6–14.1px, and a 16px field read as a
-     shout next to it. Fields use the title step so a search bar and a form
-     match the heading beside them. `!important` because a Tailwind text
-     utility on the element would otherwise win. */
+  /* A focused field below 16px can make iOS Safari zoom the page. The
+     field's own title is the label (14.170) and its subtitle is the hint
+     (12.663). The text inside a search bar or a form sits one step under
+     that subtitle (12.663 × 0.98). Cards, stat figures and every other
+     reading step stay put. `!important` because a Tailwind text utility on
+     the element would otherwise win. */
   @media (max-width: 639.98px) {
     input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
     select,
     textarea {
-      font-size: 14.148px !important;
+      font-size: 12.410px !important;
     }
   }
 
@@ -3331,9 +3332,9 @@ textarea[class~="border-input"]:focus,
    size: body 14.459 × 0.98, the root and figures 15.837 × 0.98, stat
    numbers 14.883 × 0.98, the page title 14.437 × 0.98, section headings
    14.098 × 0.98. The same steps apply on every page. Search bars, Ask AI
-   and other text fields use the title step (14.148), the same size as the
-   page title, so a field does not sit above the text around it. The
-   discover query stays on that step too.
+   and other text fields are 12.410, one step under the field subtitle
+   (12.663) and under the field title (14.170). Card copy and stat figures
+   are not fields and stay on their own steps.
 
    The dashboard is the phone standard for the same role on every page.
    text-xl through text-7xl, including pages and dialogs outside
@@ -3401,8 +3402,8 @@ textarea[class~="border-input"]:focus,
     line-height: 1.4;
   }
 
-  /* A button, tab or field set in text-xs stays on the support step, under
-     the title. Text fields themselves are pinned to the title step above. */
+  /* A button or tab set in text-xs stays on the support step, under the
+     title. A text field is pinned under that step, at 12.410, above. */
   .text-xs[data-slot='button'],
   button.text-xs,
   [role='button'].text-xs,
@@ -3597,8 +3598,9 @@ textarea[class~="border-input"]:focus,
 
   input[data-filter-field]:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
   select[data-filter-field] {
-    /* Discover's query shares the title step with every other text field. */
-    font-size: 14.148px !important;
+    /* Discover's query shares the field step with every other text field:
+       under the field title and under the field subtitle. */
+    font-size: 12.410px !important;
   }
 
   /* A paragraph a card cuts with an ellipsis wraps on a phone instead:
