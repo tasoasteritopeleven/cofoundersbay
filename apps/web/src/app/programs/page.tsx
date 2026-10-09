@@ -23,7 +23,6 @@ import {
   BookmarkCheck,
   ArrowRight,
   Zap,
-  Star,
   Filter,
   X,
   Handshake,
@@ -238,7 +237,7 @@ function ProgramCard({
 
   return (
     <Card className={cn('transition-all hover:border-primary/30 group', isEnrolled && 'border-primary/40 bg-primary/2')}>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 text-left">
         <div className="flex items-start gap-3">
           <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
             <AvatarImage src={program.organization?.logoUrl ?? undefined} />
@@ -249,95 +248,83 @@ function ProgramCard({
           </Avatar>
 
           <div className="min-w-0 flex-1 space-y-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="font-display text-base font-semibold text-foreground">{program.title}</h3>
-              {isEnrolled && (
-                <Badge variant="outline" className="text-xs bg-primary/10 text-primary-accessible border-primary/30 gap-1">
-                  <CheckCircle2 className="icon-sm" aria-hidden="true" />
-                  <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
-                </Badge>
-              )}
-              <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
-                <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
-              </Badge>
-              <Badge variant="outline" className="text-xs capitalize text-muted-foreground">
-                <BilingualText en={badgeType(program.programType).en} el={badgeType(program.programType).el} compact />
-              </Badge>
-            </div>
-            {program.organization?.name && (
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Building2 className="icon-sm flex-shrink-0" />
-                <span className="truncate">{program.organization.name}</span>
-              </p>
-            )}
+            <h3 className="font-display text-base font-semibold text-foreground">{program.title}</h3>
+            <FactLine
+              className="w-full justify-start text-left"
+              items={[
+                program.organization?.name,
+                <BilingualText key="type" en={badgeType(program.programType).en} el={badgeType(program.programType).el} compact />,
+              ]}
+            />
           </div>
         </div>
 
         {program.description && (
-          <p className="card-copy text-sm text-muted-foreground leading-relaxed line-clamp-2">{program.description}</p>
+          <p className="card-copy text-left text-sm text-muted-foreground leading-relaxed line-clamp-2">{program.description}</p>
         )}
 
-        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-              {program.applicationDeadline && acceptsApplications(program) && deadline !== null && (
-                <span className={cn('flex items-center gap-1', deadline !== null && deadline <= 7 && deadlineUrgencyClass(deadline))}>
-                  <Clock className="icon-sm" />
-                  {deadline > 0 ? `${deadline}d to apply` : 'Deadline today'}
-                </span>
-              )}
-              {program.startDate && (
-                <span className="flex items-center gap-1">
-                  <Calendar className="icon-sm" />
-                  <BilingualText en={`Starts ${fmtDate(program.startDate, PROGRAM_DATE)}`} el={`Ξεκινά ${fmtDate(program.startDate, PROGRAM_DATE)}`} compact />
-                </span>
-              )}
-              <span className="flex items-center gap-1">
-                {program.isRemote ? <Globe className="icon-sm" /> : <MapPin className="icon-sm" />}
-                {program.isRemote ? 'Remote' : (program.location ?? 'On-site')}
-              </span>
-              {spotsLeft !== null && (
-                <span className={cn(
-                  'flex items-center gap-1',
-                  isFull ? cn('font-medium', STATUS.danger.icon) : spotsLeft <= 3 ? cn('font-medium', STATUS.warning.icon) : 'text-muted-foreground',
-                )}>
-                  <Users className="icon-sm" />
-                  {isFull ? 'Full' : `${spotsLeft} spot${spotsLeft !== 1 ? 's' : ''} left`}
-                </span>
-              )}
-            </div>
+        <div className="flex w-full flex-wrap items-center justify-start gap-x-4 gap-y-1 text-left text-xs text-muted-foreground">
+          <Badge variant="outline" className={cn('text-xs capitalize border', STATUS[PROGRAM_STATUS_TONE[program.status] ?? 'neutral'].chip)}>
+            <BilingualText en={badgeStatus(program.status).en} el={badgeStatus(program.status).el} compact />
+          </Badge>
+          {program.applicationDeadline && acceptsApplications(program) && deadline !== null && (
+            <span className={cn('flex items-center gap-1', deadline !== null && deadline <= 7 && deadlineUrgencyClass(deadline))}>
+              <Clock className="icon-sm" />
+              {deadline > 0 ? `${deadline}d to apply` : 'Deadline today'}
+            </span>
+          )}
+          {program.startDate && (
+            <span className="flex items-center gap-1">
+              <Calendar className="icon-sm" />
+              <BilingualText en={`Starts ${fmtDate(program.startDate, PROGRAM_DATE)}`} el={`Ξεκινά ${fmtDate(program.startDate, PROGRAM_DATE)}`} compact />
+            </span>
+          )}
+          <span className="flex items-center gap-1">
+            {program.isRemote ? <Globe className="icon-sm" /> : <MapPin className="icon-sm" />}
+            {program.isRemote ? 'Remote' : (program.location ?? 'On-site')}
+          </span>
+          {spotsLeft !== null && (
+            <span className={cn(
+              'flex items-center gap-1',
+              isFull ? cn('font-medium', STATUS.danger.icon) : spotsLeft <= 3 ? cn('font-medium', STATUS.warning.icon) : 'text-muted-foreground',
+            )}>
+              <Users className="icon-sm" />
+              {isFull ? 'Full' : `${spotsLeft} spot${spotsLeft !== 1 ? 's' : ''} left`}
+            </span>
+          )}
+        </div>
 
-            <FactLine items={(program.industries ?? []).slice(0, 5)} />
+        <FactLine className="w-full justify-start text-left" items={(program.industries ?? []).slice(0, 5)} />
 
-            {(program.benefits as string[] | undefined)?.length ? (
-              <div className="flex flex-wrap gap-1">
-                {(program.benefits as string[]).slice(0, 3).map((b, i) => (
-                  <span key={i} className={cn('text-xs flex items-center gap-1', STATUS.success.text)}>
-                    <Star className="icon-sm" />{b}
-                  </span>
-                ))}
-              </div>
-            ) : null}
+        {(program.benefits as string[] | undefined)?.length ? (
+          <FactLine
+            className="w-full justify-start text-left"
+            label={bilingualAria('Benefits', 'Οφέλη')}
+            items={(program.benefits as string[]).slice(0, 3)}
+          />
+        ) : null}
 
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              {acceptsApplications(program) && !isEnrolled && !isFull && (
-                <Button size="sm" onClick={(e) => { e.preventDefault(); onApply(program); }}>
-                  <Zap className="icon-sm mr-1.5" aria-hidden="true" />
-                  <BilingualText en={programsEn('apply_now')} el={programsEl('apply_now')} compact />
-                </Button>
-              )}
-              {isEnrolled && (
-                // A state, not an action: it looked like a button and did
-                // nothing. Disabled, so it reads as "Applied, unavailable".
-                <Button size="sm" variant="outline" className="text-primary-accessible border-primary/40" disabled>
-                  <CheckCircle2 className="icon-sm mr-1.5" aria-hidden="true" />
-                  <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
-                </Button>
-              )}
-              <Button size="sm" variant="ghost" asChild>
-                <Link href={`/programs/${program.id}`}>
-                  View Details <ArrowRight className="icon-sm ml-1" />
-                </Link>
-              </Button>
-            </div>
+        <div className="flex flex-wrap items-center justify-start gap-2 pt-1">
+          {acceptsApplications(program) && !isEnrolled && !isFull && (
+            <Button size="sm" className="gap-1.5 text-xs" onClick={(e) => { e.preventDefault(); onApply(program); }}>
+              <Zap className="icon-sm" aria-hidden="true" />
+              <BilingualText en={programsEn('apply_now')} el={programsEl('apply_now')} compact />
+            </Button>
+          )}
+          {isEnrolled && (
+            // A state, not an action: it looked like a button and did
+            // nothing. Disabled, so it reads as "Applied, unavailable".
+            <Button size="sm" variant="outline" className="gap-1.5 text-xs text-primary-accessible border-primary/40" disabled>
+              <CheckCircle2 className="icon-sm" aria-hidden="true" />
+              <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
+            </Button>
+          )}
+          <Button size="sm" variant="ghost" className="gap-1.5 text-xs" asChild>
+            <Link href={`/programs/${program.id}`}>
+              View Details <ArrowRight className="icon-sm" />
+            </Link>
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
