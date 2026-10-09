@@ -293,7 +293,7 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
     />
     <Card className="group hover:border-primary/30 transition-colors">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
           <Link href={`/profiles/${userId}`} onClick={() => recordBehavioralSignal({ signalType: 'profile_view', targetId: userId, targetType: 'user' })}>
             <Avatar className="h-10 w-10 shrink-0 ring-2 ring-border group-hover:ring-primary/20 transition-all">
               <AvatarImage src={avatarUrl ?? undefined} />
@@ -309,15 +309,6 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
                 <Link href={`/profiles/${userId}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
                   {displayName}
                 </Link>
-                {headline && (
-                  <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{headline}</p>
-                )}
-                {location && (
-                  <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                    <MapPin className="icon-sm" />
-                    {location}
-                  </p>
-                )}
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {score > 0 && <MatchScoreBadge score={score} />}
@@ -335,6 +326,17 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
                 )}
               </div>
             </div>
+
+            <div className="card-axis">
+            {headline && (
+              <p className="text-sm text-muted-foreground mt-0.5 line-clamp-1">{headline}</p>
+            )}
+            {location && (
+              <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                <MapPin className="icon-sm" />
+                {location}
+              </p>
+            )}
 
             {/* Reason chips */}
             {reasons.length > 0 && (
@@ -403,6 +405,7 @@ function RecommendationCard({ hit, onConnect, onFeedback, onSave }: {
                 </Button>
                 <FeedbackMenu onFeedback={(fb) => onFeedback(userId, fb)} />
               </div>
+            </div>
             </div>
           </div>
         </div>

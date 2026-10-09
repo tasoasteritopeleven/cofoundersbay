@@ -186,7 +186,7 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
     <Card className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30 flex flex-col">
       <CardContent className="flex flex-col flex-1 gap-3">
         {/* Type icon + title */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
           <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', typeConfig.bg, typeConfig.color)}>
             <typeConfig.icon className="icon-md" />
           </div>
@@ -196,7 +196,7 @@ function ResourceCard({ resource, saved, onToggleSave }: { resource: Resource; s
             </h3>
             {/* Type and level are facts (one muted line); "Featured" is the
                 card's one pill. All three were tinted badges. */}
-            <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+            <div className="card-axis flex items-center gap-x-2 gap-y-1 flex-wrap">
               <FactLine
                 items={[
                   <BilingualText key="type" en={learningEn(typeConfig.labelKey)} el={learningEl(typeConfig.labelKey)} compact />,

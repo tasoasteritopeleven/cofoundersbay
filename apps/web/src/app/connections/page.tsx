@@ -78,7 +78,7 @@ function ConnectionCard({
 
   return (
     <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4">
+      <CardContent className="flex items-center gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
         <Link href={`/profiles/${other.id}`}>
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
             <AvatarImage src={other.avatarUrl ?? undefined} />
@@ -95,6 +95,7 @@ function ConnectionCard({
             </Link>
             <RoleBadge role={other.role} size="sm" />
           </div>
+          <div className="card-axis">
           {other.headline && (
             <p className="text-sm text-muted-foreground truncate">{other.headline}</p>
           )}
@@ -103,6 +104,7 @@ function ConnectionCard({
               &ldquo;{connection.message}&rdquo;
             </p>
           )}
+          </div>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
@@ -168,7 +170,7 @@ function IntroRequestCard({
   return (
     <Card className="card-interactive border-primary/20 bg-primary/5">
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
           <Link href={`/profiles/${sender.id}`}>
             <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/30">
               <AvatarImage src={sender.avatarUrl ?? undefined} />
@@ -190,6 +192,7 @@ function IntroRequestCard({
               </Badge>
             </div>
 
+            <div className="card-axis space-y-2">
             {sender.headline && (
               <p className="text-sm text-muted-foreground">{sender.headline}</p>
             )}
@@ -219,6 +222,7 @@ function IntroRequestCard({
               <p className="ml-auto shrink-0 text-xs text-muted-foreground">
                 {new Date(connection.createdAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}
               </p>
+            </div>
             </div>
           </div>
         </div>

@@ -237,7 +237,7 @@ export function EventCard({
           </div>
           
           {/* Host */}
-          <div className="mt-4 flex items-center gap-3">
+          <div className="mt-4 flex items-center gap-3" style={{ ['--card-rail' as string]: '2.75rem' }}>
             <Avatar className="h-8 w-8">
               <AvatarImage src={event.hostAvatar || undefined} />
               <AvatarFallback className="bg-primary/20 text-primary-accessible text-xs">
@@ -246,7 +246,7 @@ export function EventCard({
             </Avatar>
             <div>
               <p className="text-sm font-medium text-foreground">{event.hostName}</p>
-              <p className="text-xs text-muted-foreground">{event.hostRole}</p>
+              <p className="card-axis text-xs text-muted-foreground">{event.hostRole}</p>
             </div>
           </div>
           

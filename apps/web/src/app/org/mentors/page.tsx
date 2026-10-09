@@ -98,7 +98,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
   return (
     <Card className="transition-all hover:border-primary/30">
       <CardContent>
-        <div className="flex gap-4">
+        <div className="flex gap-4" style={{ ['--card-rail' as string]: 'calc(1.25rem + 1rem)' }}>
           <Link href={`/p/${mentor.userId}`}>
             <Avatar className="icon-md">
               <AvatarImage src={mentor.avatar} />
@@ -118,9 +118,6 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
                     <CheckCircle2 className="icon-sm text-primary-accessible" />
                   )}
                 </div>
-                {mentor.headline && (
-                  <p className="text-sm text-muted-foreground">{mentor.headline}</p>
-                )}
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
@@ -147,6 +144,10 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
               </div>
             </div>
 
+            <div className="card-axis">
+            {mentor.headline && (
+              <p className="mt-1 text-sm text-muted-foreground">{mentor.headline}</p>
+            )}
             <FactLine className="mt-2" items={mentor.expertise.slice(0, 4)} />
 
             <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
@@ -170,6 +171,7 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
                   {mentor.rating.toFixed(1)}
                 </span>
               )}
+            </div>
             </div>
           </div>
         </div>

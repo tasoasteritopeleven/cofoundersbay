@@ -653,6 +653,7 @@ export default function GroupDetailPage() {
                   type="button"
                   key={m.userId}
                   className="flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left hover:border-primary/30 transition-colors focus-ring"
+                  style={{ ['--card-rail' as string]: '3.25rem' }}
                   onClick={() => router.push(`/profiles/${m.userId}`)}
                 >
                   <Avatar className="h-10 w-10 shrink-0">
@@ -662,7 +663,7 @@ export default function GroupDetailPage() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{m.user?.displayName ?? 'Member'}</p>
                     {m.user?.headline && (
-                      <p className="text-xs text-muted-foreground truncate">{m.user.headline}</p>
+                      <p className="card-axis text-xs text-muted-foreground truncate">{m.user.headline}</p>
                     )}
                     {m.role !== 'member' && (
                       <span className="text-2xs text-primary-accessible font-medium"><StatusText value={m.role} /></span>

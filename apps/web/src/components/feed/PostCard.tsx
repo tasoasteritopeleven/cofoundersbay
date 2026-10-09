@@ -115,7 +115,7 @@ export function PostCard({
       <CardContent className="pt-5">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.5rem' }}>
             <Link href={`/profiles/${author.id}`}>
               <Avatar className="h-11 w-11 ring-2 ring-border/40">
                 <AvatarImage src={author.avatarUrl || undefined} />
@@ -141,7 +141,7 @@ export function PostCard({
                 <span className="text-xs text-muted-foreground"><RelativeTime date={createdAt} short absoluteAfterDays={7} /></span>
               </div>
               {author.headline && (
-                <p className="text-xs text-muted-foreground truncate">{author.headline}</p>
+                <p className="card-axis text-xs text-muted-foreground truncate">{author.headline}</p>
               )}
             </div>
           </div>

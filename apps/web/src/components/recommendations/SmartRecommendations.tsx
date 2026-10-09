@@ -249,7 +249,7 @@ export function SmartRecommendations() {
                     {getTypeIcon(rec.type)}
                   </div>
                 )}
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0" style={{ ['--card-rail' as string]: '4rem' }}>
                   <div className="flex items-center gap-2 mb-1">
                     <Badge variant="outline" className="gap-1">
                       {getTypeIcon(rec.type)}
@@ -257,7 +257,7 @@ export function SmartRecommendations() {
                     </Badge>
                   </div>
                   <CardTitle className="text-lg">{rec.title}</CardTitle>
-                  <CardDescription className="text-sm">
+                  <CardDescription className="card-axis text-sm">
                     {rec.subtitle}
                   </CardDescription>
                 </div>

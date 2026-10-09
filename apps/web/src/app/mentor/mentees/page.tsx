@@ -62,7 +62,7 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
   return (
     <Card className="transition-all hover:border-primary/30">
       <CardContent>
-        <div className="flex gap-4">
+        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
           <Link href={`/p/${relationship.menteeId}`}>
             <Avatar className="h-10 w-10">
               <AvatarImage src={mentee?.avatarUrl || undefined} />
@@ -77,17 +77,18 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
                 <Link href={`/p/${relationship.menteeId}`} className="font-medium hover:text-primary-accessible transition-colors">
                   {displayName}
                 </Link>
-                {mentee?.headline && (
-                  <p className="text-sm text-muted-foreground line-clamp-1">
-                    {mentee.headline}
-                  </p>
-                )}
               </div>
               <Badge variant="outline" className={cn('text-xs', statusColors[relationship.status])}>
                 <StatusText value={relationship.status} />
               </Badge>
             </div>
 
+            <div className="card-axis">
+            {mentee?.headline && (
+              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                {mentee.headline}
+              </p>
+            )}
             <FactLine className="mt-2" items={relationship.focusAreas ?? []} />
 
             <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
@@ -129,6 +130,7 @@ function MenteeCard({ relationship, upcomingBookings = 0 }: { relationship: Ment
                   <BilingualText en="Schedule" el="Προγραμματισμός" compact />
                 </Link>
               </Button>
+            </div>
             </div>
           </div>
         </div>

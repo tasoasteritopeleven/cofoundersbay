@@ -338,7 +338,7 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                 {members.map((member) => (
                   <Card key={member.id} className="group hover:border-border transition-all duration-150">
                     <CardContent className="pt-5 pb-4">
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
                         <Avatar className="h-10 w-10 shrink-0">
                           <AvatarImage src={member.avatarUrl ?? undefined} />
                           <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
@@ -352,8 +352,9 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                           >
                             {member.displayName}
                           </Link>
+                          <div className="card-axis">
                           {member.headline && (
-                            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{member.headline}</p>
+                            <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{member.headline}</p>
                           )}
                           <div className="flex flex-wrap gap-2 mt-2">
                             <Badge variant="outline" className="text-2xs h-5">
@@ -365,6 +366,7 @@ export function OrgContent({ org, slug }: OrgContentProps) {
                                 {member.location}
                               </span>
                             )}
+                          </div>
                           </div>
                         </div>
                       </div>

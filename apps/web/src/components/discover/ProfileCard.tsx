@@ -151,7 +151,7 @@ function ProfileCardInner({
     return (
       <Card className={cn('group hover:border-primary/30 transition-colors', className)}>
         <CardContent>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
             <Link href={`/profiles/${profile.userId}`}>
               <Avatar className="h-10 w-10">
                 <AvatarImage src={profile.avatarUrl || undefined} />
@@ -172,7 +172,7 @@ function ProfileCardInner({
                 <RoleBadge role={profile.role} size="sm" />
               </div>
               {profile.headline && (
-                <p className="text-xs text-muted-foreground truncate">{profile.headline}</p>
+                <p className="card-axis text-xs text-muted-foreground truncate">{profile.headline}</p>
               )}
             </div>
             <Button aria-label="Connect · Σύνδεση" size="sm" variant="ghost" onClick={onConnect}>
@@ -200,7 +200,7 @@ function ProfileCardInner({
 
         <CardContent className="relative pt-6 pb-4">
           {/* Header */}
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '4rem' }}>
             <Link href={`/profiles/${profile.userId}`}>
               <Avatar className="h-12 w-12 ring-2 ring-border/40 group-hover:ring-primary/40 transition-all">
                 <AvatarImage src={profile.avatarUrl || undefined} />
@@ -223,12 +223,14 @@ function ProfileCardInner({
                   </Badge>
                 )}
               </div>
+              <div className="card-axis">
               <div className="mt-1 flex items-center gap-2">
                 <RoleBadge role={profile.role} showIcon />
               </div>
               {profile.headline && (
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{profile.headline}</p>
               )}
+              </div>
             </div>
           </div>
 
@@ -372,7 +374,7 @@ function ProfileCardInner({
     <Card className={cn('group hover:border-primary/30 transition-all hover:-translate-y-0.5', className)}>
       <CardContent className="pt-5">
         {/* Header */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
           <Link href={`/profiles/${profile.userId}`}>
             <div className="relative">
               <Avatar className={cn('h-10 w-10 ring-2', ROLE_RING_COLORS[profile.role] || 'ring-border/40')}>
@@ -425,6 +427,7 @@ function ProfileCardInner({
                 </Button>
               </div>
             </div>
+            <div className="card-axis">
             {profile.headline && (
               <p className="person-subtitle mt-1 text-sm text-muted-foreground dark:text-muted-foreground line-clamp-2">{profile.headline}</p>
             )}
@@ -434,6 +437,7 @@ function ProfileCardInner({
                 {profile.location}
               </div>
             )}
+            </div>
           </div>
         </div>
 

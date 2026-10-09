@@ -239,7 +239,7 @@ function ProgramCard({
   return (
     <Card className={cn('transition-all hover:border-primary/30 group', isEnrolled && 'border-primary/40 bg-primary/2')}>
       <CardContent>
-        <div className="flex gap-4">
+        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.75rem' }}>
           <Avatar className="h-11 w-11 rounded-lg flex-shrink-0 border border-border">
             <AvatarImage src={program.organization?.logoUrl ?? undefined} />
             {/* Stands in for the organisation's logo: an avatar, not decoration. */}
@@ -260,7 +260,7 @@ function ProgramCard({
                     </Badge>
                   )}
                 </div>
-                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
+                <p className="card-axis mt-0.5 flex items-center gap-1 text-sm text-muted-foreground">
                   <Building2 className="icon-sm flex-shrink-0" />
                   <span className="truncate">{program.organization?.name}</span>
                 </p>
@@ -275,6 +275,7 @@ function ProgramCard({
               </div>
             </div>
 
+            <div className="card-axis">
             {program.description && (
               <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">{program.description}</p>
             )}
@@ -339,6 +340,7 @@ function ProgramCard({
                   View Details <ArrowRight className="icon-sm ml-1" />
                 </Link>
               </Button>
+            </div>
             </div>
           </div>
         </div>

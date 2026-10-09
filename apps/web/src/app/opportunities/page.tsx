@@ -148,7 +148,7 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
     <Card id={`opportunity-${opportunity.id}`} className="card-interactive hover-lift group scroll-mt-24 transition-all duration-300 hover:border-primary/30">
       <CardContent className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
             <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
               <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-bold text-sm">{initials}</AvatarFallback>
             </Avatar>
@@ -157,7 +157,7 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
               {/* Company, type and remote are facts about the listing: one
                   line, where the type and remote were two tinted pills. */}
               <FactLine
-                className="mt-1 sm:text-sm"
+                className="card-axis mt-1 sm:text-sm"
                 items={[
                   opportunity.company,
                   <BilingualText key="type" en={opportunitiesEn(cfg.labelKey)} el={opportunitiesEl(cfg.labelKey)} compact />,
@@ -251,7 +251,7 @@ function JobCard({ job }: { job: JobPostingView }) {
     <Card className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30">
       <CardContent className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3" style={{ ['--card-rail' as string]: '3.25rem' }}>
             <Avatar className="h-10 w-10 shrink-0 rounded-xl ring-2 ring-border/60">
               <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-bold text-sm">
                 {initialsOf(job.creator.displayName)}
@@ -259,7 +259,7 @@ function JobCard({ job }: { job: JobPostingView }) {
             </Avatar>
             <div>
               <h3 className="font-display text-base font-semibold text-foreground">{job.title}</h3>
-              <div className="mt-1 flex items-center gap-2 flex-wrap">
+              <div className="card-axis mt-1 flex items-center gap-2 flex-wrap">
                 <span className="text-sm text-muted-foreground">{job.creator.displayName}</span>
                 <Badge variant="outline" className="text-2xs px-1.5 bg-primary/10 text-primary-accessible border-primary/20">
                   <Building2 className="mr-1 icon-sm" />

@@ -78,7 +78,7 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
       featured && 'border-primary/15 bg-primary/[0.03]'
     )}>
       <CardContent>
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.75rem' }}>
           {/* Company avatar */}
           <Avatar className="h-11 w-11 shrink-0 rounded-xl ring-2 ring-border/60">
             <AvatarImage src={job.creator?.avatarUrl ?? undefined} />
@@ -96,7 +96,7 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
                   </h3>
                   {featured && <Star className="icon-sm text-status-warning fill-status-warning" />}
                 </div>
-                <p className="text-sm text-muted-foreground">{job.creator.displayName}</p>
+                <p className="card-axis text-sm text-muted-foreground">{job.creator.displayName}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {job.role && (
@@ -114,7 +114,7 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
               </div>
             </div>
 
-            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <div className="card-axis mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {job.location && (
                 <span className="flex items-center gap-1"><MapPin className="icon-sm" />{job.location}</span>
               )}

@@ -67,7 +67,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
       request.status === 'pending' && 'border-status-warning-border'
     )}>
       <CardContent>
-        <div className="flex gap-4">
+        <div className="flex gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
           <Link href={`/profiles/${request.requesterId}`} aria-label={`${displayName}`}>
             <Avatar className="h-10 w-10">
               <AvatarImage src={request.requester?.avatarUrl || undefined} />
@@ -82,11 +82,6 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
                 <Link href={`/profiles/${request.requesterId}`} className="font-medium hover:text-primary-accessible transition-colors">
                   {displayName}
                 </Link>
-                {request.requester?.headline && (
-                  <p className="text-sm text-muted-foreground line-clamp-1">
-                    {request.requester.headline}
-                  </p>
-                )}
               </div>
               <Badge variant="outline" className={cn('text-xs', statusColors[request.status])}>
                 {request.status === 'pending' && <Clock className="icon-sm mr-1" aria-hidden="true" />}
@@ -96,6 +91,12 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
               </Badge>
             </div>
 
+            <div className="card-axis">
+            {request.requester?.headline && (
+              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                {request.requester.headline}
+              </p>
+            )}
             <p className="card-copy text-sm mt-2 text-muted-foreground line-clamp-2">
               "{request.message}"
             </p>
@@ -149,6 +150,7 @@ function RequestCard({ request, onAccept, onDecline, isResponding }: RequestCard
                   </Link>
                 </Button>
               )}
+            </div>
             </div>
           </div>
         </div>

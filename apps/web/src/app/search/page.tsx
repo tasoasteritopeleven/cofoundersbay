@@ -189,7 +189,7 @@ function ResultCard({ result }: { result: SearchResult }) {
     >
       <Card className="group hover:border-primary/50 transition-all duration-150">
         <CardContent>
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
             {result.imageUrl ? (
               <Avatar className="h-10 w-10 shrink-0">
                 <AvatarImage src={result.imageUrl} />
@@ -221,6 +221,7 @@ function ResultCard({ result }: { result: SearchResult }) {
                 </Badge>
               </div>
 
+              <div className="card-axis">
               {result.subtitle && (
                 <p className="text-sm text-muted-foreground truncate">{result.subtitle}</p>
               )}
@@ -255,6 +256,7 @@ function ResultCard({ result }: { result: SearchResult }) {
               {result.tags && result.tags.length > 0 && (
                 <FactLine className="mt-2" items={[...result.tags.slice(0, 3), result.tags.length > 3 ? `+${result.tags.length - 3}` : null]} />
               )}
+              </div>
             </div>
 
             <ArrowRight className="icon-sm text-muted-foreground opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0" />

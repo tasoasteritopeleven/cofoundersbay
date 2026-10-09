@@ -322,13 +322,7 @@ function MatchListRow({
                   {commitment ? (
                     <Link href={commitment.href} className="rounded-full"><StepChip step={commitment.step} /></Link>
                   ) : null}
-                  {hit.location && (
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="icon-sm" />{hit.location}
-                    </span>
-                  )}
                 </div>
-                {hit.headline && <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{hit.headline}</p>}
               </div>
               {/* Score text */}
               <div className="text-right shrink-0">
@@ -338,6 +332,12 @@ function MatchListRow({
             </div>
 
             <div className="card-axis">
+            {hit.location && (
+              <p className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPin className="icon-sm" />{hit.location}
+              </p>
+            )}
+            {hit.headline && <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{hit.headline}</p>}
             <FactLine
               className="mt-2"
               items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}

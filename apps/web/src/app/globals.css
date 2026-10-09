@@ -3662,7 +3662,8 @@ textarea[class~="border-input"]:focus,
      --card-rail to the mark plus the gap. On a phone the copy shifts back
      by that rail and starts under the circular mark. The title and the
      subtitle stay beside the mark. From 640px this rule does not apply. */
-  #main-content [data-card] .card-axis {
+  #main-content [data-card] .card-axis,
+  #main-content .card-axis {
     margin-left: calc(-1 * var(--card-rail, 0px));
     width: calc(100% + var(--card-rail, 0px));
   }
