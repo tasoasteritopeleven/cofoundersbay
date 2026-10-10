@@ -458,7 +458,7 @@ html {
        letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
        rgb(188, 227, 189) left white at 1.4:1. */
     --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
-    --mint-mark: 137.2 99.3% 26.9%;       /* rgb(0, 137, 40), Bay, rings and green outlines */
+    --mint-mark: 138.4 32.2% 58%;         /* #71b687 rgb(113, 182, 135), Bay, rings, bars, outlines */
     --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4080,6 +4080,12 @@ html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([cl
   --tw-ring-color: hsl(var(--mint-mark) / 0.56);
 }
 html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
+  background-color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] :not(button):not(a):is([class~='h-full'], [class~='h-0.5'], [class~='h-1'], [class~='h-1.5'], [class~='h-2']):is([class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80']) {
+  background-color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] #main-content [role='progressbar'] > :is([class~='bg-primary'], [class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80']) {
   background-color: hsl(var(--mint-mark));
 }
 html[data-theme="minimal"] .avatar-initials[class*='bg-primary/10'] {
