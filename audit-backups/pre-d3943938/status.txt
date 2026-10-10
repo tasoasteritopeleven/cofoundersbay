@@ -1,0 +1,18 @@
+ M apps/web/next.config.ts
+ M apps/web/src/app/admin/automations/page.tsx
+ M apps/web/src/app/admin/page.tsx
+ M apps/web/src/components/ai/ActionCard.tsx
+ M apps/web/src/hooks/useAIChat.ts
+ M apps/web/src/lib/copilot-engine.ts
+ M apps/web/src/lib/copilot-types.ts
+ M apps/web/src/lib/page-controls.ts
+ M memory/PRD.md
+ M packages/shared/src/actions/types.ts
+?? apps/web/src/app/admin/automations/page.cancellation.test.tsx
+?? apps/web/src/app/admin/page.cancellation.test.tsx
+?? apps/web/src/components/ai/ActionCard.cancellation.test.tsx
+?? apps/web/src/hooks/useAIChat.cancellation.test.tsx
+?? apps/web/src/lib/__tests__/
+?? docs/AUDIT_CONTINUATION_15183f58.md
+?? docs/audit/continuation/
+?? docs/audit/inventory-15183f58-continuation.json

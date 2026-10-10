@@ -16,8 +16,16 @@ const { HOST, PORT } = process.env;
 if (!HOST || !PORT) {
   throw new Error('The preview must run through supervisor with its existing HOST and PORT.');
 }
+const fs = require('node:fs');
 const next = require.resolve('next/dist/bin/next', { paths: [repo] });
-const child = spawn(process.execPath, [next, 'dev', web, '--turbopack', '--hostname', HOST, '--port', PORT], {
+const activeBuildFile = path.resolve(__dirname, '../audit-backups/active-preview-dist');
+const activeBuild = fs.existsSync(activeBuildFile) ? fs.readFileSync(activeBuildFile, 'utf8').trim() : '';
+if (activeBuild && (!/^\.next-preview-[a-z0-9-]+$/.test(activeBuild) || !fs.existsSync(path.join(web, activeBuild, 'BUILD_ID')))) {
+  throw new Error('The selected isolated preview build is not complete. Refusing to serve mismatched assets.');
+}
+// A completed isolated build has immutable CSS/assets, avoiding watcher caps
+// and dev-memory restarts during measurements. No production deployment occurs.
+const child = spawn(process.execPath, [next, activeBuild ? 'start' : 'dev', web, '--hostname', HOST, '--port', PORT], {
   cwd: web,
   stdio: 'inherit',
   env: {
@@ -25,6 +33,8 @@ const child = spawn(process.execPath, [next, 'dev', web, '--turbopack', '--hostn
     NODE_OPTIONS: process.env.NODE_OPTIONS || '--max-old-space-size=1024',
     PREVIEW_ALLOWED_DEV_ORIGINS: process.env.PREVIEW_ALLOWED_DEV_ORIGINS || [previewHost, '**.preview.emergentcf.cloud'].join(','),
     NEXT_PUBLIC_API_USE_PROXY: '1',
+    WATCHPACK_POLLING: '1000',
+    ...(activeBuild ? { NODE_ENV: 'production', EMERGENT_PREVIEW_DIST_DIR: activeBuild } : {}),
   },
 });
 for (const signal of ['SIGTERM', 'SIGINT']) {

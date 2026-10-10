@@ -1,0 +1,955 @@
+[
+  {
+    "route": "/fundraising",
+    "width": 390,
+    "name": "fundraising-mobile",
+    "issues": "escape (36), offAxis (4), lower (1)",
+    "measurement": {
+      "cardCount": 4,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Harbor $750K seed·Γύρος Harbor $750K",
+          "rect": {
+            "left": 8,
+            "top": 4655.71875,
+            "width": 374,
+            "height": 360.90625
+          },
+          "titleStyle": {
+            "fontSize": "24px",
+            "fontWeight": "700",
+            "lineHeight": "normal",
+            "color": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Athens Tech Angels",
+          "rect": {
+            "left": 8,
+            "top": 5037.625,
+            "width": 374,
+            "height": 884.6875
+          },
+          "titleStyle": {
+            "fontSize": "18.72px",
+            "fontWeight": "700",
+            "lineHeight": "normal",
+            "color": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Warm intro from Athens founder networks·Ζεστή γνωρ",
+          "rect": {
+            "left": 8,
+            "top": 5922.3125,
+            "width": 374,
+            "height": 550.6875
+          },
+          "titleStyle": {
+            "fontSize": "18.72px",
+            "fontWeight": "700",
+            "lineHeight": "normal",
+            "color": "rgb(0, 0, 0)"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Remaining $375K of the $750K seed·Υπόλοιπα $375K τ",
+          "rect": {
+            "left": 8,
+            "top": 6473,
+            "width": 374,
+            "height": 510.6875
+          },
+          "titleStyle": {
+            "fontSize": "18.72px",
+            "fontWeight": "700",
+            "lineHeight": "normal",
+            "color": "rgb(0, 0, 0)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/fundraising",
+    "width": 1440,
+    "name": "fundraising-desktop",
+    "issues": "none detected",
+    "measurement": {
+      "cardCount": 4,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Harbor $750K seed·Γύρος Harbor $750K",
+          "rect": {
+            "left": 223.03125,
+            "top": 187.953125,
+            "width": 1148.109375,
+            "height": 299.59375
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Athens Tech Angels",
+          "rect": {
+            "left": 223.03125,
+            "top": 566.765625,
+            "width": 1148.109375,
+            "height": 200.71875
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Warm intro from Athens founder networks·Ζεστή γνωρ",
+          "rect": {
+            "left": 223.03125,
+            "top": 774.03125,
+            "width": 1148.109375,
+            "height": 200.796875
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Remaining $375K of the $750K seed·Υπόλοιπα $375K τ",
+          "rect": {
+            "left": 223.03125,
+            "top": 981.375,
+            "width": 1148.109375,
+            "height": 179.46875
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/connections",
+    "width": 390,
+    "name": "connections-mobile",
+    "issues": "offAxis (1)",
+    "measurement": {
+      "cardCount": 2,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Elena PapadopoulosFounder",
+          "rect": {
+            "left": 16,
+            "top": 274.765625,
+            "width": 358,
+            "height": 224.0625
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "People you may know·Ίσως γνωρίζετε",
+          "rect": {
+            "left": 16,
+            "top": 522.828125,
+            "width": 358,
+            "height": 299.796875
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/programs",
+    "width": 1440,
+    "name": "programs-desktop",
+    "issues": "centered (7)",
+    "measurement": {
+      "cardCount": 3,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Seed Accelerator · Autumn 2026",
+          "rect": {
+            "left": 223.03125,
+            "top": 293.203125,
+            "width": 1148.109375,
+            "height": 280.765625
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Climate & Energy Track 2026",
+          "rect": {
+            "left": 223.03125,
+            "top": 583.796875,
+            "width": 1148.109375,
+            "height": 259.4375
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Pre-seed Bootcamp · Spring 2027",
+          "rect": {
+            "left": 223.03125,
+            "top": 853.0625,
+            "width": 1148.109375,
+            "height": 300.5625
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/scout",
+    "width": 1440,
+    "name": "scout-desktop",
+    "issues": "escape (10)",
+    "measurement": {
+      "cardCount": 4,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Your brief·Το σημείωμά σας",
+          "rect": {
+            "left": 223.03125,
+            "top": 150.453125,
+            "width": 1148.109375,
+            "height": 610.484375
+          },
+          "titleStyle": {
+            "fontSize": "16.4875px",
+            "fontWeight": "600",
+            "lineHeight": "22.2581px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Marcus Chen",
+          "rect": {
+            "left": 223.03125,
+            "top": 839.90625,
+            "width": 1148.109375,
+            "height": 413.0625
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Katerina Nikolaou",
+          "rect": {
+            "left": 223.03125,
+            "top": 1268.96875,
+            "width": 1148.109375,
+            "height": 390.109375
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Giorgos Vlachos",
+          "rect": {
+            "left": 223.03125,
+            "top": 1675.078125,
+            "width": 1148.109375,
+            "height": 344.203125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/members",
+    "width": 390,
+    "name": "members-mobile",
+    "issues": "baseline check",
+    "measurement": {
+      "cardCount": 8,
+      "cards": [
+        {
+          "index": 0,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 285.90625,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 1,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 591.09375,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 2,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 896.28125,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 3,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 1201.46875,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 4,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 1506.65625,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 5,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 1811.84375,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 6,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 2117.03125,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 7,
+          "title": "No title",
+          "rect": {
+            "left": 16,
+            "top": 2422.21875,
+            "width": 358,
+            "height": 289.1875
+          },
+          "titleStyle": null
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/members",
+    "width": 1440,
+    "name": "members-desktop",
+    "issues": "baseline check",
+    "measurement": {
+      "cardCount": 7,
+      "cards": [
+        {
+          "index": 0,
+          "title": "No title",
+          "rect": {
+            "left": 223.03125,
+            "top": 135.625,
+            "width": 374.703125,
+            "height": 94.71875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 1,
+          "title": "No title",
+          "rect": {
+            "left": 609.734375,
+            "top": 135.625,
+            "width": 374.703125,
+            "height": 94.71875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 2,
+          "title": "No title",
+          "rect": {
+            "left": 996.4375,
+            "top": 135.625,
+            "width": 374.703125,
+            "height": 94.71875
+          },
+          "titleStyle": null
+        },
+        {
+          "index": 3,
+          "title": "Elena Papadopoulos",
+          "rect": {
+            "left": 223.03125,
+            "top": 334.859375,
+            "width": 372.03125,
+            "height": 291.203125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 4,
+          "title": "Marcus Chen",
+          "rect": {
+            "left": 611.0625,
+            "top": 334.859375,
+            "width": 372.03125,
+            "height": 291.203125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 5,
+          "title": "Dr. Sarah Kim",
+          "rect": {
+            "left": 999.09375,
+            "top": 334.859375,
+            "width": 372.046875,
+            "height": 291.203125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 6,
+          "title": "Nikos Andreou",
+          "rect": {
+            "left": 223.03125,
+            "top": 642.0625,
+            "width": 372.03125,
+            "height": 291.203125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/opportunities",
+    "width": 390,
+    "name": "opportunities-mobile",
+    "issues": "baseline check",
+    "measurement": {
+      "cardCount": 11,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Commercial co-founder for Harbor",
+          "rect": {
+            "left": 16,
+            "top": 735.359375,
+            "width": 358,
+            "height": 441.3125
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Angel with grid-operator experience for Orion Grid",
+          "rect": {
+            "left": 16,
+            "top": 1192.671875,
+            "width": 358,
+            "height": 462.015625
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Head of growth for Aegis Health",
+          "rect": {
+            "left": 16,
+            "top": 1670.6875,
+            "width": 358,
+            "height": 461.578125
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Technical co-founder — vertical SaaS for logistics",
+          "rect": {
+            "left": 16,
+            "top": 2190.53125,
+            "width": 358,
+            "height": 315
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 4,
+          "title": "Fractional CTO — two days a week",
+          "rect": {
+            "left": 16,
+            "top": 2521.53125,
+            "width": 358,
+            "height": 294.296875
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 5,
+          "title": "Angel syndicate — pre-seed allocation",
+          "rect": {
+            "left": 16,
+            "top": 2831.828125,
+            "width": 358,
+            "height": 318.34375
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 6,
+          "title": "Design partner wanted — ops teams of 20 to 200",
+          "rect": {
+            "left": 16,
+            "top": 3166.171875,
+            "width": 358,
+            "height": 294.734375
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 7,
+          "title": "Mentorship — ML evaluation and cost control",
+          "rect": {
+            "left": 16,
+            "top": 3476.90625,
+            "width": 358,
+            "height": 294.734375
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 8,
+          "title": "Pre-seed Bootcamp · Spring 2027 — applications ope",
+          "rect": {
+            "left": 16,
+            "top": 3787.640625,
+            "width": 358,
+            "height": 315
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 9,
+          "title": "Mentors wanted — fintech compliance and payments",
+          "rect": {
+            "left": 16,
+            "top": 4118.640625,
+            "width": 358,
+            "height": 318.34375
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 10,
+          "title": "GTM advisor — Southeast Europe expansion",
+          "rect": {
+            "left": 16,
+            "top": 4452.984375,
+            "width": 358,
+            "height": 294.734375
+          },
+          "titleStyle": {
+            "fontSize": "15.343px",
+            "fontWeight": "600",
+            "lineHeight": "20.7131px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    "status": "success"
+  },
+  {
+    "route": "/opportunities",
+    "width": 1440,
+    "name": "opportunities-desktop",
+    "issues": "baseline check",
+    "measurement": {
+      "cardCount": 11,
+      "cards": [
+        {
+          "index": 0,
+          "title": "Commercial co-founder for Harbor",
+          "rect": {
+            "left": 223.03125,
+            "top": 489.953125,
+            "width": 566.046875,
+            "height": 488.546875
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 1,
+          "title": "Angel with grid-operator experience for Orion Grid",
+          "rect": {
+            "left": 805.078125,
+            "top": 489.953125,
+            "width": 566.0625,
+            "height": 488.546875
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 2,
+          "title": "Head of growth for Aegis Health",
+          "rect": {
+            "left": 223.03125,
+            "top": 994.5,
+            "width": 566.046875,
+            "height": 470.5625
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 3,
+          "title": "Technical co-founder — vertical SaaS for logistics",
+          "rect": {
+            "left": 223.03125,
+            "top": 1524.859375,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 4,
+          "title": "Fractional CTO — two days a week",
+          "rect": {
+            "left": 223.03125,
+            "top": 1770.671875,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 5,
+          "title": "Angel syndicate — pre-seed allocation",
+          "rect": {
+            "left": 223.03125,
+            "top": 2016.484375,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 6,
+          "title": "Design partner wanted — ops teams of 20 to 200",
+          "rect": {
+            "left": 223.03125,
+            "top": 2262.296875,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 7,
+          "title": "Mentorship — ML evaluation and cost control",
+          "rect": {
+            "left": 223.03125,
+            "top": 2508.109375,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 8,
+          "title": "Pre-seed Bootcamp · Spring 2027 — applications ope",
+          "rect": {
+            "left": 223.03125,
+            "top": 2753.921875,
+            "width": 1148.109375,
+            "height": 251.140625
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 9,
+          "title": "Mentors wanted — fintech compliance and payments",
+          "rect": {
+            "left": 223.03125,
+            "top": 3021.0625,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        },
+        {
+          "index": 10,
+          "title": "GTM advisor — Southeast Europe expansion",
+          "rect": {
+            "left": 223.03125,
+            "top": 3266.875,
+            "width": 1148.109375,
+            "height": 229.8125
+          },
+          "titleStyle": {
+            "fontSize": "16.3216px",
+            "fontWeight": "600",
+            "lineHeight": "22.0342px",
+            "color": "rgb(48, 50, 59)"
+          }
+        }
+      ],
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    "status": "success"
+  }
+]

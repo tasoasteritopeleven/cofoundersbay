@@ -1,0 +1,443 @@
+diff --git a/apps/web/next.config.ts b/apps/web/next.config.ts
+index 9b740148..becef4cb 100644
+--- a/apps/web/next.config.ts
++++ b/apps/web/next.config.ts
+@@ -1,6 +1,11 @@
+ import type { NextConfig } from 'next';
+ 
+-const allowedDevOrigins = ['localhost', '127.0.0.1', '*.trycloudflare.com', '*.replit.dev'];
++const allowedDevOrigins = [
++  'localhost', '127.0.0.1', '*.trycloudflare.com', '*.replit.dev',
++  // Preview proxies may use a different asset/HMR origin. Opt in from the
++  // development launcher; do not relax production CORS or CSP for previews.
++  ...(process.env.PREVIEW_ALLOWED_DEV_ORIGINS ?? '').split(',').map((origin) => origin.trim()).filter(Boolean),
++];
+ 
+ const isProduction = process.env.NODE_ENV === 'production';
+ 
+diff --git a/apps/web/src/app/admin/automations/page.tsx b/apps/web/src/app/admin/automations/page.tsx
+index 1f7afffa..99567063 100644
+--- a/apps/web/src/app/admin/automations/page.tsx
++++ b/apps/web/src/app/admin/automations/page.tsx
+@@ -25,7 +25,7 @@ import { Input } from '@/components/ui/input';
+ import { useToast } from '@/components/ui/toast';
+ import { useConfirm, deleteConfirmCopy } from '@/components/ui/confirm-dialog';
+ import { qk } from '@/lib/query-keys';
+-import { choiceControl, rowOptions, usePageControls, usePageList } from '@/lib/page-controls';
++import { choiceControl, rowOptions, usePageControls, usePageList, type PageControlResult } from '@/lib/page-controls';
+ import {
+   Zap, Play, Pause, Trash2, RefreshCw, ChevronRight,
+   CheckCircle2, XCircle, Clock, SkipForward, AlertTriangle,
+@@ -395,8 +395,11 @@ export default function AutomationsPage() {
+   // buttons - edit, run now, pause, activate, delete (which still asks).
+   const ruleRows = (list: AutomationRuleItem[]) => rowOptions(list, (r) => r.id, (r) => r.name);
+   const ruleById = (id?: string) => rules.find((r) => r.id === id);
+-  const deleteRule = async (rule: AutomationRuleItem) => {
+-    if (await confirm(deleteConfirmCopy({ en: 'automation rule', el: 'κανόνα αυτοματισμού' }, rule.name))) deleteMutation.mutate(rule.id);
++  const deleteRule = async (rule: AutomationRuleItem): Promise<PageControlResult> => {
++    if (!await confirm(deleteConfirmCopy({ en: 'automation rule', el: 'κανόνα αυτοματισμού' }, rule.name))) {
++      return { cancelled: true };
++    }
++    await deleteMutation.mutateAsync(rule.id);
+   };
+   usePageList([
+     {
+@@ -419,7 +422,15 @@ export default function AutomationsPage() {
+     // pausing an active rule is undone by activating it, and the reverse.
+     { id: 'pause_rule', labelEn: 'Pause automation rule', labelEl: 'Παύση κανόνα', writes: true, options: ruleRows(rules.filter((r) => r.status === 'active')), undo: (v) => ({ control: 'activate_rule', value: v }), run: async (v) => { if (v) await setStatusMutation.mutateAsync({ id: v, status: 'paused' }); } },
+     { id: 'activate_rule', labelEn: 'Activate automation rule', labelEl: 'Ενεργοποίηση κανόνα', writes: true, options: ruleRows(rules.filter((r) => r.status !== 'active')), undo: (v) => (ruleById(v)?.status === 'paused' ? { control: 'pause_rule', value: v } : undefined), run: async (v) => { if (v) await setStatusMutation.mutateAsync({ id: v, status: 'active' }); } },
+-    { id: 'delete_rule', labelEn: 'Delete automation rule', labelEl: 'Διαγραφή κανόνα', writes: true, options: ruleRows(rules), run: async (v) => { const r = ruleById(v); if (r && await confirm(deleteConfirmCopy({ en: 'automation rule', el: 'κανόνα αυτοματισμού' }, r.name))) await deleteMutation.mutateAsync(r.id); } },
++    {
++      id: 'delete_rule', labelEn: 'Delete automation rule', labelEl: 'Διαγραφή κανόνα',
++      writes: true, options: ruleRows(rules),
++      run: (v) => {
++        const rule = ruleById(v);
++        if (!rule) throw new Error('This automation rule is no longer available. Refresh the list.');
++        return deleteRule(rule);
++      },
++    },
+   ]);
+ 
+   return (
+@@ -573,9 +584,12 @@ export default function AutomationsPage() {
+                       className="h-8 w-8 text-destructive-accessible hover:text-destructive-accessible"
+                       title="Delete"
+                       aria-label={`Delete ${rule.name}`}
+-                      onClick={async () => {
+-                        await deleteRule(rule);
++                      onClick={() => {
++                        // The mutation already shows its error toast; only the
++                        // assistant needs the rejection as its action outcome.
++                        void deleteRule(rule).catch(() => {});
+                       }}
++                      disabled={deleteMutation.isPending}
+                     >
+                       <Trash2 className="icon-sm" />
+                     </Button>
+diff --git a/apps/web/src/app/admin/page.tsx b/apps/web/src/app/admin/page.tsx
+index ecd6383d..b0affa94 100644
+--- a/apps/web/src/app/admin/page.tsx
++++ b/apps/web/src/app/admin/page.tsx
+@@ -89,7 +89,7 @@ import { useToast } from '@/components/ui/toast';
+ import { Skeleton } from '@/components/ui/skeleton';
+ import { cn } from '@/lib/utils';
+ import { qk } from '@/lib/query-keys';
+-import { choiceControl, rowOptions, usePageControls, usePageList } from '@/lib/page-controls';
++import { choiceControl, rowOptions, usePageControls, usePageList, type PageControlResult } from '@/lib/page-controls';
+ import { useConfirm, deleteConfirmCopy } from '@/components/ui/confirm-dialog';
+ import { bilingualInline } from '@/lib/i18n/format';
+ 
+@@ -671,8 +671,11 @@ export default function AdminPage() {
+ 
+   // A cohort delete used to run on the first click of a hover-only icon. It
+   // asks now, from the button and from the assistant alike.
+-  const deleteCohort = async (cohort: { id: string; name: string }) => {
+-    if (await confirm(deleteConfirmCopy({ en: 'cohort', el: 'κοορτής' }, cohort.name))) deleteCohortMutation.mutate(cohort.id);
++  const deleteCohort = async (cohort: { id: string; name: string }): Promise<PageControlResult> => {
++    if (!await confirm(deleteConfirmCopy({ en: 'cohort', el: 'κοορτής' }, cohort.name))) {
++      return { cancelled: true };
++    }
++    await deleteCohortMutation.mutateAsync(cohort.id);
+   };
+ 
+   // Offered to the assistant: the tab, Refresh, the audit export, and each
+@@ -731,7 +734,17 @@ export default function AdminPage() {
+     { id: 'suspend_user', labelEn: 'Suspend user', labelEl: 'Αναστολή χρήστη', writes: true, options: rowOptions(filteredUsers.filter((u) => u.moderationStatus === 'active'), (u) => u.id, userName), undo: (v) => ({ control: 'reactivate_user', value: v }), run: async (v) => { if (v) await userMutation.mutateAsync({ userId: v, status: 'suspended' }); } },
+     { id: 'reactivate_user', labelEn: 'Reactivate user', labelEl: 'Επανενεργοποίηση χρήστη', writes: true, options: rowOptions(filteredUsers.filter((u) => u.moderationStatus !== 'active'), (u) => u.id, userName), undo: (v) => { const prior = users.find((u) => u.id === v)?.moderationStatus; return prior === 'suspended' ? { control: 'suspend_user', value: v } : prior === 'banned' ? { control: 'ban_user', value: v } : undefined; }, run: async (v) => { if (v) await userMutation.mutateAsync({ userId: v, status: 'active' }); } },
+     { id: 'ban_user', labelEn: 'Ban user', labelEl: 'Αποκλεισμός χρήστη', writes: true, options: rowOptions(filteredUsers.filter((u) => u.moderationStatus !== 'banned'), (u) => u.id, userName), undo: (v) => { const prior = users.find((u) => u.id === v)?.moderationStatus; return prior === 'active' ? { control: 'reactivate_user', value: v } : prior === 'suspended' ? { control: 'suspend_user', value: v } : undefined; }, run: async (v) => { if (v) await userMutation.mutateAsync({ userId: v, status: 'banned' }); } },
+-    { id: 'delete_cohort', labelEn: 'Delete cohort', labelEl: 'Διαγραφή κύκλου', writes: true, options: rowOptions(cohorts, (c) => c.id, (c) => c.name), unavailableEn: activeTab === 'cohorts' ? undefined : 'Open the Cohorts tab first.', unavailableEl: activeTab === 'cohorts' ? undefined : 'Ανοίξτε πρώτα την καρτέλα Κύκλοι.', run: async (v) => { const c = cohorts.find((x) => x.id === v); if (c && await confirm(deleteConfirmCopy({ en: 'cohort', el: 'κοορτής' }, c.name))) await deleteCohortMutation.mutateAsync(c.id); } },
++    {
++      id: 'delete_cohort', labelEn: 'Delete cohort', labelEl: 'Διαγραφή κύκλου',
++      writes: true, options: rowOptions(cohorts, (c) => c.id, (c) => c.name),
++      unavailableEn: activeTab === 'cohorts' ? undefined : 'Open the Cohorts tab first.',
++      unavailableEl: activeTab === 'cohorts' ? undefined : 'Ανοίξτε πρώτα την καρτέλα Κύκλοι.',
++      run: (v) => {
++        const cohort = cohorts.find((c) => c.id === v);
++        if (!cohort) throw new Error('This cohort is no longer available. Refresh the list.');
++        return deleteCohort(cohort);
++      },
++    },
+     { id: 'feature_event', labelEn: 'Feature or unfeature event', labelEl: 'Προβολή ή απόσυρση εκδήλωσης', writes: true, options: rowOptions(events, (e) => e.id, (e) => e.title), unavailableEn: activeTab === 'content' ? undefined : 'Open the Events & jobs tab first.', unavailableEl: activeTab === 'content' ? undefined : 'Ανοίξτε πρώτα την καρτέλα Εκδηλώσεις & αγγελίες.', run: async (v) => { const e = events.find((x) => x.id === v); if (e) await featureMutation.mutateAsync({ type: 'event', id: e.id, featured: !e.isFeatured }); } },
+     { id: 'feature_job', labelEn: 'Feature or unfeature job', labelEl: 'Προβολή ή απόσυρση αγγελίας', writes: true, options: rowOptions(jobs, (j) => j.id, (j) => j.title), unavailableEn: activeTab === 'content' ? undefined : 'Open the Events & jobs tab first.', unavailableEl: activeTab === 'content' ? undefined : 'Ανοίξτε πρώτα την καρτέλα Εκδηλώσεις & αγγελίες.', run: async (v) => { const j = jobs.find((x) => x.id === v); if (j) await featureMutation.mutateAsync({ type: 'job', id: j.id, featured: !j.isFeatured }); } },
+     { id: 'remove_event', labelEn: 'Remove event', labelEl: 'Αφαίρεση εκδήλωσης', writes: true, options: rowOptions(events, (e) => e.id, (e) => e.title), unavailableEn: activeTab === 'content' ? undefined : 'Open the Events & jobs tab first.', unavailableEl: activeTab === 'content' ? undefined : 'Ανοίξτε πρώτα την καρτέλα Εκδηλώσεις & αγγελίες.', run: async (v) => { if (v) await removeContentMutation.mutateAsync({ type: 'event', id: v }); } },
+@@ -1209,7 +1222,7 @@ export default function AdminPage() {
+                         variant="ghost"
+                         size="icon"
+                         className="h-8 w-8 shrink-0 text-destructive-accessible opacity-0 group-hover:opacity-100 focus-within:opacity-100"
+-                        onClick={() => void deleteCohort(cohort)}
++                        onClick={() => { void deleteCohort(cohort).catch(() => {}); }}
+                         disabled={deleteCohortMutation.isPending}
+                       >
+                         <Trash2 className="icon-sm" />
+diff --git a/apps/web/src/components/ai/ActionCard.tsx b/apps/web/src/components/ai/ActionCard.tsx
+index 8092d6a2..aee1d9f1 100644
+--- a/apps/web/src/components/ai/ActionCard.tsx
++++ b/apps/web/src/components/ai/ActionCard.tsx
+@@ -20,7 +20,9 @@ type ActionCardProps = {
+ 
+ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: ActionCardProps) {
+   const busy = busyId === action.id;
++  const blocked = Boolean(busyId);
+   const done = action.status === 'done';
++  const cancelled = action.status === 'cancelled';
+   const dismissed = action.status === 'dismissed';
+   const failed = action.status === 'error';
+   const undone = action.status === 'undone';
+@@ -38,7 +40,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+       className={cn(
+         'rounded-lg border bg-card px-3 py-2.5 shadow-sm',
+         done && `border-status-success-border/40 ${STATUS.success.bg}`,
+-        (dismissed || undone) && 'surface-inactive',
++        (dismissed || undone || cancelled) && 'surface-inactive',
+         failed && 'border-destructive/40',
+       )}
+     >
+@@ -53,7 +55,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+       {/* Stated before the user commits, not after. The registry verifies each
+           of these against the API, so an intro says plainly that it cannot be
+           withdrawn rather than implying it can. */}
+-      {showReversal && !dismissed && (
++      {showReversal && !dismissed && !cancelled && (
+         <p
+           className={cn(
+             'mt-1.5 flex items-start gap-1.5 text-2xs',
+@@ -76,7 +78,11 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+       )}
+ 
+       <div className="mt-2 flex flex-wrap items-center gap-2">
+-        {undone ? (
++        {cancelled ? (
++          <span role="status" className="text-xs text-muted-foreground">
++            <BilingualText en="Cancelled — no changes made" el="Ακυρώθηκε — δεν έγιναν αλλαγές" wrap />
++          </span>
++        ) : undone ? (
+           <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+             <BilingualText en="Undone" el="Αναιρέθηκε" />
+@@ -100,7 +106,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+                 size="sm"
+                 variant="ghost"
+                 className="h-7 gap-1.5 tap-target-y"
+-                disabled={busy}
++                disabled={blocked}
+                 onClick={() => onUndo?.(action)}
+               >
+                 {busy ? (
+@@ -122,7 +128,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+               type="button"
+               size="sm"
+               className="h-7 gap-1.5 tap-target-y"
+-              disabled={busy}
++              disabled={blocked}
+               onClick={() => onConfirm(action)}
+             >
+               {busy ? (
+@@ -137,7 +143,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
+               size="sm"
+               variant="ghost"
+               className="h-7 tap-target-y"
+-              disabled={busy}
++              disabled={blocked}
+               onClick={() => onDismiss(action)}
+             >
+               <X className="h-3.5 w-3.5" aria-hidden="true" />
+diff --git a/apps/web/src/hooks/useAIChat.ts b/apps/web/src/hooks/useAIChat.ts
+index eef63c4c..498d287f 100644
+--- a/apps/web/src/hooks/useAIChat.ts
++++ b/apps/web/src/hooks/useAIChat.ts
+@@ -129,6 +129,9 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
+   const [conversationId, setConversationId] = useState<string | null>(options.conversationId || null);
+   const [conversations, setConversations] = useState<AIConversation[]>([]);
+   const [pendingActionId, setPendingActionId] = useState<string | null>(null);
++  // State updates are batched: lock synchronously so two confirmations in the
++  // same render cannot start duplicate writes or overlapping page dialogs.
++  const pendingActionRef = useRef<string | null>(null);
+ 
+   const lastUserMessageRef = useRef<string | null>(null);
+   const abortControllerRef = useRef<AbortController | null>(null);
+@@ -532,10 +535,18 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
+ 
+   const confirmAction = useCallback(
+     async (action: CopilotAction) => {
+-      if (pendingActionId) return;
++      if (pendingActionRef.current) return;
++      pendingActionRef.current = action.id;
+       setPendingActionId(action.id);
++      setError(null);
+       try {
+         const result = await executeCopilotAction(action);
++        if (result.cancelled) {
++          // A declined confirmation is not an attempted write. Keep it out of
++          // the applied/failed audit and never offer Undo for it.
++          updateAction(action.id, { status: 'cancelled', undoContext: undefined });
++          return;
++        }
+         if (!result.ok) {
+           audit(action, 'failed');
+           updateAction(action.id, { status: 'error' });
+@@ -553,10 +564,11 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
+         updateAction(action.id, { status: 'done', undoContext: result.undo });
+         return { href: result.href };
+       } finally {
++        pendingActionRef.current = null;
+         setPendingActionId(null);
+       }
+     },
+-    [audit, invalidateFor, updateAction, pendingActionId],
++    [audit, invalidateFor, updateAction],
+   );
+ 
+   /**
+@@ -566,27 +578,32 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
+    */
+   const undoAction = useCallback(
+     async (action: CopilotAction) => {
+-      if (pendingActionId) return false;
++      if (pendingActionRef.current) return false;
+       if (!undoAvailable(action.tool, action.undoContext)) return false;
+ 
++      pendingActionRef.current = action.id;
+       setPendingActionId(action.id);
++      setError(null);
+       try {
+         const payload: Record<string, unknown> = { ...(action.payload ?? {}) };
+         const result = await runUndo(action.tool, payload, action.undoContext ?? {});
+-        invalidateFor(action.tool);
++        // Cancelling an undo leaves the original action applied and undoable.
++        if (result.cancelled) return false;
+         audit(action, result.ok ? 'undone' : 'failed');
+ 
+         if (!result.ok) {
+           setError(result.error ?? 'Undo failed');
+           return false;
+         }
++        invalidateFor(action.tool);
+         updateAction(action.id, { status: 'undone' });
+         return true;
+       } finally {
++        pendingActionRef.current = null;
+         setPendingActionId(null);
+       }
+     },
+-    [audit, invalidateFor, updateAction, pendingActionId],
++    [audit, invalidateFor, updateAction],
+   );
+ 
+   const dismissAction = useCallback(
+diff --git a/apps/web/src/lib/copilot-engine.ts b/apps/web/src/lib/copilot-engine.ts
+index cc9a7121..6736d34e 100644
+--- a/apps/web/src/lib/copilot-engine.ts
++++ b/apps/web/src/lib/copilot-engine.ts
+@@ -12,7 +12,7 @@ import {
+   type ShortlistItem,
+ } from '@/lib/api';
+ import { apiRequest } from '@/lib/api';
+-import { executeAction, getActionSpec } from '@/lib/action-registry';
++import { executeAction, getActionSpec, type ActionOutcome } from '@/lib/action-registry';
+ import type { AIToolCallProposal } from '@/lib/ai-api';
+ import { isAppLocale, translate, type TranslateVars } from '@/lib/i18n/translate';
+ import type { AppLocale } from '@/lib/locale';
+@@ -1034,7 +1034,7 @@ export async function runCopilotTurn(
+  */
+ export async function executeCopilotAction(
+   action: CopilotAction,
+-): Promise<{ ok: boolean; href?: string; error?: string; undo?: Record<string, unknown> }> {
++): Promise<ActionOutcome> {
+   const payload: Record<string, unknown> = { ...(action.payload ?? {}) };
+   if (payload.href === undefined && action.href !== undefined) payload.href = action.href;
+   return executeAction(action.tool, payload);
+diff --git a/apps/web/src/lib/copilot-types.ts b/apps/web/src/lib/copilot-types.ts
+index 9efb01a1..0af7118f 100644
+--- a/apps/web/src/lib/copilot-types.ts
++++ b/apps/web/src/lib/copilot-types.ts
+@@ -23,9 +23,10 @@ export type CopilotActionTool = MutationActionId;
+ /**
+  * `undone` is distinct from `dismissed`: dismissed means the user declined
+  * before anything ran, undone means it ran and was then taken back. Collapsing
+- * them would lose the fact that a write reached the backend.
++ * them would lose the fact that a write reached the backend. `cancelled`
++ * means a subsequent page confirmation was declined before the write ran.
+  */
+-export type CopilotActionStatus = 'pending' | 'done' | 'dismissed' | 'error' | 'undone';
++export type CopilotActionStatus = 'pending' | 'done' | 'dismissed' | 'error' | 'undone' | 'cancelled';
+ 
+ export type CopilotAction = {
+   id: string;
+diff --git a/apps/web/src/lib/page-controls.ts b/apps/web/src/lib/page-controls.ts
+index 8ee1a124..59bfd045 100644
+--- a/apps/web/src/lib/page-controls.ts
++++ b/apps/web/src/lib/page-controls.ts
+@@ -28,6 +28,9 @@ export type PageControlOption = {
+   labelEl: string;
+ };
+ 
++/** A resolved handler is successful unless it explicitly declined to run. */
++export type PageControlResult = void | { cancelled: true };
++
+ export type PageControl = {
+   /** Stable within the page, e.g. `status_filter`. */
+   id: string;
+@@ -46,8 +49,12 @@ export type PageControl = {
+   /** Why it cannot run right now (nothing to export, sample rows). */
+   unavailableEn?: string;
+   unavailableEl?: string;
+-  /** The page's own handler. Receives the chosen option's value. */
+-  run: (value?: string) => void | Promise<void>;
++  /**
++   * The page's own handler. Await persistence and propagate rejection. Return
++   * `{ cancelled: true }` when confirmation is declined; returning void alone
++   * means successful completion and is retained for existing controls.
++   */
++  run: (value?: string) => PageControlResult | Promise<PageControlResult>;
+   /**
+    * The verified opposite of a command, for Undo.
+    *
+@@ -139,7 +146,7 @@ export function usePageControls(controls: PageControl[]): void {
+         run: async (value?: string) => {
+           const current = latest.current.find((x) => x.id === c.id);
+           if (!current) throw new Error(`The page command "${c.id}" is no longer available.`);
+-          await current.run(value);
++          return await current.run(value);
+         },
+         undo: c.undo ? (value?: string) => latest.current.find((x) => x.id === c.id)?.undo?.(value) : undefined,
+       })),
+@@ -157,8 +164,9 @@ export function usePageControls(controls: PageControl[]): void {
+ }
+ 
+ export type PageControlOutcome =
+-  | { ok: true; undo?: PageControlUndo }
+-  | { ok: false; error: string };
++  | { ok: true; undo?: PageControlUndo; error?: never; cancelled?: never }
++  | { ok: false; error: string; cancelled?: never }
++  | { ok: false; cancelled: true; error?: never };
+ 
+ /**
+  * Run a control by id. The executors' single entry point.
+@@ -204,10 +212,13 @@ export async function runPageControl(
+   // the write lands - so the choice is taken as given; the page's handler
+   // still looks the row up and does nothing if it is gone.
+   if (options.undoing && value) {
+-    await control.run(value);
+-    return { ok: true };
++    const result = await control.run(value);
++    return result?.cancelled ? { ok: false, cancelled: true } : { ok: true };
+   }
+-  if (control.options?.length) {
++  if (control.options) {
++    if (control.options.length === 0) {
++      return { ok: false, error: `"${control.labelEn}" has no available choices right now. Refresh the list.` };
++    }
+     if (!value) return { ok: false, error: `"${control.labelEn}" needs a choice: ${control.options.map((o) => o.labelEn).join(', ')}.` };
+     // A model may name the option rather than its value; both are accepted.
+     const asked = value.toLowerCase();
+@@ -222,7 +233,8 @@ export async function runPageControl(
+   // Asked before the handler runs: afterwards the row already shows the new
+   // state, and the page could no longer say what to restore.
+   const undo = control.writes ? control.undo?.(value) : undefined;
+-  await control.run(value);
++  const result = await control.run(value);
++  if (result?.cancelled) return { ok: false, cancelled: true };
+   return undo ? { ok: true, undo } : { ok: true };
+ }
+ 
+diff --git a/memory/PRD.md b/memory/PRD.md
+index 0f638fb8..0b5e19a1 100644
+--- a/memory/PRD.md
++++ b/memory/PRD.md
+@@ -1,5 +1,19 @@
+ # CoFounderBay — PRD & Session Log
+ 
++## Current continuation — base commit 15183f58
++
++This entry supersedes completion estimates and branch-selection instructions in the older session log below. The user explicitly selected **only** `claude/project-audit-upgrade-y2ebnr`, requested the latest push, preservation of every feature, recovery of the prior handoff, and a first evidence-based improvement with no production changes.
++
++- Full non-shallow clone and fast-forward pull at `15183f589c699fa1bea2df855715662e1ce08fef`; remote still matches at handoff. Actual project is in `/app/cofoundersbay`; original `/app` template/env preserved. No merge, commit, push, migration or deployment in this continuation.
++- Read `AGENTS.md` and `docs/PLATFORM_DESIGN_AI_PLAN.md` §31–§32. Detailed Greek findings, testable seven-phase plan, and corrected final coverage: **`docs/AUDIT_CONTINUATION_15183f58.md`**. Static inventory:160 routes,197 boundaries,3883 interaction candidates,533 endpoint declarations; NOT runtime coverage.
++- Implemented explicit cancellation through PageControlResult → ActionOutcome → copilot engine → useAIChat → bilingual ActionCard. Admin delete_rule/delete_cohort share awaited button/AI handlers. Cancel is not Done/audited-applied/undoable. Empty option lists reject unavailable targets. Synchronous ref lock prevents duplicate confirm launches.
++- Fixed user-reported blank external preview: supervisor adapter now uses native Turbopack and preview-only environment-driven dev origins; existing same-origin API proxy mode enabled. No protected env values/URLs/ports changed. Browser agent verified root, demo dashboard, settings, readiness, applications and a390px overflow spot check.
++- Backend post-change gate **299/299** plus **12/12** script tests; backend TypeScript clean. Frontend full gate **834/835**; one existing test needs Node's `fs.globSync` unavailable in Node20. Frontend TypeScript clean. All external dependencies in these tests are **MOCKED**; preview uses existing **DEMO** data, no real API/DB/provider connected.
++- **Coverage gap:** browser admin confirm/cancel/failure could not be completed with empty built-in preview-api data. Admin pattern tests do NOT import the real pages. Hook tests verify audit and duplicate locking, not all message/cache assertions. Do not claim a full-platform or end-to-end certification.
++- Next: close the admin/AI runtime coverage gap, then continue async-write consistency and page-by-page low-fatigue UI work under the saved plan. Ask for isolated backend/provider credentials only when that phase actually requires them. Never treat prior “95% polished” or WCAG claims below as newly measured results.
++
++---
++
+ ## Original request (2026-06)
+ Audit the most-developed branch on GitHub (`Animus1991/cofoundersbay`), pull those
+ changes into `claude/project-audit-upgrade-y2ebnr`, and optimise the platform's
+diff --git a/packages/shared/src/actions/types.ts b/packages/shared/src/actions/types.ts
+index 88e076ff..8ff0e857 100644
+--- a/packages/shared/src/actions/types.ts
++++ b/packages/shared/src/actions/types.ts
+@@ -52,6 +52,12 @@ export type ActionOutcome = {
+   ok: boolean;
+   href?: string;
+   error?: string;
++  /**
++   * The person declined a confirmation before any write ran. Always paired
++   * with `ok: false`; neither an applied action nor a failed request. Callers
++   * must not invalidate data, publish an undo, or record an applied audit.
++   */
++  cancelled?: true;
+   /**
+    * What the undo will need, produced by the action itself.
+    *
