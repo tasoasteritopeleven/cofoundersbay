@@ -82,6 +82,7 @@ import {
 import { RailStats } from '@/components/layout/RailParts';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 import { AdminAnalyticsDashboard } from '@/components/admin/AdminAnalyticsDashboard';
 import { ScoreInspector } from '@/components/admin/ScoreInspector';
@@ -265,36 +266,40 @@ function ReportCard({
 
   return (
     <Card className="group">
-      <CardContent className="pt-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <Link href={`/profiles/${report.reported.id}`}>
-              <Avatar className="icon-md">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Link href={`/profiles/${report.reported.id}`} aria-label={bilingualInline(`Open the profile of ${report.reported?.name || report.reported.email}`, `Άνοιγμα προφίλ: ${report.reported?.name || report.reported.email}`)}>
+              <Avatar className="h-10 w-10">
                 <AvatarFallback className="bg-destructive/20 text-destructive-accessible">
                   {report.reported.name?.[0]?.toUpperCase() ?? '?'}
                 </AvatarFallback>
               </Avatar>
             </Link>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Link href={`/profiles/${report.reported.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-                  {report.reported?.name || report.reported.email}
-                </Link>
-                <Badge variant="outline" className="text-xs"><StatusText value={report.reported.role} /></Badge>
-                <Badge variant="outline" className={cn('text-xs', typeConf.color)}>
-                  {typeConf.label}
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                Reported by {report.reporter?.name || report.reporter.email} · <RelativeTime date={report.createdAt} />
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className={cn('flex items-center gap-1 text-xs', statusConf.color)}>
-              <StatusIcon className="icon-sm" />
-              {statusConf.label}
+          )}
+          title={(
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <Link href={`/profiles/${report.reported.id}`} className="transition-colors hover:text-primary-accessible">
+                {report.reported?.name || report.reported.email}
+              </Link>
+              <Badge variant="outline" className="text-xs"><StatusText value={report.reported.role} /></Badge>
+              <Badge variant="outline" className={cn('text-xs', typeConf.color)}>
+                {typeConf.label}
+              </Badge>
             </span>
+          )}
+          subtitle={(
+            <>
+              <BilingualText en={`Reported by ${report.reporter?.name || report.reporter.email}`} el={`Αναφορά από ${report.reporter?.name || report.reporter.email}`} compact wrap /> · <RelativeTime date={report.createdAt} />
+            </>
+          )}
+          asideStays
+          aside={(
+            <>
+              <span className={cn('flex items-center gap-1 text-xs', statusConf.color)}>
+                <StatusIcon className="icon-sm" />
+                {statusConf.label}
+              </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button aria-label="More options" variant="ghost" size="icon" className="h-8 w-8" disabled={isActing}>
@@ -324,15 +329,14 @@ function ReportCard({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-        </div>
+            </>
+          )}
+        />
 
-        <div className="mt-3">
-          <p className="text-sm text-foreground">{report.reason}</p>
-        </div>
+        <p className="card-body text-foreground">{report.reason}</p>
 
         {report.status === 'pending' && (
-          <div className="mt-4 flex items-center gap-2">
+          <div className="flex items-center gap-2 border-t border-border pt-3">
             <Button size="sm" variant="secondary" onClick={onDismiss} disabled={isActing}>
               <BilingualText en="Dismiss" el="Απόρριψη" compact />
             </Button>
@@ -364,7 +368,7 @@ function UserRow({
   return (
     <div className="flex items-center gap-4 border-b border-border p-4 transition-colors hover:bg-secondary/30">
       <Link href={`/profiles/${user.id}`}>
-        <Avatar className="icon-md shrink-0">
+        <Avatar className="h-9 w-9 shrink-0">
           <AvatarImage src={user.profile?.avatarUrl ?? undefined} />
           <AvatarFallback className="bg-primary/20 text-primary-accessible">
             {displayName[0]?.toUpperCase()}
@@ -373,7 +377,7 @@ function UserRow({
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <Link href={`/profiles/${user.id}`} className="font-medium text-foreground hover:text-primary-accessible transition-colors">
+          <Link href={`/profiles/${user.id}`} className="text-sm font-medium text-foreground hover:text-primary-accessible transition-colors">
             {displayName}
           </Link>
           <Badge
@@ -1116,28 +1120,28 @@ export default function AdminPage() {
               <CardContent className="space-y-3">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div className="space-y-1">
-                    <label htmlFor="cohort-f1" className="text-xs font-medium text-muted-foreground">Name *</label>
+                    <label htmlFor="cohort-f1" className="text-sm font-medium text-muted-foreground">Name *</label>
                     <Input id="cohort-f1" placeholder="e.g. Spring 2025 Accelerator" value={newCohort.name}
                       onChange={(e) => setNewCohort(p => ({ ...p, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') }))} />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cohort-f2" className="text-xs font-medium text-muted-foreground">Slug *</label>
+                    <label htmlFor="cohort-f2" className="text-sm font-medium text-muted-foreground">Slug *</label>
                     <Input id="cohort-f2" placeholder="spring-2025" value={newCohort.slug} onChange={(e) => setNewCohort(p => ({ ...p, slug: e.target.value }))} />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cohort-f3" className="text-xs font-medium text-muted-foreground"><BilingualText en="Start Date" el="Ημερομηνία έναρξης" compact /></label>
+                    <label htmlFor="cohort-f3" className="text-sm font-medium text-muted-foreground"><BilingualText en="Start Date" el="Ημερομηνία έναρξης" compact /></label>
                     <Input id="cohort-f3" type="date" value={newCohort.startDate} onChange={(e) => setNewCohort(p => ({ ...p, startDate: e.target.value }))} />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cohort-f4" className="text-xs font-medium text-muted-foreground"><BilingualText en="End Date" el="Ημερομηνία λήξης" compact /></label>
+                    <label htmlFor="cohort-f4" className="text-sm font-medium text-muted-foreground"><BilingualText en="End Date" el="Ημερομηνία λήξης" compact /></label>
                     <Input id="cohort-f4" type="date" value={newCohort.endDate} onChange={(e) => setNewCohort(p => ({ ...p, endDate: e.target.value }))} />
                   </div>
                   <div className="space-y-1">
-                    <label htmlFor="cohort-f5" className="text-xs font-medium text-muted-foreground"><BilingualText en="Capacity" el="Χωρητικότητα" compact /></label>
+                    <label htmlFor="cohort-f5" className="text-sm font-medium text-muted-foreground"><BilingualText en="Capacity" el="Χωρητικότητα" compact /></label>
                     <Input id="cohort-f5" type="number" placeholder="50" value={newCohort.capacity} onChange={(e) => setNewCohort(p => ({ ...p, capacity: e.target.value }))} />
                   </div>
                   <div className="space-y-1 sm:col-span-2">
-                    <label htmlFor="cohort-f6" className="text-xs font-medium text-muted-foreground"><BilingualText en="Description" el="Περιγραφή" compact /></label>
+                    <label htmlFor="cohort-f6" className="text-sm font-medium text-muted-foreground"><BilingualText en="Description" el="Περιγραφή" compact /></label>
                     <Input id="cohort-f6" placeholder={bilingualInline("Short description…", "Σύντομη περιγραφή…")} value={newCohort.description} onChange={(e) => setNewCohort(p => ({ ...p, description: e.target.value }))} />
                   </div>
                 </div>

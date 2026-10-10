@@ -70,7 +70,7 @@ export function WhatsNewPanel({ audience }: { audience: WhatsNewAudience }) {
       <CardContent className="space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 id="whats-new-heading" className="text-base font-semibold text-foreground">
+            <h2 id="whats-new-heading" className="card-title text-foreground">
               <BilingualText en="What’s new" el="Τι νέο υπάρχει" compact />
             </h2>
             <p className="text-xs text-muted-foreground">

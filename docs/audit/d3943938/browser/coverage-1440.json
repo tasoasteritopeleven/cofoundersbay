@@ -1,0 +1,414 @@
+{
+  "meta": {
+    "baseUrl": "https://project-audit-79.preview.emergentagent.com",
+    "domain": "project-audit-79.preview.emergentagent.com",
+    "timestamp": "2026-10-10T08:52:39.493Z",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "language": "en",
+    "role": "existing_founder"
+  },
+  "totals": {
+    "offAxis": 0,
+    "overTitle": 0,
+    "bodyLoud": 0,
+    "tight": 0,
+    "lower": 0,
+    "escape": 10,
+    "overlap": 0,
+    "centered": 7,
+    "loneRight": 0
+  },
+  "routes": [
+    {
+      "route": "/members",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/members",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/members",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 7,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/opportunities",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/opportunities",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/opportunities",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 11,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/endorsements",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/endorsements",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/endorsements",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 4,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/connections",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/connections",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/connections",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 2,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/programs",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/programs",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/programs",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 1,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 7,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"Something went wrong ·Κάτι πήγε ",
+          "title": "span.min-w-0.max-w-full.truncate \"Something went wrong\"",
+          "titleSize": 20,
+          "stat": false,
+          "avatar": true,
+          "issues": {
+            "offAxis": [],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [],
+            "overlap": [],
+            "centered": [
+              "span.min-w-0.max-w-full.truncate \"Something went wrong\"",
+              "span \"We encountered an unexpected error. Plea\"",
+              "span.bilingual-secondary.text-muted-foreground.bilingual-secondary--inline \"Παρουσιάστηκε απρόσμενο σφάλμα. Δοκιμάστ\"",
+              "p.mb-6.text-xs.text-muted-foreground \"Error ID: ERR-MV25NQYE\"",
+              "code.bg-secondary/40.px-1.5.py-0.5 \"ERR-MV25NQYE\"",
+              "span.min-w-0.max-w-full.truncate \"Error details\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Λεπτομέρειες σφάλματος\""
+            ],
+            "loneRight": []
+          },
+          "total": 7,
+          "samples": {
+            "title": {
+              "fontSize": "20px",
+              "fontWeight": "600",
+              "lineHeight": "28px",
+              "color": "rgb(48, 50, 59)",
+              "left": 561.3125
+            }
+          },
+          "boundingRect": {
+            "left": 536.3125,
+            "top": 23.75,
+            "width": 367.359375,
+            "height": 392.75
+          }
+        }
+      ],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/fundraising",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/fundraising",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/fundraising",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 4,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/updates",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/updates",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/updates",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 3,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/investors",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/investors",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/investors",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 7,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/feed",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/feed",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/feed",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 3,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/scout",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/scout",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/scout",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 1,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 10,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"Your brief·Το σημείωμά σας Who y",
+          "title": "span.min-w-0.max-w-full.truncate \"Your brief\"",
+          "titleSize": 18.72,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [
+              "span.min-w-0.max-w-full.truncate \"Your brief\"",
+              "span \"Who you are looking for. The scout reads\"",
+              "span.min-w-0.max-w-full.truncate \"Role\"",
+              "span.min-w-0.max-w-full.truncate \"Skills, separated by commas\"",
+              "span.min-w-0.max-w-full.truncate \"Where\"",
+              "span.min-w-0.max-w-full.truncate \"Commitment\"",
+              "span.min-w-0.max-w-full.truncate \"Stage\"",
+              "span.min-w-0.max-w-full.truncate \"Anything else (optional)\"",
+              "span.min-w-0.max-w-full.truncate \"Save brief\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Αποθήκευση σημειώματος\""
+            ],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 10,
+          "samples": {
+            "title": {
+              "fontSize": "18.72px",
+              "fontWeight": "700",
+              "lineHeight": "normal",
+              "color": "rgb(0, 0, 0)",
+              "left": 8
+            }
+          },
+          "boundingRect": {
+            "left": 8,
+            "top": 14703.765625,
+            "width": 1424,
+            "height": 262.71875
+          }
+        }
+      ],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/demo",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/demo",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/dashboard/founder",
+      "status": 200,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 8,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    }
+  ]
+}

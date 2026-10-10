@@ -354,39 +354,39 @@ export default function TenantBillingPage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label htmlFor="name" className="text-xs">Contact name *</Label>
+                    <Label htmlFor="name">Contact name *</Label>
                     <Input id="name" value={contactForm.name} onChange={e => setContactForm(p => ({ ...p, name: e.target.value }))} placeholder="Jane Doe" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-xs">Billing email *</Label>
+                    <Label htmlFor="email">Billing email *</Label>
                     <Input id="email" type="email" value={contactForm.email} onChange={e => setContactForm(p => ({ ...p, email: e.target.value }))} placeholder="billing@org.com" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="company" className="text-xs"><BilingualText en="Company name" el="Επωνυμία" compact /></Label>
+                    <Label htmlFor="company"><BilingualText en="Company name" el="Επωνυμία" compact /></Label>
                     <Input id="company" value={contactForm.company} onChange={e => setContactForm(p => ({ ...p, company: e.target.value }))} placeholder="Acme Accelerator" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="legalName" className="text-xs"><BilingualText en="Legal entity name" el="Νομική επωνυμία" compact /></Label>
+                    <Label htmlFor="legalName"><BilingualText en="Legal entity name" el="Νομική επωνυμία" compact /></Label>
                     <Input id="legalName" value={contactForm.legalName} onChange={e => setContactForm(p => ({ ...p, legalName: e.target.value }))} placeholder="Acme Accelerator Ltd." />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="vatId" className="text-xs"><BilingualText en="VAT / Tax ID" el="ΑΦΜ" compact /></Label>
+                    <Label htmlFor="vatId"><BilingualText en="VAT / Tax ID" el="ΑΦΜ" compact /></Label>
                     <Input id="vatId" value={contactForm.vatId} onChange={e => setContactForm(p => ({ ...p, vatId: e.target.value }))} placeholder="EU123456789" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="country" className="text-xs"><BilingualText en="Country" el="Χώρα" compact /></Label>
+                    <Label htmlFor="country"><BilingualText en="Country" el="Χώρα" compact /></Label>
                     <Input id="country" value={contactForm.country} onChange={e => setContactForm(p => ({ ...p, country: e.target.value }))} placeholder="US" maxLength={2} />
                   </div>
                   <div className="col-span-2 space-y-1.5">
-                    <Label htmlFor="addressLine1" className="text-xs"><BilingualText en="Street address" el="Διεύθυνση" compact /></Label>
+                    <Label htmlFor="addressLine1"><BilingualText en="Street address" el="Διεύθυνση" compact /></Label>
                     <Input id="addressLine1" value={contactForm.addressLine1} onChange={e => setContactForm(p => ({ ...p, addressLine1: e.target.value }))} placeholder="123 Innovation Blvd" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="city" className="text-xs"><BilingualText en="City" el="Πόλη" compact /></Label>
+                    <Label htmlFor="city"><BilingualText en="City" el="Πόλη" compact /></Label>
                     <Input id="city" value={contactForm.city} onChange={e => setContactForm(p => ({ ...p, city: e.target.value }))} placeholder="San Francisco" />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="postalCode" className="text-xs"><BilingualText en="Postal code" el="Ταχυδρομικός κώδικας" compact /></Label>
+                    <Label htmlFor="postalCode"><BilingualText en="Postal code" el="Ταχυδρομικός κώδικας" compact /></Label>
                     <Input id="postalCode" value={contactForm.postalCode} onChange={e => setContactForm(p => ({ ...p, postalCode: e.target.value }))} placeholder="94107" />
                   </div>
                 </div>

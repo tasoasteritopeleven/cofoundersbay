@@ -62,7 +62,8 @@ function toSecurityEvent(flag: AbuseFlagRecord): SecurityEvent {
     id: flag.id,
     level: levelFor(flag.severity),
     // The flag type is the category: `rapid_messaging`, `ring_detection`…
-    category: flag.type.replace(/_/g, ' '),
+    // "burst_spam" reads "Burst spam": a category starts its line.
+    category: flag.type.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase()),
     message: flag.description ?? `${flag.displayName ?? flag.email}: ${flag.type.replace(/_/g, ' ')}`,
     time: flag.createdAt,
   };

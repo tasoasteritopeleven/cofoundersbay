@@ -153,7 +153,9 @@ const NotificationRow = memo(function NotificationRow({
       )}
 
       {/* Icon */}
-      <div className="relative mt-0.5 shrink-0">
+      {/* The type's glyph is the row's mark (the badge naming the type is
+          hidden on a phone), so it stays on screen in every row. */}
+      <div className="relative mt-0.5 shrink-0" data-keep-icon="">
         <div className={cn('flex h-9 w-9 items-center justify-center rounded-full', colorClass)}>
           <Icon className="icon-sm" />
         </div>

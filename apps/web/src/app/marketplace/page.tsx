@@ -18,7 +18,7 @@ import { RailAction } from '@/components/layout/RailParts';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -34,7 +34,7 @@ import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { FactLine } from '@/components/common/FactLine';
-import { ListRowCard } from '@/components/common/ListRowCard';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -163,51 +163,116 @@ function ProviderCard({ provider, featured }: { provider: ServiceProvider; featu
   const { primary } = useLanguagePreference();
   const [saved, setSaved] = useState(false);
   const catCfg = CAT_CONFIG[provider.category] ?? CAT_CONFIG['other'];
+  const CatIcon = catCfg.icon;
 
-  const requestHref = provider.isAvailable ? (provider.websiteUrl ?? provider.contactUrl) : undefined;
   return (
-    <ListRowCard
-      className={cn(featured && 'border-primary/15', !provider.isAvailable && 'surface-inactive')}
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarImage src={provider.providerAvatar} />
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-            {provider.providerName[0]}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      title={provider.title}
-      badge={featured ? <Badge variant="outline" className="text-xs"><BilingualText en="Featured" el="Προτεινόμενο" compact /></Badge> : undefined}
-      headline={[
-        provider.providerName,
-        catCfg.label,
-        provider.providerTitle,
-        priceForDisplay(provider.pricing, primary),
-        `${provider.avgRating.toFixed(1)}`,
-        provider.location,
-        ...provider.specialties.slice(0, 3),
-      ].filter(Boolean).join(' · ')}
-      detail={provider.description}
-      actions={(
-        <>
-          <button
-            type="button"
-            onClick={() => setSaved(!saved)}
-            className="tap-target inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
-            aria-label={saved ? 'Remove bookmark' : 'Save provider'}
-          >
-            <Bookmark className={cn('icon-sm', saved ? 'fill-primary text-primary-accessible' : '')} />
-          </button>
-          {requestHref ? (
-            <Button size="sm" className="gap-1" asChild>
-              <a href={requestHref} target="_blank" rel="noopener noreferrer"><BilingualText en="Request" el="Αίτημα" compact /></a>
-            </Button>
-          ) : (
-            <Button size="sm" disabled><BilingualText en="Request" el="Αίτημα" compact /></Button>
+    <Card className={cn(
+      'group flex flex-col transition-all hover:border-primary/30',
+      featured && 'border-primary/15 bg-primary/[0.03]',
+      !provider.isAvailable && 'surface-inactive',
+    )}>
+      <CardContent className="flex flex-1 flex-col gap-3">
+        {/* The Opportunities card: the service is the title, its provider the
+            line under it; the sentence, the facts and the foot start on the
+            mark's edge. */}
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10 rounded-xl">
+              <AvatarImage src={provider.providerAvatar} />
+              <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-semibold">
+                {provider.providerName[0]}
+              </AvatarFallback>
+            </Avatar>
           )}
-        </>
-      )}
-    />
+          title={provider.title}
+          subtitle={(
+            <span className="inline-flex flex-wrap items-center gap-x-1.5">
+              <span className="font-medium text-foreground">{provider.providerName}</span>
+              {provider.isVerified && <BadgeCheck className="icon-sm text-status-info shrink-0" aria-label={bilingualInline('Verified', 'Επαληθευμένος')} />}
+              {/* "Growth Marketing Strategist" wraps rather than losing the
+                  whole specialism to an ellipsis. */}
+              <span>· {provider.providerTitle}</span>
+            </span>
+          )}
+          meta={(
+            <span className="inline-flex flex-wrap items-center gap-1.5">
+              <span className="inline-flex items-center gap-1">
+                <Star className="icon-sm fill-status-warning text-status-warning" />
+                <span className="font-medium text-foreground">{provider.avgRating.toFixed(1)}</span>
+                <span>({provider.reviewCount})</span>
+              </span>
+              {featured && <Badge className="text-2xs bg-primary/10 text-primary-accessible border-primary/20 border"><BilingualText en="Featured" el="Προτεινόμενο" compact /></Badge>}
+            </span>
+          )}
+          asideStays
+          aside={(
+            /* Their tap target and accessible name (this icon-only button had
+               neither), kept with our icon-size and contrast-safe tokens. */
+            <button
+              onClick={() => setSaved(!saved)}
+              className="tap-target flex h-11 w-11 shrink-0 items-center justify-center gap-1.5 rounded-md hover:bg-muted transition-colors sm:w-auto sm:px-3"
+              aria-label={saved ? 'Remove bookmark' : 'Save provider'}
+            >
+              <Bookmark className={cn('icon-sm', saved ? 'fill-primary text-primary-accessible' : 'text-muted-foreground')} />
+              <span className="hidden sm:inline text-sm"><BilingualText en={saved ? 'Saved' : 'Save'} el={saved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
+            </button>
+          )}
+        />
+
+        <p className="card-body line-clamp-2 text-muted-foreground">{provider.description}</p>
+
+        <div className="space-y-1">
+          {/* Category, then specialties: facts, one line each. */}
+          <FactLine items={[<BilingualText key="cat" en={catCfg.label} el={catCfg.labelEl ?? catCfg.label} compact />, ...provider.specialties.slice(0, 3), provider.specialties.length > 3 ? `+${provider.specialties.length - 3}` : null]} />
+          <FactLine
+            items={[
+              provider.responseTime,
+              <BilingualText key="clients" en={`${provider.clientCount} clients`} el={`${provider.clientCount} πελάτες`} compact />,
+              provider.location,
+              <span key="avail" className={provider.isAvailable ? 'text-status-success' : undefined}>
+                {provider.isAvailable
+                  ? <BilingualText en="Available" el="Διαθέσιμος" compact />
+                  : <BilingualText en="Fully booked" el="Πλήρης" compact />}
+              </span>,
+            ]}
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-3 border-t border-border">
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground"><BilingualText en="Starting at" el="Από" compact /></p>
+            <p className="card-body truncate font-semibold tabular-nums">{priceForDisplay(provider.pricing, primary)}</p>
+          </div>
+          <div className="flex shrink-0 gap-2">
+            {/* Neither had a handler. A listing carries its provider's own
+                contact and website links, so those are what these open. */}
+            {provider.contactUrl ? (
+              <Button variant="outline" size="sm" className="h-8 text-xs gap-1" asChild>
+                <a href={provider.contactUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="icon-sm" aria-hidden="true" /><BilingualText en="Message" el="Μήνυμα" compact />
+                </a>
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm" className="h-8 text-xs gap-1" disabled title={bilingualInline('This provider has not listed a contact link', 'Ο πάροχος δεν έχει δηλώσει σύνδεσμο επικοινωνίας')}>
+                <MessageCircle className="icon-sm" aria-hidden="true" /><BilingualText en="Message" el="Μήνυμα" compact />
+              </Button>
+            )}
+            {provider.isAvailable && (provider.websiteUrl || provider.contactUrl) ? (
+              <Button size="sm" className="h-8 text-xs" asChild>
+                <a href={provider.websiteUrl ?? provider.contactUrl} target="_blank" rel="noopener noreferrer"><BilingualText en="Request" el="Αίτημα" compact /></a>
+              </Button>
+            ) : (
+              <Button size="sm" className="h-8 text-xs" disabled title={provider.isAvailable
+                ? bilingualInline('This provider has not listed a request link', 'Ο πάροχος δεν έχει δηλώσει σύνδεσμο αιτήματος')
+                : bilingualInline('Not taking new clients', 'Δεν δέχεται νέους πελάτες')}>
+                <BilingualText en="Request" el="Αίτημα" compact />
+              </Button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

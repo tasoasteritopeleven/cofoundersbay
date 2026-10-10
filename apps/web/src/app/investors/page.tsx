@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FactLine } from '@/components/common/FactLine';
-import { ListRowCard } from '@/components/common/ListRowCard';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
@@ -224,67 +224,126 @@ function InvestorCard({
     investor.viewCount != null && { key: 'views', icon: Eye, en: `${investor.viewCount.toLocaleString('en-GB')} views`, el: `${investor.viewCount.toLocaleString('el-GR')} προβολές` },
   ].filter(Boolean) as { key: string; icon: typeof Briefcase; en: string; el: string }[];
 
-  const headline = [
-    type?.en,
-    investor.firmName,
-    investor.firmRole,
-    investor.headline,
-    ...investor.stages.map((s) => STAGE_LABEL[s] ?? s),
-    checkSize,
-    place,
-    ...investor.industries.slice(0, 3),
-    ...facts.map((fact) => fact.en),
-  ].filter(Boolean).join(' · ');
-
+  // The Endorsements card: avatar, name and the line under it, the save
+  // control at the right; the thesis, the facts and the foot start on the
+  // avatar's edge, and the thesis sits a notch under the name and byline.
   return (
-    <ListRowCard
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarImage src={investor.avatarUrl} alt="" />
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      title={investor.displayName}
-      titleHref={investor.sample ? undefined : `/profiles/${investor.userId}`}
-      badge={investor.isActivelyScouting ? (
-        <Badge variant="outline" className="text-xs">
-          <BilingualText en="Scouting" el="Αναζητά" compact />
-        </Badge>
-      ) : undefined}
-      headline={headline}
-      detail={investor.thesisSummary}
-      actions={(
-        <>
-          <button
-            type="button"
-            aria-pressed={saved}
-            aria-label={saved
-              ? bilingualInline(`Remove ${investor.displayName} from your shortlist`, `Αφαίρεση ${investor.displayName} από τη λίστα σας`)
-              : bilingualInline(`Save ${investor.displayName} to your shortlist`, `Αποθήκευση ${investor.displayName} στη λίστα σας`)}
-            onClick={onToggleSave}
-            className="tap-target inline-flex items-center justify-center text-muted-foreground"
-          >
-            <Bookmark className={cn('icon-sm', saved && 'fill-primary text-primary-accessible')} aria-hidden="true" />
-          </button>
+    <Card className="group transition-all hover:border-primary/30">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={investor.avatarUrl} alt="" />
+              <AvatarFallback className="bg-primary/10 text-sm font-semibold text-primary-accessible">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          title={(
+            <span className="inline-flex max-w-full items-center gap-1.5">
+              <span className="min-w-0 break-words">{investor.displayName}</span>
+              {investor.isVerified && (
+                <BadgeCheck
+                  className={cn('icon-sm shrink-0', STATUS.info.icon)}
+                  aria-label={bilingualInline('Verified', 'Επαληθευμένος')}
+                />
+              )}
+            </span>
+          )}
+          /* One text run, never cut: the investor type, then firm and role
+             (as separate flex items they broke into ragged columns). */
+          subtitle={type || investor.firmName || investor.firmRole || investor.headline ? (
+            <>
+              {type ? <BilingualText en={type.en} el={type.el} compact /> : null}
+              {type && (investor.firmName || investor.firmRole || investor.headline) ? ' · ' : null}
+              {investor.firmName || investor.firmRole
+                ? [investor.firmName, investor.firmRole].filter(Boolean).join(' · ')
+                : investor.headline}
+            </>
+          ) : undefined}
+          meta={investor.isActivelyScouting ? (
+            <Badge className={cn('mt-1 border text-2xs', STATUS.success.chip)}>
+              <BilingualText en="Actively scouting" el="Αναζητά ενεργά" compact />
+            </Badge>
+          ) : undefined}
+          asideStays
+          aside={(
+            <button
+              aria-label={saved
+                ? bilingualInline(`Remove ${investor.displayName} from your shortlist`, `Αφαίρεση ${investor.displayName} από τη λίστα σας`)
+                : bilingualInline(`Save ${investor.displayName} to your shortlist`, `Αποθήκευση ${investor.displayName} στη λίστα σας`)}
+              aria-pressed={saved}
+              type="button"
+              onClick={onToggleSave}
+              className="tap-target flex items-center gap-1 rounded-md p-1 transition-colors hover:bg-muted sm:px-1.5"
+            >
+              <Bookmark className={cn('icon-sm', saved ? 'fill-primary text-primary-accessible' : 'text-muted-foreground')} aria-hidden="true" />
+              <span className="hidden sm:inline text-xs"><BilingualText en={saved ? 'Saved' : 'Save'} el={saved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
+            </button>
+          )}
+        />
+
+        {investor.thesisSummary && (
+          <p className="card-body line-clamp-2 text-muted-foreground">{investor.thesisSummary}</p>
+        )}
+
+        {/* What they invest in, then in which sectors: two fact lines,
+            dot-separated, where stages, cheque, place and sectors were up
+            to eight tinted pills. */}
+        <div className="space-y-1">
+          <FactLine
+            label={bilingualInline('Stages, cheque size and place', 'Στάδια, εύρος επένδυσης και τόπος')}
+            items={[
+              ...investor.stages.map((s) => STAGE_LABEL[s] ?? s),
+              checkSize,
+              place,
+            ]}
+          />
+          <FactLine
+            label={bilingualInline('Sectors', 'Τομείς')}
+            items={investor.industries}
+          />
+        </div>
+
+        <CardFoot
+          meta={facts.length ? (
+            <FactLine items={facts.map(({ key, en, el }) => <BilingualText key={key} en={en} el={el} compact />)} />
+          ) : undefined}
+        >
           {investor.sample ? (
-            <Button size="sm" disabled title={sampleReason}>
-              <BilingualText en="Message" el="Μήνυμα" compact />
-            </Button>
+            <>
+              <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" disabled title={sampleReason}>
+                <Eye className="icon-sm" aria-hidden="true" />
+                <BilingualText en="Profile" el="Προφίλ" compact />
+              </Button>
+              <Button size="sm" className="h-7 gap-1 text-xs" disabled title={sampleReason}>
+                <UserPlus className="icon-sm" aria-hidden="true" />
+                <BilingualText en="Message directly" el="Απευθείας μήνυμα" compact />
+              </Button>
+            </>
           ) : (
             <>
-              <AskIntroButton targetId={investor.userId} targetName={investor.displayName} className="gap-1" />
-              <Button size="sm" className="gap-1" asChild>
+              <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" asChild>
+                <Link href={`/profiles/${investor.userId}`}>
+                  <Eye className="icon-sm" aria-hidden="true" />
+                  <BilingualText en="Profile" el="Προφίλ" compact />
+                </Link>
+              </Button>
+              {/* A warm path first: who you know who knows them (the
+                  intermediary decides whether to forward). The direct
+                  message stays beside it, named for what it is. */}
+              <AskIntroButton targetId={investor.userId} targetName={investor.displayName} className="h-7 gap-1 text-xs" />
+              <Button size="sm" className="h-7 gap-1 text-xs" asChild>
                 <Link href={`/messages?to=${investor.userId}`}>
-                  <BilingualText en="Message" el="Μήνυμα" compact />
+                  <UserPlus className="icon-sm" aria-hidden="true" />
+                  <BilingualText en="Message directly" el="Απευθείας μήνυμα" compact />
                 </Link>
               </Button>
             </>
           )}
-        </>
-      )}
-    />
+        </CardFoot>
+      </CardContent>
+    </Card>
   );
 }
 

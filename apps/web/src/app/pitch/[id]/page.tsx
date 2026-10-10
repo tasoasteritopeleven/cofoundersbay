@@ -223,14 +223,15 @@ function contentOf<T>(slide: SlideBase): T {
 function CoverSlide({ slide }: { slide: SlideBase }) {
   const c = contentOf<CoverContent>(slide);
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center px-8 py-12 bg-primary/[0.04]">
+    // Left-aligned like every card: the round, the name, the line under it.
+    <div className="flex flex-col items-start justify-center h-full px-8 py-12 bg-primary/[0.04]">
       <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm text-primary-accessible font-medium">
-        {c.stage} • Raising {c.raising}
+        <BilingualText en={`${c.stage} · Raising ${c.raising}`} el={`${c.stage} · Αντλεί ${c.raising}`} compact />
       </div>
       {/* 48px fixed left roughly six characters per line on a 320px screen. */}
       <h1 className="text-3xl font-semibold text-foreground mb-4 sm:text-4xl lg:text-5xl">{slide.title}</h1>
-      <p className="text-xl text-muted-foreground max-w-2xl">{c.tagline}</p>
-      <p className="text-sm text-muted-foreground mt-8">Founded {c.founded}</p>
+      <p className="text-lg text-muted-foreground max-w-2xl">{c.tagline}</p>
+      <p className="text-sm text-muted-foreground mt-8"><BilingualText en={`Founded ${c.founded}`} el={`Ιδρύθηκε ${c.founded}`} compact /></p>
     </div>
   );
 }
@@ -380,14 +381,14 @@ function TeamSlide({ slide }: { slide: SlideBase }) {
       </div>
       <div className="grid grid-cols-3 gap-6">
         {c.members.map((member, i) => (
-          <div key={i} className="rounded-2xl border bg-card p-6 text-center">
-            <Avatar className="h-16 w-16 mx-auto mb-4">
-              <AvatarFallback className="text-xl">
+          <div key={i} data-card="" className="rounded-2xl border bg-card p-4">
+            <Avatar className="mb-3 h-10 w-10">
+              <AvatarFallback className="text-sm">
                 {initialsOf(member.name)}
               </AvatarFallback>
             </Avatar>
-            <p className="font-semibold">{member.name}</p>
-            <p className="text-sm text-primary-accessible mt-1">{member.role}</p>
+            <p className="card-title">{member.name}</p>
+            <p className="card-subtitle mt-0.5 text-primary-accessible">{member.role}</p>
             <p className="text-xs text-muted-foreground mt-2">{member.background}</p>
           </div>
         ))}

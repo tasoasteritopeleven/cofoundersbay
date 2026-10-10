@@ -50,6 +50,8 @@ import { STATUS, type StatusTone } from '@/lib/semantic-colors';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, ROW_GONE, rowOptions, settle, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 import { formatDate } from '@/lib/i18n/format';
@@ -160,34 +162,34 @@ function ApplicationCard({
 
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex gap-4">
-          <Avatar className="icon-md rounded-lg">
-            <AvatarImage src={application.logoUrl} />
-            <AvatarFallback className="rounded-lg bg-primary/10 text-primary-accessible font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                {/* Linked to /org/applications/:id, a route that never existed. */}
-                <button
-                  type="button"
-                  onClick={() => onReview(application)}
-                  className="text-left font-medium hover:text-primary-accessible transition-colors"
-                >
-                  {application.startupName}
-                </button>
-                <p className="text-sm text-muted-foreground">
-                  {[application.founderName, application.industry, application.location].filter(Boolean).join(' · ')}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className={cn('text-xs flex items-center gap-1 border', statusColors.chip)}>
-                  <StatusIcon className="icon-sm" />
-                  <StatusText value={application.status} />
-                </Badge>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10 rounded-xl">
+              <AvatarImage src={application.logoUrl} />
+              <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-semibold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          title={(
+            /* Linked to /org/applications/:id, a route that never existed. */
+            <button
+              type="button"
+              onClick={() => onReview(application)}
+              className="text-left transition-colors hover:text-primary-accessible"
+            >
+              {application.startupName}
+            </button>
+          )}
+          subtitle={[application.founderName, application.industry, application.location].filter(Boolean).join(' · ') || undefined}
+          asideStays
+          aside={(
+            <>
+              <Badge variant="outline" className={cn('text-xs flex items-center gap-1 border', statusColors.chip)}>
+                <StatusIcon className="icon-sm" />
+                <StatusText value={application.status} />
+              </Badge>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button aria-label="More options" variant="ghost" size="icon">
@@ -219,25 +221,20 @@ function ApplicationCard({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-            </div>
+            </>
+          )}
+        />
 
-            <div className="flex flex-wrap gap-4 mt-2 text-xs text-muted-foreground">
-              <span>{application.program}</span>
-              {application.stage ? <span><StatusText value={application.stage} /></span> : null}
-              <span className="flex items-center gap-1">
-                <Calendar className="icon-sm" aria-hidden="true" />
-                {application.submittedAt}
-              </span>
-              {application.score !== undefined && (
-                <span className="flex items-center gap-1">
-                  <Star className={cn('icon-sm', STATUS.warning.icon)} />
-                  <BilingualText en={`Score: ${application.score}/100`} el={`Βαθμολογία: ${application.score}/100`} compact />
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
+        <FactLine
+          items={[
+            application.program,
+            application.stage ? <StatusText key="stage" value={application.stage} /> : null,
+            application.submittedAt,
+            application.score !== undefined
+              ? <BilingualText key="score" en={`Score: ${application.score}/100`} el={`Βαθμολογία: ${application.score}/100`} compact />
+              : null,
+          ]}
+        />
       </CardContent>
     </Card>
   );

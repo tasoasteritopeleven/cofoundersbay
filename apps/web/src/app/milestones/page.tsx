@@ -139,9 +139,8 @@ function MilestoneCard({
   return (
     <div
       data-card=""
-      data-surface="card"
       className={cn(
-        'group relative rounded-xl border bg-card transition-all hover:shadow-sm',
+        'group relative rounded-2xl border bg-card transition-all hover:shadow-sm',
         // No opacity fade on a completed row. Fading the container fades its text
         // with it: muted text measured 4.35:1 at 0.75 on the card and 4.38:1 at
         // 0.80 on this row's own success tint -- both under AA, and the exact
@@ -164,7 +163,7 @@ function MilestoneCard({
       <div className="px-5 py-4">
         <div className="flex items-start gap-3">
           {/* Status icon */}
-          <div data-keep-icon="" className={cn('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', statusColors.bg)}>
+          <div className={cn('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', statusColors.bg)}>
             <CfbGlyph name={status.glyph} className={cn('icon-sm', statusColors.icon)} />
           </div>
 
@@ -252,7 +251,7 @@ function MilestoneCard({
             </div>
 
             {item.description && (
-              <p className="card-copy mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+              <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
                 {previewEl?.description
                   ? <BilingualText en={item.description} el={previewEl.description} wrap />
                   : item.description}

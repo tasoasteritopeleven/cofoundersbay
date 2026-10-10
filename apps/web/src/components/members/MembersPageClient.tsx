@@ -43,6 +43,7 @@ import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { FactLine } from '@/components/common/FactLine';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { StatusText } from '@/components/common/StatusText';
 
 type ViewMode = 'grid' | 'list';
@@ -135,89 +136,84 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
   const hydrated = useHydrated();
   const isOnline = hydrated && isRecentlyActive(member.lastSeenAt);
 
+  const mark = (
+    <Link href={`/profiles/${member.userId}`} className="relative block" aria-label={bilingualInline(`Open ${member.displayName}'s profile`, `Άνοιγμα προφίλ: ${member.displayName}`)}>
+      <Avatar className="h-10 w-10">
+        <AvatarImage src={member.avatarUrl ?? undefined} />
+        <AvatarFallback className="bg-primary/15 text-primary-accessible font-semibold text-sm">
+          {initialsOf(member.displayName)}
+        </AvatarFallback>
+      </Avatar>
+      {isOnline && (
+        <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-background">
+          <span className="h-2.5 w-2.5 rounded-full bg-status-success-mark ring-1 ring-background" />
+        </span>
+      )}
+    </Link>
+  );
+  const name = (
+    <Link href={`/profiles/${member.userId}`} className="transition-colors hover:text-primary-accessible">
+      {member.displayName}
+    </Link>
+  );
+  const role = member.role ? <StatusText value={member.role} /> : undefined;
+  const actions = (
+    <>
+      <Button size="sm" onClick={onConnect} className="gap-1.5">
+        <UserPlus className="icon-sm" />
+        <BilingualText en="Connect" el="Σύνδεση" compact />
+      </Button>
+      <Button aria-label={`Message ${member.displayName}`} size="sm" variant="outline" onClick={onMessage} className="gap-1.5">
+        <MessageCircle className="icon-sm" />
+        <span className="hidden sm:inline"><BilingualText en="Message" el="Μήνυμα" compact /></span>
+      </Button>
+    </>
+  );
+
+  // Grid and list share the Endorsements card: avatar, name and role, then
+  // the bio, skills and facts on the avatar's edge. The grid card was
+  // centred, with the role in lowercase as a pill.
   if (isGridView) {
     return (
       <Card className="card-interactive hover-lift group transition-all duration-300">
-        <CardContent className="space-y-4">
-          <div className="flex flex-col items-center text-center">
-            <Link href={`/profiles/${member.userId}`} className="relative inline-block">
-              <Avatar className="h-16 w-16 ring-2 ring-primary/20 mb-3">
-                <AvatarImage src={member.avatarUrl ?? undefined} />
-                <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-base">
-                  {initialsOf(member.displayName)}
-                </AvatarFallback>
-              </Avatar>
-              {isOnline && (
-                <span className="absolute bottom-3 right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-background">
-                  <span className="h-2.5 w-2.5 rounded-full bg-status-success-mark ring-1 ring-background" />
-                </span>
-              )}
-            </Link>
+        <CardContent className="space-y-3">
+          <CardHead
+            mark={mark}
+            title={name}
+            subtitle={role}
+            aside={isOnline ? (
+              <span className="text-status-success"><BilingualText en="Online" el="Σε σύνδεση" compact /></span>
+            ) : undefined}
+          />
 
-            <Link
-              href={`/profiles/${member.userId}`}
-              className="font-display text-base font-semibold text-foreground hover:text-primary-accessible transition-colors mb-1"
-            >
-              {member.displayName}
-            </Link>
+          {member.bio && (
+            <p className="card-body line-clamp-2 text-muted-foreground">
+              {member.bio}
+            </p>
+          )}
 
-            {member.role && (
-              <Badge variant="secondary" className="mb-2">
-                <StatusText value={member.role} />
-              </Badge>
-            )}
-
-            {member.bio && (
-              <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-3">
-                {member.bio}
-              </p>
-            )}
-
+          <div className="space-y-1">
             <FactLine
-              className="mb-3 justify-center"
               items={[...(member.skills ?? []).slice(0, 3), (member.skills?.length ?? 0) > 3 ? `+${(member.skills?.length ?? 0) - 3}` : null]}
             />
+            <FactLine items={[member.location]} />
+          </div>
 
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-              {member.location && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="icon-sm" />
-                  {member.location}
-                </div>
-              )}
-              {isOnline && (
-                <span className="flex items-center gap-1 text-status-success">
-                  <span className="h-1.5 w-1.5 rounded-full bg-status-success-mark" />
-                  <BilingualText en="Online" el="Σε σύνδεση" compact />
-                </span>
-              )}
+          {/* Profile completeness: a label and its figure over the bar. */}
+          <div>
+            <div className="mb-1 flex items-center justify-between gap-3 text-xs">
+              <span className="text-muted-foreground"><BilingualText en="Profile completeness" el="Πληρότητα προφίλ" compact /></span>
+              <span className={cn('font-semibold tabular-nums', scoreColor(completeness))}>{completeness}%</span>
             </div>
-
-            {/* Contribution score */}
-            <div className="w-full mb-3">
-              <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-muted-foreground"><BilingualText en="Profile completeness" el="Πληρότητα προφίλ" compact /></span>
-                <span className={cn('font-semibold', scoreColor(completeness))}>{completeness}%</span>
-              </div>
-              <div className="h-1.5 rounded-full bg-secondary/60 overflow-hidden">
-                <div
-                  className={cn('h-full rounded-full transition-all', completeness >= 80 ? 'bg-status-success-mark' : completeness >= 50 ? 'bg-status-warning-mark' : 'bg-primary/60')}
-                  style={{ width: `${completeness}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-2 w-full">
-              <Button size="sm" onClick={onConnect} className="flex-1 gap-1.5">
-                <UserPlus className="icon-sm" />
-                <BilingualText en="Connect" el="Σύνδεση" compact />
-              </Button>
-              <Button aria-label={`Message ${member.displayName}`} size="sm" variant="outline" onClick={onMessage} className="gap-1.5">
-                <MessageCircle className="icon-sm" />
-                <span className="hidden sm:inline"><BilingualText en="Message" el="Μήνυμα" compact /></span>
-              </Button>
+            <div className="h-1.5 overflow-hidden rounded-full bg-secondary/60" role="presentation">
+              <div
+                className={cn('h-full rounded-full transition-all', completeness >= 80 ? 'bg-status-success-mark' : completeness >= 50 ? 'bg-status-warning-mark' : 'bg-primary/60')}
+                style={{ width: `${completeness}%` }}
+              />
             </div>
           </div>
+
+          <CardFoot>{actions}</CardFoot>
         </CardContent>
       </Card>
     );
@@ -225,82 +221,33 @@ function MemberCard({ member, viewMode, onConnect, onMessage }: MemberCardProps)
 
   return (
     <Card className="card-interactive hover-lift group transition-all duration-300">
-      <CardContent>
-        <div className="flex items-start gap-4">
-          <Link href={`/profiles/${member.userId}`} className="relative shrink-0">
-            <Avatar className="h-12 w-12 ring-2 ring-primary/20">
-              <AvatarImage src={member.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-sm">
-                {initialsOf(member.displayName)}
-              </AvatarFallback>
-            </Avatar>
-            {isOnline && (
-              <span className="absolute bottom-0 right-0 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-background">
-                <span className="h-2.5 w-2.5 rounded-full bg-status-success-mark ring-1 ring-background" />
-              </span>
-            )}
-          </Link>
+      <CardContent className="space-y-3">
+        <CardHead mark={mark} title={name} subtitle={role} asideClassName="hidden sm:flex" aside={actions} />
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <div>
-                <Link
-                  href={`/profiles/${member.userId}`}
-                  className="font-display text-base font-semibold text-foreground hover:text-primary-accessible transition-colors"
-                >
-                  {member.displayName}
-                </Link>
-                {member.role && (
-                  <Badge variant="secondary" className="ml-2">
-                    <StatusText value={member.role} />
-                  </Badge>
-                )}
-              </div>
-              <div className="flex gap-2 shrink-0">
-                <Button size="sm" onClick={onConnect} className="gap-1.5">
-                  <UserPlus className="icon-sm" />
-                  <BilingualText en="Connect" el="Σύνδεση" compact />
-                </Button>
-                <Button aria-label={`Message ${member.displayName}`} size="sm" variant="outline" onClick={onMessage} className="gap-1.5">
-                  <MessageCircle className="icon-sm" />
-                  <span className="hidden sm:inline"><BilingualText en="Message" el="Μήνυμα" compact /></span>
-                </Button>
-              </div>
-            </div>
+        {member.bio && (
+          <p className="card-body line-clamp-2 text-muted-foreground">
+            {member.bio}
+          </p>
+        )}
 
-            <div className="mt-1 space-y-2">
-            {member.bio && (
-              <p className="card-copy text-sm text-muted-foreground line-clamp-2 mb-3">
-                {member.bio}
-              </p>
-            )}
-
-            <FactLine
-              className="mb-3"
-              items={[...(member.skills ?? []).slice(0, 5), (member.skills?.length ?? 0) > 5 ? `+${(member.skills?.length ?? 0) - 5}` : null]}
-            />
-
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              {member.location && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="icon-sm" />
-                  {member.location}
-                </div>
-              )}
-              {member.industries && member.industries.length > 0 && (
-                <div className="flex items-center gap-1">
-                  <Briefcase className="icon-sm" />
-                  {member.industries.slice(0, 2).join(', ')}
-                </div>
-              )}
-              <div className="flex items-center gap-1">
-                <Activity className="icon-sm" />
-                <span className={scoreColor(completeness)}>{completeness}% complete</span>
-              </div>
-            </div>
-            </div>
-          </div>
+        <div className="space-y-1">
+          <FactLine
+            items={[...(member.skills ?? []).slice(0, 5), (member.skills?.length ?? 0) > 5 ? `+${(member.skills?.length ?? 0) - 5}` : null]}
+          />
+          <FactLine
+            items={[
+              member.location,
+              member.industries && member.industries.length > 0 ? member.industries.slice(0, 2).join(', ') : null,
+              <span key="complete" className={scoreColor(completeness)}>
+                <BilingualText en={`${completeness}% complete`} el={`${completeness}% πλήρες`} compact />
+              </span>,
+              isOnline ? <span key="online" className="text-status-success"><BilingualText en="Online" el="Σε σύνδεση" compact /></span> : null,
+            ]}
+          />
         </div>
+
+        {/* On a phone the actions move under the facts, on the card's axis. */}
+        <div className="flex flex-wrap items-center gap-2 sm:hidden">{actions}</div>
       </CardContent>
     </Card>
   );
@@ -573,21 +520,26 @@ export function MembersPageClient() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {featuredMembers.map((member) => (
-                <div key={member.userId} className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/[0.03] p-3">
-                  <Link href={`/profiles/${member.userId}`} className="relative shrink-0">
-                    <Avatar className="h-10 w-10 ring-1 ring-primary/30">
-                      <AvatarImage src={member.avatarUrl ?? undefined} />
-                      <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm">{initialsOf(member.displayName)}</AvatarFallback>
-                    </Avatar>
-                  </Link>
-                  <div className="flex-1 min-w-0">
-                    {/* The badge wraps under the name rather than clipping it. */}
-                    <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
-                      <Link href={`/profiles/${member.userId}`} className="text-sm font-semibold text-foreground hover:text-primary-accessible transition-colors line-clamp-1">{member.displayName}</Link>
-                      <PersonVerifiedBadge userId={member.userId} />
-                    </div>
-                    <p className="line-clamp-2 text-2xs leading-snug text-muted-foreground">{member.headline ?? member.role ?? 'Member'}</p>
-                  </div>
+                <div key={member.userId} data-card="" className="rounded-2xl border border-primary/15 bg-primary/[0.03] p-3">
+                  <CardHead
+                    titleAs="p"
+                    mark={(
+                      <Link href={`/profiles/${member.userId}`} className="relative block" aria-label={bilingualInline(`Open ${member.displayName}'s profile`, `Άνοιγμα προφίλ: ${member.displayName}`)}>
+                        <Avatar className="h-10 w-10 ring-1 ring-primary/30">
+                          <AvatarImage src={member.avatarUrl ?? undefined} />
+                          <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm">{initialsOf(member.displayName)}</AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    )}
+                    /* The badge wraps under the name rather than clipping it. */
+                    title={(
+                      <span className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
+                        <Link href={`/profiles/${member.userId}`} className="hover:text-primary-accessible transition-colors">{member.displayName}</Link>
+                        <PersonVerifiedBadge userId={member.userId} />
+                      </span>
+                    )}
+                    subtitle={<span className="line-clamp-2">{member.headline ?? (member.role ? <StatusText value={member.role} /> : <BilingualText en="Member" el="Μέλος" compact />)}</span>}
+                  />
                 </div>
               ))}
             </div>

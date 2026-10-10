@@ -270,7 +270,7 @@ export default function PublicProfilePage() {
               <CardContent>
                 <div className="prose prose-sm dark:prose-invert max-w-none">
                   {(profile.bio ?? '').split('\n\n').map((p, i) => (
-                    <p key={i} className="text-muted-foreground">{p}</p>
+                    <p key={i} className="card-body text-muted-foreground">{p}</p>
                   ))}
                 </div>
               </CardContent>

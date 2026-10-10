@@ -19,6 +19,7 @@ import {
   X,
   Loader2,
   Bookmark,
+  Clock,
   Rocket,
   TrendingUp,
   Globe,
@@ -65,7 +66,7 @@ import { SaveItemButton, useSavedItems, useSaveToggle } from '@/components/commo
 import { MessageButton } from '@/components/common/PersonActions';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
 import { FactLine } from '@/components/common/FactLine';
-import { ListRowCard } from '@/components/common/ListRowCard';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -143,21 +144,56 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
     ? fmtDate(opportunity.deadline, { day: 'numeric', month: 'short', year: 'numeric' })
     : null;
 
-  const tags = (opportunity.tags ?? []).slice(0, 4).join(' · ');
   return (
-    <ListRowCard
-      id={`opportunity-${opportunity.id}`}
-      className="scroll-mt-24"
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{initials}</AvatarFallback>
-        </Avatar>
-      )}
-      title={opportunity.title}
-      headline={[opportunity.company, opportunitiesEn(cfg.labelKey), opportunity.isRemote ? opportunitiesEn('remote') : null, opportunity.location, deadline, postedAgo, opportunity.createdBy.displayName, tags].filter(Boolean).join(' · ')}
-      detail={opportunity.description}
-      actions={(
-        <>
+    // The id is the assistant's citation target (`/opportunities#opportunity-…`).
+    <Card id={`opportunity-${opportunity.id}`} className="card-interactive hover-lift group scroll-mt-24 transition-all duration-300 hover:border-primary/30">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10 rounded-xl ring-2 ring-border/60">
+              <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-semibold text-sm">{initials}</AvatarFallback>
+            </Avatar>
+          )}
+          title={opportunity.title}
+          /* Company, type and remote are facts about the listing: one line,
+             where the type and remote were two tinted pills. */
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                opportunity.company,
+                <BilingualText key="type" en={opportunitiesEn(cfg.labelKey)} el={opportunitiesEl(cfg.labelKey)} compact />,
+                opportunity.isRemote ? <BilingualText key="remote" en={opportunitiesEn('remote')} el={opportunitiesEl('remote')} compact /> : null,
+              ]}
+            />
+          )}
+          aside={postedAgo}
+        />
+
+        {opportunity.description && (
+          <p className="card-body line-clamp-2 text-muted-foreground">{opportunity.description}</p>
+        )}
+
+        <FactLine items={opportunity.tags ?? []} />
+
+        <FactLine
+          items={[
+            opportunity.location,
+            deadline && opportunity.deadline ? (() => {
+              const daysLeft = Math.ceil((new Date(opportunity.deadline as string).getTime() - Date.now()) / 86400000);
+              const key = daysLeft <= 0 ? 'expired' : daysLeft <= 3 ? 'days_left' : 'deadline';
+              const fill = (t: string) => t.replace('{n}', String(daysLeft)).replace('{date}', deadline);
+              return (
+                <span key="deadline" className={daysLeft <= 3 ? 'font-medium text-status-danger' : 'text-status-warning'}>
+                  <BilingualText en={fill(opportunitiesEn(key))} el={fill(opportunitiesEl(key))} compact />
+                </span>
+              );
+            })() : null,
+            opportunity.createdBy.displayName,
+          ]}
+        />
+
+        <div className="flex gap-2 pt-1">
           {opportunity.url ? (
             <Button size="sm" className="gap-1.5 text-xs" asChild>
               <a href={opportunity.url} target="_blank" rel="noopener noreferrer">
@@ -186,35 +222,44 @@ function OpportunityCard({ opportunity }: { opportunity: OpportunityItem }) {
           {/* Stored for the reader (/api/saved-items). It used to toast
               "saved on this device" and store nothing. */}
           <SaveItemButton kind="opportunity" itemId={opportunity.id} title={opportunity.title} />
-        </>
-      )}
-    />
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
 function JobCard({ job }: { job: JobPostingView }) {
   const { ask } = usePopupChat();
   return (
-    <ListRowCard
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-            {initialsOf(job.creator.displayName)}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      title={job.title}
-      titleHref={job.creator?.id ? `/profiles/${job.creator.id}` : undefined}
-      badge={(
-        <Badge variant="outline" className="text-xs">
-          <BilingualText en={opportunitiesEn('job')} el={opportunitiesEl('job')} compact />
-        </Badge>
-      )}
-      headline={[job.creator.displayName, job.role, job.location, job.isRemote ? opportunitiesEn('remote') : null].filter(Boolean).join(' · ')}
-      actions={(
-        <>
+    <Card className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10 rounded-xl ring-2 ring-border/60">
+              <AvatarFallback className="rounded-xl bg-primary/15 text-foreground font-semibold text-sm">
+                {initialsOf(job.creator.displayName)}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          title={job.title}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                job.creator.displayName,
+                <BilingualText key="job" en={opportunitiesEn('job')} el={opportunitiesEl('job')} compact />,
+                job.isRemote ? <BilingualText key="remote" en={opportunitiesEn('remote')} el={opportunitiesEl('remote')} compact /> : null,
+              ]}
+            />
+          )}
+        />
+
+        <FactLine items={[job.location, job.role]} />
+
+        <div className="flex gap-2 pt-1">
           {/* The job feed has no apply route, so the useful actions are the
-              draft the assistant writes and a message to the poster. */}
+              draft the assistant writes and a message to the poster (the
+              posting now carries the poster's id). */}
           <Button
             size="sm"
             className="gap-1.5 text-xs"
@@ -228,9 +273,9 @@ function JobCard({ job }: { job: JobPostingView }) {
           </Button>
           <SaveItemButton kind="job" itemId={job.id} title={job.title} />
           <MessageButton userId={job.creator?.id} displayName={job.creator.displayName} />
-        </>
-      )}
-    />
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -252,35 +297,65 @@ function ProposalCard({
   const statusCfg = PROPOSAL_STATUS[proposal.status] ?? PROPOSAL_STATUS.pending;
 
   return (
-    <ListRowCard
-      className={cn(!isPending && 'surface-inactive')}
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-            {proposal.fromInitials}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      title={proposal.fromName}
-      badge={(
-        <Badge variant="outline" className="text-xs">
-          <BilingualText en={opportunitiesEn(statusCfg.labelKey)} el={opportunitiesEl(statusCfg.labelKey)} compact />
-        </Badge>
-      )}
-      headline={[proposal.fromRole, proposal.date, proposal.timeframe, proposal.compensation].filter(Boolean).join(' · ')}
-      detail={proposal.scope}
-      actions={isPending ? (
-        <>
-          <Button size="sm" className="gap-1" onClick={() => onAccept(proposal.id)}>
-            <Check className="icon-sm" />
-            <BilingualText en={opportunitiesEn('accept')} el={opportunitiesEl('accept')} compact />
-          </Button>
-          <Button variant="ghost" size="sm" aria-label={opportunitiesEn('decline')} onClick={() => onDecline(proposal.id)}>
-            <X className="icon-sm" />
-          </Button>
-        </>
-      ) : undefined}
-    />
+    <Card className={cn('transition-all', !isPending && 'surface-inactive')}>
+      <CardContent className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback className="bg-primary/15 text-foreground text-xs font-bold">
+                {proposal.fromInitials}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-semibold text-foreground">{proposal.fromName}</p>
+              <p className="text-xs text-muted-foreground">{proposal.fromRole}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className={cn('text-xs', statusCfg.className)}>
+              <BilingualText en={opportunitiesEn(statusCfg.labelKey)} el={opportunitiesEl(statusCfg.labelKey)} compact />
+            </Badge>
+            <span className="text-xs text-muted-foreground">{proposal.date}</span>
+          </div>
+        </div>
+
+        <div className="rounded-xl bg-secondary/40 p-4 space-y-2">
+          <p className="text-sm text-foreground leading-relaxed">{proposal.scope}</p>
+          <div className="flex flex-wrap gap-4 text-xs text-muted-foreground pt-1">
+            <span className="flex items-center gap-1">
+              <Clock className="icon-sm" />
+              {proposal.timeframe}
+            </span>
+            <span className="flex items-center gap-1">
+              <Coins className="icon-sm" />
+              {proposal.compensation}
+            </span>
+          </div>
+        </div>
+
+        {isPending && (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              className="flex-1 gap-2"
+              onClick={() => onAccept(proposal.id)}
+            >
+              <Check className="icon-sm" />
+              <BilingualText en={opportunitiesEn('accept')} el={opportunitiesEl('accept')} compact />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 gap-2"
+              onClick={() => onDecline(proposal.id)}
+            >
+              <X className="icon-sm" />
+              <BilingualText en={opportunitiesEn('decline')} el={opportunitiesEl('decline')} compact />
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

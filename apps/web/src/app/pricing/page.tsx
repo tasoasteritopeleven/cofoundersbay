@@ -275,17 +275,19 @@ export default function PricingPage() {
                   plan.popular && 'border-primary ring-1 ring-primary/20'
                 )}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground shadow-sm"><BilingualText en="Most Popular" el="Πιο δημοφιλές" compact /></Badge>
-                  </div>
-                )}
-
                 <CardHeader className="pb-4">
                   <div className={cn('mb-3 flex h-10 w-10 items-center justify-center rounded-lg', plan.bgColor)}>
                     <Icon className={cn('icon-md', plan.color)} />
                   </div>
-                  <CardTitle className="text-xl">{plan.name}</CardTitle>
+                  {/* The plan's name is the card's title and the price reads under
+                      it; "Most popular" sits beside the name inside the card, where
+                      it used to hang over the card's top edge. */}
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <CardTitle className="text-xl">{plan.name}</CardTitle>
+                    {plan.popular && (
+                      <Badge className="bg-primary text-primary-foreground"><BilingualText en="Most popular" el="Πιο δημοφιλές" compact /></Badge>
+                    )}
+                  </div>
                   <CardDescription><BilingualText en={plan.description} el={plan.descriptionEl} wrap /></CardDescription>
                 </CardHeader>
 
@@ -293,11 +295,11 @@ export default function PricingPage() {
                   {/* Price */}
                   <div className="mb-6">
                     {isEnterprise ? (
-                      <div className="text-3xl font-bold text-foreground"><BilingualText en="Custom" el="Κατά περίπτωση" compact /></div>
+                      <div className="text-lg font-semibold text-foreground"><BilingualText en="Custom" el="Κατά περίπτωση" compact /></div>
                     ) : (
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-foreground">${price}</span>
-                        <span className="text-muted-foreground">/{annual ? 'yr' : 'mo'}</span>
+                        <span className="text-lg font-semibold tabular-nums text-foreground">${price}</span>
+                        <span className="text-sm text-muted-foreground">/{annual ? 'yr' : 'mo'}</span>
                       </div>
                     )}
                     {!isEnterprise && !isFree && annual && savings > 0 && (

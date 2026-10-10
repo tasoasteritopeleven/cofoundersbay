@@ -13,9 +13,12 @@ import { PAGE_RAIL_WIDTH } from './PageRailContext';
  *   glass while they float, and a default card inside the rail drops its
  *   frame so sections read as groups on the surface, not cards on a card.
  */
-const css = readFileSync('src/app/globals.css', 'utf8');
-const shell = readFileSync('src/components/layout/AppShell.tsx', 'utf8');
-const rail = readFileSync('src/components/layout/PageRail.tsx', 'utf8');
+// On Windows the checkout may be CRLF; the selectors we look for span line
+// breaks, so read every source with line endings normalised to LF.
+const src = (path: string) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+const css = src('src/app/globals.css');
+const shell = src('src/components/layout/AppShell.tsx');
+const rail = src('src/components/layout/PageRail.tsx');
 
 describe('page rail width', () => {
   it('has one source, read by the panel and by the column beside it', () => {

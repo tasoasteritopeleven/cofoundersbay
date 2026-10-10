@@ -12,7 +12,9 @@ import { rankSimilar } from '@/components/profile/ProfileSections';
 import type { SearchHit } from '@/lib/api';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { bilingualAria } from '@/lib/i18n/format';
 import { getMeProfile, searchProfiles, sendConnectionRequest } from '@/lib/api';
 import { rowOptions, ROW_GONE, usePageControls, usePageList } from '@/lib/page-controls';
 import { qk, queryKeys } from '@/lib/query-keys';
@@ -137,57 +139,68 @@ export function PeopleYouMayKnow({ excludeIds, limit = 6 }: { excludeIds: Readon
 
   if (me.isLoading || pool.isLoading || !suggested.length) return null;
 
+  // A section of Connections cards: the same head (circle, name with its
+  // role, headline), the reason on the body step under it, and Connect in
+  // the card's foot on the avatar's edge.
   return (
-    <Card aria-labelledby="pymk-title">
-      <CardHeader className="border-b border-border">
-        <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
-          <div className="min-w-0">
-            <CardTitle id="pymk-title" className="text-lg">
-              <BilingualText en="People you may know" el="Ίσως γνωρίζετε" compact />
-            </CardTitle>
-            <p className="mt-1 text-xs text-muted-foreground">
-              <BilingualText en="By the roles you are looking for and what you share (skills, industry, city) - never by who viewed whom." el="Με βάση τους ρόλους που αναζητάτε και όσα μοιράζεστε (δεξιότητες, κλάδος, πόλη) - ποτέ με το ποιος είδε ποιον." wrap />
-            </p>
-          </div>
-          <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-primary-accessible" asChild>
-            <Link href="/discover"><Compass className="icon-sm" aria-hidden="true" /><BilingualText en="Find more" el="Βρείτε περισσότερους" compact /></Link>
-          </Button>
+    <section aria-labelledby="pymk-title" className="space-y-4">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h2 id="pymk-title" className="text-base font-semibold text-foreground">
+            <BilingualText en="People you may know" el="Ίσως γνωρίζετε" compact />
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            <BilingualText en="By the roles you are looking for and what you share (skills, industry, city), never by who viewed whom." el="Με βάση τους ρόλους που αναζητάτε και όσα μοιράζεστε (δεξιότητες, κλάδος, πόλη), ποτέ με το ποιος είδε ποιον." wrap />
+          </p>
         </div>
-      </CardHeader>
-      <CardContent>
-        {/* People in columns 32px apart, each on its column's axis: a frame
-            per person drew a card inside the card. */}
-        <ul className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
-          {suggested.map(({ hit, shared, wanted }) => (
-            <li key={hit.userId} className="flex min-w-0 flex-col gap-3">
-              <div className="flex min-w-0 items-start gap-3">
-                <Avatar className="h-12 w-12 shrink-0">
-                  <AvatarImage src={hit.avatarUrl ?? undefined} alt="" />
-                  <AvatarFallback className="bg-primary/10 text-sm text-primary-accessible" data-keep-icon="">{initialsOf(hit.displayName)}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <div className="flex min-w-0 flex-wrap items-center gap-x-1.5">
-                    <Link href={`/profiles/${hit.userId}`} className="truncate text-sm font-medium text-foreground hover:text-primary-accessible">{hit.displayName}</Link>
-                    <PersonVerifiedBadge userId={hit.userId} />
+        <Button variant="outline" size="sm" className="gap-1.5" asChild>
+          <Link href="/discover"><Compass className="icon-sm" aria-hidden="true" /><BilingualText en="Find more" el="Βρείτε περισσότερους" compact /></Link>
+        </Button>
+      </div>
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {suggested.map(({ hit, shared, wanted }) => (
+          <li key={hit.userId} className="min-w-0">
+            <Card className="h-full transition-all hover:border-primary/20">
+              <CardContent className="flex h-full flex-col gap-3">
+                <CardHead
+                  mark={(
+                    <Link href={`/profiles/${hit.userId}`} aria-label={bilingualAria(`Open ${hit.displayName}'s profile`, `Άνοιγμα προφίλ: ${hit.displayName}`)}>
+                      <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+                        <AvatarImage src={hit.avatarUrl ?? undefined} alt="" />
+                        <AvatarFallback className="bg-primary/20 font-semibold text-primary-accessible">{initialsOf(hit.displayName)}</AvatarFallback>
+                      </Avatar>
+                    </Link>
+                  )}
+                  title={(
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                      <Link href={`/profiles/${hit.userId}`} className="transition-colors hover:text-primary-accessible">{hit.displayName}</Link>
+                      <PersonVerifiedBadge userId={hit.userId} />
+                    </span>
+                  )}
+                  subtitle={hit.headline ? <span className="line-clamp-2">{hit.headline}</span> : <StatusText value={hit.role} />}
+                />
+                {wanted || shared.length ? (
+                  <div className="space-y-1">
+                    {wanted ? (
+                      <p className="card-body text-primary-accessible">
+                        <BilingualText en="A role you are looking for:" el="Ρόλος που αναζητάτε:" compact />{' '}<StatusText value={hit.role} />
+                      </p>
+                    ) : null}
+                    {shared.length ? (
+                      <p className="text-xs text-muted-foreground">
+                        <BilingualText en={`In common: ${shared.join(', ')}`} el={`Κοινά: ${shared.join(', ')}`} compact wrap />
+                      </p>
+                    ) : null}
                   </div>
-                  {hit.headline ? <p className="line-clamp-2 text-xs text-muted-foreground">{hit.headline}</p> : <p className="text-xs text-muted-foreground"><StatusText value={hit.role} /></p>}
-                  {wanted ? (
-                    <p className="mt-1 text-xs text-primary-accessible">
-                      <BilingualText en="A role you are looking for:" el="Ρόλος που αναζητάτε:" compact />{' '}<StatusText value={hit.role} />
-                    </p>
-                  ) : null}
-                  {shared.length ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      <BilingualText en={`In common: ${shared.join(', ')}`} el={`Κοινά: ${shared.join(', ')}`} compact wrap />
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-              <ConnectButton userId={hit.userId} displayName={hit.displayName} variant="outline" className="w-full" />
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+                ) : null}
+                <CardFoot className="mt-auto">
+                  <ConnectButton userId={hit.userId} displayName={hit.displayName} variant="outline" />
+                </CardFoot>
+              </CardContent>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

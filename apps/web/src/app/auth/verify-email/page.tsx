@@ -79,11 +79,11 @@ export default function VerifyEmailPage() {
         <Card className="border-border">
           {status === 'loading' && (
             <>
-              <CardHeader className="text-center pb-2">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+              <CardHeader className="pb-2">
+                <div data-keep-icon="" className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                   <Loader2 className="icon-xl text-primary-accessible animate-spin" />
                 </div>
-                <h1 className="text-base font-semibold leading-tight sm:text-lg"><BilingualText en="Verifying your email" el="Επαλήθευση του email σας" compact /></h1>
+                <h1 className="card-title"><BilingualText en="Verifying your email" el="Επαλήθευση του email σας" compact /></h1>
                 <CardDescription><BilingualText en="Please wait while we verify your email address..." el="Περιμένετε όσο επαληθεύουμε τη διεύθυνση email σας…" wrap /></CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
@@ -96,21 +96,21 @@ export default function VerifyEmailPage() {
 
           {status === 'success' && (
             <>
-              <CardHeader className="text-center pb-2">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-status-success-bg">
+              <CardHeader className="pb-2">
+                <div data-keep-icon="" className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-status-success-bg">
                   <CheckCircle2 className="icon-xl text-status-success" />
                 </div>
-                <h1 className="text-base font-semibold leading-tight text-status-success sm:text-lg"><BilingualText en="Email Verified!" el="Το email επαληθεύτηκε!" compact /></h1>
+                <h1 className="card-title text-status-success"><BilingualText en="Email Verified!" el="Το email επαληθεύτηκε!" compact /></h1>
                 <CardDescription>
                   {verifiedEmail ? (
-                    <>Your email <strong className="text-foreground">{verifiedEmail}</strong> has been verified.</>
+                    <BilingualText en={`Your email ${verifiedEmail} has been verified.`} el={`Το email σας ${verifiedEmail} επαληθεύτηκε.`} wrap />
                   ) : (
-                    'Your email address has been successfully verified.'
+                    <BilingualText en="Your email address has been successfully verified." el="Η διεύθυνση email σας επαληθεύτηκε." wrap />
                   )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="card-body text-muted-foreground">
                   <BilingualText en="You now have full access to all CoFounderBay features." el="Έχετε πλέον πλήρη πρόσβαση σε όλες τις δυνατότητες του CoFounderBay." wrap />
                 </p>
                 <div className="flex flex-col gap-2">
@@ -128,19 +128,19 @@ export default function VerifyEmailPage() {
 
           {status === 'error' && (
             <>
-              <CardHeader className="text-center pb-2">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+              <CardHeader className="pb-2">
+                <div data-keep-icon="" className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
                   <XCircle className="icon-xl text-destructive-accessible" />
                 </div>
-                <h1 className="text-base font-semibold leading-tight text-destructive-accessible sm:text-lg"><BilingualText en="Verification Failed" el="Η επαλήθευση απέτυχε" compact /></h1>
+                <h1 className="card-title text-destructive-accessible"><BilingualText en="Verification Failed" el="Η επαλήθευση απέτυχε" compact /></h1>
                 <CardDescription>
-                  {errorMessage || 'The verification link is invalid or has expired.'}
+                  {errorMessage || <BilingualText en="The verification link is invalid or has expired." el="Ο σύνδεσμος επαλήθευσης δεν ισχύει ή έχει λήξει." wrap />}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 <div className="rounded-lg border border-border bg-muted/30 p-4">
-                  <p className="text-sm text-muted-foreground mb-3">Common reasons:</p>
-                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                  <p className="text-sm font-medium text-foreground mb-2"><BilingualText en="Common reasons" el="Συνήθεις αιτίες" compact /></p>
+                  <ul className="card-body text-muted-foreground space-y-1 list-disc pl-4">
                     <li><BilingualText en="The link has expired (valid for 24 hours)" el="Ο σύνδεσμος έληξε (ισχύει 24 ώρες)" wrap /></li>
                     <li><BilingualText en="The link has already been used" el="Ο σύνδεσμος έχει ήδη χρησιμοποιηθεί" compact /></li>
                     <li><BilingualText en="The link was copied incorrectly" el="Ο σύνδεσμος αντιγράφηκε λάθος" compact /></li>
@@ -148,10 +148,10 @@ export default function VerifyEmailPage() {
                 </div>
                 
                 <div className="pt-2">
-                  <p className="text-sm font-medium text-foreground mb-3">Request a new verification link:</p>
+                  <p className="text-sm font-medium text-foreground mb-3"><BilingualText en="Request a new verification link" el="Ζητήστε νέο σύνδεσμο επαλήθευσης" compact wrap /></p>
                   {resendSent ? (
-                    <div className="rounded-lg border border-status-success-border bg-status-success-bg p-3 text-center">
-                      <CheckCircle2 className="icon-md text-status-success mx-auto mb-2" />
+                    <div className="rounded-lg border border-status-success-border bg-status-success-bg p-3">
+                      <CheckCircle2 className="icon-md text-status-success mb-2" />
                       <p className="text-sm text-status-success ">
                         <BilingualText en="Verification email sent! Check your inbox." el="Στάλθηκε email επαλήθευσης! Ελέγξτε τα εισερχόμενά σας." wrap />
                       </p>
@@ -175,7 +175,7 @@ export default function VerifyEmailPage() {
                         ) : (
                           <Mail className="icon-sm" />
                         )}
-                        Resend Verification Email
+                        <BilingualText en="Resend verification email" el="Νέα αποστολή email επαλήθευσης" compact />
                       </Button>
                     </form>
                   )}
@@ -186,19 +186,19 @@ export default function VerifyEmailPage() {
 
           {status === 'no-token' && (
             <>
-              <CardHeader className="text-center pb-2">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-status-warning-bg">
+              <CardHeader className="pb-2">
+                <div data-keep-icon="" className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-status-warning-bg">
                   <Mail className="icon-xl text-status-warning" />
                 </div>
-                <h1 className="text-base font-semibold leading-tight sm:text-lg"><BilingualText en="Verify Your Email" el="Επαληθεύστε το email σας" compact /></h1>
+                <h1 className="card-title"><BilingualText en="Verify Your Email" el="Επαληθεύστε το email σας" compact /></h1>
                 <CardDescription>
                   <BilingualText en="Enter your email to receive a verification link" el="Εισάγετε το email σας για να λάβετε σύνδεσμο επαλήθευσης" wrap />
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 {resendSent ? (
-                  <div className="rounded-lg border border-status-success-border bg-status-success-bg p-4 text-center">
-                    <CheckCircle2 className="icon-lg text-status-success mx-auto mb-2" />
+                  <div className="rounded-lg border border-status-success-border bg-status-success-bg p-4">
+                    <CheckCircle2 className="icon-lg text-status-success mb-2" />
                     <p className="text-sm font-medium text-status-success mb-1">
                       <BilingualText en="Verification email sent!" el="Στάλθηκε email επαλήθευσης!" compact />
                     </p>
@@ -226,12 +226,12 @@ export default function VerifyEmailPage() {
                       ) : (
                         <Mail className="icon-sm" />
                       )}
-                      Send Verification Email
+                      <BilingualText en="Send verification email" el="Αποστολή email επαλήθευσης" compact />
                     </Button>
                   </form>
                 )}
                 
-                <div className="text-center pt-2">
+                <div className="pt-2">
                   <Link href="/login" className="text-sm text-primary-accessible hover:underline">
                     <BilingualText en="Back to Login" el="Επιστροφή στη σύνδεση" compact />
                   </Link>
@@ -242,7 +242,7 @@ export default function VerifyEmailPage() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Need help?{' '}
+          <BilingualText en="Need help?" el="Χρειάζεστε βοήθεια;" compact />{' '}
           <Link href="/help" className="text-primary-accessible hover:underline">
             <BilingualText en="Contact Support" el="Επικοινωνία με υποστήριξη" compact />
           </Link>

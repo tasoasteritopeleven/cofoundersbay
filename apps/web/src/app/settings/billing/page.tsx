@@ -46,7 +46,7 @@ function InvoiceStatusBadge({ status }: { status: string }) {
 /** What a plan includes: one quiet list, shared with /pricing through PLAN_HIGHLIGHTS. */
 function PlanHighlights({ items }: { items: { en: string; el: string }[] }) {
   return (
-    <ul className="space-y-1.5 border-t border-border pt-3 text-sm text-muted-foreground">
+    <ul className="card-body space-y-1.5 border-t border-border pt-3 text-muted-foreground">
       {items.map((item) => (
         <li key={item.en} className="flex items-start gap-2">
           <Check className="mt-0.5 icon-sm shrink-0 text-status-success" aria-hidden="true" />
@@ -220,8 +220,8 @@ export default function UserBillingPage() {
               ) : sub ? (
                 <>
                   <div>
-                    <p className="text-lg font-semibold">{sub.plan?.displayName ?? <BilingualText en="Unknown plan" el="Άγνωστο πλάνο" compact />}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="card-title">{sub.plan?.displayName ?? <BilingualText en="Unknown plan" el="Άγνωστο πλάνο" compact />}</p>
+                    <p className="card-subtitle">
                       {formatCents(sub.billingCycle === 'annual' ? sub.plan?.priceAnnual : sub.plan?.priceMonthly ?? 0, sub.plan?.currency)}
                       {sub.billingCycle === 'annual'
                         ? <BilingualText en="/year" el="/έτος" compact />
@@ -249,8 +249,8 @@ export default function UserBillingPage() {
               ) : (
                 <>
                   <div>
-                    <p className="text-lg font-semibold"><BilingualText en="Free" el="Δωρεάν" compact /></p>
-                    <p className="text-sm text-muted-foreground">$0<BilingualText en="/mo" el="/μήνα" compact /></p>
+                    <p className="card-title"><BilingualText en="Free" el="Δωρεάν" compact /></p>
+                    <p className="card-subtitle">$0<BilingualText en="/mo" el="/μήνα" compact /></p>
                   </div>
                   <PlanHighlights items={PLAN_HIGHLIGHTS.free} />
                 </>
@@ -267,8 +267,8 @@ export default function UserBillingPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
-                  <p className="text-lg font-semibold">Pro</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="card-title">Pro</p>
+                  <p className="card-subtitle">
                     <BilingualText en="Unlock more usage on matching, messages, and mentor booking." el="Περισσότερη χρήση σε αντιστοιχίσεις, μηνύματα και κρατήσεις μεντόρων." wrap />
                   </p>
                 </div>
@@ -386,7 +386,7 @@ export default function UserBillingPage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-name" className="text-xs"><BilingualText en="Full name" el="Ονοματεπώνυμο" compact /> *</Label>
+                    <Label htmlFor="billing-contact-name"><BilingualText en="Full name" el="Ονοματεπώνυμο" compact /> *</Label>
                     <Input
                       id="billing-contact-name"
                       placeholder="Jane Doe"
@@ -395,7 +395,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-email" className="text-xs">Email *</Label>
+                    <Label htmlFor="billing-contact-email">Email *</Label>
                     <Input
                       id="billing-contact-email"
                       type="email"
@@ -405,7 +405,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-company" className="text-xs"><BilingualText en="Company" el="Επωνυμία" compact /></Label>
+                    <Label htmlFor="billing-contact-company"><BilingualText en="Company" el="Επωνυμία" compact /></Label>
                     <Input
                       id="billing-contact-company"
                       placeholder="Acme Inc."
@@ -414,7 +414,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-vat" className="text-xs"><BilingualText en="VAT / Tax ID" el="ΑΦΜ" compact /></Label>
+                    <Label htmlFor="billing-contact-vat"><BilingualText en="VAT / Tax ID" el="ΑΦΜ" compact /></Label>
                     <Input
                       id="billing-contact-vat"
                       placeholder="EU123456789"
@@ -423,7 +423,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5 sm:col-span-2">
-                    <Label htmlFor="billing-contact-address" className="text-xs"><BilingualText en="Address" el="Διεύθυνση" compact /></Label>
+                    <Label htmlFor="billing-contact-address"><BilingualText en="Address" el="Διεύθυνση" compact /></Label>
                     <Input
                       id="billing-contact-address"
                       placeholder="123 Main Street"
@@ -432,7 +432,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-city" className="text-xs"><BilingualText en="City" el="Πόλη" compact /></Label>
+                    <Label htmlFor="billing-contact-city"><BilingualText en="City" el="Πόλη" compact /></Label>
                     <Input
                       id="billing-contact-city"
                       placeholder="Athens"
@@ -441,7 +441,7 @@ export default function UserBillingPage() {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="billing-contact-postal" className="text-xs"><BilingualText en="Postal Code" el="Ταχυδρομικός κώδικας" compact /></Label>
+                    <Label htmlFor="billing-contact-postal"><BilingualText en="Postal Code" el="Ταχυδρομικός κώδικας" compact /></Label>
                     <Input
                       id="billing-contact-postal"
                       placeholder="10431"

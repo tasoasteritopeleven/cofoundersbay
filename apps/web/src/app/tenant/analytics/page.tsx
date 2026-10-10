@@ -278,7 +278,7 @@ export default function TenantAnalyticsPage() {
                     <BilingualText en={cell.en} el={cell.el} stacked wrap />
                   </dt>
                   <dd className="mt-1 text-lg font-semibold tabular-nums">{cell.value}</dd>
-                  {cell.note ? <dd className="text-xs text-muted-foreground">{cell.note}</dd> : null}
+                  {cell.note ? <dd className="text-xs text-muted-foreground first-letter:uppercase">{cell.note}</dd> : null}
                 </div>
               ))}
             </dl>

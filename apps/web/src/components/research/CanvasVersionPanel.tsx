@@ -387,7 +387,7 @@ function SnapshotsTab({ boardId }: { boardId: string }) {
     <div className="space-y-3 flex flex-col h-full">
       {/* Save */}
       <div className="p-3 bg-muted/50 rounded-lg border border-border space-y-2">
-        <Label htmlFor="snapshotLabel" className="text-xs font-medium">Save current state</Label>
+        <Label htmlFor="snapshotLabel" className="font-medium">Save current state</Label>
         <div className="flex gap-2">
           <Input id="snapshotLabel"
             placeholder={bilingualInline("Label (optional)…", "Ετικέτα (προαιρετικά)…")}
@@ -577,7 +577,7 @@ function VersionsTab({ boardId }: { boardId: string }) {
     <div className="space-y-3 flex flex-col h-full">
       {/* Commit */}
       <div className="p-3 bg-muted/50 rounded-lg border border-border space-y-2">
-        <Label htmlFor="label" className="text-xs font-medium">Commit current state</Label>
+        <Label htmlFor="label" className="font-medium">Commit current state</Label>
         <div className="flex gap-2">
           <Input id="label"
             placeholder={bilingualInline("Commit message (optional)…", "Μήνυμα αλλαγής (προαιρετικά)…")}
@@ -745,7 +745,7 @@ function BranchesTab({ boardId }: { boardId: string }) {
 
       {showCreate && (
         <div className="p-3 bg-muted/50 rounded-lg border border-border space-y-2">
-          <Label htmlFor="name" className="text-xs font-medium">New branch</Label>
+          <Label htmlFor="name" className="font-medium">New branch</Label>
           <Input id="name"
             placeholder="branch-name (lowercase, hyphens)"
             value={name}

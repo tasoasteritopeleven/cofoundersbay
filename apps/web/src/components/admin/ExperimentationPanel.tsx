@@ -258,7 +258,7 @@ function CreateExperimentModal({ onClose, onCreated }: { onClose: () => void; on
             { label: 'Description', key: 'description', placeholder: 'Optional context…' },
           ].map(({ label, key, placeholder }) => (
             <div key={key}>
-              <label htmlFor="exp-f1" className="block text-xs text-muted-foreground mb-1">{label}</label>
+              <label htmlFor="exp-f1" className="block text-sm text-muted-foreground mb-1">{label}</label>
               <input id="exp-f1"
                 value={(form as Record<string, string>)[key]}
                 onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
@@ -270,7 +270,7 @@ function CreateExperimentModal({ onClose, onCreated }: { onClose: () => void; on
           <div className="grid grid-cols-2 gap-3">
             {[{ label: 'Variant A (control)', key: 'variantA' }, { label: 'Variant B (treatment)', key: 'variantB' }].map(({ label, key }) => (
               <div key={key}>
-                <label htmlFor="exp-f2" className="block text-xs text-muted-foreground mb-1">{label}</label>
+                <label htmlFor="exp-f2" className="block text-sm text-muted-foreground mb-1">{label}</label>
                 <textarea id="exp-f2"
                   value={(form as Record<string, string>)[key]}
                   onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
@@ -281,7 +281,7 @@ function CreateExperimentModal({ onClose, onCreated }: { onClose: () => void; on
             ))}
           </div>
           <div>
-            <label htmlFor="exp-f3" className="block text-xs text-muted-foreground mb-1">Split Ratio (% assigned to B): {Math.round(parseFloat(form.splitRatio) * 100)}%</label>
+            <label htmlFor="exp-f3" className="block text-sm text-muted-foreground mb-1">Split Ratio (% assigned to B): {Math.round(parseFloat(form.splitRatio) * 100)}%</label>
             <input id="exp-f3"
               type="range" min="0.1" max="0.9" step="0.05"
               value={form.splitRatio}

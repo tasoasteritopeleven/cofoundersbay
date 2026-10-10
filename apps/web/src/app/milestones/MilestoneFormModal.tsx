@@ -186,7 +186,7 @@ export function MilestoneFormModal({
 
           {/* Title */}
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-title`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <label htmlFor={`${fieldId}-title`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
               <BilingualText en={milestoneEn('field_title')} el={milestoneEl('field_title')} compact /> <span className="text-destructive-accessible">*</span>
             </label>
             <Input
@@ -203,7 +203,7 @@ export function MilestoneFormModal({
 
           {/* Description */}
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-desc`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <label htmlFor={`${fieldId}-desc`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
               <BilingualText en={milestoneEn('field_desc')} el={milestoneEl('field_desc')} compact />
             </label>
             <textarea
@@ -220,7 +220,7 @@ export function MilestoneFormModal({
           {/* Status + Priority row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-status`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor={`${fieldId}-status`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 <BilingualText en={milestoneEn('field_status')} el={milestoneEl('field_status')} compact />
               </label>
               <select
@@ -236,7 +236,7 @@ export function MilestoneFormModal({
               </select>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-priority`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor={`${fieldId}-priority`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 <BilingualText en={milestoneEn('field_priority')} el={milestoneEl('field_priority')} compact />
               </label>
               <select
@@ -255,7 +255,7 @@ export function MilestoneFormModal({
           {/* Category + Due date row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-category`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor={`${fieldId}-category`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 <BilingualText en={milestoneEn('field_category')} el={milestoneEl('field_category')} compact />
               </label>
               <select
@@ -271,7 +271,7 @@ export function MilestoneFormModal({
               </select>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-due`} className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor={`${fieldId}-due`} className="flex items-center gap-1.5 text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 <CfbGlyph name="calendar" className="icon-sm" />
                 <BilingualText en={milestoneEn('field_due')} el={milestoneEl('field_due')} compact />
               </label>
@@ -288,7 +288,7 @@ export function MilestoneFormModal({
           {/* Progress */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label htmlFor={`${fieldId}-progress`} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor={`${fieldId}-progress`} className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 <BilingualText en={milestoneEn('field_progress')} el={milestoneEl('field_progress')} compact />
               </label>
               <span className="text-xs font-semibold tabular-nums text-foreground">{form.progress}%</span>
@@ -313,7 +313,7 @@ export function MilestoneFormModal({
 
           {/* Collaborator */}
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-collab`} className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <label htmlFor={`${fieldId}-collab`} className="flex items-center gap-1.5 text-sm font-medium uppercase tracking-wide text-muted-foreground">
               <CfbGlyph name="people" className="icon-sm" />
               <BilingualText en={milestoneEn('field_collab')} el={milestoneEl('field_collab')} compact />
             </label>
@@ -331,7 +331,7 @@ export function MilestoneFormModal({
 
           {/* Notes */}
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-notes`} className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <label htmlFor={`${fieldId}-notes`} className="flex items-center gap-1.5 text-sm font-medium uppercase tracking-wide text-muted-foreground">
               <CfbGlyph name="book" className="icon-sm" />
               <BilingualText en={milestoneEn('field_notes')} el={milestoneEl('field_notes')} compact />
             </label>

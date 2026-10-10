@@ -35,6 +35,7 @@ import { qk } from '@/lib/query-keys';
 import { usePageControls, usePageList } from '@/lib/page-controls';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 import { FactLine } from '@/components/common/FactLine';
@@ -97,32 +98,35 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
 
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex gap-4" style={{ ['--card-rail' as string]: 'calc(1.25rem + 1rem)' }}>
-          <Link href={`/p/${mentor.userId}`}>
-            <Avatar className="icon-md">
-              <AvatarImage src={mentor.avatar} />
-              <AvatarFallback className="bg-primary/10 text-primary-accessible font-semibold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Link href={`/p/${mentor.userId}`} className="font-medium hover:text-primary-accessible transition-colors">
-                    {mentor.name}
-                  </Link>
-                  {mentor.isVerified && (
-                    <CheckCircle2 className="icon-sm text-primary-accessible" />
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
-                  <StatusText value={mentor.status} />
-                </Badge>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Link href={`/p/${mentor.userId}`} aria-label={bilingualInline(`Open ${mentor.name}'s profile`, `Άνοιγμα προφίλ: ${mentor.name}`)}>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={mentor.avatar} />
+                <AvatarFallback className="bg-primary/10 text-primary-accessible font-semibold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          )}
+          title={(
+            <span className="flex items-center gap-1.5">
+              <Link href={`/p/${mentor.userId}`} className="hover:text-primary-accessible transition-colors">
+                {mentor.name}
+              </Link>
+              {mentor.isVerified && (
+                <CheckCircle2 className="icon-sm text-primary-accessible" aria-label={bilingualInline('Verified', 'Επαληθευμένος')} />
+              )}
+            </span>
+          )}
+          subtitle={mentor.headline || undefined}
+          asideStays
+          aside={(
+            <>
+              <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
+                <StatusText value={mentor.status} />
+              </Badge>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button aria-label="More options" variant="ghost" size="icon">
@@ -141,39 +145,24 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
                     <UnavailableMenuItem className="text-destructive-accessible" en="Remove from Pool" el="Αφαίρεση από τη δεξαμενή" reasonEn="The pool is read from mentor profiles; there is no pool membership to remove." reasonEl="Η δεξαμενή προκύπτει από τα προφίλ μεντόρων· δεν υπάρχει συμμετοχή για αφαίρεση." />
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-            </div>
+            </>
+          )}
+        />
 
-            <div className="card-axis">
-            {mentor.headline && (
-              <p className="mt-1 text-sm text-muted-foreground">{mentor.headline}</p>
-            )}
-            <FactLine className="mt-2" items={mentor.expertise.slice(0, 4)} />
-
-            <div className="flex flex-wrap gap-4 mt-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Users className="icon-sm" aria-hidden="true" />
-                <BilingualText
-                  en={`${mentor.activeMentees}/${mentor.maxMentees} mentees`}
-                  el={`${mentor.activeMentees}/${mentor.maxMentees} καθοδηγούμενοι`}
-                  compact
-                />
-              </span>
-              {mentor.totalSessions != null && (
-                <span className="flex items-center gap-1">
-                  <Calendar className="icon-sm" aria-hidden="true" />
-                  <BilingualText en={`${mentor.totalSessions} sessions`} el={`${mentor.totalSessions} συνεδρίες`} compact />
-                </span>
-              )}
-              {mentor.rating && (
-                <span className="flex items-center gap-1">
-                  <Star className={cn('icon-sm', STATUS.warning.icon)} />
-                  {mentor.rating.toFixed(1)}
-                </span>
-              )}
-            </div>
-            </div>
-          </div>
+        <div className="space-y-1">
+          <FactLine items={mentor.expertise.slice(0, 4)} />
+          <FactLine
+            items={[
+              <BilingualText
+                key="mentees"
+                en={`${mentor.activeMentees}/${mentor.maxMentees} mentees`}
+                el={`${mentor.activeMentees}/${mentor.maxMentees} καθοδηγούμενοι`}
+                compact
+              />,
+              mentor.totalSessions != null ? <BilingualText key="sessions" en={`${mentor.totalSessions} sessions`} el={`${mentor.totalSessions} συνεδρίες`} compact /> : null,
+              mentor.rating ? <span key="rating" className="inline-flex items-center gap-1"><Star className={cn('icon-sm', STATUS.warning.icon)} />{mentor.rating.toFixed(1)}</span> : null,
+            ]}
+          />
         </div>
       </CardContent>
     </Card>

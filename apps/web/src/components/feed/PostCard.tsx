@@ -199,7 +199,7 @@ export function PostCard({
 
         {/* Content */}
         <div className="mt-4">
-          <p className="text-foreground whitespace-pre-wrap leading-relaxed">{content}</p>
+          <p className="card-body text-foreground whitespace-pre-wrap">{content}</p>
         </div>
 
         {/* Tags */}

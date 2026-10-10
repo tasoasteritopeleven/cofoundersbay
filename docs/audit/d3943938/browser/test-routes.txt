@@ -1,0 +1,17 @@
+# Browser audit routes for d3943938
+# Target routes from review request
+
+# Core routes
+/members
+/opportunities
+/endorsements
+/connections
+/programs
+/fundraising
+/updates
+/investors
+/feed
+/scout
+
+# Demo seeding route
+/demo

@@ -92,7 +92,7 @@ function AuditLogRow({ log }: { log: AdminAuditLogItem }) {
 
   const metaStr = Object.entries(log.meta ?? {})
     .filter(([k]) => !['actorId'].includes(k))
-    .map(([k, v]) => `${k}: ${String(v)}`)
+    .map(([k, v]) => `${k.charAt(0).toUpperCase()}${k.slice(1)}: ${String(v)}`)
     .join(' · ');
 
   return (
@@ -102,8 +102,10 @@ function AuditLogRow({ log }: { log: AdminAuditLogItem }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-medium text-sm">{log.actorEmail}</span>
-          <Badge variant="outline" className={cn('text-xs', colorClass)}>
+          {/* An address and an action name are identifiers: never translated,
+              never re-cased. */}
+          <span className="font-medium text-sm" translate="no">{log.actorEmail}</span>
+          <Badge variant="outline" className={cn('text-xs', colorClass)} translate="no">
             {log.action}
           </Badge>
           <Badge variant="secondary" className="text-xs"><StatusText value={log.entityType} /></Badge>

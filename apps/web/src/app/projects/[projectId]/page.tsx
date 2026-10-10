@@ -284,7 +284,7 @@ export default function ProjectDetailPage() {
                       {(() => {
                         const elParas = project.descriptionEl?.split('\n\n') ?? [];
                         return project.description.split('\n\n').map((p, i) => (
-                          <p key={i} className="text-muted-foreground">
+                          <p key={i} className="card-body text-muted-foreground">
                             {elParas[i] ? <BilingualText en={p} el={elParas[i]} wrap /> : p}
                           </p>
                         ));
@@ -295,7 +295,7 @@ export default function ProjectDetailPage() {
                 </Card>
 
                 {project.rolesNeeded.length > 0 && (
-                <Card className="rounded-xl">
+                <Card>
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle><BilingualText en={projectEn('open_roles')} el={projectEl('open_roles')} compact /></CardTitle>
                     <Badge variant="outline" className="rounded-full">
@@ -307,11 +307,11 @@ export default function ProjectDetailPage() {
                       <div key={role.title} className="min-w-0">
                         <div className="mb-2 flex items-start justify-between gap-3">
                           <div>
-                            <h4 className="page-section font-semibold text-foreground">
+                            <h4 className="text-sm font-semibold text-foreground">
                               {role.titleEl ? <BilingualText en={role.title} el={role.titleEl} wrap /> : role.title}
                             </h4>
                             {role.description ? (
-                              <p className="text-sm text-muted-foreground">
+                              <p className="card-body mt-0.5 text-muted-foreground">
                                 {role.descriptionEl
                                   ? <BilingualText en={role.description} el={role.descriptionEl} wrap />
                                   : role.description}
@@ -569,14 +569,14 @@ export default function ProjectDetailPage() {
               </CardHeader>
               <CardContent>
                 <Link href={`/profiles/${project.founder.id}`} className="group flex items-center gap-3">
-                  <Avatar className="h-12 w-12">
+                  <Avatar className="h-10 w-10">
                     <AvatarImage src={project.founder.avatar} />
                     <AvatarFallback className="bg-primary/10 text-primary-accessible">
                       {project.founder.name[0]}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-foreground transition-colors group-hover:text-primary-accessible">
+                    <p className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary-accessible">
                       {project.founder.name}
                     </p>
                     <RoleBadge role={project.founder.role} size="sm" />

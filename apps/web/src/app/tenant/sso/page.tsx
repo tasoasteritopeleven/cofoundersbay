@@ -477,14 +477,14 @@ export default function TenantSSOPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="sso-provider-name" className="text-xs font-medium"><BilingualText en="Provider Name *" el="Όνομα παρόχου *" compact /></label>
+                    <label htmlFor="sso-provider-name" className="text-sm font-medium"><BilingualText en="Provider Name *" el="Όνομα παρόχου *" compact /></label>
                     <Input id="sso-provider-name" value={newProvider.providerName} onChange={e => setNewProvider(p => ({ ...p, providerName: e.target.value }))} placeholder={bilingualInline('e.g. University SSO, Okta, Azure AD', 'π.χ. SSO Πανεπιστημίου, Okta, Azure AD')} />
                   </div>
 
                   {(providerType === 'oidc' || providerType === 'oauth2') && (
                     <>
                       <div className="space-y-1">
-                        <label htmlFor="sso-issuer" className="text-xs font-medium"><BilingualText en="Issuer / Discovery URL *" el="URL εκδότη / discovery *" compact /></label>
+                        <label htmlFor="sso-issuer" className="text-sm font-medium"><BilingualText en="Issuer / Discovery URL *" el="URL εκδότη / discovery *" compact /></label>
                         <Input id="sso-issuer" value={newProvider.oidcIssuerUrl} onChange={e => setNewProvider(p => ({ ...p, oidcIssuerUrl: e.target.value }))} placeholder="https://accounts.google.com" />
                         <p className="text-xs text-muted-foreground">
                           <BilingualText en="Discovery is tried at this URL + /.well-known/openid-configuration" el="Η ανακάλυψη δοκιμάζεται σε αυτό το URL + /.well-known/openid-configuration" wrap />
@@ -492,16 +492,16 @@ export default function TenantSSOPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label htmlFor="sso-client-id" className="text-xs font-medium"><BilingualText en="Client ID *" el="Client ID *" compact /></label>
+                          <label htmlFor="sso-client-id" className="text-sm font-medium"><BilingualText en="Client ID *" el="Client ID *" compact /></label>
                           <Input id="sso-client-id" value={newProvider.oidcClientId} onChange={e => setNewProvider(p => ({ ...p, oidcClientId: e.target.value }))} placeholder="client-id" />
                         </div>
                         <div className="space-y-1">
-                          <label htmlFor="sso-client-secret" className="text-xs font-medium"><BilingualText en="Client Secret" el="Client secret" compact /></label>
+                          <label htmlFor="sso-client-secret" className="text-sm font-medium"><BilingualText en="Client Secret" el="Client secret" compact /></label>
                           <Input id="sso-client-secret" type="password" value={newProvider.oidcClientSecret} onChange={e => setNewProvider(p => ({ ...p, oidcClientSecret: e.target.value }))} placeholder="••••••••" />
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="sso-scopes" className="text-xs font-medium"><BilingualText en="Scopes" el="Scopes" compact /></label>
+                        <label htmlFor="sso-scopes" className="text-sm font-medium"><BilingualText en="Scopes" el="Scopes" compact /></label>
                         <Input id="sso-scopes" value={newProvider.oidcScopes} onChange={e => setNewProvider(p => ({ ...p, oidcScopes: e.target.value }))} placeholder="openid profile email" />
                       </div>
                     </>
@@ -510,21 +510,21 @@ export default function TenantSSOPage() {
                   {providerType === 'saml' && (
                     <>
                       <div className="space-y-1">
-                        <label htmlFor="sso-metadata" className="text-xs font-medium"><BilingualText en="Metadata URL (recommended)" el="URL metadata (προτείνεται)" compact /></label>
+                        <label htmlFor="sso-metadata" className="text-sm font-medium"><BilingualText en="Metadata URL (recommended)" el="URL metadata (προτείνεται)" compact /></label>
                         <Input id="sso-metadata" value={newProvider.samlMetadataUrl} onChange={e => setNewProvider(p => ({ ...p, samlMetadataUrl: e.target.value }))} placeholder="https://idp.example.com/metadata.xml" />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label htmlFor="sso-entry" className="text-xs font-medium"><BilingualText en="SSO Entry Point" el="Σημείο εισόδου SSO" compact /></label>
+                          <label htmlFor="sso-entry" className="text-sm font-medium"><BilingualText en="SSO Entry Point" el="Σημείο εισόδου SSO" compact /></label>
                           <Input id="sso-entry" value={newProvider.samlEntryPoint} onChange={e => setNewProvider(p => ({ ...p, samlEntryPoint: e.target.value }))} placeholder="https://idp.example.com/sso" />
                         </div>
                         <div className="space-y-1">
-                          <label htmlFor="sso-entity" className="text-xs font-medium"><BilingualText en="Issuer / Entity ID" el="Εκδότης / Entity ID" compact /></label>
+                          <label htmlFor="sso-entity" className="text-sm font-medium"><BilingualText en="Issuer / Entity ID" el="Εκδότης / Entity ID" compact /></label>
                           <Input id="sso-entity" value={newProvider.samlIssuer} onChange={e => setNewProvider(p => ({ ...p, samlIssuer: e.target.value }))} placeholder="urn:example:idp" />
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="sso-cert" className="text-xs font-medium"><BilingualText en="Public certificate (PEM)" el="Δημόσιο πιστοποιητικό (PEM)" compact /></label>
+                        <label htmlFor="sso-cert" className="text-sm font-medium"><BilingualText en="Public certificate (PEM)" el="Δημόσιο πιστοποιητικό (PEM)" compact /></label>
                         <textarea id="sso-cert" value={newProvider.samlCert} onChange={e => setNewProvider(p => ({ ...p, samlCert: e.target.value }))}
                           placeholder="-----BEGIN CERTIFICATE-----&#10;..." rows={3}
                           className="w-full rounded-xl border border-input bg-background px-3 py-2 text-xs font-mono resize-none" />
@@ -533,7 +533,7 @@ export default function TenantSSOPage() {
                   )}
 
                   <div className="space-y-1">
-                    <label htmlFor="sso-button-text" className="text-xs font-medium"><BilingualText en="Login Button Text" el="Κείμενο κουμπιού σύνδεσης" compact /></label>
+                    <label htmlFor="sso-button-text" className="text-sm font-medium"><BilingualText en="Login Button Text" el="Κείμενο κουμπιού σύνδεσης" compact /></label>
                     <Input id="sso-button-text" value={newProvider.loginButtonText} onChange={e => setNewProvider(p => ({ ...p, loginButtonText: e.target.value }))} placeholder="Continue with SSO" />
                   </div>
 
@@ -595,7 +595,7 @@ export default function TenantSSOPage() {
                 {ssoMode !== 'disabled' && (
                   <>
                     <div className="space-y-1">
-                      <label htmlFor="sso-selected-provider" className="text-xs font-medium"><BilingualText en="Identity provider" el="Πάροχος ταυτότητας" compact /></label>
+                      <label htmlFor="sso-selected-provider" className="text-sm font-medium"><BilingualText en="Identity provider" el="Πάροχος ταυτότητας" compact /></label>
                       <select id="sso-selected-provider" value={selectedProviderId} onChange={e => setSelectedProviderId(e.target.value)}
                         className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
                         <option value="">{bilingualInline('None selected', 'Καμία επιλογή')}</option>
@@ -629,14 +629,14 @@ export default function TenantSSOPage() {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="space-y-1">
-                        <label htmlFor="sso-default-role" className="text-xs font-medium"><BilingualText en="Default role for new SSO members" el="Προεπιλεγμένος ρόλος νέων μελών SSO" compact wrap /></label>
+                        <label htmlFor="sso-default-role" className="text-sm font-medium"><BilingualText en="Default role for new SSO members" el="Προεπιλεγμένος ρόλος νέων μελών SSO" compact wrap /></label>
                         <select id="sso-default-role" value={defaultRole} onChange={e => setDefaultRole(e.target.value)}
                           className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
                           {['founder', 'investor', 'mentor', 'member'].map(r => <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</option>)}
                         </select>
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="sso-session" className="text-xs font-medium"><BilingualText en="Session length (hours)" el="Διάρκεια συνεδρίας (ώρες)" compact /></label>
+                        <label htmlFor="sso-session" className="text-sm font-medium"><BilingualText en="Session length (hours)" el="Διάρκεια συνεδρίας (ώρες)" compact /></label>
                         <Input id="sso-session" type="number" min={1} max={720} value={sessionDuration} onChange={e => setSessionDuration(Number(e.target.value))} />
                       </div>
                     </div>
@@ -654,11 +654,11 @@ export default function TenantSSOPage() {
                   <Card>
                     <CardContent className="pt-4 space-y-4">
                       <div className="space-y-1">
-                        <label htmlFor="sso-redirect" className="text-xs font-medium"><BilingualText en="Page after sign-in" el="Σελίδα μετά τη σύνδεση" compact /></label>
+                        <label htmlFor="sso-redirect" className="text-sm font-medium"><BilingualText en="Page after sign-in" el="Σελίδα μετά τη σύνδεση" compact /></label>
                         <Input id="sso-redirect" value={postLoginRedirect} onChange={e => setPostLoginRedirect(e.target.value)} placeholder={bilingualInline('/dashboard (blank for the default)', '/dashboard (κενό για την προεπιλογή)')} />
                       </div>
                       <div className="space-y-1">
-                        <label htmlFor="sso-allowed-domains" className="text-xs font-medium"><BilingualText en="Allowed email domains" el="Επιτρεπόμενοι τομείς email" compact /></label>
+                        <label htmlFor="sso-allowed-domains" className="text-sm font-medium"><BilingualText en="Allowed email domains" el="Επιτρεπόμενοι τομείς email" compact /></label>
                         <Input id="sso-allowed-domains" value={allowedDomains} onChange={e => setAllowedDomains(e.target.value)} placeholder={bilingualInline('uoa.gr, di.uoa.gr (comma-separated)', 'uoa.gr, di.uoa.gr (με κόμμα)')} />
                         <p className="text-xs text-muted-foreground"><BilingualText en="Leave empty to allow any domain." el="Αφήστε κενό για οποιονδήποτε τομέα." compact wrap /></p>
                       </div>

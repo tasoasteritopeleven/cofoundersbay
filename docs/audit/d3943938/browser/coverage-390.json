@@ -1,0 +1,549 @@
+{
+  "meta": {
+    "baseUrl": "https://project-audit-79.preview.emergentagent.com",
+    "domain": "project-audit-79.preview.emergentagent.com",
+    "timestamp": "2026-10-10T08:50:54.269Z",
+    "viewport": {
+      "width": 390,
+      "height": 900
+    },
+    "language": "en",
+    "role": "existing_founder"
+  },
+  "totals": {
+    "offAxis": 5,
+    "overTitle": 0,
+    "bodyLoud": 0,
+    "tight": 0,
+    "lower": 1,
+    "escape": 36,
+    "overlap": 0,
+    "centered": 0,
+    "loneRight": 0
+  },
+  "routes": [
+    {
+      "route": "/members",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/members",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/members",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 8,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/opportunities",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/opportunities",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/opportunities",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 11,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/endorsements",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/endorsements",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/endorsements",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 5,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/connections",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/connections",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/connections",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 2,
+      "sum": {
+        "offAxis": 1,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"People you may know By the roles",
+          "title": "span.min-w-0.max-w-full.truncate \"People you may know\"",
+          "titleSize": 15.343,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [
+              "span.min-w-0.max-w-full.truncate \"Find more\" dx=12.0"
+            ],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 1,
+          "samples": {
+            "title": {
+              "fontSize": "15.343px",
+              "fontWeight": "600",
+              "lineHeight": "20.7131px",
+              "color": "rgb(48, 50, 59)",
+              "left": 33
+            }
+          },
+          "boundingRect": {
+            "left": 16,
+            "top": 522.828125,
+            "width": 358,
+            "height": 299.796875
+          }
+        }
+      ],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/programs",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/programs",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/programs",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 3,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/fundraising",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/fundraising",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/fundraising",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 4,
+      "sum": {
+        "offAxis": 4,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 1,
+        "escape": 36,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"Harbor $750K seed·Γύρος Harbor $",
+          "title": "span \"Harbor $750K seed\"",
+          "titleSize": 24,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [
+              "dd.card-body.mt-0.5.break-words \"1\" dx=40.0",
+              "dd.card-body.mt-0.5.break-words \"$375K\" dx=40.0",
+              "dd.card-body.mt-0.5.break-words \"15 Oct\" dx=40.0",
+              "dd.card-body.mt-0.5.break-words \"Athens Tech Angels\" dx=40.0"
+            ],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [
+              "span.min-w-0.max-w-full.truncate \"remaining\""
+            ],
+            "escape": [
+              "span \"Harbor $750K seed\"",
+              "div.card-subtitle.mt-0.5.break-words \"SAFE · Valuation TBD·Αποτίμηση εκκρεμεί\"",
+              "span.min-w-0.max-w-full.truncate \"Active\"",
+              "span.font-medium \"$375K raised·αντλήθηκαν\"",
+              "span.min-w-0.max-w-full.truncate \"50% of target\"",
+              "span.min-w-0.max-w-full.truncate \"remaining\"",
+              "span.break-words \"Investors·\"",
+              "span.break-words \"Committed·\"",
+              "span.break-words \"Closing·\"",
+              "span.break-words \"Lead investor·\"",
+              "span.min-w-0.max-w-full.truncate \"Add investor\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Προσθήκη επενδυτή\""
+            ],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 17,
+          "samples": {
+            "title": {
+              "fontSize": "24px",
+              "fontWeight": "700",
+              "lineHeight": "normal",
+              "color": "rgb(0, 0, 0)",
+              "left": 8
+            }
+          },
+          "boundingRect": {
+            "left": 8,
+            "top": 4655.71875,
+            "width": 374,
+            "height": 360.90625
+          }
+        },
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"A Athens Tech Angels Syndicate ·",
+          "title": "span.block \"Athens Tech Angels\"",
+          "titleSize": 18.72,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [
+              "span.flex.h-full.w-full \"A\"",
+              "span.block \"Athens Tech Angels\"",
+              "div.card-subtitle.mt-0.5.break-words \"Syndicate · $200K–$500K\"",
+              "span.truncate \"Syndicate\"",
+              "span \"Lead investor — committed the full $375K\"",
+              "div.min-w-0.text-xs.text-muted-foreground \"3 Sept\"",
+              "span.min-w-0.max-w-full.truncate \"View details\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Λεπτομέρειες\""
+            ],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 8,
+          "samples": {
+            "title": {
+              "fontSize": "18.72px",
+              "fontWeight": "700",
+              "lineHeight": "normal",
+              "color": "rgb(0, 0, 0)",
+              "left": 8
+            }
+          },
+          "boundingRect": {
+            "left": 8,
+            "top": 5037.625,
+            "width": 374,
+            "height": 884.6875
+          }
+        },
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"W Warm intro from Athens founder",
+          "title": "span.break-words \"Warm intro from Athens founder networks·\"",
+          "titleSize": 18.72,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [
+              "span.flex.h-full.w-full \"W\"",
+              "span.break-words \"Warm intro from Athens founder networks·\"",
+              "div.card-subtitle.mt-0.5.break-words \"Angel · Warm intro·Ζεστή γνωριμία\"",
+              "span.truncate \"Angel\"",
+              "span \"Waiting on a warm intro from Athens and \"",
+              "div.min-w-0.text-xs.text-muted-foreground \"2 Sept\"",
+              "span.min-w-0.max-w-full.truncate \"View details\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Λεπτομέρειες\""
+            ],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 8,
+          "samples": {
+            "title": {
+              "fontSize": "18.72px",
+              "fontWeight": "700",
+              "lineHeight": "normal",
+              "color": "rgb(0, 0, 0)",
+              "left": 8
+            }
+          },
+          "boundingRect": {
+            "left": 8,
+            "top": 5922.3125,
+            "width": 374,
+            "height": 550.6875
+          }
+        },
+        {
+          "framed": false,
+          "card": "div.rounded-2xl.border.border-border \"R Remaining $375K of the $750K s",
+          "title": "span.break-words \"Remaining $375K of the $750K seed·\"",
+          "titleSize": 18.72,
+          "stat": false,
+          "avatar": false,
+          "issues": {
+            "offAxis": [],
+            "overTitle": [],
+            "bodyLoud": [],
+            "tight": [],
+            "lower": [],
+            "escape": [
+              "span.flex.h-full.w-full \"R\"",
+              "span.break-words \"Remaining $375K of the $750K seed·\"",
+              "div.card-subtitle.mt-0.5.break-words \"Syndicate · $375K remaining·Υπόλοιπα $37\"",
+              "span.truncate \"Syndicate\"",
+              "span \"Open ask to close the remaining $375K.\"",
+              "div.min-w-0.text-xs.text-muted-foreground \"4 Sept\"",
+              "span.min-w-0.max-w-full.truncate \"View details\"",
+              "span.bilingual-secondary.text-muted-foreground.min-w-0 \"·Λεπτομέρειες\""
+            ],
+            "overlap": [],
+            "centered": [],
+            "loneRight": []
+          },
+          "total": 8,
+          "samples": {
+            "title": {
+              "fontSize": "18.72px",
+              "fontWeight": "700",
+              "lineHeight": "normal",
+              "color": "rgb(0, 0, 0)",
+              "left": 8
+            }
+          },
+          "boundingRect": {
+            "left": 8,
+            "top": 6473,
+            "width": 374,
+            "height": 510.6875
+          }
+        }
+      ],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/updates",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/updates",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/updates",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 3,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/investors",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/investors",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/investors",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 7,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/feed",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/feed",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/feed",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 3,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/scout",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/scout",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/scout",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 4,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    },
+    {
+      "route": "/demo",
+      "requestedUrl": "https://project-audit-79.preview.emergentagent.com/demo",
+      "finalUrl": "https://project-audit-79.preview.emergentagent.com/dashboard/founder",
+      "status": 200,
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "language": "en",
+      "role": "existing_founder",
+      "cards": 0,
+      "sum": {
+        "offAxis": 0,
+        "overTitle": 0,
+        "bodyLoud": 0,
+        "tight": 0,
+        "lower": 0,
+        "escape": 0,
+        "overlap": 0,
+        "centered": 0,
+        "loneRight": 0
+      },
+      "fields": [],
+      "detail": [],
+      "runtimeErrors": []
+    }
+  ]
+}

@@ -14,7 +14,7 @@ function pages(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
     if (statSync(path).isDirectory()) return pages(path);
-    return /\.tsx$/.test(name) && !/\.test\.tsx$/.test(name) ? [path] : [];
+    return /\.tsx$/.test(name) && !/\.test\.tsx$/.test(name) ? [path.replace(/\\/g, '/')] : [];
   });
 }
 

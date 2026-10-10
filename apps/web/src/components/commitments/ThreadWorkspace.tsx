@@ -23,6 +23,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
 import { useConfirm } from '@/components/ui/confirm-dialog';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { ReportBlockModal } from '@/components/common/ReportBlockModal';
 import { qk } from '@/lib/query-keys';
@@ -125,11 +126,11 @@ function ProtectedConversation({
         </p>
       </div>
       {thread.note ? (
-        <blockquote className="text-sm italic text-muted-foreground">“{thread.note}”</blockquote>
+        <blockquote className="card-body italic text-muted-foreground">“{thread.note}”</blockquote>
       ) : null}
       <ol className="max-h-80 space-y-2 overflow-y-auto pr-1">
         {thread.messages.length === 0 ? (
-          <li className="text-sm text-muted-foreground"><BilingualText en={CMT.no_messages.en} el={CMT.no_messages.el} wrap /></li>
+          <li className="card-body text-muted-foreground"><BilingualText en={CMT.no_messages.en} el={CMT.no_messages.el} wrap /></li>
         ) : (
           thread.messages.map((m) => (
             <li key={m.id} className={cn('flex', m.mine ? 'justify-end' : 'justify-start')}>
@@ -241,12 +242,12 @@ function VersionCard({ version, highlight }: { version: CommitmentTermsVersion; 
                   <span className="font-medium text-foreground">· <BilingualText en={CMT.changed.en} el={CMT.changed.el} compact /></span>
                 ) : null}
               </dt>
-              <dd className={cn('text-sm tabular-nums text-foreground', changed && 'font-semibold')}>{value}</dd>
+              <dd className={cn('card-body tabular-nums text-foreground', changed && 'font-semibold')}>{value}</dd>
             </div>
           );
         })}
       </dl>
-      {version.note ? <p className="text-sm text-muted-foreground">{version.note}</p> : null}
+      {version.note ? <p className="card-body text-muted-foreground">{version.note}</p> : null}
       <p className="flex flex-wrap gap-x-3 gap-y-1 text-2xs text-muted-foreground">
         <span className={version.acceptedByMe ? 'text-status-success' : undefined}>
           <BilingualText en={version.acceptedByMe ? CMT.accepted_by_you.en : CMT.not_accepted_by_you.en} el={version.acceptedByMe ? CMT.accepted_by_you.el : CMT.not_accepted_by_you.el} compact />
@@ -337,7 +338,7 @@ function TermsSpace({
           ) : null}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground"><BilingualText en={CMT.no_terms.en} el={CMT.no_terms.el} wrap /></p>
+        <p className="card-body text-muted-foreground"><BilingualText en={CMT.no_terms.en} el={CMT.no_terms.el} wrap /></p>
       )}
 
       {earlier.length ? (
@@ -610,7 +611,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
   }
   if (!thread) {
     return (
-      <p className="text-sm text-muted-foreground">
+      <p className="card-body text-muted-foreground">
         <BilingualText en="This conversation could not be opened." el="Η συζήτηση δεν άνοιξε." wrap />
       </p>
     );
@@ -618,22 +619,31 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
 
   return (
     <div className="space-y-5" data-thread={thread.id}>
-      <header className="flex flex-wrap items-center gap-3">
-        <Avatar className="h-9 w-9" data-keep-icon="">
-          <AvatarFallback className="bg-primary/15 text-xs text-foreground">{initialsOf(thread.counterpart.displayName)}</AvatarFallback>
-        </Avatar>
-        <div className="min-w-0 flex-1">
-          <p className="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-foreground">
-            <span className="truncate">{thread.counterpart.displayName}</span>
-            <VerifiedBadge methods={thread.verification.counterpartMethods} />
-          </p>
-          {thread.counterpart.headline ? <p className="truncate text-xs text-muted-foreground">{thread.counterpart.headline}</p> : null}
-        </div>
-        <StepChip step={thread.step} />
-        <Button size="sm" variant="ghost" className="ml-auto text-muted-foreground" onClick={() => setReportOpen(true)}>
-          <Flag className="icon-sm" aria-hidden />
-          <BilingualText en={CMT.report_block.en} el={CMT.report_block.el} compact />
-        </Button>
+      <header>
+        <CardHead
+          titleAs="h2"
+          mark={(
+            <Avatar className="h-10 w-10" data-keep-icon="">
+              <AvatarFallback className="bg-primary/15 text-xs text-foreground">{initialsOf(thread.counterpart.displayName)}</AvatarFallback>
+            </Avatar>
+          )}
+          title={(
+            <span className="flex min-w-0 flex-wrap items-center gap-1.5">
+              <span>{thread.counterpart.displayName}</span>
+              <VerifiedBadge methods={thread.verification.counterpartMethods} />
+            </span>
+          )}
+          subtitle={thread.counterpart.headline ?? undefined}
+          aside={(
+            <>
+              <StepChip step={thread.step} />
+              <Button size="sm" variant="ghost" className="text-muted-foreground" onClick={() => setReportOpen(true)}>
+                <Flag className="icon-sm" aria-hidden />
+                <BilingualText en={CMT.report_block.en} el={CMT.report_block.el} compact />
+              </Button>
+            </>
+          )}
+        />
       </header>
 
       <CommitmentLadder step={thread.step} myConfirmed={thread.myConfirmed} />
@@ -650,7 +660,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
 
       {thread.step === 'interest' ? (
         <section className="space-y-3">
-          {thread.note ? <blockquote className="text-sm italic text-muted-foreground">“{thread.note}”</blockquote> : null}
+          {thread.note ? <blockquote className="card-body italic text-muted-foreground">“{thread.note}”</blockquote> : null}
           {isOwner ? (
             <div className="flex flex-wrap gap-2">
               <Button size="sm" disabled={busy} onClick={() => void run(() => acceptCommitmentInterest(threadId), 'Interest accepted')}>
@@ -662,7 +672,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
             </div>
           ) : (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground"><BilingualText en={CMT.interest_waiting.en} el={CMT.interest_waiting.el} wrap /></p>
+              <p className="card-body text-muted-foreground"><BilingualText en={CMT.interest_waiting.en} el={CMT.interest_waiting.el} wrap /></p>
               <Button size="sm" variant="outline" disabled={busy} onClick={() => void run(() => withdrawCommitmentInterest(threadId), 'Interest withdrawn')}>
                 <BilingualText en={CMT.interest_withdraw.en} el={CMT.interest_withdraw.el} compact />
               </Button>
@@ -705,7 +715,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
           <h3 id={`deal-${thread.id}`} className="text-sm font-semibold text-status-success">
             <BilingualText en={CMT.deal_room.en} el={CMT.deal_room.el} compact />
           </h3>
-          <p className="text-sm text-foreground"><BilingualText en={CMT.deal_room_open.en} el={CMT.deal_room_open.el} wrap /></p>
+          <p className="card-body text-foreground"><BilingualText en={CMT.deal_room_open.en} el={CMT.deal_room_open.el} wrap /></p>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" asChild>
               <Link href={`/data-room/${encodeURIComponent(thread.cardId)}`}>
@@ -747,7 +757,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
       ) : null}
 
       {thread.step === 'closed' ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="card-body text-muted-foreground">
           <BilingualText en={CMT.closed_thread.en} el={CMT.closed_thread.el} wrap />
           {thread.closedReason ? <span className="mt-1 block italic">“{thread.closedReason}”</span> : null}
         </p>

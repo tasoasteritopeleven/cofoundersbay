@@ -349,17 +349,17 @@ export default function MatchDetailPage() {
           </p>
           <Button variant="outline" size="sm" className="gap-1.5" onClick={() => void handleShortlist()} aria-pressed={shortlisted}>
             <Bookmark className={cn('icon-sm', shortlisted && 'fill-current text-status-warning')} aria-hidden="true" />
-            {shortlisted ? 'Saved' : 'Shortlist'}
+            {shortlisted ? <BilingualText en="Saved" el="Αποθηκεύτηκε" compact /> : <BilingualText en="Shortlist" el="Λίστα" compact />}
           </Button>
           <Button variant="outline" size="sm" className="gap-1.5" asChild>
             <Link href={`/messages?to=${targetUserId}`}>
               <MessageCircle className="icon-sm" aria-hidden="true" />
-              Message
+              <BilingualText en="Message" el="Μήνυμα" compact />
             </Link>
           </Button>
           <Button size="sm" className="gap-1.5" onClick={() => void handlePropose()} disabled={connectMutation.isPending}>
             <Send className="icon-sm" aria-hidden="true" />
-            Collaborate
+            <BilingualText en="Collaborate" el="Συνεργασία" compact />
           </Button>
           {/* Hand someone the link, or open the full profile. */}
           <DropdownMenu>
@@ -383,8 +383,9 @@ export default function MatchDetailPage() {
           </DropdownMenu>
         </div>
 
-        {/* Summary: the two of you, the score between you, how sure it is. */}
-        <div className="rounded-2xl border border-border bg-card px-4 py-6 sm:px-8">
+        {/* Summary: the two of you, the score between you, how sure it is. A
+            chart card (two marks and a donut), so it stays centred. */}
+        <div data-card-chart="" className="rounded-2xl border border-border bg-card px-4 py-6 sm:px-8">
           <div className="flex items-center justify-between gap-4">
             <PersonBlock name={sourceProfile.displayName} role={sourceProfile.role} avatarUrl={sourceProfile.avatarUrl} />
             <DonutScore score={overall.score} />
@@ -420,7 +421,7 @@ export default function MatchDetailPage() {
             {data.reasons.length > 0 && (
               <SectionCard title="Why this match" titleEl="Γιατί ταιριάζετε" icon={ThumbsUp} contentClassName="space-y-3">
                 {data.reasons.map((r) => (
-                  <p key={r} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                  <p key={r} className="card-body flex items-start gap-2.5 text-muted-foreground">
                     <CheckCircle className="mt-0.5 icon-sm shrink-0 text-status-success" aria-hidden="true" />
                     <span>{r}</span>
                   </p>
@@ -446,7 +447,7 @@ export default function MatchDetailPage() {
                     <span className="mt-0.5 shrink-0 text-status-warning"><FrictionIcon icon={point.icon} /></span>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-status-warning">{point.title}</p>
-                      <p className="text-sm text-foreground">{point.description}</p>
+                      <p className="card-body text-foreground">{point.description}</p>
                     </div>
                   </div>
                 ))}

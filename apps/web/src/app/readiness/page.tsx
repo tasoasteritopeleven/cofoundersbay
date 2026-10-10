@@ -351,7 +351,7 @@ function ScoreEmblem({
   const wrap = size + pad * 2;
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div data-chart="" className="flex flex-col items-center gap-3">
       <div className="relative" style={{ width: wrap, height: wrap }}>
         {/* The image is the ring and the number; the dimension pips below are
             links, and a link inside role="img" is flattened away for a screen
@@ -672,11 +672,11 @@ function ReadinessRadarChart({ dimensions }: { dimensions: DimData[] }) {
             benchmarkName={primary === 'el' ? readinessEl('benchmark') : readinessEn('benchmark')}
           />
         </div>
-        <div className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-4 rounded-full bg-primary/60" /><BilingualText en={readinessEn('your_score')} el={readinessEl('your_score')} compact /></span>
           <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-4 rounded-full bg-muted-foreground/30" /><BilingualText en={readinessEn('benchmark')} el={readinessEl('benchmark')} compact /></span>
         </div>
-        <p className="page-stat-label mt-1.5 text-center text-muted-foreground">
+        <p className="page-stat-label mt-1.5 text-muted-foreground">
           <BilingualText en={readinessEn('radar_benchmark_note')} el={readinessEl('radar_benchmark_note')} wrap />
         </p>
       </CardContent>
@@ -1236,7 +1236,7 @@ export default function ReadinessPage() {
             gauge no longer shares a row with two restatements of itself. */}
         <div className="grid min-w-0 flex-[1_1_36rem] grid-cols-1 gap-5">
           <Card className="min-w-0 overflow-hidden border-0 bg-primary/[0.03] lg:col-span-1">
-            <CardContent className="flex h-full flex-col items-center gap-5 text-center lg:flex-row lg:items-center lg:gap-8 lg:text-left">
+            <CardContent className="flex h-full flex-col items-start gap-5 lg:flex-row lg:items-center lg:gap-8">
               <ScoreEmblem
                 score={overallScore}
                 dimensions={dimensions.map((d) => ({
@@ -1246,9 +1246,9 @@ export default function ReadinessPage() {
                   labelEl: d.labelEl,
                 }))}
               />
-              <div className="flex min-w-0 w-full flex-1 flex-col items-center gap-4 lg:items-start">
+              <div className="flex min-w-0 w-full flex-1 flex-col items-start gap-4">
               <div className="min-w-0">
-                <p className="page-section font-semibold"><BilingualText en={readinessEn('overall_readiness')} el={readinessEl('overall_readiness')} /></p>
+                <h2 className="card-title"><BilingualText en={readinessEn('overall_readiness')} el={readinessEl('overall_readiness')} /></h2>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   <BilingualText
                     en={`Based on ${dimensions.length} dimensions · ${doneCriteria}/${totalCriteria} criteria`}

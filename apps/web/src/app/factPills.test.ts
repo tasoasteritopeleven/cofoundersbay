@@ -25,11 +25,13 @@ const ALLOWED: Record<string, string> = {
   'src/app/themes/alliance/page.tsx': 'a preview of a third-party theme, drawn as that theme draws it',
 };
 
+// On Windows join() gives backslashes while ALLOWED keys are forward-slash
+// relative paths — normalise once so the lookup and the read both work.
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
     if (statSync(path).isDirectory()) return files(path);
-    return /\.tsx$/.test(name) && !/\.test\.tsx$/.test(name) ? [path] : [];
+    return /\.tsx$/.test(name) && !/\.test\.tsx$/.test(name) ? [path.replace(/\\/g, '/')] : [];
   });
 }
 

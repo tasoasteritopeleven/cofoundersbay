@@ -194,7 +194,7 @@ export default function ProgramDetailPage() {
           {program.description && (
             <Card>
               <CardContent>
-                <p className="whitespace-pre-line text-sm leading-relaxed">{program.description}</p>
+                <p className="card-body whitespace-pre-line">{program.description}</p>
               </CardContent>
             </Card>
           )}
@@ -207,8 +207,8 @@ export default function ProgramDetailPage() {
           {(program.benefits?.length ?? 0) > 0 && (
             <Card>
               <CardContent className="space-y-3">
-                <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground"><BilingualText en="What the programme offers" el="Τι προσφέρει το πρόγραμμα" compact wrap /></h2>
-                <ul className="space-y-1.5 text-sm">
+                <h2 className="card-title"><BilingualText en="What the programme offers" el="Τι προσφέρει το πρόγραμμα" compact wrap /></h2>
+                <ul className="card-body space-y-1.5">
                   {program.benefits.map((b) => (
                     <li key={b} className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 icon-sm shrink-0 text-status-success" aria-hidden="true" />
@@ -224,16 +224,16 @@ export default function ProgramDetailPage() {
         <aside>
           <Card>
             <CardContent className="space-y-3">
-              <p className="text-sm font-semibold">
+              <h2 className="card-title">
                 <BilingualText en={`${programsEn('apply_to')} ${program.title}`} el={`${programsEl('apply_to')} ${program.title}`} compact wrap />
-              </p>
+              </h2>
               {enrolled ? (
                 <Badge className="gap-1.5" variant="secondary">
                   <CheckCircle2 className="icon-sm" aria-hidden="true" />
                   <BilingualText en={programsEn('applied')} el={programsEl('applied')} compact />
                 </Badge>
               ) : closed ? (
-                <p className="text-sm text-muted-foreground">
+                <p className="card-body text-muted-foreground">
                   <BilingualText
                     en={full ? 'The programme is full.' : deadlinePassed ? 'Applications have closed.' : 'This programme is not taking applications.'}
                     el={full ? 'Το πρόγραμμα είναι πλήρες.' : deadlinePassed ? 'Οι αιτήσεις έκλεισαν.' : 'Το πρόγραμμα δεν δέχεται αιτήσεις.'}

@@ -184,11 +184,12 @@ export function BilingualText({
     return (
       <span className={cn('flex min-w-0 flex-col', wrap ? 'overflow-visible' : 'overflow-hidden', className)}>
         {/* leading-tight, not leading-none: leading-none clips Greek diacritics
-            on capitals (Ά, Έ, Ό) and Latin descenders. */}
+            on capitals (Ά, Έ, Ό) and Latin descenders. A wrapping line opens
+            to leading-snug: at 1.25 two wrapped lines read as one block. */}
         <span
           lang={resolved.primaryLang}
         {...pairMark}
-          className={cn(wrap ? 'break-words leading-tight' : 'truncate leading-tight', primaryClassName)}
+          className={cn(wrap ? 'break-words leading-snug' : 'truncate leading-tight', primaryClassName)}
         >
           {resolved.primaryText}
         </span>

@@ -33,11 +33,10 @@ import { RailAction, RailOptions, RailStats } from '@/components/layout/RailPart
 import { usePageRail } from '@/components/layout/PageRailContext';
 import Link from 'next/link';
 import { BilingualText } from '@/components/common/BilingualText';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { ListRowCard } from '@/components/common/ListRowCard';
+import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
@@ -56,6 +55,7 @@ import { qk } from '@/lib/query-keys';
 
 import { pressableProps } from '@/lib/pressable';
 import { FactLine } from '@/components/common/FactLine';
+import { CardHead } from '@/components/common/CardAnatomy';
 const CATEGORIES = ['All', 'Founders', 'Tech', 'Marketing', 'Design', 'Finance', 'Product', 'Operations', 'Legal'];
 
 const TYPE_FILTERS = [
@@ -79,7 +79,7 @@ function GroupCard({
   group,
   onToggle,
   loading,
-  index: _index = 0,
+  index = 0,
 }: {
   group: GroupView;
   onToggle: (id: string, isMember: boolean) => void;
@@ -87,35 +87,106 @@ function GroupCard({
   index?: number;
 }) {
   const router = useRouter();
+  const coverTone = COVER_TONES[index % COVER_TONES.length];
+  const groupType = (group.category?.toLowerCase() ?? 'industry') as string;
+  const typeColor = categoryChip(groupType);
   return (
-    <ListRowCard
-      className="cursor-pointer"
+    <Card
+      className="card-interactive hover-lift group transition-all duration-300 hover:border-primary/30 cursor-pointer overflow-hidden"
       onClick={() => router.push(`/groups/${group.id}`)}
-      mark={(
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 text-primary-accessible ring-2 ring-primary/20">
-          {group.avatarUrl ? (
-            <img src={group.avatarUrl} alt="" className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
-          ) : (
-            <Users className="icon-md" />
+      {...pressableProps({ role: 'link', label: group.name })}
+    >
+      {/* Cover Image */}
+      {group.coverImageUrl ? (
+        <div
+          className="h-28 w-full bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${group.coverImageUrl})` }}
+        >
+          {/* On the card's axis, like everything under it. */}
+          <div className="absolute top-2 left-4 sm:left-6 lg:left-[24px]">
+            <span className={cn('rounded-full px-2 py-0.5 text-xs font-semibold capitalize', typeColor.chip)}>
+              {groupType}
+            </span>
+          </div>
+          {group.privacy === 'private' && (
+            <div className="absolute top-2 right-2">
+              <Globe className="icon-sm text-white/80" />
+            </div>
           )}
         </div>
+      ) : (
+        // No cover image: a thin tinted band carries the type chip. A 112px
+        // block with a faint icon was the tallest thing on the card and said
+        // nothing the card's own icon does not.
+        <div className={cn('h-10 w-full rounded-t-xl relative', coverTone)}>
+          <div className="absolute top-2 left-4 sm:left-6 lg:left-[24px]">
+            <span className={cn('rounded-full px-2 py-0.5 text-xs font-semibold capitalize', typeColor.chip)}>
+              {groupType}
+            </span>
+          </div>
+        </div>
       )}
-      title={group.name}
-      badge={group.isMember ? <Badge variant="outline" className="text-xs">Joined</Badge> : undefined}
-      headline={[group.category, group.privacy, `${group.memberCount.toLocaleString('en-GB')} members`, ...group.tags.slice(0, 3)].filter(Boolean).join(' · ')}
-      detail={group.description}
-      actions={(
-        <Button
-          variant={group.isMember ? 'outline' : 'default'}
-          size="sm"
-          className="gap-1"
-          disabled={loading}
-          onClick={(e) => { e.stopPropagation(); onToggle(group.id, group.isMember); }}
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground">
+              {group.avatarUrl ? (
+                <img src={group.avatarUrl} alt={group.name} className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
+              ) : (
+                <Users className="icon-md" />
+              )}
+            </div>
+          )}
+          title={group.name}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                group.category,
+                group.privacy === 'public'
+                  ? <BilingualText key="privacy" en="Public" el="Δημόσια" compact />
+                  : <BilingualText key="privacy" en="Private" el="Ιδιωτική" compact />,
+              ]}
+            />
+          )}
+          asideStays
+          aside={group.isMember ? <CheckCircle2 className={cn('icon-sm shrink-0', STATUS.success.icon)} aria-label={bilingualInline('You are a member', 'Είστε μέλος')} /> : undefined}
+        />
+
+        {group.description && (
+          <p className="card-body line-clamp-2 text-muted-foreground">{group.description}</p>
+        )}
+
+        <FactLine items={group.tags.slice(0, 4)} />
+
+        <div
+          className="flex items-center justify-between pt-2 border-t border-border"
+          onClick={(e) => e.stopPropagation()}
         >
-          {loading ? <Loader2 className="icon-sm animate-spin" /> : group.isMember ? 'Leave' : 'Join'}
-        </Button>
-      )}
-    />
+          <FactLine
+            items={[
+              <BilingualText key="members" en={`${group.memberCount.toLocaleString('en-GB')} members`} el={`${group.memberCount.toLocaleString('el-GR')} μέλη`} compact />,
+              <BilingualText key="posts" en={`${group.postCount.toLocaleString('en-GB')} posts`} el={`${group.postCount.toLocaleString('el-GR')} αναρτήσεις`} compact />,
+            ]}
+          />
+          <Button
+            variant={group.isMember ? 'outline' : 'default'}
+            size="sm"
+            className="gap-1 text-xs h-7 px-3"
+            disabled={loading}
+            onClick={() => onToggle(group.id, group.isMember)}
+          >
+            {loading ? (
+              <Loader2 className="icon-sm animate-spin" />
+            ) : group.isMember ? (
+              <><LogOut className="icon-sm" /> <BilingualText en="Leave" el="Αποχώρηση" compact /></>
+            ) : (
+              <><UserPlus className="icon-sm" /> <BilingualText en="Join" el="Συμμετοχή" compact /></>
+            )}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

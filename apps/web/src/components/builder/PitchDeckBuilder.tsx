@@ -795,7 +795,7 @@ export function PitchDeckBuilder({
       content: (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="deckType" className="text-xs text-muted-foreground">
+            <Label htmlFor="deckType" className="text-muted-foreground">
               <BilingualText en={builderEn('pitch_deck_type')} el={builderEl('pitch_deck_type')} compact />
             </Label>
             <Select

@@ -35,19 +35,8 @@ html {
 }
 
 @layer base {
-  /* A focused field below 16px can make iOS Safari zoom the page. The
-     field's own title is the label (14.170) and its subtitle is the hint
-     (12.663). The text inside a search bar or a form sits one step under
-     that subtitle (12.663 × 0.98). Cards, stat figures and every other
-     reading step stay put. `!important` because a Tailwind text utility on
-     the element would otherwise win. */
-  @media (max-width: 639.98px) {
-    input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
-    select,
-    textarea {
-      font-size: 12.410px !important;
-    }
-  }
+  /* Field text sizes live in "Fields read under their labels" at the end of
+     this sheet (the iOS focus zoom is handled by IosFieldZoom). */
 
   :root {
     /* ── Light theme ──
@@ -1340,7 +1329,7 @@ html {
      (e.g. secondaryClassName="text-primary-foreground" on an active chip). */
   .bilingual-secondary {
     font-size: max(12.2412px, 0.765075rem, 0.85em);
-    line-height: 1.35;                 /* room for Greek diacritics */
+    line-height: 1.45;                 /* room for Greek diacritics; 1.35 crowded a wrapped Greek line */
     font-weight: 400;
     letter-spacing: 0;
   }
@@ -3364,7 +3353,7 @@ textarea[class~="border-input"]:focus,
   .bilingual-secondary,
   .bilingual-separator {
     font-size: 13.044px;
-    line-height: 1.35;
+    line-height: 1.45;
   }
 
   #main-content .text-2xs,
@@ -3521,7 +3510,20 @@ textarea[class~="border-input"]:focus,
     line-height: 1.4;
   }
 
-  /* The line under the page title, on every page. 3% under 13.321px. */
+  /* A card's own title sits on the title step, a notch over the rows and
+     sentences it holds. The rail keeps its compact step. */
+  #main-content [data-card] h2.page-section,
+  #main-content [data-card] h3.page-section:not(.page-section--compact) {
+    font-size: 15.343px;
+    line-height: 1.35;
+  }
+  #main-content [data-rail-content] [data-card] h2.page-section,
+  #main-content [data-rail-content] [data-card] h3.page-section {
+    font-size: 14.906px;
+    line-height: 1.45;
+  }
+
+  /* The line under the page title, on every page. */
   #main-content p.page-lead,
   p.page-lead {
     font-size: 12.921px;
@@ -3614,9 +3616,9 @@ textarea[class~="border-input"]:focus,
 
   input[data-filter-field]:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
   select[data-filter-field] {
-    /* Discover's query shares the field step with every other text field:
-       under the field title and under the field subtitle. */
-    font-size: 12.410px !important;
+    /* The discover query and its sort control sit on the same control step
+       as every other field ("Fields read under their labels"). */
+    font-size: 14.406px !important;
   }
 
   /* A paragraph or a card title a card cuts with an ellipsis wraps on a
@@ -3880,4 +3882,179 @@ textarea[class~="border-input"]:focus,
 .facts-dotted .bilingual-separator::before {
   content: "/";
   font-size: 0.75rem;
+}
+
+/* A fact is a value, and a value that starts a line starts with a capital
+   ("Cofounder", not "cofounder"): tags arrive as typed. */
+.facts-dotted > li::first-letter {
+  text-transform: uppercase;
+}
+
+/* ── Card text ladder ────────────────────────────────────────────────────
+   Every card reads like the Endorsements and Connections cards, at the
+   Members page's sizes (2026-10-10). One title, the line under it, the
+   sentences, the facts:
+
+     step            role                          phone     tablet/desktop
+     .card-title     name or title, semibold       15.343    16.32
+     .card-subtitle  the line under it, muted      14.906    14.28
+     .card-body      sentences, values, figures    14.406    13.77
+     meta            facts, dates, kinds (text-xs) 13.044    13.26
+
+   The body sits a notch under the subtitle and the title, so a thesis never
+   reads as loud as the byline and a figure inside a round card ("$375K
+   raised", "Athens Tech Angels") never outranks the round's name. A stat
+   card whose only content is a figure and its label keeps its figure step.
+   Rem against the 16px root, restated against the 82% desktop root, and px
+   on a phone like the reading scale; `.probes/card_audit.mjs` measures it. */
+.card-title {
+  font-size: 1.0201rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.card-subtitle {
+  font-size: 0.8925875rem;
+  line-height: 1.45;
+  color: hsl(var(--muted-foreground));
+}
+.card-body {
+  font-size: 0.8606rem;
+  line-height: 1.55;
+}
+@media (min-width: 1024px) {
+  .card-title { font-size: 1.24402439rem; }
+  .card-subtitle { font-size: 1.08852134rem; }
+  .card-body { font-size: 1.04954268rem; }
+}
+@media (max-width: 639.98px) {
+  .card-title,
+  #main-content .card-title {
+    font-size: 15.343px;
+    line-height: 1.35;
+  }
+  .card-subtitle,
+  #main-content .card-subtitle {
+    font-size: 14.906px;
+    line-height: 1.45;
+  }
+  .card-body,
+  #main-content .card-body {
+    font-size: 14.406px;
+    line-height: 1.5;
+  }
+}
+
+/* A description inside a card (a muted sentence that clamps or reads
+   relaxed) sits on the body step, a notch under the card's title and the
+   line under it: a thesis or a bio read as loud as the byline. Attribute
+   selectors, as in the reading-measure rule: naming a Tailwind utility in a
+   selector folds the rule into that utility. */
+[data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+[data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
+#main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+#main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+  font-size: 0.8606rem;
+  line-height: 1.55;
+}
+/* #main-content restates .text-sm from 1024px up at (1,1,0); the id keeps
+   this rule above it. */
+@media (min-width: 1024px) {
+  [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+    font-size: 1.04954268rem;
+  }
+}
+@media (max-width: 639.98px) {
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+    font-size: 14.406px;
+    line-height: 1.5;
+  }
+}
+
+/* A row label inside a card written as a bare `font-medium` paragraph
+   inherited the body size (16.33px) and stood over the card's own title.
+   It takes the subtitle step, the size of a field label. */
+[data-card] p[class='font-medium'],
+[data-card] span[class='font-medium'],
+#main-content [data-card] p[class='font-medium'],
+#main-content [data-card] span[class='font-medium'] {
+  font-size: 0.8925875rem;
+  line-height: 1.45;
+}
+@media (min-width: 1024px) {
+  [data-card] p[class='font-medium'],
+  [data-card] span[class='font-medium'],
+  #main-content [data-card] p[class='font-medium'],
+  #main-content [data-card] span[class='font-medium'] {
+    font-size: 1.08852134rem;
+  }
+}
+@media (max-width: 639.98px) {
+  #main-content [data-card] p[class='font-medium'],
+  #main-content [data-card] span[class='font-medium'] {
+    font-size: 14.906px;
+  }
+}
+
+/* A card heading set in text-base or text-lg sits at the section step on a
+   phone (14.984), within 0.08px of the sentences under it; it takes the
+   card's title step. Every heading in a card wraps at 1.35, room for Greek
+   accents: at 1.25 a two-line title read as one block. */
+@media (max-width: 639.98px) {
+  #main-content [data-card] h2.text-base,
+  #main-content [data-card] h3.text-base,
+  #main-content [data-card] h4.text-base,
+  #main-content [data-card] h2.text-lg,
+  #main-content [data-card] h3.text-lg {
+    font-size: 15.343px;
+    line-height: 1.35;
+  }
+}
+#main-content [data-card] h2,
+#main-content [data-card] h3,
+#main-content [data-card] h4 {
+  line-height: 1.35;
+}
+
+/* A transparent badge that opens its row starts on the card's axis: its
+   letters, not its padding box, line up with the title (Endorsements'
+   "Go-to-market" sat 10px in). The padding after it stays, so the next
+   item keeps its distance. */
+.badge.bg-transparent:first-child {
+  padding-left: 0;
+}
+
+/* ── Fields read under their labels ──────────────────────────────────────
+   Typed text and placeholders sit a notch under the field's label (text-sm,
+   medium): the body step on tablet and desktop, the control step on a
+   phone. A search bar or Ask AI used to set its placeholder at the 16.16px
+   iOS floor, above the section heading beside it.
+   iOS zooms the page into any focused field under 16px; IosFieldZoom adds
+   maximum-scale=1 to the viewport on iOS only, which stops that zoom while
+   pinch zoom stays free (iOS has ignored the cap for pinch since iOS 10).
+   Other platforms never get the cap, so WCAG 1.4.4 holds everywhere. */
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+select,
+textarea,
+button[role='combobox'] {
+  font-size: 0.8606rem !important;
+}
+@media (min-width: 1024px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select,
+  textarea,
+  button[role='combobox'] {
+    font-size: 1.04954268rem !important;
+  }
+}
+@media (max-width: 639.98px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select,
+  textarea,
+  button[role='combobox'] {
+    font-size: 14.406px !important;
+  }
 }

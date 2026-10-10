@@ -820,7 +820,7 @@ export default function OrgAdminPage() {
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label htmlFor="invite-user-id" className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"><BilingualText en="User ID" el="Αναγνωριστικό χρήστη" compact /></label>
+              <label htmlFor="invite-user-id" className="block text-sm font-semibold uppercase tracking-wide text-muted-foreground"><BilingualText en="User ID" el="Αναγνωριστικό χρήστη" compact /></label>
               <Input
                 id="invite-user-id"
                 value={inviteUserId}
@@ -830,7 +830,7 @@ export default function OrgAdminPage() {
               />
             </div>
             <div>
-              <label htmlFor="invite-role" className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"><BilingualText en="Role" el="Ρόλος" compact /></label>
+              <label htmlFor="invite-role" className="block text-sm font-semibold uppercase tracking-wide text-muted-foreground"><BilingualText en="Role" el="Ρόλος" compact /></label>
               <Select value={inviteRole} onValueChange={setInviteRole}>
                 <SelectTrigger id="invite-role" aria-label="Role" className="mt-2">
                   <SelectValue />

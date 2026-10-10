@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LegalText } from '@/components/common/LegalText';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { MainLandmark } from '@/components/layout/AppShell';
 
 const LAST_UPDATED = 'March 20, 2026';
@@ -199,13 +200,17 @@ export default function TermsPage() {
         <div className="space-y-12">
           {sections.map((section) => (
             <Card key={section.id} id={section.id} className="scroll-mt-20 border-border">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
-                    <section.icon className="h-4 w-4 text-primary-accessible" />
-                  </div>
-                  <h2 className="text-lg font-semibold text-foreground pt-1">{section.title}</h2>
-                </div>
+              <CardContent className="space-y-4">
+                <CardHead
+                  titleAs="h2"
+                  mark={(
+                    <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">
+                      <section.icon className="icon-md text-primary-accessible" aria-hidden="true" />
+                    </div>
+                  )}
+                  title={section.title}
+                  className="items-center"
+                />
                 <LegalText content={section.content} />
               </CardContent>
             </Card>
@@ -213,11 +218,13 @@ export default function TermsPage() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-12 rounded-xl border border-border bg-muted/30 p-6 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
+        {/* Closing note: left on one axis like every card, the two ways on
+            under it. It was centred, the only centred text box on the page. */}
+        <div className="mt-12 space-y-4 rounded-xl border border-border bg-muted/30 p-4 sm:p-6">
+          <p className="card-body text-muted-foreground">
             <BilingualText en="By using CoFounderBay, you acknowledge that you have read and agree to these Terms of Service." el="Χρησιμοποιώντας το CoFounderBay, δηλώνετε ότι διαβάσατε και αποδέχεστε αυτούς τους όρους χρήσης." wrap />
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button variant="outline" size="sm" asChild>
               <Link href="/privacy"><BilingualText en="Read Privacy Policy" el="Διαβάστε την πολιτική απορρήτου" compact /></Link>
             </Button>

@@ -118,8 +118,8 @@ function MemberRow({ member, live, adminHref }: { member: OrgMember; live: boole
   const RoleIcon = roleCfg.icon;
 
   return (
-    <div className="flex items-center gap-4 py-3 px-1 border-b border-border last:border-0 hover:bg-muted/30 rounded-lg transition-colors">
-      <Avatar className="icon-md shrink-0">
+    <div className="flex items-center gap-4 py-3 border-b border-border last:border-0 hover:bg-muted/30 rounded-lg transition-colors">
+      <Avatar className="h-9 w-9 shrink-0">
         <AvatarImage src={member.avatarUrl} />
         <AvatarFallback className="text-sm font-medium">{initialsOf(member.name).toUpperCase()}</AvatarFallback>
       </Avatar>
@@ -135,7 +135,7 @@ function MemberRow({ member, live, adminHref }: { member: OrgMember; live: boole
         ) : null}
         <p className="mt-0.5 text-xs text-muted-foreground md:hidden">
           <BilingualText en={roleCfg.label} el={roleCfg.labelEl} compact />{member.department ? ` · ${member.department}` : ''}
-          {member.joinedAt ? <> · <BilingualText en={`joined ${member.joinedAt}`} el={`μέλος από ${member.joinedAt}`} compact /></> : ''}
+          {member.joinedAt ? <> · <BilingualText en={`Joined ${member.joinedAt}`} el={`Μέλος από ${member.joinedAt}`} compact /></> : ''}
         </p>
       </div>
       <div className="hidden md:flex items-center gap-1 w-28 shrink-0">

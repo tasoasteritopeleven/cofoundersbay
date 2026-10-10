@@ -37,7 +37,7 @@ function Field({ label, children }: { label: { en: string; el: string }; childre
       <dt className="text-xs text-muted-foreground">
         <BilingualText en={label.en} el={label.el} compact wrap />
       </dt>
-      <dd className="mt-0.5 text-sm leading-relaxed text-foreground">{children}</dd>
+      <dd className="card-body mt-0.5 text-foreground">{children}</dd>
     </div>
   );
 }
@@ -50,11 +50,12 @@ function Field({ label, children }: { label: { en: string; el: string }; childre
  * author previews is exactly what a reader sees. Equity and funding words
  * always come with the non-guarantee sentence.
  *
- * Anatomy (one left axis, five text styles and one pill):
+ * Anatomy (one left axis, five text styles and one pill), on the card
+ * ladder in globals.css (title over byline over the fields' sentences):
  *   meta     kind · version as plain text, the outcome as the card's only pill
- *   title    semibold
+ *   title    .card-title
  *   byline   avatar, name with the verified mark, headline under it (never cut)
- *   fields   caption label over body text: missing (and exists, goal), offer
+ *   fields   caption label over .card-body text: missing (and exists, goal), offer
  *   facts    one muted line, dot-separated (category, remote, place, stage, commitment)
  *   footer   above a hairline: the non-guarantee sentence, the page's footer, actions
  * A phone sets captions a full step under the body, so a label never reads
@@ -103,7 +104,7 @@ export function NeedCard({
           </p>
           {card.outcome ? <OutcomeChip outcome={card.outcome} reason={card.closedReason} /> : null}
         </div>
-        <Heading className="text-base font-semibold leading-snug text-foreground">{card.title || '—'}</Heading>
+        <Heading className="card-title text-foreground">{card.title || '—'}</Heading>
         {owner ? (
           <div className="flex min-w-0 items-center gap-2.5 pt-1.5">
             <Avatar className="h-8 w-8" data-keep-icon="">

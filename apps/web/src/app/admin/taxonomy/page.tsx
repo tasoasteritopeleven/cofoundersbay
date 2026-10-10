@@ -61,7 +61,6 @@ function slugify(str: string) {
 function SkillRowSkeleton() {
   return (
     <div className="flex items-center gap-3 px-4 sm:px-6 py-2 border-b last:border-b-0">
-      <div className="w-6" />
       <Skeleton className="icon-sm rounded" />
       <Skeleton className="h-4 flex-1 max-w-[160px]" />
       <Skeleton className="h-4 w-24" />
@@ -81,10 +80,10 @@ function SkillRow({
   onDelete: (skill: AdminSkillItem) => void;
 }) {
   return (
+    // The name starts on the card's axis: an empty spacer and a decorative
+    // hash used to push every row 36px in.
     <div className="flex items-center gap-3 px-4 sm:px-6 py-2 hover:bg-muted/50 transition-colors border-b last:border-b-0">
-      <div className="w-6" />
-      <Hash className="icon-sm text-muted-foreground shrink-0" aria-hidden="true" />
-      <span className="flex-1 font-medium truncate">{skill.name}</span>
+      <span className="min-w-0 flex-1 truncate text-sm font-medium">{skill.name}</span>
       <div className="ml-auto flex items-center gap-3">
       <span className="text-sm text-muted-foreground hidden sm:block">{skill.slug}</span>
       {skill.category && (

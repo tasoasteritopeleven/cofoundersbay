@@ -173,9 +173,11 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="mb-4 flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+        {/* The gauge beside its words at every width: the words are
+            sentences, and sentences in a card start on its left axis. */}
+        <div className="mb-4 flex items-center gap-4">
           <RadialGauge score={vrs.overall} />
-          <div className="min-w-0 flex-1 text-center sm:text-left">
+          <div className="min-w-0 flex-1">
             <p className={cn('text-sm font-semibold', tierColor)}>
               <BilingualText en={`${tierEn} progress`} el={`${tierEl} πρόοδος`} />
             </p>
@@ -198,7 +200,7 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
               </Link>
             </p>
             {vrs.lowestDimension?.href && (
-              <div className={cn('mt-2 flex items-start justify-center gap-1.5 text-xs sm:justify-start', STATUS.warning.text)}>
+              <div className={cn('mt-2 flex items-start gap-1.5 text-xs', STATUS.warning.text)}>
                 <CfbGlyph name="spark" className="icon-sm mt-0.5 shrink-0" />
                 <span className="min-w-0 text-pretty">
                   <BilingualText en="Lowest" el="Χαμηλότερη" compact />{': '}

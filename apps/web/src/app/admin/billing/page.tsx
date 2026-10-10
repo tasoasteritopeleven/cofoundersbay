@@ -517,7 +517,7 @@ export default function AdminBillingPage() {
                 <CardContent className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
-                      <Label htmlFor="code" className="text-xs">Code *</Label>
+                      <Label htmlFor="code">Code *</Label>
                       <Input id="code"
                         placeholder="LAUNCH30"
                         value={couponForm.code}
@@ -525,7 +525,7 @@ export default function AdminBillingPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="discountType" className="text-xs"><BilingualText en="Discount type" el="Τύπος έκπτωσης" compact /></Label>
+                      <Label htmlFor="discountType"><BilingualText en="Discount type" el="Τύπος έκπτωσης" compact /></Label>
                       <Select value={couponForm.discountType} onValueChange={v => setCouponForm(p => ({ ...p, discountType: v }))}>
                         <SelectTrigger id="discountType" aria-label="Discount type" className="h-9">
                           <SelectValue />
@@ -537,7 +537,7 @@ export default function AdminBillingPage() {
                       </Select>
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="discountValue" className="text-xs">Value ({couponForm.discountType === 'percent' ? '%' : '$'})</Label>
+                      <Label htmlFor="discountValue">Value ({couponForm.discountType === 'percent' ? '%' : '$'})</Label>
                       <Input id="discountValue"
                         type="number"
                         value={couponForm.discountValue}
@@ -545,7 +545,7 @@ export default function AdminBillingPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="maxRedemptions" className="text-xs"><BilingualText en="Max redemptions (optional)" el="Μέγιστες χρήσεις (προαιρετικά)" compact /></Label>
+                      <Label htmlFor="maxRedemptions"><BilingualText en="Max redemptions (optional)" el="Μέγιστες χρήσεις (προαιρετικά)" compact /></Label>
                       <Input id="maxRedemptions"
                         type="number"
                         placeholder={bilingualInline("Unlimited", "Απεριόριστο")}
@@ -618,7 +618,7 @@ export default function AdminBillingPage() {
           <div className="space-y-3 py-2">
             <DialogDescription><BilingualText en="Select a new plan to apply immediately. This bypasses payment." el="Επιλέξτε νέο πλάνο που εφαρμόζεται αμέσως, χωρίς πληρωμή." wrap /></DialogDescription>
             <div className="space-y-1.5">
-              <Label htmlFor="overridePlanId" className="text-xs"><BilingualText en="New plan" el="Νέο πλάνο" compact /></Label>
+              <Label htmlFor="overridePlanId"><BilingualText en="New plan" el="Νέο πλάνο" compact /></Label>
               <Select value={overridePlanId} onValueChange={setOverridePlanId}>
                 <SelectTrigger id="overridePlanId" aria-label="New plan">
                   <SelectValue placeholder={bilingualInline("Select plan", "Επιλογή πακέτου")} />

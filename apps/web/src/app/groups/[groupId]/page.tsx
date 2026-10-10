@@ -113,7 +113,7 @@ function PostCard({
               </button>
             )}
           </div>
-          <p className="mt-1.5 text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">{post.content}</p>
+          <p className="card-body mt-1.5 text-foreground/90 whitespace-pre-wrap">{post.content}</p>
         </div>
       </div>
 

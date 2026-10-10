@@ -301,7 +301,7 @@ function ReferralCard({ referral }: { referral: Referral }) {
       </Avatar>
 
       <div className="flex-1 min-w-0">
-        <p className="font-medium truncate">{referral.name || referral.email}</p>
+        <p className="truncate text-sm font-medium" translate={referral.name ? undefined : "no"}>{referral.name || referral.email}</p>
         {referral.name && (
           <p className="text-sm text-muted-foreground truncate">{referral.email}</p>
         )}

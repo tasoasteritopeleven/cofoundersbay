@@ -41,6 +41,7 @@ import { cn } from '@/lib/utils';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, ROW_GONE, rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 
@@ -78,30 +79,30 @@ function InquiryCard({
 
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex gap-3 sm:gap-4">
-          <Avatar className="h-10 w-10 shrink-0 sm:h-12 sm:w-12">
-            <AvatarImage src={inquiry.clientAvatar} />
-            <AvatarFallback>{inquiry.clientName[0]?.toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="font-semibold">{inquiry.clientName}</span>
-                  <Badge variant="outline" className={cn('text-xs', config.color)}>
-                    <StatusIcon className="mr-1 icon-sm" />
-                    <StatusText value={inquiry.status} />
-                  </Badge>
-                </div>
-                {inquiry.clientCompany && (
-                  <p className="text-sm text-muted-foreground">{inquiry.clientCompany}</p>
-                )}
-              </div>
-              <div className="flex shrink-0 items-center gap-1">
-                <span className="whitespace-nowrap text-xs text-muted-foreground">
-                  <RelativeTime date={inquiry.receivedAt} format={formatRelativeTime} />
-                </span>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={inquiry.clientAvatar} />
+              <AvatarFallback>{inquiry.clientName[0]?.toUpperCase()}</AvatarFallback>
+            </Avatar>
+          )}
+          title={(
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span>{inquiry.clientName}</span>
+              <Badge variant="outline" className={cn('text-xs', config.color)}>
+                <StatusIcon className="mr-1 icon-sm" />
+                <StatusText value={inquiry.status} />
+              </Badge>
+            </span>
+          )}
+          subtitle={inquiry.clientCompany || undefined}
+          asideStays
+          aside={(
+            <>
+              <span className="whitespace-nowrap">
+                <RelativeTime date={inquiry.receivedAt} format={formatRelativeTime} />
+              </span>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Open inquiry actions for ${inquiry.clientName}`}>
@@ -144,14 +145,14 @@ function InquiryCard({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-            </div>
-            <Badge variant="secondary" className="mt-2 text-xs">
-              {inquiry.service}
-            </Badge>
-            <p className="text-sm text-muted-foreground mt-2">{inquiry.message}</p>
+            </>
+          )}
+        />
+        {/* The service asked about is a fact, the message the body. */}
+        <p className="text-xs font-medium text-muted-foreground">{inquiry.service}</p>
+        <p className="card-body text-muted-foreground">{inquiry.message}</p>
             {inquiry.status === 'new' && (
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2 border-t border-border pt-3">
                 {/* Both had no handler; they do what the menu's Reply and
                     View Profile do. */}
                 <Button
@@ -174,8 +175,6 @@ function InquiryCard({
                 )}
               </div>
             )}
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

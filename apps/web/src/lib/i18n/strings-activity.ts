@@ -64,7 +64,7 @@ export const ACTIVITY_STRINGS: Record<string, BilingualPair> = {
   retry: { en: 'Retry', el: 'Επανάληψη' },
   load_more: { en: 'Load more', el: 'Περισσότερα' },
   loading: { en: 'Loading…', el: 'Φόρτωση…' },
-  by_author: { en: 'by {name}', el: 'από {name}' },
+  by_author: { en: 'By {name}', el: 'Από {name}' },
   badge_new: { en: 'New', el: 'Νέο' },
   open_item: { en: 'Open', el: 'Άνοιγμα' },
 

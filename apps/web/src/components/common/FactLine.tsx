@@ -15,7 +15,7 @@ export function FactLine({
   label,
   className,
 }: {
-  items: ReactNode[];
+  items: readonly ReactNode[];
   /** Names the list for a screen reader when the facts are not self-evident. */
   label?: string;
   className?: string;

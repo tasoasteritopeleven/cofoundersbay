@@ -27,6 +27,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailOptions } from '@/components/layout/RailParts';
 import { BilingualText } from '@/components/common/BilingualText';
+import { FactLine } from '@/components/common/FactLine';
 import { achievementsEn, achievementsEl } from '@/lib/i18n/strings-achievements';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -304,8 +305,8 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div>
-                <h3 className="font-semibold text-base mb-1">{achievement.title}</h3>
-                <p className="text-sm text-muted-foreground mb-2">
+                <h3 className="card-title">{achievement.title}</h3>
+                <p className="card-body mt-0.5 text-muted-foreground">
                   {achievement.description}
                 </p>
               </div>
@@ -332,27 +333,18 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
                 row was what made /achievements the one page that scrolled
                 horizontally on a phone — the fixed bottom nav then stretched with
                 the grown layout viewport, which made it look like the nav's fault. */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs">
-              <Badge variant="outline" className="gap-1">
-                <CategoryIcon className="icon-sm" />
-                {achievement.category}
-              </Badge>
-              <Badge
-                variant="outline"
-                className={cn('gap-1', TIER_COLORS[achievement.tier])}
-              >
-                <Medal className="icon-sm" aria-hidden="true" />
-                {achievement.tier}
-              </Badge>
-              <span className="text-muted-foreground">
-                {achievement.rarity}% <BilingualText en={achievementsEn('have_this')} el={achievementsEl('have_this')} compact />
-              </span>
-              {achievement.unlocked && achievement.unlockedAt && (
-                <span className="text-muted-foreground ml-auto">
-                  Unlocked {new Date(achievement.unlockedAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}
-                </span>
-              )}
-            </div>
+            {/* Category, tier, rarity and the unlock date: facts, one line,
+                the tier keeping its colour. */}
+            <FactLine
+              items={[
+                <span key="cat" className="capitalize">{achievement.category}</span>,
+                <span key="tier" className={cn('capitalize', TIER_COLORS[achievement.tier])}>{achievement.tier}</span>,
+                <span key="rarity">{achievement.rarity}% <BilingualText en={achievementsEn('have_this')} el={achievementsEl('have_this')} compact /></span>,
+                achievement.unlocked && achievement.unlockedAt
+                  ? <BilingualText key="unlocked" en={`Unlocked ${new Date(achievement.unlockedAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}`} el={`Ξεκλειδώθηκε ${new Date(achievement.unlockedAt).toLocaleDateString('el-GR', { timeZone: 'UTC' })}`} compact />
+                  : null,
+              ]}
+            />
           </div>
         </div>
       </CardContent>

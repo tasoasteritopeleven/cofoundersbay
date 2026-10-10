@@ -474,27 +474,27 @@ function SSOConfigPanel({
                   ))}
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="sso-providerName" className="text-xs font-medium">Provider Name *</label>
+                  <label htmlFor="sso-providerName" className="text-sm font-medium">Provider Name *</label>
                   <Input id="sso-providerName" value={newProvider.providerName} onChange={e => setNewProvider(p => ({ ...p, providerName: e.target.value }))} placeholder="e.g., University SSO" />
                 </div>
                 {(providerType === 'oidc' || providerType === 'oauth2') && (
                   <>
                     <div className="space-y-2">
-                      <label htmlFor="sso-issuerUrl" className="text-xs font-medium">Issuer URL *</label>
+                      <label htmlFor="sso-issuerUrl" className="text-sm font-medium">Issuer URL *</label>
                       <Input id="sso-issuerUrl" value={newProvider.oidcIssuerUrl} onChange={e => setNewProvider(p => ({ ...p, oidcIssuerUrl: e.target.value }))} placeholder="https://accounts.google.com" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-2">
-                        <label htmlFor="sso-clientId" className="text-xs font-medium">Client ID *</label>
+                        <label htmlFor="sso-clientId" className="text-sm font-medium">Client ID *</label>
                         <Input id="sso-clientId" value={newProvider.oidcClientId} onChange={e => setNewProvider(p => ({ ...p, oidcClientId: e.target.value }))} placeholder="client-id" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="sso-clientSecret" className="text-xs font-medium"><BilingualText en="Client Secret" el="Client secret" compact /></label>
+                        <label htmlFor="sso-clientSecret" className="text-sm font-medium"><BilingualText en="Client Secret" el="Client secret" compact /></label>
                         <Input id="sso-clientSecret" type="password" value={newProvider.oidcClientSecret} onChange={e => setNewProvider(p => ({ ...p, oidcClientSecret: e.target.value }))} placeholder="••••••••" />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="sso-scopes" className="text-xs font-medium">Scopes</label>
+                      <label htmlFor="sso-scopes" className="text-sm font-medium">Scopes</label>
                       <Input id="sso-scopes" value={newProvider.oidcScopes} onChange={e => setNewProvider(p => ({ ...p, oidcScopes: e.target.value }))} placeholder="openid profile email" />
                     </div>
                   </>
@@ -502,27 +502,27 @@ function SSOConfigPanel({
                 {providerType === 'saml' && (
                   <>
                     <div className="space-y-2">
-                      <label htmlFor="sso-metadataUrl" className="text-xs font-medium"><BilingualText en="Metadata URL (optional)" el="URL metadata (προαιρετικό)" compact /></label>
+                      <label htmlFor="sso-metadataUrl" className="text-sm font-medium"><BilingualText en="Metadata URL (optional)" el="URL metadata (προαιρετικό)" compact /></label>
                       <Input id="sso-metadataUrl" value={newProvider.samlMetadataUrl} onChange={e => setNewProvider(p => ({ ...p, samlMetadataUrl: e.target.value }))} placeholder="https://idp.example.com/metadata.xml" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-2">
-                        <label htmlFor="sso-entryPoint" className="text-xs font-medium"><BilingualText en="SSO Entry Point" el="Σημείο εισόδου SSO" compact /></label>
+                        <label htmlFor="sso-entryPoint" className="text-sm font-medium"><BilingualText en="SSO Entry Point" el="Σημείο εισόδου SSO" compact /></label>
                         <Input id="sso-entryPoint" value={newProvider.samlEntryPoint} onChange={e => setNewProvider(p => ({ ...p, samlEntryPoint: e.target.value }))} placeholder="https://idp.example.com/sso" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="sso-entityId" className="text-xs font-medium"><BilingualText en="Issuer / Entity ID" el="Εκδότης / Entity ID" compact /></label>
+                        <label htmlFor="sso-entityId" className="text-sm font-medium"><BilingualText en="Issuer / Entity ID" el="Εκδότης / Entity ID" compact /></label>
                         <Input id="sso-entityId" value={newProvider.samlIssuer} onChange={e => setNewProvider(p => ({ ...p, samlIssuer: e.target.value }))} placeholder="urn:example:idp" />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="sso-cert" className="text-xs font-medium"><BilingualText en="Public Certificate (PEM)" el="Δημόσιο πιστοποιητικό (PEM)" compact /></label>
+                      <label htmlFor="sso-cert" className="text-sm font-medium"><BilingualText en="Public Certificate (PEM)" el="Δημόσιο πιστοποιητικό (PEM)" compact /></label>
                       <textarea id="sso-cert" value={newProvider.samlCert} onChange={e => setNewProvider(p => ({ ...p, samlCert: e.target.value }))} placeholder="-----BEGIN CERTIFICATE-----\n..." className="w-full min-h-[80px] rounded-xl border border-input bg-background px-3 py-2 text-xs font-mono resize-none" />
                     </div>
                   </>
                 )}
                 <div className="space-y-2">
-                  <label htmlFor="sso-loginButtonText" className="text-xs font-medium"><BilingualText en="Login Button Text" el="Κείμενο κουμπιού σύνδεσης" compact /></label>
+                  <label htmlFor="sso-loginButtonText" className="text-sm font-medium"><BilingualText en="Login Button Text" el="Κείμενο κουμπιού σύνδεσης" compact /></label>
                   <Input id="sso-loginButtonText" value={newProvider.loginButtonText} onChange={e => setNewProvider(p => ({ ...p, loginButtonText: e.target.value }))} placeholder="Continue with SSO" />
                 </div>
                 <div className="flex justify-end">
@@ -559,7 +559,7 @@ function SSOConfigPanel({
             {ssoMode !== 'disabled' && (
               <>
                 <div className="space-y-2">
-                  <label htmlFor="sso-selectedProvider" className="text-xs font-medium"><BilingualText en="Identity Provider" el="Πάροχος ταυτότητας" compact /></label>
+                  <label htmlFor="sso-selectedProvider" className="text-sm font-medium"><BilingualText en="Identity Provider" el="Πάροχος ταυτότητας" compact /></label>
                   <select id="sso-selectedProvider" value={selectedProviderId} onChange={e => setSelectedProviderId(e.target.value)}
                     className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
                     <option value="">— None selected —</option>
@@ -568,21 +568,21 @@ function SSOConfigPanel({
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="sso-allowedDomains" className="text-xs font-medium"><BilingualText en="Allowed Email Domains" el="Επιτρεπόμενοι τομείς email" compact /></label>
+                  <label htmlFor="sso-allowedDomains" className="text-sm font-medium"><BilingualText en="Allowed Email Domains" el="Επιτρεπόμενοι τομείς email" compact /></label>
                   <Input id="sso-allowedDomains" value={allowedDomains} onChange={e => setAllowedDomains(e.target.value)} placeholder="uoa.gr, di.uoa.gr (comma-separated)" />
                   <p className="text-xs text-muted-foreground"><BilingualText en="Leave empty to allow all domains" el="Αφήστε κενό για όλους τους τομείς" compact /></p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label htmlFor="sso-defaultRole" className="text-xs font-medium"><BilingualText en="Default Role for new users" el="Προεπιλεγμένος ρόλος νέων χρηστών" compact /></label>
+                    <label htmlFor="sso-defaultRole" className="text-sm font-medium"><BilingualText en="Default Role for new users" el="Προεπιλεγμένος ρόλος νέων χρηστών" compact /></label>
                     <select id="sso-defaultRole" value={defaultRole} onChange={e => setDefaultRole(e.target.value)}
                       className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
                       {['founder', 'investor', 'mentor', 'member'].map(r => <option key={r} value={r}>{bilingualInline(r.charAt(0).toUpperCase() + r.slice(1), statusEl(r))}</option>)}
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="sso-sessionDuration" className="text-xs font-medium"><BilingualText en="Session Duration (hours)" el="Διάρκεια συνεδρίας (ώρες)" compact /></label>
+                    <label htmlFor="sso-sessionDuration" className="text-sm font-medium"><BilingualText en="Session Duration (hours)" el="Διάρκεια συνεδρίας (ώρες)" compact /></label>
                     <Input id="sso-sessionDuration" type="number" min={1} max={720} value={sessionDurationHours} onChange={e => setSessionDurationHours(Number(e.target.value))} />
                   </div>
                 </div>

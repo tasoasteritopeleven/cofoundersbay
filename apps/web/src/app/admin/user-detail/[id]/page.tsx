@@ -271,14 +271,14 @@ export default function AdminUserDetailPage() {
               </Avatar>
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold">{name}</h2>
-                <p className="break-all text-sm text-muted-foreground">{user.email}</p>
+                <p className="break-all text-sm text-muted-foreground" translate="no">{user.email}</p>
               </div>
               <Badge variant={status.variant}>
                 <BilingualText en={status.en} el={status.el} compact />
               </Badge>
 
               <div className="mt-2 w-full space-y-1.5 text-left">
-                <label htmlFor="user-role" className="text-xs font-medium text-muted-foreground">
+                <label htmlFor="user-role" className="text-sm font-medium text-muted-foreground">
                   <BilingualText en="Role" el="Ρόλος" compact />
                 </label>
                 <Select value={user.role} onValueChange={(v) => { if (v !== user.role) role.mutate(v); }} disabled={role.isPending}>

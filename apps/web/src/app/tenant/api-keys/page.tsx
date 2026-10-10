@@ -74,7 +74,7 @@ function KeyRow({ apiKey }: { apiKey: ApiKey }) {
           </div>
           <div className="flex flex-wrap gap-1 mt-2">
             {apiKey.scopes.map(s => (
-              <Badge key={s} variant="secondary" size="sm">{s}</Badge>
+              <Badge key={s} variant="secondary" size="sm" translate="no">{s}</Badge>
             ))}
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-muted-foreground">

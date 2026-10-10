@@ -4,13 +4,14 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Plus, ChevronRight, Clock, CheckCircle2, Download, X,
+  Plus, ChevronRight, CheckCircle2, Download, X,
 } from 'lucide-react';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { AppShell } from '@/components/layout/AppShell';
 import { NonGuaranteeNote } from '@/components/commitments/NonGuaranteeNote';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -118,16 +119,16 @@ function leadAskPrompt(lead: InvestorLead, harborLive: boolean) {
     : `Draft a next-step note for ${lead.name}. Use only my saved round details, pitch deck and data room; ask me for anything missing rather than inventing amounts or commitments.`;
 }
 
-function LeadName({ lead, className }: { lead: InvestorLead; className?: string }) {
+function LeadName({ lead, className, as: Tag = 'p' }: { lead: InvestorLead; className?: string; as?: 'p' | 'span' }) {
   // A kanban card truncates by design; a pipeline row wraps, or a long
   // Greek half ran 33px past the row on a phone.
   const truncating = className?.includes('truncate') ?? false;
   return (
-    <p className={className}>
+    <Tag className={cn(Tag === 'span' && 'block', className)}>
       {lead.nameEl
         ? <BilingualText en={lead.name} el={lead.nameEl} compact wrap={!truncating} />
         : lead.name}
-    </p>
+    </Tag>
   );
 }
 
@@ -270,43 +271,45 @@ function RoundCard({
   const days = hydrated ? daysUntil(round.closingDate) : null;
   const roundKey = ROUND_STATUS_KEYS[round.status];
 
+  const figures = [
+    { label: 'stat_investors' as const, value: round.investors.toString() },
+    { label: 'stat_committed_amt' as const, value: fmtMoney(round.raised, round.currency) },
+    { label: 'stat_closing' as const, value: !round.closingDate ? null : days === null ? formatShortDate(round.closingDate, primary) : days < 0 ? 'overdue' : `${days}` },
+    { label: 'lead_investor' as const, value: round.leadInvestor ?? '' },
+  ];
+
+  // The round's name is the card's title and everything inside reads under
+  // it: the figures sit on the body step, their labels on the caption step.
+  // They used to match or outrank the name ("$375K raised", "Athens Tech
+  // Angels" at the title's size and weight).
   return (
-    <Card className="rounded-xl">
-      <CardContent>
-        <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <CfbGlyph name="wallet" className="icon-sm text-muted-foreground" />
-              <h2 className="page-section page-section--row font-semibold tracking-tight">
-                {round.nameEl
-                  ? <BilingualText en={round.name} el={round.nameEl} />
-                  : round.name}
-              </h2>
-              <Badge variant="outline" className={cn('rounded-full border', STATUS[ROUND_TONE[round.status]].chip)}>
-                {roundKey ? <BilingualText en={fundraisingEn(roundKey)} el={fundraisingEl(roundKey)} compact /> : round.status}
-              </Badge>
-            </div>
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              {round.type} · {round.valuation
-                ? `${fmtMoney(round.valuation, round.currency)} `
-                : null}
+    <Card>
+      <CardContent className="space-y-4">
+        <CardHead
+          titleAs="h2"
+          title={round.nameEl ? <BilingualText en={round.name} el={round.nameEl} /> : round.name}
+          subtitle={(
+            <>
+              {round.type} · {round.valuation ? `${fmtMoney(round.valuation, round.currency)} ` : null}
               {round.valuation
                 ? <BilingualText en={fundraisingEn('pre_money')} el={fundraisingEl('pre_money')} compact />
                 : <BilingualText en={fundraisingEn('valuation_tbd')} el={fundraisingEl('valuation_tbd')} compact />}
-            </p>
-          </div>
-          <Button size="sm" variant="outline" className={cn('shrink-0', BUILDER_BTN)} onClick={onAdd}>
-            <BilingualText en={fundraisingEn('add_investor')} el={fundraisingEl('add_investor')} compact />
-          </Button>
-        </div>
+            </>
+          )}
+          aside={(
+            <Badge variant="outline" className={cn('border', STATUS[ROUND_TONE[round.status]].chip)}>
+              {roundKey ? <BilingualText en={fundraisingEn(roundKey)} el={fundraisingEl(roundKey)} compact /> : round.status}
+            </Badge>
+          )}
+        />
 
-        <div className="mb-4 space-y-1.5">
-          <div className="flex justify-between text-sm font-medium">
-            <span>{fmtMoney(round.raised, round.currency)} <BilingualText en={fundraisingEn('raised')} el={fundraisingEl('raised')} compact /></span>
+        <div className="space-y-1.5">
+          <div className="card-body flex justify-between gap-3 tabular-nums">
+            <span className="font-medium">{fmtMoney(round.raised, round.currency)} <BilingualText en={fundraisingEn('raised')} el={fundraisingEl('raised')} compact /></span>
             <span className="text-muted-foreground">{fmtMoney(round.target, round.currency)} <BilingualText en={fundraisingEn('target')} el={fundraisingEl('target')} compact /></span>
           </div>
-          <Progress value={pct} className="h-3" />
-          <div className="flex justify-between text-2xs text-muted-foreground">
+          <Progress value={pct} className="h-2" />
+          <div className="flex justify-between gap-3 text-xs text-muted-foreground tabular-nums">
             <span>
               <BilingualText en={`${pct}% ${fundraisingEn('of_target')}`} el={`${pct}% ${fundraisingEl('of_target')}`} compact />
             </span>
@@ -314,21 +317,13 @@ function RoundCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { glyph: 'people' as const, label: 'stat_investors' as const, value: round.investors.toString() },
-            { glyph: 'chart' as const, label: 'stat_committed_amt' as const, value: fmtMoney(round.raised, round.currency) },
-            { glyph: 'calendar' as const, label: 'stat_closing' as const, value: !round.closingDate ? null : days === null ? formatShortDate(round.closingDate, primary) : days < 0 ? 'overdue' : `${days}` },
-            { glyph: 'award' as const, label: 'lead_investor' as const, value: round.leadInvestor ?? '' },
-          ].map((s) => (
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-border pt-3 sm:grid-cols-4">
+          {figures.map((s) => (
             <div key={s.label} className="min-w-0">
-              <div className="mb-1 flex items-center gap-1.5">
-                <CfbGlyph name={s.glyph} className="icon-sm shrink-0 text-muted-foreground" />
-                <p className="min-w-0 text-2xs leading-snug text-muted-foreground">
-                  <BilingualText en={fundraisingEn(s.label)} el={fundraisingEl(s.label)} compact wrap />
-                </p>
-              </div>
-              <p className="truncate text-sm font-semibold">
+              <dt className="text-xs text-muted-foreground">
+                <BilingualText en={fundraisingEn(s.label)} el={fundraisingEl(s.label)} compact wrap />
+              </dt>
+              <dd className="card-body mt-0.5 break-words font-medium tabular-nums">
                 {s.label === 'stat_closing' && s.value === 'overdue'
                   ? <BilingualText en={fundraisingEn('overdue')} el={fundraisingEl('overdue')} compact />
                   : s.label === 'stat_closing' && s.value === null
@@ -348,10 +343,16 @@ function RoundCard({
                       : s.label === 'lead_investor' && !s.value
                         ? <BilingualText en={fundraisingEn('none_yet')} el={fundraisingEl('none_yet')} compact />
                         : s.value}
-              </p>
+              </dd>
             </div>
           ))}
-        </div>
+        </dl>
+
+        <CardFoot>
+          <Button size="sm" variant="outline" className={BUILDER_BTN} onClick={onAdd}>
+            <BilingualText en={fundraisingEn('add_investor')} el={fundraisingEl('add_investor')} compact />
+          </Button>
+        </CardFoot>
       </CardContent>
     </Card>
   );
@@ -386,42 +387,41 @@ function PipelineView({
               </div>
               <div className="space-y-2">
                 {items.map((lead) => (
-                  <Card key={lead.id} className="rounded-xl transition-colors hover:border-primary/30">
-                    <CardContent className="space-y-1.5">
-                      <div className="flex items-center gap-1.5">
-                        <Avatar className="h-7 w-7 shrink-0 rounded-xl">
-                          <AvatarFallback className="rounded-xl bg-primary/10 text-xs font-bold text-primary-accessible">
-                            {lead.name[0]}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0">
-                          <LeadName lead={lead} className="person-name truncate font-semibold" />
-                          {lead.firm && <p className="truncate text-xs text-muted-foreground">{lead.firm}</p>}
-                        </div>
-                        {lead.isVerified && <CfbGlyph name="award" className={cn('ml-auto icon-sm shrink-0', STATUS.info.icon)} />}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <CfbGlyph name="wallet" className="icon-sm" />
+                  <Card key={lead.id} className="transition-colors hover:border-primary/30">
+                    <CardContent className="space-y-2">
+                      <CardHead
+                        mark={(
+                          <Avatar className="h-8 w-8 rounded-xl">
+                            <AvatarFallback className="rounded-xl bg-primary/10 text-xs font-semibold text-primary-accessible">
+                              {lead.name[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        titleAs="h4"
+                        title={<LeadName lead={lead} as="span" className="truncate" />}
+                        subtitle={lead.firm ? <span className="block truncate">{lead.firm}</span> : undefined}
+                        aside={lead.isVerified ? <CfbGlyph name="award" className={cn('icon-sm', STATUS.info.icon)} /> : undefined}
+                      />
+                      <p className="text-xs text-muted-foreground">
                         {lead.checkSizeEl
                           ? <BilingualText en={lead.checkSize} el={lead.checkSizeEl} compact />
                           : lead.checkSize}
-                      </div>
+                      </p>
                       {lead.notes && (
-                        <p className="line-clamp-2 text-xs text-muted-foreground">
+                        <p className="card-body line-clamp-2 text-muted-foreground">
                           {lead.notesEl
                             ? <BilingualText en={lead.notes} el={lead.notesEl} wrap />
                             : lead.notes}
                         </p>
                       )}
                       {lead.lastContact && (
-                        <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="icon-sm" />
+                        <p className="text-xs text-muted-foreground">
                           <BilingualText en={fundraisingEn('last_contact')} el={fundraisingEl('last_contact')} compact />
                           : {formatShortDate(lead.lastContact, primary)}
                         </p>
                       )}
                       <select
-                        className="w-full rounded-xl border border-border bg-background px-2 py-1 text-2xs"
+                        className="w-full rounded-md border border-border bg-background px-2 py-1"
                         value={lead.status}
                         onChange={(e) => onMove(lead.id, e.target.value as InvestorStatus)}
                         aria-label={bilingualAria(fundraisingEn('move_to'), fundraisingEl('move_to'))}
@@ -636,53 +636,43 @@ function InvestorListView({
       {leads.map((lead) => {
         const colors = STATUS[INVESTOR_TONE[lead.status]];
         return (
-          <Card key={lead.id} className="rounded-xl transition-colors hover:border-primary/20">
-            {/* Two rows on a phone, one row from `sm` up.
-                Measured at 360px: the identity column collapsed to 18px — the
-                status <select> is sized by its widest option label and, with the
-                two icon buttons, held ~206px of a ~296px row as `shrink-0`, so
-                every line of investor text lost 33-67% of its characters. Wrapping
-                the controls onto their own line gives the name, firm and note the
-                full width back; nothing is hidden or removed. */}
-            <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
-                <Avatar className="h-10 w-10 shrink-0 rounded-xl">
-                  <AvatarFallback className="rounded-xl bg-primary/10 font-bold text-primary-accessible">{lead.name[0]}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <LeadName lead={lead} className="person-name font-semibold" />
-                    {lead.isVerified && <CfbGlyph name="award" className={cn('icon-sm', STATUS.info.icon)} />}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
+          <Card key={lead.id} className="transition-colors hover:border-primary/20">
+            {/* The Endorsements card: mark, name and the line under it, the
+                note on the mark's edge, then a foot with the last contact
+                and the controls. The controls wrap on a phone instead of
+                squeezing the name (measured at 360px, the identity column
+                once collapsed to 18px); nothing is hidden or removed. */}
+            <CardContent className="space-y-3">
+              <CardHead
+                mark={(
+                  <Avatar className="h-10 w-10 rounded-xl">
+                    <AvatarFallback className="rounded-xl bg-primary/10 font-semibold text-primary-accessible">{lead.name[0]}</AvatarFallback>
+                  </Avatar>
+                )}
+                title={<LeadName lead={lead} as="span" />}
+                titleAs="h3"
+                subtitle={(
+                  <>
                     {lead.firm ? `${lead.firm} · ` : ''}
                     <BilingualText en={lead.type} el={INVESTOR_TYPE_EL[lead.type] ?? lead.type} compact />
                     {' · '}
                     {lead.checkSizeEl
                       ? <BilingualText en={lead.checkSize} el={lead.checkSizeEl} compact />
                       : lead.checkSize}
-                  </p>
-                  {lead.notes && (
-                    <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">
-                      {lead.notesEl
-                        ? <BilingualText en={lead.notes} el={lead.notesEl} wrap />
-                        : lead.notes}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex shrink-0 items-center gap-3 sm:justify-end">
-                {lead.lastContact && (
-                  /* `mr-auto` pins the date to the left edge of the controls row so
-                     the status select and the actions stay right-aligned whether or
-                     not a lead has a last-contact date. */
-                  <p className="mr-auto text-xs text-muted-foreground sm:mr-0">
-                    <Clock className="mr-1 inline icon-sm" />
-                    {formatShortDate(lead.lastContact, primary)}
-                  </p>
+                  </>
                 )}
+                aside={lead.isVerified ? <CfbGlyph name="award" className={cn('icon-sm', STATUS.info.icon)} /> : undefined}
+              />
+              {lead.notes && (
+                <p className="card-body line-clamp-2 text-muted-foreground">
+                  {lead.notesEl
+                    ? <BilingualText en={lead.notes} el={lead.notesEl} wrap />
+                    : lead.notes}
+                </p>
+              )}
+              <CardFoot meta={lead.lastContact ? formatShortDate(lead.lastContact, primary) : undefined}>
                 <select
-                  className={cn('rounded-full border bg-transparent px-2 py-1 text-xs', colors.chip)}
+                  className={cn('rounded-full border bg-transparent px-2 py-1', colors.chip)}
                   value={lead.status}
                   onChange={(e) => onMove(lead.id, e.target.value as InvestorStatus)}
                   aria-label={bilingualAria(fundraisingEn('move_to'), fundraisingEl('move_to'))}
@@ -693,32 +683,30 @@ function InvestorListView({
                     </option>
                   ))}
                 </select>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={cn('h-7 w-7 gap-1 p-0 sm:w-auto sm:px-2', BUILDER_BTN)}
-                    aria-label={bilingualAria(fundraisingEn('message'), fundraisingEl('message'))}
-                    onClick={() => ask(leadAskPrompt(lead, harborLive))}
-                  >
-                    <CfbGlyph name="messages" className="icon-sm" />
-                    <span className="hidden sm:inline text-xs"><BilingualText en={fundraisingEn('message')} el={fundraisingEl('message')} compact /></span>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={cn('h-7 w-7 gap-1 p-0 sm:w-auto sm:px-2', BUILDER_BTN)}
-                    aria-label={bilingualAria(fundraisingEn('view_details'), fundraisingEl('view_details'))}
-                    onClick={() => {
-                      if (lead.href) router.push(lead.href);
-                      else ask(leadAskPrompt(lead, harborLive));
-                    }}
-                  >
-                    <CfbGlyph name="discover" className="icon-sm" />
-                    <span className="hidden sm:inline text-xs"><BilingualText en={fundraisingEn('view_details')} el={fundraisingEl('view_details')} compact /></span>
-                  </Button>
-                </div>
-              </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn('h-7 w-7 gap-1 p-0 sm:w-auto sm:px-2', BUILDER_BTN)}
+                  aria-label={bilingualAria(fundraisingEn('message'), fundraisingEl('message'))}
+                  onClick={() => ask(leadAskPrompt(lead, harborLive))}
+                >
+                  <CfbGlyph name="messages" className="icon-sm" />
+                  <span className="hidden sm:inline text-xs"><BilingualText en={fundraisingEn('message')} el={fundraisingEl('message')} compact /></span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn('h-7 w-7 gap-1 p-0 sm:w-auto sm:px-2', BUILDER_BTN)}
+                  aria-label={bilingualAria(fundraisingEn('view_details'), fundraisingEl('view_details'))}
+                  onClick={() => {
+                    if (lead.href) router.push(lead.href);
+                    else ask(leadAskPrompt(lead, harborLive));
+                  }}
+                >
+                  <CfbGlyph name="discover" className="icon-sm" />
+                  <span className="hidden sm:inline text-xs"><BilingualText en={fundraisingEn('view_details')} el={fundraisingEl('view_details')} compact /></span>
+                </Button>
+              </CardFoot>
             </CardContent>
           </Card>
         );

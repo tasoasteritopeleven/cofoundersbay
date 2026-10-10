@@ -16,7 +16,6 @@ import {
   UserPlus,
   Compass,
   Handshake,
-  Quote,
   TrendingUp,
 } from 'lucide-react';
 import {
@@ -43,9 +42,11 @@ import { cn, initialsOf } from '@/lib/utils';
 import { STATUS } from '@/lib/semantic-colors';
 import { AIInsightButton } from '@/components/ai/AIInsightButton';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { connectionsEn, connectionsEl } from '@/lib/i18n/strings-connections';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
+import { useDateFormat } from '@/lib/i18n/useDateFormat';
 import { PeopleYouMayKnow } from '@/components/network/PeopleYouMayKnow';
 
 const CollaborationStarter = dynamic(
@@ -76,80 +77,83 @@ function ConnectionCard({
   const other = isReceiver ? connection.requester : connection.receiver;
   const isAccepted = connection.status === 'accepted';
 
+  const actions = isAccepted ? (
+    <>
+      <AIInsightButton
+        prompt={`Analyze collaboration potential with ${other.displayName}, a ${other.role}${other.headline ? ` — ${other.headline}` : ''}. What working dynamic would we likely have?`}
+        agentId="matching"
+        cacheKey={`conn-match-${connection.id}`}
+        variant="icon"
+        label={bilingualAria(connectionsEn('ai_collaboration'), connectionsEl('ai_collaboration'))}
+      />
+      <Button variant="secondary" size="sm" className="gap-2" onClick={onMessage}>
+        <MessageCircle className="icon-sm" />
+        <BilingualText en={connectionsEn('message')} el={connectionsEl('message')} compact />
+      </Button>
+    </>
+  ) : isReceiver && connection.status === 'pending' ? (
+    <>
+      <Button
+        size="sm"
+        className="gap-1"
+        onClick={onAccept}
+        disabled={isPending}
+      >
+        <Check className="icon-sm" />
+        <BilingualText en={connectionsEn('accept')} el={connectionsEl('accept')} compact />
+      </Button>
+      <Button aria-label={bilingualAria(connectionsEn('decline'), connectionsEl('decline'))}
+        variant="ghost"
+        size="sm"
+        className="gap-1 text-muted-foreground hover:text-destructive-accessible"
+        onClick={onDecline}
+        disabled={isPending}
+      >
+        <X className="icon-sm" aria-hidden="true" />
+      </Button>
+    </>
+  ) : (
+    <Badge variant="outline" className="text-muted-foreground">
+      <Clock className="mr-1 icon-sm" />
+      <BilingualText en={connectionsEn('pending')} el={connectionsEl('pending')} compact />
+    </Badge>
+  );
+
+  // The same head as every card (avatar, name, the line under it); the
+  // actions sit at its right from `sm` up and under the note on a phone,
+  // where they would squeeze the name.
   return (
     <Card className="card-interactive">
-      <CardContent className="flex items-center gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
-        <Link href={`/profiles/${other.id}`}>
-          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-            <AvatarImage src={other.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-              {initialsOf(other.displayName)}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href={`/profiles/${other.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
-              {other.displayName}
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Link href={`/profiles/${other.id}`} aria-label={bilingualAria(`Open ${other.displayName}'s profile`, `Άνοιγμα προφίλ: ${other.displayName}`)}>
+              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+                <AvatarImage src={other.avatarUrl ?? undefined} />
+                <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+                  {initialsOf(other.displayName)}
+                </AvatarFallback>
+              </Avatar>
             </Link>
-            <RoleBadge role={other.role} size="sm" />
-          </div>
-          <div className="card-axis">
-          {other.headline && (
-            <p className="text-sm text-muted-foreground truncate">{other.headline}</p>
           )}
-          {connection.message && !isAccepted && (
-            <p className="mt-1 text-xs text-muted-foreground italic line-clamp-2">
-              &ldquo;{connection.message}&rdquo;
-            </p>
+          title={(
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <Link href={`/profiles/${other.id}`} className="transition-colors hover:text-primary-accessible">
+                {other.displayName}
+              </Link>
+              <RoleBadge role={other.role} size="sm" />
+            </span>
           )}
-          </div>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2">
-          {isAccepted ? (
-            <>
-              <AIInsightButton
-                prompt={`Analyze collaboration potential with ${other.displayName}, a ${other.role}${other.headline ? ` — ${other.headline}` : ''}. What working dynamic would we likely have?`}
-                agentId="matching"
-                cacheKey={`conn-match-${connection.id}`}
-                variant="icon"
-                label={bilingualAria(connectionsEn('ai_collaboration'), connectionsEl('ai_collaboration'))}
-              />
-              <Button variant="secondary" size="sm" className="gap-2" onClick={onMessage}>
-                <MessageCircle className="icon-sm" />
-                <BilingualText en={connectionsEn('message')} el={connectionsEl('message')} compact />
-              </Button>
-            </>
-          ) : isReceiver && connection.status === 'pending' ? (
-            <>
-              <Button
-                size="sm"
-                className="gap-1"
-                onClick={onAccept}
-                disabled={isPending}
-              >
-                <Check className="icon-sm" />
-                <BilingualText en={connectionsEn('accept')} el={connectionsEl('accept')} compact />
-              </Button>
-              <Button aria-label={bilingualAria(connectionsEn('decline'), connectionsEl('decline'))}
-                variant="ghost"
-                size="sm"
-                className="gap-1 text-muted-foreground hover:text-destructive-accessible"
-                onClick={onDecline}
-                disabled={isPending}
-              >
-                <X className="icon-sm" aria-hidden="true" />
-              </Button>
-            </>
-          ) : (
-            <Badge variant="outline" className="text-muted-foreground">
-              <Clock className="mr-1 icon-sm" />
-              <BilingualText en={connectionsEn('pending')} el={connectionsEl('pending')} compact />
-            </Badge>
-          )}
-        </div>
+          subtitle={other.headline ?? undefined}
+          asideClassName="hidden sm:flex"
+          aside={actions}
+        />
+        {connection.message && !isAccepted && (
+          <p className="card-body italic text-muted-foreground line-clamp-2">
+            &ldquo;{connection.message}&rdquo;
+          </p>
+        )}
+        <div className="flex flex-wrap items-center gap-2 sm:hidden">{actions}</div>
       </CardContent>
     </Card>
   );
@@ -167,65 +171,59 @@ function IntroRequestCard({
   isPending?: boolean;
 }) {
   const sender = connection.requester;
+  const formatDay = useDateFormat();
+  // Endorsements' anatomy: avatar, name and headline, the kind at the right;
+  // the note and the foot (date, then the two answers) on the avatar's edge.
   return (
     <Card className="card-interactive border-primary/20 bg-primary/5">
-      <CardContent>
-        <div className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
-          <Link href={`/profiles/${sender.id}`}>
-            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/30">
-              <AvatarImage src={sender.avatarUrl ?? undefined} />
-              <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-                {initialsOf(sender.displayName)}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-
-          <div className="min-w-0 flex-1 space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <Link href={`/profiles/${sender.id}`} className="person-name inline-flex tap-target-y items-center font-semibold text-foreground transition-colors hover:text-primary-accessible">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Link href={`/profiles/${sender.id}`} aria-label={bilingualAria(`Open ${sender.displayName}'s profile`, `Άνοιγμα προφίλ: ${sender.displayName}`)}>
+              <Avatar className="h-10 w-10 ring-2 ring-primary/30">
+                <AvatarImage src={sender.avatarUrl ?? undefined} />
+                <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
+                  {initialsOf(sender.displayName)}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          )}
+          title={(
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <Link href={`/profiles/${sender.id}`} className="transition-colors hover:text-primary-accessible">
                 {sender.displayName}
               </Link>
               <RoleBadge role={sender.role} size="sm" />
-              <Badge variant="outline" size="sm" className="ml-auto border-primary/40 text-primary-accessible gap-1">
-                <Handshake className="icon-sm" />
-                <BilingualText en={connectionsEn('intro_request')} el={connectionsEl('intro_request')} compact />
-              </Badge>
-            </div>
+            </span>
+          )}
+          subtitle={sender.headline ?? undefined}
+          aside={(
+            <span className="font-medium text-primary-accessible">
+              <BilingualText en={connectionsEn('intro_request')} el={connectionsEl('intro_request')} compact />
+            </span>
+          )}
+        />
 
-            <div className="card-axis space-y-2">
-            {sender.headline && (
-              <p className="text-sm text-muted-foreground">{sender.headline}</p>
-            )}
+        {connection.message && (
+          <p className="card-body italic text-foreground/80">{connection.message}</p>
+        )}
 
-            {connection.message && (
-              <div className="flex gap-2">
-                <Quote className="icon-sm shrink-0 mt-0.5 text-primary/60" />
-                <p className="text-sm text-foreground/80 italic">{connection.message}</p>
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <Button size="sm" className="gap-1.5" onClick={onAccept} disabled={isPending}>
-                <Check className="icon-sm" />
-                <BilingualText en={connectionsEn('accept_intro')} el={connectionsEl('accept_intro')} compact />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="gap-1.5 text-muted-foreground hover:text-destructive-accessible"
-                onClick={onDecline}
-                disabled={isPending}
-              >
-                <X className="icon-sm" />
-                <BilingualText en={connectionsEn('decline')} el={connectionsEl('decline')} compact />
-              </Button>
-              <p className="ml-auto shrink-0 text-xs text-muted-foreground">
-                {new Date(connection.createdAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}
-              </p>
-            </div>
-            </div>
-          </div>
-        </div>
+        <CardFoot meta={formatDay(connection.createdAt, { day: 'numeric', month: 'short', year: 'numeric' })}>
+          <Button size="sm" className="gap-1.5" onClick={onAccept} disabled={isPending}>
+            <Check className="icon-sm" />
+            <BilingualText en={connectionsEn('accept_intro')} el={connectionsEl('accept_intro')} compact />
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-1.5 text-muted-foreground hover:text-destructive-accessible"
+            onClick={onDecline}
+            disabled={isPending}
+          >
+            <X className="icon-sm" />
+            <BilingualText en={connectionsEn('decline')} el={connectionsEl('decline')} compact />
+          </Button>
+        </CardFoot>
       </CardContent>
     </Card>
   );

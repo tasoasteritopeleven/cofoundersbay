@@ -8,6 +8,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailStats } from '@/components/layout/RailParts';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { statusEl } from '@/components/common/StatusText';
 import { FormDraftNotice } from '@/components/common/FormDraftNotice';
@@ -42,20 +43,23 @@ function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNo
   return (
     <Card>
       <CardContent className="space-y-3">
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="min-w-0">
-            <Link href={`/profiles/${encodeURIComponent(p.person.id)}`} className="text-base font-semibold text-foreground hover:text-primary-accessible">
+        <CardHead
+          title={(
+            <Link href={`/profiles/${encodeURIComponent(p.person.id)}`} className="hover:text-primary-accessible">
               {p.person.displayName}
             </Link>
-            {p.person.headline ? <p className="text-sm text-muted-foreground">{p.person.headline}</p> : null}
-            {p.person.location ? <p className="text-xs text-muted-foreground">{p.person.location}</p> : null}
-          </div>
-          <span className="rounded-md border border-primary/15 bg-primary/[0.03] px-2 py-0.5 text-sm font-bold tabular-nums text-foreground" title="Fit with your brief · Ταίριασμα με το σημείωμα">
-            {p.score}
-          </span>
-        </div>
+          )}
+          subtitle={p.person.headline ?? undefined}
+          meta={p.person.location ?? undefined}
+          asideStays
+          aside={(
+            <span className="rounded-md border border-primary/15 bg-primary/[0.03] px-2 py-0.5 text-xs font-bold tabular-nums text-foreground" title="Fit with your brief · Ταίριασμα με το σημείωμα">
+              {p.score}
+            </span>
+          )}
+        />
         {p.reasons.length ? (
-          <ul className="list-disc space-y-0.5 pl-5 text-sm text-muted-foreground">
+          <ul className="card-body list-disc space-y-0.5 pl-4 text-muted-foreground">
             {p.reasons.map((r) => (
               <li key={r.en}><BilingualText en={r.en} el={r.el} compact /></li>
             ))}
@@ -63,11 +67,11 @@ function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNo
         ) : null}
         <div className="space-y-1.5 border-t border-border pt-3">
           <p className="text-xs font-medium text-muted-foreground"><BilingualText en="A first note you could send yourself" el="Ένα πρώτο σημείωμα που μπορείτε να στείλετε εσείς" compact /></p>
-          <p className="text-sm text-foreground">{p.draftNote}</p>
+          <p className="card-body text-foreground">{p.draftNote}</p>
           <Button
             type="button"
             size="sm"
-            variant="ghost"
+            variant="outline"
             onClick={() => void navigator.clipboard?.writeText(p.draftNote).then(() => success('Note copied'), () => showError('Could not copy the link'))}
           >
             <BilingualText en="Copy note" el="Αντιγραφή σημειώματος" compact />

@@ -88,7 +88,7 @@ function InviteRow({ invite, onCancel, cancelling }: {
         <Mail className="icon-sm text-muted-foreground" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{invite.email}</p>
+        <p className="truncate text-sm font-medium text-foreground" translate="no">{invite.email}</p>
         {/* Dates stay pinned to UTC, as everywhere else on the platform, so a
             rendered day cannot shift under the reader's clock. */}
         <p className="text-xs leading-snug text-muted-foreground">

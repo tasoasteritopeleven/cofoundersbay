@@ -253,7 +253,7 @@ export function BoardHistoryDrawer({
 
           {/* Create snapshot */}
           <div className="mt-4 space-y-2 p-3 bg-muted/50 rounded-lg border border-border">
-            <Label htmlFor="snapshotLabel" className="text-xs font-medium">Save current state</Label>
+            <Label htmlFor="snapshotLabel" className="font-medium">Save current state</Label>
             <div className="flex gap-2">
               <Input id="snapshotLabel"
                 placeholder={bilingualInline("Label (optional)…", "Ετικέτα (προαιρετικά)…")}

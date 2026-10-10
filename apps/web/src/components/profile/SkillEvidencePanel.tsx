@@ -124,7 +124,7 @@ export function SkillEvidencePanel({ userId, editable = false }: { userId: strin
                       }}
                     >
                       <div className="min-w-0 flex-1 space-y-1">
-                        <Label htmlFor={`evidence-${s.name}`} className="text-xs"><BilingualText en="Completed work" el="Ολοκληρωμένη δουλειά" compact /></Label>
+                        <Label htmlFor={`evidence-${s.name}`}><BilingualText en="Completed work" el="Ολοκληρωμένη δουλειά" compact /></Label>
                         <select id={`evidence-${s.name}`} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm" value={choice} onChange={(e) => setChoice(e.target.value)}>
                           <option value="">—</option>
                           {(candidates.data ?? []).map((c) => (

@@ -69,13 +69,13 @@ function Inline({ text }: { text: string }) {
 
 export function LegalText({ content }: { content: string }) {
   return (
-    <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+    <div className="card-body space-y-3 text-muted-foreground">
       {parse(content).map((block, i) => (
         <Fragment key={i}>
-          {block.kind === 'heading' && <h3 className="pt-1 text-sm font-semibold text-foreground">{block.text}</h3>}
+          {block.kind === 'heading' && <h3 className="card-subtitle pt-1 font-semibold text-foreground">{block.text}</h3>}
           {block.kind === 'para' && <p><Inline text={block.text} /></p>}
           {block.kind === 'list' && (
-            <ul className="list-disc space-y-1 pl-5 marker:text-muted-foreground/70">
+            <ul className="list-disc space-y-1 pl-4 marker:text-muted-foreground/70">
               {block.items.map((item, j) => (
                 <li key={j}><Inline text={item} /></li>
               ))}

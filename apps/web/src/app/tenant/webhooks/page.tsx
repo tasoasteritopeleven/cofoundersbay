@@ -96,7 +96,7 @@ function WebhookCard({ webhook }: { webhook: WebhookItem }) {
             </div>
             <div className="flex flex-wrap gap-1 mt-2">
               {webhook.events.map(e => (
-                <Badge key={e} variant="secondary" size="sm">{e}</Badge>
+                <Badge key={e} variant="secondary" size="sm" translate="no">{e}</Badge>
               ))}
             </div>
             <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">

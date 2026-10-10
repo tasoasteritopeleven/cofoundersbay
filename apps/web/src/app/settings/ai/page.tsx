@@ -297,7 +297,7 @@ export default function AISettingsPage() {
                 )}>
                   {isAIAvailable ? 'AI Assistant is Online' : 'AI Assistant is Offline'}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="card-body text-muted-foreground">
                   {/* Written for the reader, not the operator: "Run: ollama
                       serve" was shown to every user. The built-in copilot
                       answers from platform data without a model, so the
@@ -480,19 +480,19 @@ export default function AISettingsPage() {
                         : 'border-border hover:border-primary/50'
                     )}
                   >
-                    <span className="font-medium">{style.label}</span>
-                    <span className="text-sm text-muted-foreground">{style.desc}</span>
+                    <span className="text-sm font-medium">{style.label}</span>
+                    <span className="card-body text-muted-foreground">{style.desc}</span>
                   </button>
                 ))}
               </div>
 
               {/* Language */}
               <div className="space-y-2">
-                <p id="page-cap5-cap" className="flex items-center gap-2">
+                <p id="page-cap5-cap" className="flex items-center gap-2 text-sm font-medium">
                   <Languages className="icon-sm text-muted-foreground" />
                   {t('Response Language')}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="card-body text-muted-foreground">
                   {t('Tap a language. The same setting is in the header globe and in Settings.')}
                 </p>
                 <LanguageChipGrid
@@ -507,8 +507,8 @@ export default function AISettingsPage() {
               {/* Use Emoji */}
               <div className="flex items-center justify-between gap-4 py-2">
                 <div>
-                  <p className="font-medium"><BilingualText en="Use Emojis" el="Χρήση emoji" compact /></p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-medium"><BilingualText en="Use Emojis" el="Χρήση emoji" compact /></p>
+                  <p className="card-body text-muted-foreground">
                     <BilingualText en="Include emojis in AI responses for a friendlier tone" el="Emoji στις απαντήσεις για πιο φιλικό ύφος" wrap />
                   </p>
                 </div>
@@ -541,8 +541,8 @@ export default function AISettingsPage() {
               ].map(({ key, label, desc }) => (
                 <div key={key} className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0">
                   <div>
-                    <p className="font-medium">{label}</p>
-                    <p className="text-sm text-muted-foreground">{desc}</p>
+                    <p className="text-sm font-medium">{label}</p>
+                    <p className="card-body text-muted-foreground">{desc}</p>
                   </div>
                   <Toggle
                     label={label}
@@ -573,8 +573,8 @@ export default function AISettingsPage() {
               ].map(({ key, label, desc }) => (
                 <div key={key} className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0">
                   <div>
-                    <p className="font-medium">{label}</p>
-                    <p className="text-sm text-muted-foreground">{desc}</p>
+                    <p className="text-sm font-medium">{label}</p>
+                    <p className="card-body text-muted-foreground">{desc}</p>
                   </div>
                   <Toggle
                     label={label}

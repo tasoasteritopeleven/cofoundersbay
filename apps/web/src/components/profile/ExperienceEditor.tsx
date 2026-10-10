@@ -64,7 +64,7 @@ function Rows<T extends { [K in keyof T]: string }>({
               const id = `${base}-${i}-${String(f.key)}`;
               return (
                 <div key={String(f.key)} className="space-y-1.5">
-                  <Label htmlFor={id} className="text-xs"><BilingualText en={f.en} el={f.el} compact /></Label>
+                  <Label htmlFor={id}><BilingualText en={f.en} el={f.el} compact /></Label>
                   <Input
                     id={id}
                     value={row[f.key] ?? ''}

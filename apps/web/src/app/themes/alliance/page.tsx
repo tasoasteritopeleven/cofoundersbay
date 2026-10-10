@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { FactLine } from '@/components/common/FactLine';
 import { MainLandmark } from '@/components/layout/AppShell';
 
 /**
@@ -125,53 +126,40 @@ export default function AllianceThemePage() {
                     <Badge className="bg-white/90 text-slate-900 hover:bg-white"><BilingualText en="Featured" el="Προβεβλημένο" compact /></Badge>
                   </div>
                 </div>
-                <CardContent>
-                  {/* Wraps on a phone: name, role and Connect in one row pushed
-                      Connect 80px past the card edge at 390px. */}
-                  <div className="mb-4 flex flex-wrap items-start gap-x-4 gap-y-2">
+                <CardContent className="space-y-3">
+                  {/* The avatar rides on the banner with Connect at the right;
+                      the name, the line under it and everything below start on
+                      the avatar's left edge, as on every card. */}
+                  <div className="flex items-end justify-between gap-3">
                     <div className="relative z-10 -mt-12 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border-4 border-card bg-gradient-to-br from-blue-400 to-purple-400 text-lg font-semibold text-white" aria-hidden="true">
                       {person.name.replace(/^Dr\.\s*/, '').split(' ').map((w) => w[0]).slice(0, 2).join('')}
-                    </div>
-                    <div className="min-w-0 flex-1 basis-40 pt-2">
-                      <div className="mb-1 flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-semibold sm:text-xl">{person.name}</h3>
-                        <Badge variant="secondary" className="text-xs">
-                          <Star className="icon-sm mr-1 fill-status-warning text-yellow-400" aria-hidden="true" />
-                          {person.badge}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{person.role}</p>
                     </div>
                     <Button tabIndex={-1} aria-hidden="true" variant="outline" size="sm" className="shrink-0 rounded-full">
                       <Users className="icon-sm mr-2" />
                       <BilingualText en="Connect" el="Σύνδεση" compact />
                     </Button>
                   </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <h3 className="card-title text-foreground">{person.name}</h3>
+                      <Badge variant="secondary" className="text-xs">
+                        <Star className="icon-sm mr-1 fill-status-warning text-yellow-400" aria-hidden="true" />
+                        {person.badge}
+                      </Badge>
+                    </div>
+                    <p className="card-subtitle mt-0.5">{person.role}</p>
+                  </div>
 
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="card-body text-muted-foreground">
                     {person.pitch}
                   </p>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {person.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="rounded-full">
-                        {tag}
-                      </Badge>
-                    ))}
+                  <div className="space-y-1">
+                    <FactLine items={person.tags} />
+                    <FactLine items={[person.place, person.sector]} />
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="icon-sm" />
-                      {person.place}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Building className="icon-sm" />
-                      {person.sector}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t">
+                  <div className="flex items-center justify-end gap-2 pt-3 border-t">
                     <Button tabIndex={-1} aria-hidden="true" variant="ghost" size="sm" className="flex-1">
                       <Heart className="icon-sm mr-2" />
                       <BilingualText en="Like" el="Μου αρέσει" compact />
@@ -193,8 +181,8 @@ export default function AllianceThemePage() {
           <div className="space-y-6">
             <Card>
               <CardContent>
-                <h3 className="font-semibold text-lg mb-4"><BilingualText en="Trending Topics" el="Δημοφιλή θέματα" compact /></h3>
-                <div className="space-y-3">
+                <h3 className="card-title mb-3"><BilingualText en="Trending Topics" el="Δημοφιλή θέματα" compact /></h3>
+                <div className="card-rows">
                   {[
                     { tag: '#AIStartups', count: '2.5K posts' },
                     { tag: '#FundingRound', count: '1.8K posts' },
@@ -203,10 +191,10 @@ export default function AllianceThemePage() {
                   ].map((topic) => (
                     <div
                       key={topic.tag}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                      className="axis-row flex items-center justify-between rounded-lg hover:bg-muted cursor-pointer transition-colors"
                     >
                       <div>
-                        <div className="font-semibold text-status-info ">{topic.tag}</div>
+                        <div className="card-body font-semibold text-status-info">{topic.tag}</div>
                         <div className="text-xs text-muted-foreground">{topic.count}</div>
                       </div>
                       <TrendingUp className="icon-sm text-status-success" />
@@ -219,8 +207,8 @@ export default function AllianceThemePage() {
             <Card className="border-white/20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
               <CardContent>
                 <Sparkles className="icon-xl mb-3" />
-                <h3 className="font-semibold text-lg mb-2"><BilingualText en="Upgrade to Pro" el="Αναβάθμιση σε Pro" compact /></h3>
-                <p className="text-sm text-blue-100 mb-4">
+                <h3 className="card-title mb-1"><BilingualText en="Upgrade to Pro" el="Αναβάθμιση σε Pro" compact /></h3>
+                <p className="card-body text-blue-100 mb-4">
                   <BilingualText en="Unlock premium features and connect with top founders" el="Ξεκλειδώστε premium λειτουργίες και γνωρίστε κορυφαίους ιδρυτές" wrap />
                 </p>
                 <Button className="w-full bg-white text-slate-900 hover:bg-white/90" asChild>
@@ -231,8 +219,8 @@ export default function AllianceThemePage() {
 
             <Card>
               <CardContent>
-                <h3 className="font-semibold text-lg mb-4"><BilingualText en="Upcoming Events" el="Προσεχείς εκδηλώσεις" compact /></h3>
-                <div className="space-y-3">
+                <h3 className="card-title mb-3"><BilingualText en="Upcoming Events" el="Προσεχείς εκδηλώσεις" compact /></h3>
+                <div className="card-rows">
                   {[
                     { title: 'Startup Pitch Night', date: 'Tomorrow, 6 PM' },
                     { title: 'AI Founders Meetup', date: 'Fri, Dec 20' },
@@ -240,13 +228,13 @@ export default function AllianceThemePage() {
                   ].map((event, i) => (
                     <div
                       key={i}
-                      className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
+                      className="axis-row flex items-start gap-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
                     >
-                      <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                      <div data-keep-icon="" className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
                         <Calendar className="icon-lg text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-sm truncate">{event.title}</div>
+                        <div className="card-body font-semibold">{event.title}</div>
                         <div className="text-xs text-muted-foreground">{event.date}</div>
                       </div>
                     </div>

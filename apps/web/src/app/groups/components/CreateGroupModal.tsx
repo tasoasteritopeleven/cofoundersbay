@@ -71,7 +71,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-name`} className="text-xs font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-name`} className="text-sm font-medium text-muted-foreground">
               <BilingualText en="Community name" el="Όνομα κοινότητας" compact /> *
             </label>
             <Input
@@ -84,7 +84,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-slug`} className="text-xs font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-slug`} className="text-sm font-medium text-muted-foreground">
               <BilingualText en="Slug (URL)" el="Slug (URL)" compact /> *
             </label>
             <div className="flex items-center gap-0 rounded-lg border border-input overflow-hidden">
@@ -101,7 +101,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-desc`} className="text-xs font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-desc`} className="text-sm font-medium text-muted-foreground">
               <BilingualText en="Description" el="Περιγραφή" compact />
             </label>
             <textarea
@@ -116,7 +116,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-category`} className="text-xs font-medium text-muted-foreground">
+              <label htmlFor={`${fieldId}-category`} className="text-sm font-medium text-muted-foreground">
                 <BilingualText en="Category" el="Κατηγορία" compact />
               </label>
               <select
@@ -159,7 +159,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-tags`} className="text-xs font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-tags`} className="text-sm font-medium text-muted-foreground">
               <BilingualText en="Tags (comma-separated)" el="Ετικέτες (με κόμμα)" compact />
             </label>
             <Input

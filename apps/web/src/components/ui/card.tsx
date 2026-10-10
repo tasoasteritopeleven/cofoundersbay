@@ -37,7 +37,10 @@ CardTitle.displayName = 'CardTitle';
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('page-lead text-sm text-muted-foreground', className)} {...props} />
+    /* The card's subtitle step (globals.css "Card text ladder"): over the
+       sentences and rows the card holds, under its title. It sat on the
+       page-lead step, a notch under the rows it introduced. */
+    <p ref={ref} className={cn('card-subtitle', className)} {...props} />
   ),
 );
 CardDescription.displayName = 'CardDescription';
