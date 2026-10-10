@@ -454,12 +454,12 @@ html {
     --ring: 198.05 37% 43.5%;
   }
   html[data-theme="minimal"] {
-    /* Pastel green, 20% more chroma than rgb(193, 225, 193): rgb(188, 227, 189).
-       White on it is about 1.4:1, so the label stays a dark green of the same
-       hue (7.17:1 on the fill). */
-    --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
-    --mint-mark: 138.5 99.5% 36.5%;       /* rgb(0, 186, 58), 20% darker than rgb(0, 250, 81) */
-    --primary-foreground: 120 30% 22%;    /* #274927 */
+    /* The button fill is the lightest this green can be while white
+       letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
+       rgb(188, 227, 189) left white at 1.4:1. */
+    --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
+    --mint-mark: 137.2 99.3% 26.9%;       /* rgb(0, 137, 40), Bay, rings and green outlines */
+    --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
     --accent: 43 24.1% 82.9%;             /* Windsurf active nav #ded8c9 */

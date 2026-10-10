@@ -419,7 +419,7 @@ export default function HelpPage() {
             )}
           >
             <BilingualText en="All Topics" el="Όλα τα θέματα" compact />
-            <Badge variant="secondary" className={cn('ml-0.5 h-4 px-1.5 text-2xs', selectedCategory === null && 'bg-primary-foreground text-primary-accessible')}>
+            <Badge variant="secondary" className={cn('ml-0.5 h-4 px-1.5 text-2xs', selectedCategory === null && 'bg-primary-accessible text-primary-foreground')}>
               {faqCategories.reduce((sum, c) => sum + c.faqs.length, 0)}
             </Badge>
           </button>
