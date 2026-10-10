@@ -458,7 +458,7 @@ html {
        White on it is about 1.4:1, so the label stays a dark green of the same
        hue (7.17:1 on the fill). */
     --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
-    --mint-mark: 120.1 46.6% 80.6%;       /* #b6e5b7, Bay and small green marks, +20% chroma */
+    --mint-mark: 121.2 54.4% 79.8%;       /* #afe8b1 rgb(175, 232, 177), Bay and green outlines */
     --primary-foreground: 120 30% 22%;    /* #274927 */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4066,10 +4066,10 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. The button fill stays the pastel. "Bay", the green ring on a
-   profile circle, a small count dot, and the initials circle itself use a
-   green 20% more intense. A circle at h-8 or under takes a stronger wash,
-   because the same pastel disappears at that size. */
+/* Mint only. The button fill stays the pastel. "Bay", a green ring or
+   border on a circle (the help book, a profile mark), a small count dot,
+   and the initials circle use a green another 20% more intense. A circle
+   at h-8 or under, and the small book button, take a stronger edge. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--mint-mark));
 }
@@ -4099,6 +4099,26 @@ html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) >
 }
 html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/20'] {
   background-color: hsl(var(--mint-mark) / 0.63);
+}
+/* A circle whose edge is the green, not a filled button: the help book,
+   and the same border on a profile-sized mark. A solid bg-primary control
+   keeps the button pastel. Smaller circles take a stronger edge. */
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
+html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
+  border-color: hsl(var(--mint-mark) / 0.28);
+}
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']),
+html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']) {
+  border-color: hsl(var(--mint-mark) / 0.42);
+}
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) [class~='text-primary'] {
+  color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))'] {
+  stroke: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
+  stroke: hsl(var(--mint-mark) / 0.55);
 }
 
 /* A description inside a card (a muted sentence that clamps or reads
