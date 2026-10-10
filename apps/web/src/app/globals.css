@@ -1806,6 +1806,24 @@ html {
       min-width: 31.08px;
     }
 
+    /* Purple primary and transparent outline/ghost buttons are 5% under
+       the topic pill on a phone only: 31.08 × 0.95 = 29.53. From 640px
+       they stay on the pill. A stacked label still grows. Attribute
+       selectors, so the utility names are not folded into Tailwind. */
+    :is(button, a):is([class~='bg-primary'], [class~='bg-transparent']):not(.min-h-14):not(.min-h-16) {
+      height: auto;
+      min-height: 29.53px;
+    }
+    :is(button, a)[class~='h-[31.08px]'][class~='w-[31.08px]']:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-10.w-10:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-11.w-11:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-12.w-12:is([class~='bg-primary'], [class~='bg-transparent']) {
+      width: 29.53px;
+      min-width: 29.53px;
+      height: 29.53px;
+      min-height: 29.53px;
+    }
+
     /* What a fingertip still missed at 390px (measured on 15 pages, 60
        targets): text buttons and links in rows that declare themselves
        targets (`tap-target-y`, 24px), native selects (32px), and switches

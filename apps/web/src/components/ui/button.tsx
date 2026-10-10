@@ -30,7 +30,7 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-foreground/[0.06]',
         ghost:
-          'text-foreground/70 hover:text-foreground hover:bg-secondary/60',
+          'bg-transparent text-foreground/70 hover:text-foreground hover:bg-secondary/60',
         outline:
           'border border-border bg-transparent text-foreground hover:bg-secondary/50 hover:border-foreground/15',
         destructive:
@@ -49,8 +49,10 @@ const buttonVariants = cva(
        * made the controls feel cramped.
        *
        * The height is the Help topic pill (All topics, Getting started):
-       * 31.08px below 640px and 33.67px from there up. xs stays the shorter
-       * mark. A call site that passes `h-auto` still grows with its label.
+       * 31.08px below 640px and 33.67px from there up. On a phone, a purple
+       * primary and a transparent outline or ghost are another 5% under that
+       * (29.53px). xs stays the shorter mark. A call site that passes a
+       * stacked label still grows with it.
        *
        * Expressed as `min-height` with `height: auto`, not as a fixed height.
        * A fixed one is indistinguishable from the ladder for an ordinary
