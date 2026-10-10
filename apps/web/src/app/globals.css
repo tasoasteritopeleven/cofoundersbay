@@ -458,7 +458,8 @@ html {
        letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
        rgb(188, 227, 189) left white at 1.4:1. */
     --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
-    --mint-mark: 139.7 27.1% 49.1%;       /* #5b9f72 rgb(91, 159, 114): #71b687, 10% darker in OKLab lightness. Bay, rings, bars, outlines */
+    --mint-mark: 138.4 29.2% 53.7%;       /* #66ab7c rgb(102, 171, 124): #71b687, 5% darker in OKLab lightness. Bay, bars, outlines */
+    --mint-ring: 138.4 35.8% 62.3%;       /* #7cc192 rgb(124, 193, 146): #71b687, 5% lighter. Pastel rings only */
     --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4066,18 +4067,18 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. The button fill stays the pastel. "Bay", a green ring or
-   border on a circle (the help book, a profile mark), a small count dot,
-   and the initials circle use a stronger green. A circle at h-8 or under,
-   and the small book button, take a stronger edge. */
+/* Mint only. Buttons stay the deeper green. "Bay", a green bar, and a
+   green outline (the help book, a profile circle) use --mint-mark, 5%
+   darker than #71b687. A pastel ring uses --mint-ring, 5% lighter.
+   A circle at h-8 or under takes a stronger edge. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--mint-mark));
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
-  --tw-ring-color: hsl(var(--mint-mark) / 0.39);
+  --tw-ring-color: hsl(var(--mint-ring) / 0.39);
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([class~='h-6'], [class~='h-7'], [class~='h-8'], [class~='w-6'], [class~='w-7'], [class~='w-8']) {
-  --tw-ring-color: hsl(var(--mint-mark) / 0.56);
+  --tw-ring-color: hsl(var(--mint-ring) / 0.56);
 }
 html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
   background-color: hsl(var(--mint-mark));
