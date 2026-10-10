@@ -46,10 +46,10 @@ const buttonVariants = cva(
        * the type beside them had been retuned to stay legible, which is what
        * made the controls feel cramped.
        *
-       * The height is the Help topic pill (All topics, Getting started):
-       * 31.08px below 640px and 33.67px from there up. On a phone, a purple
-       * primary and a transparent outline or ghost are another 5% under that
-       * (29.53px). xs stays the shorter mark. A call site that passes a
+       * The height is 2% under the Help topic pill: 30.458px below 640px
+       * and 32.997px from there up. On a phone, a purple primary and a
+       * transparent outline or ghost are another 5% under the pill, then
+       * the same 2% (28.939px). xs stays the shorter mark. A call site that passes a
        * stacked label still grows with it.
        *
        * Expressed as `min-height` with `height: auto`, not as a fixed height.
@@ -62,13 +62,13 @@ const buttonVariants = cva(
        */
       size: {
         xs:   'h-7 min-h-7 px-2.5 text-xs lg:h-auto lg:min-h-[calc(28px*var(--chrome-y))] lg:px-[10px]',
-        sm:   'h-auto min-h-[31.08px] px-3 text-xs sm:min-h-[33.67px] lg:px-[12px]',
-        md:   'h-auto min-h-[31.08px] px-4 sm:min-h-[33.67px] lg:px-[16px]',
-        lg:   'h-auto min-h-[31.08px] px-6 text-base sm:min-h-[33.67px] lg:px-[24px]',
-        xl:   'h-auto min-h-[31.08px] px-8 text-base sm:min-h-[33.67px] lg:px-[32px]',
+        sm:   'h-auto min-h-[30.458px] px-3 text-xs sm:min-h-[32.997px] lg:px-[12px]',
+        md:   'h-auto min-h-[30.458px] px-4 sm:min-h-[32.997px] lg:px-[16px]',
+        lg:   'h-auto min-h-[30.458px] px-6 text-base sm:min-h-[32.997px] lg:px-[24px]',
+        xl:   'h-auto min-h-[30.458px] px-8 text-base sm:min-h-[32.997px] lg:px-[32px]',
         // An icon button has no text to outgrow its box, so it stays a fixed
-        // square — the same height as the topic pill.
-        icon: 'h-[31.08px] w-[31.08px] min-h-[31.08px] min-w-[31.08px] sm:h-[33.67px] sm:w-[33.67px] sm:min-h-[33.67px] sm:min-w-[33.67px]',
+        // square — the same height as the other buttons.
+        icon: 'h-[30.458px] w-[30.458px] min-h-[30.458px] min-w-[30.458px] sm:h-[32.997px] sm:w-[32.997px] sm:min-h-[32.997px] sm:min-w-[32.997px]',
       },
     },
     defaultVariants: {

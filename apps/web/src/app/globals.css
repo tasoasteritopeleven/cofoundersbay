@@ -1787,41 +1787,42 @@ html {
     /* Call sites pin h-7 / h-8 / h-9 / h-10 (28 / 32 / 36 / 40px) for the
        desktop ladder, and older buttons still carry h-11 (44px). Those
        utilities are not breakpoint-scoped, so a phone inherited them.
-       The phone height is the Help topic pill (All topics, Getting
-       started), measured at 31.08px. h-11 and h-12 join the list because
-       that is the height the eye meets on a phone. From 640px the pill is
-       33.67px (the rule after the height restatement). Square controls
+       The phone height is 2% under the Help topic pill (All topics,
+       Getting started): 31.08 × 0.98 = 30.458px. h-11 and h-12 join the
+       list because that is the height the eye meets on a phone. From 640px
+       the same cut is 32.997px (the rule after the height restatement). Square controls
        shrink on both axes; a full-width button only shrinks in height.
        Fields stay 44px. The Ask AI bar is only as tall as the button
        inside it, so it shortens with this height. */
     :is(button, a, [role='tab'], [role='button']):is(.h-7, .h-8, .h-9, .h-10, .h-11, .h-12, .min-h-7, .min-h-8, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .min-h-\[44px\]) {
       height: auto;
-      min-height: 31.08px;
+      min-height: 30.458px;
     }
     :is(button, a, [role='button']):is(.w-7, .w-8, .w-9, .w-10, .w-11, .min-w-\[44px\]),
     :is(button, a, [role='button']).h-10.w-10,
     :is(button, a, [role='button']).h-11.w-11,
     :is(button, a, [role='button']).h-12.w-12 {
-      width: 31.08px;
-      min-width: 31.08px;
+      width: 30.458px;
+      min-width: 30.458px;
     }
 
     /* Purple primary and transparent outline/ghost buttons are 5% under
-       the topic pill on a phone only: 31.08 × 0.95 = 29.53. From 640px
-       they stay on the pill. A stacked label still grows. Attribute
-       selectors, so the utility names are not folded into Tailwind. */
+       the topic pill on a phone, then 2% under that: 29.53 × 0.98 = 28.939.
+       From 640px they stay with the other buttons. A stacked label still
+       grows. Attribute selectors, so the utility names are not folded
+       into Tailwind. */
     :is(button, a):is([class~='bg-primary'], [class~='bg-transparent']):not(.min-h-14):not(.min-h-16) {
       height: auto;
-      min-height: 29.53px;
+      min-height: 28.939px;
     }
-    :is(button, a)[class~='h-[31.08px]'][class~='w-[31.08px]']:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a)[class~='h-[30.458px]'][class~='w-[30.458px]']:is([class~='bg-primary'], [class~='bg-transparent']),
     :is(button, a).h-10.w-10:is([class~='bg-primary'], [class~='bg-transparent']),
     :is(button, a).h-11.w-11:is([class~='bg-primary'], [class~='bg-transparent']),
     :is(button, a).h-12.w-12:is([class~='bg-primary'], [class~='bg-transparent']) {
-      width: 29.53px;
-      min-width: 29.53px;
-      height: 29.53px;
-      min-height: 29.53px;
+      width: 28.939px;
+      min-width: 28.939px;
+      height: 28.939px;
+      min-height: 28.939px;
     }
 
     /* What a fingertip still missed at 390px (measured on 15 pages, 60
@@ -1833,8 +1834,15 @@ html {
       min-height: 44px;
     }
     .tap-target-phone {
-      min-height: 31.08px;
-      min-width: 31.08px;
+      min-height: 30.458px;
+      min-width: 30.458px;
+    }
+    /* py-1.5 pills measure 31.08px from 6px of padding. 0.311px off each
+       side is the 2% cut. Attribute selector, so it is not folded into
+       the py-1.5 utility. */
+    :is(button, a, [role='button'], [role='tab'])[class~='py-1.5'] {
+      padding-top: 5.689px;
+      padding-bottom: 5.689px;
     }
     /* The Ask AI bar follows the button inside it (the topic-pill height). */
     [data-ask-ai] {
@@ -2423,22 +2431,33 @@ html {
   .lg\:h-auto { height: auto; }
 }
 
-/* Help topic pills (All topics, Getting started) measure 33.67px from
-   640px. A single-line h-9…h-12 control comes down to that. One that
+/* Topic pills and the same py-1.5 chips size themselves from padding, so
+   the min-height floor does not shorten them. 0.337px off each side is 2%
+   of the 33.67px pill. On a phone the pill's padding is 6px and the same
+   cut is 0.311px, in the phone block above. */
+@media (min-width: 1024px) {
+  :is(button, a, [role='button'], [role='tab'])[class~='py-1.5'] {
+    padding-top: calc(6px * var(--chrome-y) - 0.337px);
+    padding-bottom: calc(6px * var(--chrome-y) - 0.337px);
+  }
+}
+
+/* Buttons are 2% under the Help topic pill's 33.67px from 640px, so
+   32.997px. A single-line h-9…h-12 control comes down to that. One that
    carries h-auto, or an explicit min-h-14 / min-h-16, keeps the height
    its own label needs. */
 @media (min-width: 640px) {
   :is(button, a, [role='button']):is(.h-9, .h-10, .h-11, .h-12, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .md\:h-9, .md\:h-10, .md\:min-h-9, .md\:min-h-10):not(.h-auto):not(.min-h-14):not(.min-h-16) {
     height: auto;
-    min-height: 33.67px;
+    min-height: 32.997px;
   }
   :is(button, a, [role='button']).h-10.w-10,
   :is(button, a, [role='button']).h-11.w-11,
   :is(button, a, [role='button']).h-12.w-12 {
-    width: 33.67px;
-    min-width: 33.67px;
-    height: 33.67px;
-    min-height: 33.67px;
+    width: 32.997px;
+    min-width: 32.997px;
+    height: 32.997px;
+    min-height: 32.997px;
   }
 }
 

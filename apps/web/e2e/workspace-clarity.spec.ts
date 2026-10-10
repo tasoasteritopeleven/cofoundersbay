@@ -65,9 +65,9 @@ test('project filters communicate selection and keep a phone-sized target', asyn
   await expect(all).toHaveAttribute('aria-pressed', 'false');
   await expect(page.getByRole('link', { name: /^View project/ })).toHaveCount(1);
   if ((page.viewportSize()?.width ?? 1440) < 640) {
-    // The phone button height is the Help topic pill, 31.08px; fields stay 44.
-    // Layout snaps it to 1/64px units, so the box reads just under 31.08.
-    expect((await building.boundingBox())!.height).toBeGreaterThanOrEqual(31.03);
+    // The phone button height is 30.458px; fields stay 44.
+    // Layout snaps it to 1/64px units, so the box reads just under 30.458.
+    expect((await building.boundingBox())!.height).toBeGreaterThanOrEqual(30.40);
   }
 });
 
