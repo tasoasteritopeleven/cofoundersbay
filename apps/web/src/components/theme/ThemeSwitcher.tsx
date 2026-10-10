@@ -44,7 +44,7 @@ export const THEME_OPTIONS = [
     label: 'Cyan',
     description: 'Soft sky blue, cool and clear',
     icon: Palette,
-    swatch: ['#f2f6f7', '#31c1d6', '#346f78'],
+    swatch: ['#f2f6f7', '#66bce1', '#3c6e83'],
   },
   {
     name: 'cofounder' as ThemeName,
