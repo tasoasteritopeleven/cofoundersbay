@@ -386,7 +386,7 @@ function ScoreEmblem({
             </radialGradient>
           </defs>
           <circle cx={cx} cy={cy} r={r - 14} fill={`url(#${glowId}-fill)`} />
-          <circle cx={cx} cy={cy} r={r + 6} fill="none" stroke="hsl(var(--mint-ring, var(--mint-mark, var(--primary))) / 0.29)" strokeWidth={2} />
+          <circle cx={cx} cy={cy} r={r + 6} fill="none" stroke="hsl(var(--mint-ring, var(--mint-mark, var(--primary))))" strokeWidth={2} />
           <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(var(--ring-gold-track))" strokeWidth={10} />
           <circle
             cx={cx}
@@ -398,7 +398,7 @@ function ScoreEmblem({
             strokeLinecap="round"
             strokeDasharray={`${(score / 100) * circ} ${circ}`}
           />
-          <circle cx={cx} cy={cy} r={r - 18} fill="none" stroke="hsl(var(--mint-ring, var(--mint-mark, var(--primary))) / 0.34)" strokeWidth={1.5} />
+          <circle cx={cx} cy={cy} r={r - 18} fill="none" stroke="hsl(var(--mint-ring, var(--mint-mark, var(--primary))))" strokeWidth={1.5} />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2" aria-hidden="true">
           <span className="score-emblem-figure font-bold leading-none tabular-nums tracking-tight">

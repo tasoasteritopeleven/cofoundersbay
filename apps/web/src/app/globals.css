@@ -458,8 +458,8 @@ html {
        letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
        rgb(188, 227, 189) left white at 1.4:1. */
     --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
-    --mint-mark: 138.7 30.3% 56.2%;       /* #6db183 rgb(109, 177, 131): #71b687, 2% darker in OKLab lightness. Bay, outlines, profile circles */
-    --mint-ring: 138.2 33.9% 59.7%;       /* #75bb8b rgb(117, 187, 139): #71b687, 2% lighter. Pastel rings */
+    --mint-mark: 138.7 30.3% 56.2%;       /* #6db183 rgb(109, 177, 131): #71b687, 2% darker in OKLab lightness. Bay and profile fills */
+    --mint-ring: 162.7 20.4% 43.3%;       /* #588578 rgb(88, 133, 120). Rings, chat icon, green outlines, sent-message fill */
     --mint-button-ink: 138.5 36% 18.5%;   /* #1e4029, kept for the contrast record. Buttons no longer use it: white on the pastel is 2.27:1 */
     --mint-ring-hover: 138.2 33.9% 55.5%; /* leftover hover of the pastel fill; buttons now darken --primary */
     --meter-apricot: 22.6 81.4% 68.5%;    /* #f09f6d, the Apricot theme's apricot */
@@ -4071,19 +4071,15 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. "Bay", the chat launcher and a green outline use the sent
-   message green (--primary, rgb(56, 134, 58)). A pastel ring uses
-   --mint-ring. Filled buttons and a sent message use that same green
-   with white letters: white on the ring pastel is 2.27:1. A circle at
-   h-8 or under takes a stronger edge. */
+/* Mint only. Bay stays the deep green. The chat launcher, a green
+   outline, a pastel ring and a sent message use #588578
+   (rgb(88, 133, 120)). White letters on that fill are 4.17:1. Filled
+   buttons stay the deep green with white letters. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--primary));
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
-  --tw-ring-color: hsl(var(--mint-ring) / 0.39);
-}
-html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([class~='h-6'], [class~='h-7'], [class~='h-8'], [class~='w-6'], [class~='w-7'], [class~='w-8']) {
-  --tw-ring-color: hsl(var(--mint-ring) / 0.56);
+  --tw-ring-color: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
   background-color: hsl(var(--mint-mark));
@@ -4121,27 +4117,27 @@ html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) >
    stronger edge. */
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
-  border-color: hsl(var(--primary));
+  border-color: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']) {
-  border-color: hsl(var(--primary));
+  border-color: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] circle.stroke-primary {
-  stroke: hsl(var(--primary));
+  stroke: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) [class~='text-primary'] {
-  color: hsl(var(--primary));
+  color: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))'] {
-  stroke: hsl(var(--primary));
+  stroke: hsl(var(--mint-ring));
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
-  stroke: hsl(var(--primary) / 0.72);
+  stroke: hsl(var(--mint-ring));
 }
-/* Filled mint buttons and a sent message use the deep green, with white
-   letters. White on the ring pastel is 2.27:1; on this fill it is 4.53:1.
-   The chat launcher already uses the same pair. */
+/* Filled mint buttons stay the deep green, with white letters (4.53:1).
+   The chat launcher and a sent message use #588578. White on that fill
+   is 4.17:1; the same green as the letters would be 1:1. */
 html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:not([data-chat-launcher]) {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
@@ -4152,8 +4148,18 @@ html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])
   color: hsl(var(--primary-foreground));
   border-color: color-mix(in hsl, hsl(var(--primary)) 86%, black);
 }
+html[data-theme="minimal"] [data-chat-launcher] {
+  background-color: hsl(var(--mint-ring));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] [data-chat-launcher]:hover {
+  background-color: color-mix(in hsl, hsl(var(--mint-ring)) 86%, black);
+  color: hsl(var(--primary-foreground));
+  border-color: color-mix(in hsl, hsl(var(--mint-ring)) 86%, black);
+}
 html[data-theme="minimal"] [data-own-message] {
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--mint-ring));
   color: hsl(var(--primary-foreground));
 }
 
