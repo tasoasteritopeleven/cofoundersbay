@@ -430,7 +430,7 @@ export function ResearchTemplateTile({
         {/* Pills, so three tags and a count do not read as one phrase. */}
         <div className="mt-2 flex flex-wrap items-center gap-1.5 text-2xs text-muted-foreground">
           {template.tags.map((tag) => (
-            <span key={tag} className="rounded-md bg-muted/70 px-1.5 py-0.5">
+            <span key={tag}>
               <BilingualText en={tag} el={RESEARCH_TAG_EL[tag] ?? tag} compact />
             </span>
           ))}

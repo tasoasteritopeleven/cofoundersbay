@@ -458,7 +458,7 @@ html {
        White on it is about 1.4:1, so the label stays a dark green of the same
        hue (7.17:1 on the fill). */
     --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
-    --mint-mark: 139.3 100% 49.1%;        /* rgb(0, 250, 81), the brightest this green can go */
+    --mint-mark: 138.5 99.5% 36.5%;       /* rgb(0, 186, 58), 20% darker than rgb(0, 250, 81) */
     --primary-foreground: 120 30% 22%;    /* #274927 */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4122,6 +4122,24 @@ html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))']
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
   stroke: hsl(var(--mint-mark) / 0.72);
+}
+
+/* A chip whose words already say the thing does not need a wash behind
+   them. On the cream card those fills read as a stain. The words stay.
+   Avatar marks, pressed controls and block callouts keep their surface. */
+#main-content :is(span, a):is(
+  [class*='bg-status-success-bg'],
+  [class*='bg-status-warning-bg'],
+  [class*='bg-status-danger-bg'],
+  [class*='bg-status-info-bg'],
+  [class*='bg-status-accent-bg'],
+  [class*='bg-status-neutral-bg'],
+  [class~='bg-secondary'],
+  [class~='bg-muted'],
+  [class*='bg-muted/']
+):not(.avatar-initials):not([aria-pressed='true']):not([data-state='active']),
+#main-content button[class*='rounded-full']:is([class~='bg-secondary'], [class~='bg-secondary/30'], [class~='bg-muted'], [class~='bg-muted/30'], [class~='bg-muted/40'], [class~='bg-primary/5'], [class~='bg-primary/10'], [class~='bg-primary/15'], [class~='bg-primary/20']) {
+  background-color: transparent;
 }
 
 /* A description inside a card (a muted sentence that clamps or reads

@@ -210,7 +210,7 @@ export function BoardSummaryPanel({
                 <p className="text-2xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">All Tags</p>
                 <div className="flex flex-wrap gap-1">
                   {stats.allTags.slice(0, 20).map((tag) => (
-                    <span key={tag} className="text-2xs px-1.5 py-0.5 rounded-full bg-secondary text-muted-foreground">{tag}</span>
+                    <span key={tag} className="text-2xs text-muted-foreground">{tag}</span>
                   ))}
                   {stats.allTags.length > 20 && (
                     <span className="text-2xs text-muted-foreground">+{stats.allTags.length - 20}</span>

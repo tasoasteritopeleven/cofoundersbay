@@ -1289,9 +1289,9 @@ export default function ResearchCanvas() {
               </div>
 
               {node.tags && node.tags.length > 0 && (
-                <div className="flex-none px-3 py-1.5 border-t border-border bg-card/30 backdrop-blur-sm flex flex-wrap gap-1">
+                <div className="flex flex-none flex-wrap gap-x-2 border-t border-border px-3 py-1.5">
                   {node.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="px-1.5 py-0.5 rounded text-2xs bg-primary/10 text-primary-accessible">
+                    <span key={tag} className="text-2xs text-muted-foreground">
                       {tag}
                     </span>
                   ))}

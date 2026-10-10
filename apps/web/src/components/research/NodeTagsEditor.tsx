@@ -22,18 +22,6 @@ const SUGGESTED_TAGS = [
   'mentor-notes', 'due-diligence', 'pitch-deck', 'investor',
 ];
 
-const TAG_COLORS: Record<string, string> = {
-  research: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  'market-analysis': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-  competitor: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-  funding: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
-  team: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
-  product: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300',
-  strategy: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
-  validation: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
-  default: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
-};
-
 interface NodeTagsEditorProps {
   tags: string[];
   onChange: (tags: string[]) => void;
@@ -43,10 +31,6 @@ interface NodeTagsEditorProps {
 export function NodeTagsEditor({ tags, onChange, compact = false }: NodeTagsEditorProps) {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-
-  const getTagColor = (tag: string) => {
-    return TAG_COLORS[tag.toLowerCase()] || TAG_COLORS.default;
-  };
 
   const addTag = useCallback((tag: string) => {
     const normalizedTag = tag.toLowerCase().trim().replace(/\s+/g, '-');
@@ -89,7 +73,7 @@ export function NodeTagsEditor({ tags, onChange, compact = false }: NodeTagsEdit
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className={cn('gap-1 pr-1', getTagColor(tag))}
+                  className="gap-1 pr-1"
                 >
                   {tag}
                   <button aria-label={`Remove ${tag}`}
@@ -139,7 +123,7 @@ export function NodeTagsEditor({ tags, onChange, compact = false }: NodeTagsEdit
           <Badge
             key={tag}
             variant="secondary"
-            className={cn('gap-1 pr-1', getTagColor(tag))}
+            className="gap-1 pr-1"
           >
             {tag}
             <button aria-label={`Remove ${tag}`}
@@ -216,10 +200,6 @@ export function NodeFilterBar({
     }
   }, [selectedTags, onTagsChange]);
 
-  const getTagColor = (tag: string) => {
-    return TAG_COLORS[tag.toLowerCase()] || TAG_COLORS.default;
-  };
-
   return (
     <div className="flex items-center gap-3 px-1 py-1">
       <Input
@@ -243,8 +223,8 @@ export function NodeFilterBar({
               className={cn(
                 'text-xs px-2 py-1 rounded-full border whitespace-nowrap transition-all',
                 selectedTags.includes(tag)
-                  ? cn(getTagColor(tag), 'border-foreground/30')
-                  : 'hover:bg-muted/40'
+                  ? 'border-foreground/30 font-medium text-foreground'
+                  : 'border-transparent hover:text-foreground'
               )}
             >
               {tag}
