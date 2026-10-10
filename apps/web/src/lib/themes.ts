@@ -139,8 +139,8 @@ export const themes: Record<ThemeName, ThemeColors> = {
     cardForeground: '30 8% 12%',
     popover: '0 0% 100%',
     popoverForeground: '30 8% 12%',
-    primary: '190 48% 26%',
-    primaryForeground: '0 0% 100%',
+    primary: '120 34.78% 81.96%',
+    primaryForeground: '120 30% 22%',
     secondary: '40 14% 94%',
     secondaryForeground: '30 8% 16%',
     muted: '40 14% 95%',
@@ -151,7 +151,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     destructiveForeground: '0 0% 100%',
     border: '36 12% 88%',
     input: '36 10% 55%',
-    ring: '190 48% 32%',
+    ring: '120 32% 36%',
   },
   apricot: {
     // "Apricot" — legacy inline fallback only; globals.css owns the live tokens.
