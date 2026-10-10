@@ -149,6 +149,11 @@ describe('NeedCard', () => {
     };
     const { rerender } = render(<NeedCard card={base} />);
     for (const label of ['What already exists', 'The outcome it is for', 'Who is missing']) expect(screen.getByText(label)).toBeTruthy();
+    expect(screen.getByText('A pilot in four clinics.').className).toMatch(/italic/);
+    expect(screen.getByText('A growth lead from regulated sales.').className).toMatch(/font-medium/);
+    expect(screen.getByText('A growth lead from regulated sales.').className).not.toMatch(/italic/);
+    expect(screen.getByText('Head of growth', { selector: 'span' }).className).toMatch(/font-medium/);
+    expect(screen.getByText('Clinic acquisition').className).toMatch(/italic/);
     expect(screen.getByText(/1–2% · 30 h\/week/)).toBeTruthy();
     expect(screen.getByText(/does not promise funding/)).toBeTruthy();
     rerender(<NeedCard card={{ ...base, kind: 'cofounder', offer: { ...base.offer, equity: null } }} />);

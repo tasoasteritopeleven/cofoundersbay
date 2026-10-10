@@ -31,13 +31,31 @@ export type NeedCardView = {
   owner?: { displayName: string; headline: string | null; verifiedMethods?: readonly VerificationMethod[] };
 };
 
-function Field({ label, children }: { label: { en: string; el: string }; children: ReactNode }) {
+function Field({
+  label,
+  tone = 'lead',
+  children,
+}: {
+  label: { en: string; el: string };
+  /** lead: the ask, body step, medium. aside: context, italic and muted like an endorsement quote. meta: a count line, the facts step. */
+  tone?: 'lead' | 'aside' | 'meta';
+  children: ReactNode;
+}) {
   return (
     <div>
       <dt className="text-xs text-muted-foreground">
         <BilingualText en={label.en} el={label.el} compact wrap />
       </dt>
-      <dd className="card-body mt-0.5 text-foreground">{children}</dd>
+      <dd
+        className={cn(
+          'mt-0.5',
+          tone === 'meta' ? 'text-xs text-muted-foreground' : 'card-body',
+          tone === 'aside' && 'italic text-muted-foreground',
+          tone === 'lead' && 'font-medium text-foreground',
+        )}
+      >
+        {children}
+      </dd>
     </div>
   );
 }
@@ -54,8 +72,10 @@ function Field({ label, children }: { label: { en: string; el: string }; childre
  * ladder in globals.css (title over byline over the fields' sentences):
  *   meta     kind · version as plain text, the outcome as the card's only pill
  *   title    .card-title
- *   byline   avatar, name with the verified mark, headline under it (never cut)
- *   fields   caption label over .card-body text: missing (and exists, goal), offer
+ *   byline   avatar, name on the subtitle step (medium, foreground), headline under it in the caption step
+ *   fields   a caption over the sentence. Who is missing, and the offer's role
+ *            and terms, are medium; what exists and the goal recede (italic,
+ *            muted), the way an endorsement quote does; evidence is a caption line
  *   facts    one muted line, dot-separated (category, remote, place, stage, commitment)
  *   footer   above a hairline: the non-guarantee sentence, the page's footer, actions
  * A phone sets captions a full step under the body, so a label never reads
@@ -111,7 +131,7 @@ export function NeedCard({
               <AvatarFallback className="bg-primary/15 text-2xs text-foreground">{initialsOf(owner.displayName)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="flex min-w-0 items-center gap-1 text-xs font-medium text-foreground sm:text-sm">
+              <p className="card-subtitle card-byline flex min-w-0 items-center gap-1">
                 <span className="min-w-0 truncate">{owner.displayName}</span>
                 <VerifiedBadge methods={owner.verifiedMethods ?? []} variant="mark" />
               </p>
@@ -122,20 +142,20 @@ export function NeedCard({
       </header>
 
       <dl className="space-y-3">
-        {compact ? null : (
-          <>
-            {card.exists ? <Field label={CMT.exists}>{card.exists}</Field> : null}
-            {card.goal ? <Field label={CMT.goal}>{card.goal}</Field> : null}
-          </>
-        )}
+        {!compact && (card.exists || card.goal) ? (
+          <div className="space-y-2">
+            {card.exists ? <Field label={CMT.exists} tone="aside">{card.exists}</Field> : null}
+            {card.goal ? <Field label={CMT.goal} tone="aside">{card.goal}</Field> : null}
+          </div>
+        ) : null}
         {card.missing ? <Field label={CMT.missing}>{card.missing}</Field> : null}
         <Field label={CMT.offer}>
           <span className="block font-medium">{card.offer?.role || '—'}</span>
-          {offerLine.length ? <span className="block tabular-nums">{offerLine.join(' · ')}</span> : null}
-          {!compact && card.offer.scope ? <span className="mt-1 block">{card.offer.scope}</span> : null}
+          {offerLine.length ? <span className="block font-medium tabular-nums">{offerLine.join(' · ')}</span> : null}
+          {!compact && card.offer.scope ? <span className="mt-1 block font-normal italic text-muted-foreground">{card.offer.scope}</span> : null}
         </Field>
         {!compact && evidence.length ? (
-          <Field label={CMT.evidence}>
+          <Field label={CMT.evidence} tone="meta">
             <ul className="facts-dotted flex flex-wrap gap-x-2">
               {evidence.map((pair) => (
                 <li key={pair.en}><BilingualText en={pair.en} el={pair.el} compact /></li>
