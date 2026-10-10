@@ -458,7 +458,7 @@ html {
        White on it is about 1.4:1, so the label stays a dark green of the same
        hue (7.17:1 on the fill). */
     --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
-    --mint-mark: 129.0 97.3% 66.3%;       /* #55fd6f rgb(85, 253, 111), Bay, rings and green outlines */
+    --mint-mark: 139.3 100% 49.1%;        /* rgb(0, 250, 81), the brightest this green can go */
     --primary-foreground: 120 30% 22%;    /* #274927 */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4074,42 +4074,42 @@ html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--mint-mark));
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
-  --tw-ring-color: hsl(var(--mint-mark) / 0.3);
+  --tw-ring-color: hsl(var(--mint-mark) / 0.39);
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([class~='h-6'], [class~='h-7'], [class~='h-8'], [class~='w-6'], [class~='w-7'], [class~='w-8']) {
-  --tw-ring-color: hsl(var(--mint-mark) / 0.43);
+  --tw-ring-color: hsl(var(--mint-mark) / 0.56);
 }
 html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
   background-color: hsl(var(--mint-mark));
 }
 html[data-theme="minimal"] .avatar-initials[class*='bg-primary/10'] {
-  background-color: hsl(var(--mint-mark) / 0.292);
+  background-color: hsl(var(--mint-mark) / 0.38);
 }
 html[data-theme="minimal"] .avatar-initials[class*='bg-primary/15'] {
-  background-color: hsl(var(--mint-mark) / 0.406);
+  background-color: hsl(var(--mint-mark) / 0.53);
 }
 html[data-theme="minimal"] .avatar-initials[class*='bg-primary/20'] {
-  background-color: hsl(var(--mint-mark) / 0.523);
+  background-color: hsl(var(--mint-mark) / 0.68);
 }
 html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/10'] {
-  background-color: hsl(var(--mint-mark) / 0.42);
+  background-color: hsl(var(--mint-mark) / 0.55);
 }
 html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/15'] {
-  background-color: hsl(var(--mint-mark) / 0.59);
+  background-color: hsl(var(--mint-mark) / 0.77);
 }
 html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/20'] {
-  background-color: hsl(var(--mint-mark) / 0.76);
+  background-color: hsl(var(--mint-mark) / 0.99);
 }
 /* A circle whose edge is the green, not a filled button: the help book,
    and the same border on a profile-sized mark. A solid bg-primary control
    keeps the button pastel. Smaller circles take a stronger edge. */
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
-  border-color: hsl(var(--mint-mark) / 0.28);
+  border-color: hsl(var(--mint-mark) / 0.36);
 }
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']) {
-  border-color: hsl(var(--mint-mark) / 0.5);
+  border-color: hsl(var(--mint-mark) / 0.65);
 }
 html[data-theme="minimal"] circle.stroke-primary {
   stroke: hsl(var(--mint-mark));
@@ -4121,7 +4121,7 @@ html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))']
   stroke: hsl(var(--mint-mark));
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
-  stroke: hsl(var(--mint-mark) / 0.55);
+  stroke: hsl(var(--mint-mark) / 0.72);
 }
 
 /* A description inside a card (a muted sentence that clamps or reads
