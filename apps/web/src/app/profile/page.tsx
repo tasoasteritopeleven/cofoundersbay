@@ -564,7 +564,7 @@ export default function ProfilePage() {
             ) : null,
           ]}
           openTo={<OwnOpenToPill openTo={trust.openTo} />}
-          aside={<RoleBadge role={profile.role} className="text-sm px-3 py-1" />}
+          aside={<RoleBadge role={profile.role} size="sm" className="!pl-0" />}
           actions={
             <>
               <Button size="sm" className="gap-2" asChild>

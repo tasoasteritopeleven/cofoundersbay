@@ -20,7 +20,7 @@ function capped(content: string): string {
 
 /**
  * iOS zooms the whole page into a focused field set under 16px, and fields
- * here sit a notch under their labels (14.406px on a phone). On iOS only,
+ * here sit a notch under their labels (12.410px on a phone). On iOS only,
  * the viewport gains maximum-scale=1, which stops that focus zoom; iOS has
  * ignored the cap for pinch zoom since iOS 10, so people can still zoom to
  * any size. Every other platform keeps the server's viewport (maximum-scale

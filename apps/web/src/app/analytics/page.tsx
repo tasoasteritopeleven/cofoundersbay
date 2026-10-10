@@ -766,11 +766,11 @@ export default function AnalyticsPage() {
 
               {declining.length > 0 && (
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-status-warning-border/50 bg-status-warning-bg/40 p-4">
-                  <div className="min-w-0 space-y-1 text-sm">
-                    <p className="font-semibold">
+                  <div className="min-w-0 space-y-1">
+                    <p className="card-title">
                       <BilingualText en={analyticsEn('declining_prefix')} el={analyticsEl('declining_prefix')} wrap />
                     </p>
-                    <p className="text-muted-foreground">
+                    <p className="card-body text-muted-foreground">
                       {declining.map((m, i) => (
                         <span key={m.label}>
                           {i > 0 ? ' · ' : ''}

@@ -323,6 +323,7 @@ export function EventCard({
           )}
           subtitle={formatEventTime(event.startDate, event.endDate)}
           meta={event.location ? <span className="block truncate">{event.location}</span> : undefined}
+          asideStays
           aside={(
             <Badge variant="outline" className="gap-1">
               <EventTypeIcon type={event.type} />

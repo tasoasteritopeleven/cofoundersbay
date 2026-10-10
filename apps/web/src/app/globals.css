@@ -3510,16 +3510,18 @@ textarea[class~="border-input"]:focus,
     line-height: 1.4;
   }
 
-  /* A card's own title sits on the title step, a notch over the rows and
-     sentences it holds. The rail keeps its compact step. */
+  /* A card's own title sits on the member-name step (14.148), the same
+     step as the page title, over the rows and sentences it holds. The
+     rail's card title sits on the member-subtitle step so a side card
+     never outranks the page. */
   #main-content [data-card] h2.page-section,
   #main-content [data-card] h3.page-section:not(.page-section--compact) {
-    font-size: 15.343px;
+    font-size: 14.148px;
     line-height: 1.35;
   }
   #main-content [data-rail-content] [data-card] h2.page-section,
   #main-content [data-rail-content] [data-card] h3.page-section {
-    font-size: 14.906px;
+    font-size: 13.044px;
     line-height: 1.45;
   }
 
@@ -3608,17 +3610,19 @@ textarea[class~="border-input"]:focus,
 
   #main-content .person-name {
     /* Inherited the body step and sat above the page title.
-       On a phone it uses the title step. From 640px the inherited size
+       On a phone it uses the title step. A wrapped name needs 1.35,
+       the same leading as a card title. From 640px the inherited size
        stays, and that size is already under the title. */
     font-size: 14.148px;
-    line-height: 1.3;
+    line-height: 1.35;
   }
 
   input[data-filter-field]:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
   select[data-filter-field] {
-    /* The discover query and its sort control sit on the same control step
-       as every other field ("Fields read under their labels"). */
-    font-size: 14.406px !important;
+    /* The discover query and its sort control sit on the field step
+       (12.410): under the field title (text-sm, 14.170) and under the
+       field subtitle (text-xs, 12.663). */
+    font-size: 12.410px !important;
   }
 
   /* A paragraph or a card title a card cuts with an ellipsis wraps on a
@@ -3648,8 +3652,8 @@ textarea[class~="border-input"]:focus,
      :where keeps this under the need-card title rule. */
   #main-content p.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
   #main-content h3.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
-  #main-content p.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.person-name):not(.page-title)),
-  #main-content h3.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.person-name):not(.page-title)) {
+  #main-content p.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-stat-label):not(.person-name):not(.page-title):not(.card-title):not(.card-subtitle):not(.card-body)),
+  #main-content h3.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-stat-label):not(.person-name):not(.page-title):not(.card-title):not(.card-subtitle):not(.card-body)) {
     font-size: 14.243px;
     line-height: 1.45;
   }
@@ -3737,8 +3741,8 @@ textarea[class~="border-input"]:focus,
      A pure stat (page-stat), a member name, a card-copy line, a control
      and the rail keep their own steps. An italic quote is one step under
      that sentence. */
-  #main-content [data-card] :is(p, div, span, li, dd, dt).text-sm:not(:is(.page-stat, .person-name, .card-copy, .page-stat-label, .page-stat-meta, button, a, [role='button'], [role='tab'], input, textarea, select)),
-  #main-content [data-card] :is(p, dd, li).text-base:not(:is(.page-stat, .page-figure, .person-name, .font-display)),
+  #main-content [data-card] :is(p, div, span, li, dd, dt, ul, ol, label).text-sm:not(:is(.page-stat, .person-name, .card-copy, .page-stat-label, .page-stat-meta, button, a, [role='button'], [role='tab'], input, textarea, select)),
+  #main-content [data-card] :is(p, div, dd, li).text-base:not(:is(.page-stat, .page-figure, .person-name, .font-display, .card-title)),
   #main-content [data-card] :is(p, dd, li).text-lg:not(.page-section) {
     font-size: 12.921px;
     line-height: 1.45;
@@ -3896,10 +3900,10 @@ textarea[class~="border-input"]:focus,
    sentences, the facts:
 
      step            role                          phone     tablet/desktop
-     .card-title     name or title, semibold       15.343    16.32
-     .card-subtitle  the line under it, muted      14.906    14.28
-     .card-body      sentences, values, figures    14.406    13.77
-     meta            facts, dates, kinds (text-xs) 13.044    13.26
+     .card-title     name or title, semibold       14.148    16.32
+     .card-subtitle  the line under it, muted      13.044    14.28
+     .card-body      sentences, values, figures    12.921    13.77
+     meta            facts, dates, kinds (text-xs) 12.663    13.26
 
    The body sits a notch under the subtitle and the title, so a thesis never
    reads as loud as the byline and a figure inside a round card ("$375K
@@ -3927,19 +3931,23 @@ textarea[class~="border-input"]:focus,
   .card-body { font-size: 1.04954268rem; }
 }
 @media (max-width: 639.98px) {
+  /* Members page on a phone: the name is the page-title step, the line
+     under it is the member subtitle, and a sentence ("Who you are looking
+     for…", "Invests in Mediterranean…") sits on the lead step, under both.
+     A stat figure keeps .page-stat and is not these classes. */
   .card-title,
   #main-content .card-title {
-    font-size: 15.343px;
+    font-size: 14.148px;
     line-height: 1.35;
   }
   .card-subtitle,
   #main-content .card-subtitle {
-    font-size: 14.906px;
+    font-size: 13.044px;
     line-height: 1.45;
   }
   .card-body,
   #main-content .card-body {
-    font-size: 14.406px;
+    font-size: 12.921px;
     line-height: 1.5;
   }
 }
@@ -3969,7 +3977,7 @@ textarea[class~="border-input"]:focus,
 @media (max-width: 639.98px) {
   #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
   #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
-    font-size: 14.406px;
+    font-size: 12.921px;
     line-height: 1.5;
   }
 }
@@ -3995,7 +4003,7 @@ textarea[class~="border-input"]:focus,
 @media (max-width: 639.98px) {
   #main-content [data-card] p[class='font-medium'],
   #main-content [data-card] span[class='font-medium'] {
-    font-size: 14.906px;
+    font-size: 13.044px;
   }
 }
 
@@ -4009,7 +4017,7 @@ textarea[class~="border-input"]:focus,
   #main-content [data-card] h4.text-base,
   #main-content [data-card] h2.text-lg,
   #main-content [data-card] h3.text-lg {
-    font-size: 15.343px;
+    font-size: 14.148px;
     line-height: 1.35;
   }
 }
@@ -4051,10 +4059,12 @@ button[role='combobox'] {
   }
 }
 @media (max-width: 639.98px) {
+  /* Under the field title (text-sm, 14.170) and under a field subtitle
+     (text-xs, 12.663). iOS focus-zoom is stopped by IosFieldZoom. */
   input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
   select,
   textarea,
   button[role='combobox'] {
-    font-size: 14.406px !important;
+    font-size: 12.410px !important;
   }
 }

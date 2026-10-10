@@ -56,6 +56,8 @@ import { qk } from '@/lib/query-keys';
 import { pressableProps } from '@/lib/pressable';
 import { FactLine } from '@/components/common/FactLine';
 import { CardHead } from '@/components/common/CardAnatomy';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { initialsOf } from '@/lib/utils';
 const CATEGORIES = ['All', 'Founders', 'Tech', 'Marketing', 'Design', 'Finance', 'Product', 'Operations', 'Legal'];
 
 const TYPE_FILTERS = [
@@ -129,13 +131,12 @@ function GroupCard({
       <CardContent className="space-y-3">
         <CardHead
           mark={(
-            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground">
-              {group.avatarUrl ? (
-                <img src={group.avatarUrl} alt={group.name} className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
-              ) : (
-                <Users className="icon-md" />
-              )}
-            </div>
+            <Avatar className="h-10 w-10 rounded-xl">
+              <AvatarImage src={group.avatarUrl ?? undefined} alt="" />
+              <AvatarFallback data-keep-icon className="rounded-xl bg-muted text-xs font-semibold text-muted-foreground">
+                {initialsOf(group.name)}
+              </AvatarFallback>
+            </Avatar>
           )}
           title={group.name}
           subtitle={(

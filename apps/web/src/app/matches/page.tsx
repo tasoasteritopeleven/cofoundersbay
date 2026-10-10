@@ -300,7 +300,7 @@ function MatchListRow({
     <ListRowCard
       mark={(
         <Link href={`/profiles/${hit.userId}`}>
-          <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
+          <Avatar className="h-10 w-10 shrink-0">
             <AvatarImage src={hit.avatarUrl ?? undefined} />
             <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{initials}</AvatarFallback>
           </Avatar>

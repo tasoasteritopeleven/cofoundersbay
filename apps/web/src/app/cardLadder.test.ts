@@ -79,9 +79,9 @@ describe('card text ladder', () => {
 
   it('keeps the order on a phone, above the caption step', () => {
     const phone = media(LADDER, 'max-width: 639.98px');
-    expect(size(phone, '#main-content .card-title', 16)).toBe(15.343);
-    expect(size(phone, '#main-content .card-subtitle', 16)).toBe(14.906);
-    expect(size(phone, '#main-content .card-body', 16)).toBe(14.406);
+    expect(size(phone, '#main-content .card-title', 16)).toBe(14.148);
+    expect(size(phone, '#main-content .card-subtitle', 16)).toBe(13.044);
+    expect(size(phone, '#main-content .card-body', 16)).toBe(12.921);
   });
 
   it('sets field text under its label (text-sm) at every width', () => {
@@ -90,8 +90,8 @@ describe('card text ladder', () => {
     // Tablet: under text-sm (14.28px).
     expect(size(fields.slice(0, fields.indexOf('@media')), field, 16)).toBeLessThan(14.28);
     expect(size(media(fields, 'min-width: 1024px'), field, 13.12)).toBeLessThan(14.28);
-    // Phone: the control step, under the phone text-sm (14.906px).
-    expect(size(media(fields, 'max-width: 639.98px'), field, 16)).toBe(14.406);
+    // Phone: under the field title (text-sm, 14.170) and the field subtitle (text-xs, 12.663).
+    expect(size(media(fields, 'max-width: 639.98px'), field, 16)).toBe(12.410);
     expect(CSS).not.toMatch(/font-size:\s*16\.16px\s*!important/);
   });
 

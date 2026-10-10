@@ -37,14 +37,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
-import { StatusText } from '@/components/common/StatusText';
 import { SaveItemButton } from '@/components/common/SaveItemButton';
 import { ListRowCard } from '@/components/common/ListRowCard';
 import { jobsEn, jobsEl } from '@/lib/i18n/strings-jobs';
@@ -89,8 +87,7 @@ function JobCard({ job, featured = false }: { job: JobPostingView; featured?: bo
       )}
       title={job.title}
       titleHref={job.creator?.id ? `/profiles/${job.creator.id}` : undefined}
-      badge={job.role ? <Badge variant="outline" className="text-xs"><StatusText value={job.role} /></Badge> : undefined}
-      headline={[job.creator.displayName, job.type, place].filter(Boolean).join(' · ')}
+      headline={[job.creator.displayName, job.role, job.type, place].filter(Boolean).join(' · ')}
       actions={<SaveItemButton kind="job" itemId={job.id} title={job.title} />}
     />
   );

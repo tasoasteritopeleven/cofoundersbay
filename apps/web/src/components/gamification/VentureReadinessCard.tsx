@@ -173,11 +173,11 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        {/* The gauge beside its words at every width: the words are
-            sentences, and sentences in a card start on its left axis. */}
-        <div className="mb-4 flex items-center gap-4">
+        {/* The gauge is the figure. The sentences sit under it, on the
+            card's left axis, the same edge as the title. */}
+        <div className="mb-4 space-y-3">
           <RadialGauge score={vrs.overall} />
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0">
             <p className={cn('text-sm font-semibold', tierColor)}>
               <BilingualText en={`${tierEn} progress`} el={`${tierEl} πρόοδος`} />
             </p>

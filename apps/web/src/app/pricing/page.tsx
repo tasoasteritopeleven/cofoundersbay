@@ -295,10 +295,10 @@ export default function PricingPage() {
                   {/* Price */}
                   <div className="mb-6">
                     {isEnterprise ? (
-                      <div className="text-lg font-semibold text-foreground"><BilingualText en="Custom" el="Κατά περίπτωση" compact /></div>
+                      <div className="card-body font-semibold text-foreground"><BilingualText en="Custom" el="Κατά περίπτωση" compact /></div>
                     ) : (
                       <div className="flex items-baseline gap-1">
-                        <span className="text-lg font-semibold tabular-nums text-foreground">${price}</span>
+                        <span className="card-body font-semibold tabular-nums text-foreground">${price}</span>
                         <span className="text-sm text-muted-foreground">/{annual ? 'yr' : 'mo'}</span>
                       </div>
                     )}
@@ -435,9 +435,9 @@ export default function PricingPage() {
               a: { en: 'Write to enterprise@cofounderbay.com; pricing for them is agreed case by case.', el: 'Γράψτε στο enterprise@cofounderbay.com· η τιμή τους συμφωνείται κατά περίπτωση.' },
             },
           ].map(({ q, a }) => (
-            <div key={q.en} className="rounded-xl border border-border bg-card/50 p-5">
-              <h3 className="font-semibold text-foreground"><BilingualText en={q.en} el={q.el} wrap /></h3>
-              <p className="mt-2 text-sm text-muted-foreground"><BilingualText en={a.en} el={a.el} wrap /></p>
+            <div key={q.en} data-card="" className="rounded-xl border border-border bg-card/50 p-5">
+              <h3 className="card-title text-foreground"><BilingualText en={q.en} el={q.el} wrap /></h3>
+              <p className="card-body mt-2 text-muted-foreground"><BilingualText en={a.en} el={a.el} wrap /></p>
             </div>
           ))}
         </div>

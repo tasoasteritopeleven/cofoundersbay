@@ -21,8 +21,9 @@
 //   centered    centred text in a card that is not a stat card.
 //   loneRight   a right-aligned line with nothing to its left.
 // Anatomy (the Endorsements/Connections card, measured 2026-10-10: 16px
-// inset on a phone and 24px from 640px, a 2.5rem mark, title 15.343/16.32,
-// the line under it no louder than 14.906/14.28):
+// inset on a phone and 24px from 640px, a 2.5rem mark, title 14.148/16.32
+// (the Members name on a phone), the line under it no louder than
+// 13.044/14.28):
 //   titleStep   the card's head title is off the card-title step by >0.4px
 //               (a display title, an h1 or a stat figure is exempt).
 //   subStep     the line under the title is louder than the subtitle step.
@@ -84,7 +85,7 @@ for (const route of routes) {
     const main = document.querySelector('main#main-content') ?? document.querySelector('main, [role="main"]') ?? document.body;
     const shown = (el) => el.checkVisibility?.({ checkOpacity: true, checkVisibilityCSS: true }) ?? true;
     const FLOAT = '[role=dialog],[role=alertdialog],[role=menu],[role=listbox],[role=tooltip],[data-radix-popper-content-wrapper],[data-sonner-toaster],[data-rail-surface]';
-    const CONTROL = 'button,input,select,textarea,[role=button],[role=tab],[role=switch],[role=checkbox],[role=radio],[role=option],[role=menuitem],[role=slider],[contenteditable=true]';
+    const CONTROL = 'button,a,input,select,textarea,[role=button],[role=tab],[role=switch],[role=checkbox],[role=radio],[role=option],[role=menuitem],[role=slider],[contenteditable=true]';
     const fs = (el) => parseFloat(getComputedStyle(el).fontSize);
     const label = (el) => {
       const cls = typeof el.className === 'string' ? el.className.split(/\s+/).filter(Boolean).slice(0, 3).join('.') : '';
@@ -310,8 +311,8 @@ for (const route of routes) {
       // Anatomy against the Endorsements/Connections card.
       if (!stat && titleEl && tg) {
         const root = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        const TITLE = W < 640 ? 15.343 : 16.32;
-        const SUB = W < 640 ? 14.906 : 14.28;
+        const TITLE = W < 640 ? 14.148 : 16.32;
+        const SUB = W < 640 ? 13.044 : 14.28;
         const display = titleEl.closest('h1') || card.matches('[data-card-hero]') || card.querySelector('h1');
         const head = tg.top - inner.top < 90;
         if (head && !display && Math.abs(tSize - TITLE) > 0.4) issues.titleStep.push(`${label(titleEl)} ${tSize.toFixed(2)}`);
@@ -357,7 +358,7 @@ for (const route of routes) {
         const sizes = [lab, ...lab.querySelectorAll('*')].filter((n) => ownText(n) && shown(n) && !n.closest('.sr-only,[aria-hidden="true"]')).map(fs);
         labSize = sizes.length ? Math.max(...sizes) : fs(lab);
       }
-      const ref = labSize ?? (W < 640 ? 14.906 : 14.28);
+      const ref = labSize ?? (W < 640 ? 14.17 : 14.28);
       const bad = v >= ref - 0.05 || (ph !== null && ph >= ref - 0.05);
       if (bad) fields.push(`${f.tagName.toLowerCase()}[${f.type ?? ''}] "${(f.placeholder || f.getAttribute('aria-label') || f.name || '').slice(0, 30)}" value ${v.toFixed(2)} ph ${ph?.toFixed(2) ?? '-'} label ${labSize?.toFixed(2) ?? 'none'}`);
     }

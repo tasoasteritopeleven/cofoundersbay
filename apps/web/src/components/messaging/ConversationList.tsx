@@ -272,7 +272,7 @@ export function ConversationList({
       <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
         {pinnedConversations.length > 0 && (
           <div className="mb-2">
-            <p className="mb-1 px-3 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="mb-1 px-2 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               <BilingualText en={messagesEn('pinned')} el={messagesEl('pinned')} compact />
             </p>
             {pinnedConversations.map((conv) => (
@@ -293,7 +293,7 @@ export function ConversationList({
         {regularConversations.length > 0 && (
           <div>
             {pinnedConversations.length > 0 && (
-              <p className="mb-1 px-3 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mb-1 px-2 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 <BilingualText en={messagesEn('all_messages')} el={messagesEl('all_messages')} compact />
               </p>
             )}

@@ -83,9 +83,9 @@ export function ProfileHero({
                 <Heading className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">{name}</Heading>
                 {nameBadge}
               </div>
-              {headline ? <div className="text-base text-muted-foreground">{headline}</div> : null}
+              {headline ? <div className="card-subtitle">{headline}</div> : null}
               {facts.length ? (
-                <ul className="facts-dotted flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-sm text-muted-foreground">
+                <ul className="facts-dotted flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-xs text-muted-foreground">
                   {facts.map((fact, i) => (
                     <li key={i} className="flex min-w-0 items-center gap-1.5">{fact}</li>
                   ))}
