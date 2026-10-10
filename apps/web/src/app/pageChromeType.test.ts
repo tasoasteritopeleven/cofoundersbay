@@ -89,7 +89,7 @@ describe('page chrome type harmony', () => {
     const label = toPx(firstFontSize(desk, 'p.page-stat-label'), DESKTOP_ROOT_PX);
     const tighten = 0.99;
 
-    expect(title).toBeCloseTo(18 * tighten, 1);
+    expect(title).toBeCloseTo(18 * tighten * 0.98, 1);
     expect(stat).toBeCloseTo(title, 5);
     expect(section).toBeCloseTo(FLOOR_PX * RATIO ** 4 * tighten, 1);
     expect(figure).toBeCloseTo(FLOOR_PX * RATIO ** 3 * tighten, 1);
@@ -113,7 +113,7 @@ describe('page chrome type harmony', () => {
 
     const twoXl = toPx(firstFontSize(desk, '#main-content .text-2xl'), DESKTOP_ROOT_PX);
 
-    expect(twoXl).toBeCloseTo(17.82, 1);
+    expect(twoXl).toBeCloseTo(18 * 0.99 * 0.98, 1);
     expect(block).toMatch(/#main-content \.text-\\\[11px\\\][\s\S]*?font-size:\s*12\.2412px/);
     expect(CSS).toMatch(/#main-content \[data-rail-content\] \.text-2xl/);
   });

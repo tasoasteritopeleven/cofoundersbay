@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
  * flatter five-size cluster (title 15.42, sections 14.28). Every page now
  * shares the steps tuned on those three:
  *
- *   caption 12.24 · meta 13.13 · body 14.14 · figure 15.27 · section 16.49 · title 17.82
+ *   caption 12.24 · meta 12.87 · body 13.86 · figure 15.27 · section 16.49 · title 17.46
  *
  * This reads the CSS, resolves rem against the root each breakpoint uses,
  * and checks that the Tailwind steps and the named roles land on those
@@ -25,7 +25,7 @@ const PAGE_RAIL = readFileSync('src/components/layout/PageRail.tsx', 'utf8');
 const PHONE_ROOT_PX = 16;
 const DESKTOP_ROOT_PX = 0.82 * 16;
 
-const STEP = { caption: 12.2412, meta: 13.1287, body: 14.1386, section: 16.4875, title: 17.82 };
+const STEP = { caption: 12.2412, meta: 12.8661, body: 13.8558, section: 16.4875, title: 17.4636 };
 
 function toPx(value: string, rootPx: number): number {
   const parts = /^max\((.+)\)$/.exec(value)?.[1].split(',') ?? [value];

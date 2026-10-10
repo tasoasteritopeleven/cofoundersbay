@@ -72,9 +72,9 @@ describe('card text ladder', () => {
     const title = size(desk, '.card-title', 13.12);
     const subtitle = size(desk, '.card-subtitle', 13.12);
     const body = size(desk, '.card-body', 13.12);
-    expect(title).toBeCloseTo(16.32, 1);
-    expect(subtitle).toBeCloseTo(14.28, 1);
-    expect(body).toBeCloseTo(13.77, 1);
+    expect(title).toBeCloseTo(15.995, 1);
+    expect(subtitle).toBeCloseTo(13.996, 1);
+    expect(body).toBeCloseTo(13.495, 1);
   });
 
   it('keeps the order on a phone, above the caption step', () => {

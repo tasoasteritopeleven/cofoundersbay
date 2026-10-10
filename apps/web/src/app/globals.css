@@ -2597,7 +2597,7 @@ span.page-stat,
 div.page-stat,
 dd.page-stat,
 p.founder-dash-stat {
-  font-size: max(12.2412px, 1.11375rem);
+  font-size: max(12.2412px, 1.091475rem);
   line-height: 1.60875rem;
 }
 p.page-stat-label,
@@ -2639,7 +2639,7 @@ p.founder-dash-figure {
   div.page-stat,
   dd.page-stat,
   p.founder-dash-stat {
-    font-size: max(12.2412px, 1.11375rem);
+    font-size: max(12.2412px, 1.091475rem);
     line-height: 1.60875rem;
   }
   p.page-stat-label,
@@ -2667,7 +2667,7 @@ p.founder-dash-figure {
   div.page-stat,
   dd.page-stat,
   p.founder-dash-stat {
-    font-size: max(12.2412px, 1.35823171rem);
+    font-size: max(12.2412px, 1.33106708rem);
     line-height: 1.96189025rem;
   }
   p.page-stat-label,
@@ -2698,7 +2698,7 @@ p.founder-dash-figure {
 h3.page-section.page-section--compact,
 [data-rail-content] h3.page-section,
 [data-rail-content] h3.founder-dash-section {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.299375rem;
 }
 
@@ -2706,7 +2706,7 @@ h3.page-section.page-section--compact,
   h3.page-section.page-section--compact,
   [data-rail-content] h3.page-section,
   [data-rail-content] h3.founder-dash-section {
-    font-size: 0.88366163rem;
+    font-size: 0.86598840rem;
     line-height: 1.299375rem;
   }
 }
@@ -2714,7 +2714,7 @@ h3.page-section.page-section--compact,
   h3.page-section.page-section--compact,
   [data-rail-content] h3.page-section,
   [data-rail-content] h3.founder-dash-section {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
 }
@@ -2735,11 +2735,11 @@ h3.page-section.page-section--compact,
    the one below it, and every Tailwind step lands on one of them:
 
      caption 12.24   2xs, stat labels, the bilingual floor
-     meta    13.13   xs, tabs, small buttons, chips
-     body    14.14   sm, copy, inputs, rail card titles
+     meta    12.87   xs, tabs, small buttons, chips
+     body    13.86   sm, copy, rail card titles
      figure  15.27   in-card figures ($375K)
      section 16.49   card and section titles, base, lg
-     title   17.82   h1, stat figures, xl and above (ceiling below)
+     title   17.46   h1, stat figures, xl and above (ceiling below)
 
    The readiness gauge (32px) is the one display figure. Same pixels on
    phone and desktop. The left SideNav keeps its own chrome ladder.
@@ -2750,11 +2750,11 @@ h3.page-section.page-section--compact,
   line-height: 1rem;
 }
 #main-content .text-xs {
-  font-size: 0.82054294rem;
+  font-size: 0.80413208rem;
   line-height: 1.2375rem;
 }
 #main-content .text-sm {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.299375rem;
 }
 /* Tailwind's base (16.32) and lg (18) sat 0.2px either side of the section
@@ -2770,11 +2770,11 @@ h3.page-section.page-section--compact,
    (inputs, selects) still resolves to its sm step. */
 @media (min-width: 640px) {
   #main-content .sm\:text-xs {
-    font-size: 0.82054294rem;
+    font-size: 0.80413208rem;
     line-height: 1.2375rem;
   }
   #main-content .sm\:text-sm {
-    font-size: 0.88366163rem;
+    font-size: 0.86598840rem;
     line-height: 1.299375rem;
   }
   #main-content .sm\:text-lg {
@@ -2791,14 +2791,14 @@ h3.page-section.page-section--compact,
 /* Tabs switch the copy under them, so they sit a step below it. After
    `.text-sm`: the trigger carries that class. */
 #main-content [role='tab'] {
-  font-size: 0.82054294rem;
+  font-size: 0.80413208rem;
   line-height: 1.2375rem;
 }
 /* The rail is ~240px wide: every heading step stays on its title size. */
 #main-content [data-rail-content] .text-base,
 #main-content [data-rail-content] .text-lg,
 #main-content [data-rail-content] .sm\:text-lg {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.299375rem;
 }
 
@@ -2808,11 +2808,11 @@ h3.page-section.page-section--compact,
     line-height: max(1.24402439rem, 16.3216px);
   }
   #main-content .text-xs {
-    font-size: 1.00066212rem;
+    font-size: 0.98064888rem;
     line-height: 1.50914634rem;
   }
   #main-content .text-sm {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
   #main-content .text-base,
@@ -2824,11 +2824,11 @@ h3.page-section.page-section--compact,
   }
   #main-content .sm\:text-xs,
   #main-content .lg\:text-xs {
-    font-size: 1.00066212rem;
+    font-size: 0.98064888rem;
     line-height: 1.50914634rem;
   }
   #main-content .sm\:text-sm {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
   #main-content .sm\:text-lg,
@@ -2837,13 +2837,13 @@ h3.page-section.page-section--compact,
     line-height: 1.81097561rem;
   }
   #main-content [role='tab'] {
-    font-size: 1.00066212rem;
+    font-size: 0.98064888rem;
     line-height: 1.50914634rem;
   }
   #main-content [data-rail-content] .text-base,
   #main-content [data-rail-content] .text-lg,
   #main-content [data-rail-content] .sm\:text-lg {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
 }
@@ -2873,7 +2873,7 @@ h3.page-section.page-section--compact,
 #main-content .text-6xl,
 #main-content .text-7xl,
 #main-content .text-\[2\.75rem\] {
-  font-size: max(12.2412px, 1.11375rem);
+  font-size: max(12.2412px, 1.091475rem);
   line-height: 1.60875rem;
 }
 #main-content .text-\[11px\],
@@ -2888,7 +2888,7 @@ h3.page-section.page-section--compact,
 #main-content [data-rail-content] .text-2xl,
 #main-content [data-rail-content] .sm\:text-2xl,
 #main-content [data-rail-content] .text-3xl {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.299375rem;
 }
 @media (min-width: 1024px) {
@@ -2908,7 +2908,7 @@ h3.page-section.page-section--compact,
   #main-content .text-6xl,
   #main-content .text-7xl,
   #main-content .text-\[2\.75rem\] {
-    font-size: max(12.2412px, 1.35823171rem);
+    font-size: max(12.2412px, 1.33106708rem);
     line-height: 1.96189025rem;
   }
   #main-content [data-rail-content] .text-xl,
@@ -2916,7 +2916,7 @@ h3.page-section.page-section--compact,
   #main-content [data-rail-content] .text-2xl,
   #main-content [data-rail-content] .sm\:text-2xl,
   #main-content [data-rail-content] .text-3xl {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
 }
@@ -2932,7 +2932,7 @@ h3.page-section.page-section--compact,
 #main-content div.page-stat,
 #main-content dd.page-stat,
 #main-content p.founder-dash-stat {
-  font-size: max(12.2412px, 1.11375rem);
+  font-size: max(12.2412px, 1.091475rem);
   line-height: 1.60875rem;
 }
 #main-content p.page-stat-label,
@@ -2958,7 +2958,7 @@ h3.page-section.page-section--compact,
 #main-content h3.page-section.page-section--compact,
 #main-content [data-rail-content] h3.page-section,
 #main-content [data-rail-content] h3.founder-dash-section {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.299375rem;
 }
 @media (min-width: 1024px) {
@@ -2970,7 +2970,7 @@ h3.page-section.page-section--compact,
   #main-content div.page-stat,
   #main-content dd.page-stat,
   #main-content p.founder-dash-stat {
-    font-size: max(12.2412px, 1.35823171rem);
+    font-size: max(12.2412px, 1.33106708rem);
     line-height: 1.96189025rem;
   }
   #main-content p.page-stat-label,
@@ -2996,7 +2996,7 @@ h3.page-section.page-section--compact,
   #main-content h3.page-section.page-section--compact,
   #main-content [data-rail-content] h3.page-section,
   #main-content [data-rail-content] h3.founder-dash-section {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
     line-height: 1.58460366rem;
   }
 }
@@ -3043,20 +3043,20 @@ h3.page-section.page-section--compact,
 #main-content .type-ui.text-base,
 #main-content .type-ui.sm\:text-sm,
 #main-content input.type-ui {
-  font-size: 0.82054294rem;
+  font-size: 0.80413208rem;
   line-height: 1.35;
 }
 #main-content .type-identity,
 #main-content .type-identity.text-sm,
 #main-content .type-identity.text-xs {
-  font-size: 0.88366163rem;
+  font-size: 0.86598840rem;
   line-height: 1.3;
 }
 #main-content .type-page,
 #main-content .type-page.text-xl,
 #main-content .type-page.text-2xl,
 #main-content h1.type-page {
-  font-size: 1.11375rem;
+  font-size: 1.091475rem;
   line-height: 1.3;
 }
 @media (min-width: 1024px) {
@@ -3078,18 +3078,18 @@ h3.page-section.page-section--compact,
   #main-content .type-ui.text-base,
   #main-content .type-ui.sm\:text-sm,
   #main-content input.type-ui {
-    font-size: 1.00066212rem;
+    font-size: 0.98064888rem;
   }
   #main-content .type-identity,
   #main-content .type-identity.text-sm,
   #main-content .type-identity.text-xs {
-    font-size: 1.07763613rem;
+    font-size: 1.05608341rem;
   }
   #main-content .type-page,
   #main-content .type-page.text-xl,
   #main-content .type-page.text-2xl,
   #main-content h1.type-page {
-    font-size: 1.35823171rem;
+    font-size: 1.33106708rem;
   }
 }
 
@@ -3377,7 +3377,7 @@ textarea[class~="border-input"]:focus,
 
 /* ── Phone reading scale ─────────────────────────────────────────────────
    The product ladder above is the same pixels on a phone as on a desktop
-   (caption 12.24, body 14.14, title 17.82). That is a desk density. Below
+   (caption 12.24, body 13.86, title 17.46). That is a desk density. Below
    640px the steps move up to sizes a hand-held screen can read, and the
    line-height opens for Greek accents:
 
@@ -3971,10 +3971,10 @@ textarea[class~="border-input"]:focus,
    sentences, the facts:
 
      step            role                          phone     tablet/desktop
-     .card-title     name or title, semibold       14.148    16.32
-     .card-subtitle  the line under it, muted      13.044    14.28
-     .card-body      sentences, values, figures    12.921    13.77
-     meta            facts, dates, kinds (text-xs) 12.663    13.26
+     .card-title     name or title, semibold       14.148    16.00
+     .card-subtitle  the line under it, muted      13.044    14.00
+     .card-body      sentences, values, figures    12.921    13.49
+     meta            facts, dates, kinds (text-xs) 12.663    12.87
 
    The body sits a notch under the subtitle and the title, so a thesis never
    reads as loud as the byline and a figure inside a round card ("$375K
@@ -3983,12 +3983,12 @@ textarea[class~="border-input"]:focus,
    Rem against the 16px root, restated against the 82% desktop root, and px
    on a phone like the reading scale; `.probes/card_audit.mjs` measures it. */
 .card-title {
-  font-size: 1.0201rem;
+  font-size: 0.999698rem;
   line-height: 1.35;
   font-weight: 600;
 }
 .card-subtitle {
-  font-size: 0.8925875rem;
+  font-size: 0.87473575rem;
   line-height: 1.45;
   color: hsl(var(--muted-foreground));
 }
@@ -4000,13 +4000,13 @@ textarea[class~="border-input"]:focus,
   font-weight: 500;
 }
 .card-body {
-  font-size: 0.8606rem;
+  font-size: 0.843388rem;
   line-height: 1.55;
 }
 @media (min-width: 1024px) {
-  .card-title { font-size: 1.24402439rem; }
-  .card-subtitle { font-size: 1.08852134rem; }
-  .card-body { font-size: 1.04954268rem; }
+  .card-title { font-size: 1.21914390rem; }
+  .card-subtitle { font-size: 1.06675091rem; }
+  .card-body { font-size: 1.02855183rem; }
 }
 @media (max-width: 639.98px) {
   /* Members page on a phone: the name is the page-title step, the line
@@ -4052,7 +4052,7 @@ textarea[class~="border-input"]:focus,
 #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
 [role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
 [role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
-  font-size: 0.8606rem;
+  font-size: 0.843388rem;
   line-height: 1.55;
 }
 @media (min-width: 1024px) {
@@ -4060,7 +4060,7 @@ textarea[class~="border-input"]:focus,
   #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
   [role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
   [role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
-    font-size: 1.04954268rem;
+    font-size: 1.02855183rem;
   }
 }
 
@@ -4177,7 +4177,7 @@ html[data-theme="minimal"] [data-own-message] {
 [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
 #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
 #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
-  font-size: 0.8606rem;
+  font-size: 0.843388rem;
   line-height: 1.55;
 }
 /* #main-content restates .text-sm from 1024px up at (1,1,0); the id keeps
@@ -4187,7 +4187,7 @@ html[data-theme="minimal"] [data-own-message] {
   [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
   #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
   #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
-    font-size: 1.04954268rem;
+    font-size: 1.02855183rem;
   }
 }
 @media (max-width: 639.98px) {
@@ -4205,7 +4205,7 @@ html[data-theme="minimal"] [data-own-message] {
 [data-card] span[class='font-medium'],
 #main-content [data-card] p[class='font-medium'],
 #main-content [data-card] span[class='font-medium'] {
-  font-size: 0.8925875rem;
+  font-size: 0.87473575rem;
   line-height: 1.45;
 }
 @media (min-width: 1024px) {
@@ -4213,7 +4213,7 @@ html[data-theme="minimal"] [data-own-message] {
   [data-card] span[class='font-medium'],
   #main-content [data-card] p[class='font-medium'],
   #main-content [data-card] span[class='font-medium'] {
-    font-size: 1.08852134rem;
+    font-size: 1.06675091rem;
   }
 }
 @media (max-width: 639.98px) {
@@ -4264,14 +4264,14 @@ input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='
 select,
 textarea,
 button[role='combobox'] {
-  font-size: 0.8606rem !important;
+  font-size: 0.843388rem !important;
 }
 @media (min-width: 1024px) {
   input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
   select,
   textarea,
   button[role='combobox'] {
-    font-size: 1.04954268rem !important;
+    font-size: 1.02855183rem !important;
   }
 }
 @media (max-width: 639.98px) {
@@ -4283,4 +4283,23 @@ button[role='combobox'] {
   button[role='combobox'] {
     font-size: 12.410px !important;
   }
+}
+
+/* Search fields share the Member Directory search: Input h-11,
+   calc(2.75rem * --chrome-y). At the 82% desktop root that is 35.72px;
+   at a 16px root it is 43.56px. h-8 and h-9 searches take the same box.
+   Ask AI is a composer, not a search field. Buttons keep their own height. */
+input[type='search'],
+input:is(
+  [placeholder*='Search'],
+  [placeholder*='search'],
+  [placeholder*='Αναζήτηση'],
+  [placeholder*='αναζήτηση'],
+  [aria-label*='Search'],
+  [aria-label*='search'],
+  [aria-label*='Αναζήτηση'],
+  [aria-label*='αναζήτηση']
+):not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='file']) {
+  height: calc(2.75rem * var(--chrome-y));
+  min-height: calc(2.75rem * var(--chrome-y));
 }
