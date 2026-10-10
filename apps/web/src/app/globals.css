@@ -458,7 +458,7 @@ html {
        White on it is about 1.4:1, so the label stays a dark green of the same
        hue (7.17:1 on the fill). */
     --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
-    --mint-mark: 123.9 76.4% 76.1%;       /* #93f19a rgb(147, 241, 154), Bay and green outlines */
+    --mint-mark: 126.1 89.8% 72.0%;       /* #77f885 rgb(119, 248, 133), Bay and green outlines */
     --primary-foreground: 120 30% 22%;    /* #274927 */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
