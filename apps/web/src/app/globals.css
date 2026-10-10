@@ -4112,9 +4112,8 @@ html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) >
   background-color: hsl(var(--mint-mark) / 0.99);
 }
 /* A circle whose edge is the green, not a filled button: the help book,
-   and the same border on a profile-sized mark. Filled buttons are the
-   deep green with white letters, set below. Smaller circles take a
-   stronger edge. */
+   and the same border on a profile-sized mark. The edge is #588578.
+   Filled buttons stay the deep green with white letters, set below. */
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
   border-color: hsl(var(--mint-ring));
