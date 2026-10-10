@@ -34,6 +34,11 @@ const child = spawn(process.execPath, [next, activeBuild ? 'start' : 'dev', web,
     PREVIEW_ALLOWED_DEV_ORIGINS: process.env.PREVIEW_ALLOWED_DEV_ORIGINS || [previewHost, '**.preview.emergentcf.cloud'].join(','),
     NEXT_PUBLIC_API_USE_PROXY: '1',
     WATCHPACK_POLLING: '1000',
+    EMERGENT_PREVIEW_RUNTIME: '1',
+    NEXT_PUBLIC_EMERGENT_PREVIEW: '1',
+    // Host sources are HTTPS-only when this HTTPS preview is embedded. No
+    // wildcard: other tenants and arbitrary websites cannot frame the app.
+    PREVIEW_FRAME_ANCESTORS: process.env.PREVIEW_FRAME_ANCESTORS || 'app.emergent.sh emergent.sh app.emergentagent.com app.emergent.host',
     ...(activeBuild ? { NODE_ENV: 'production', EMERGENT_PREVIEW_DIST_DIR: activeBuild } : {}),
   },
 });
