@@ -13,7 +13,7 @@ describe('phone touch floor', () => {
     expect(media).toContain('max-width: 639.98px');
     expect(media).not.toContain('min-width');
     const rule = css.slice(start, css.indexOf('.tap-target-y', start));
-    expect(rule).toContain('min-height: 39.71px');
+    expect(rule).toContain('min-height: 31.08px');
     expect(rule).toContain('.h-7');
     expect(rule).toContain('.h-8');
     expect(rule).toContain('.h-9');

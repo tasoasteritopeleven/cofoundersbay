@@ -48,9 +48,9 @@ const buttonVariants = cva(
        * the type beside them had been retuned to stay legible, which is what
        * made the controls feel cramped.
        *
-       * Nothing below `lg` changes: there the root is 100%, the rem values
-       * already render at their nominal size, and the 44px touch heights are
-       * deliberate. The ladder is 28 / 32 / 36 / 40 / 48.
+       * The height is the Help topic pill (All topics, Getting started):
+       * 31.08px below 640px and 33.67px from there up. xs stays the shorter
+       * mark. A call site that passes `h-auto` still grows with its label.
        *
        * Expressed as `min-height` with `height: auto`, not as a fixed height.
        * A fixed one is indistinguishable from the ladder for an ordinary
@@ -62,13 +62,13 @@ const buttonVariants = cva(
        */
       size: {
         xs:   'h-7 min-h-7 px-2.5 text-xs lg:h-auto lg:min-h-[calc(28px*var(--chrome-y))] lg:px-[10px]',
-        sm:   'h-11 min-h-11 px-3 text-xs md:h-8 md:min-h-8 lg:h-auto lg:min-h-[calc(32px*var(--chrome-y))] lg:px-[12px]',
-        md:   'h-11 min-h-11 px-4 md:h-9 md:min-h-9 lg:h-auto lg:min-h-[calc(36px*var(--chrome-y))] lg:px-[16px]',
-        lg:   'h-11 min-h-11 px-6 text-base md:h-10 md:min-h-10 lg:h-auto lg:min-h-[calc(40px*var(--chrome-y))] lg:px-[24px]',
-        xl:   'h-12 px-8 text-base lg:h-auto lg:min-h-[calc(48px*var(--chrome-y))] lg:px-[32px]',
+        sm:   'h-auto min-h-[31.08px] px-3 text-xs sm:min-h-[33.67px] lg:px-[12px]',
+        md:   'h-auto min-h-[31.08px] px-4 sm:min-h-[33.67px] lg:px-[16px]',
+        lg:   'h-auto min-h-[31.08px] px-6 text-base sm:min-h-[33.67px] lg:px-[24px]',
+        xl:   'h-auto min-h-[31.08px] px-8 text-base sm:min-h-[33.67px] lg:px-[32px]',
         // An icon button has no text to outgrow its box, so it stays a fixed
-        // square — that is the shape, not a floor.
-        icon: 'h-11 w-11 md:h-9 md:w-9 lg:h-[calc(36px*var(--chrome-y))] lg:w-[36px]',
+        // square — the same height as the topic pill.
+        icon: 'h-[31.08px] w-[31.08px] min-h-[31.08px] min-w-[31.08px] sm:h-[33.67px] sm:w-[33.67px] sm:min-h-[33.67px] sm:min-w-[33.67px]',
       },
     },
     defaultVariants: {

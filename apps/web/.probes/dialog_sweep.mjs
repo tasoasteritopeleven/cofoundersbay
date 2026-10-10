@@ -5,7 +5,7 @@
 // [role=dialog|alertdialog] for
 //   name     - an accessible name (aria-labelledby text or aria-label)
 //   fits     - inside the viewport (no part off-screen sideways, top visible)
-//   close    - a close control >= 39.71x39.71 below 640px, the phone button floor (>= 24 otherwise)
+//   close    - a close control >= 31.08x31.08 below 640px, the topic-pill button height (>= 24 otherwise)
 //   escape   - Escape closes it
 //   focus    - focus returns to the trigger after closing
 //   unnamed  - controls inside without an accessible name
@@ -89,7 +89,7 @@ for (const route of routes) {
       const name = d.getAttribute('aria-label') || byId(d.getAttribute('aria-labelledby'));
       const closeEl = [...d.querySelectorAll('button')].find((btn) => /close|κλείσιμο/i.test(btn.getAttribute('aria-label') || btn.textContent || ''));
       const cr = closeEl?.getBoundingClientRect();
-      const minClose = width < 640 ? 39.66 : 24; // 39.71px floor, snapped to 1/64px
+      const minClose = width < 640 ? 31.03 : 24; // 31.08px topic-pill height, snapped to 1/64px
       const unnamed = [...d.querySelectorAll('button, a[href], input:not([type=hidden]), select, textarea, [role="combobox"], [role="switch"], [role="checkbox"]')]
         .filter((el) => {
           const er = el.getBoundingClientRect();

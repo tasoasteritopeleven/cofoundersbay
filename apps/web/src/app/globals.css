@@ -1785,25 +1785,25 @@ html {
     }
 
     /* Call sites pin h-7 / h-8 / h-9 / h-10 (28 / 32 / 36 / 40px) for the
-       desktop ladder, and Button's own sizes are h-11 (44px) until `md`.
-       Those utilities are not breakpoint-scoped, so a phone inherited them.
-       The phone floor is 39.71px — another 5% under 41.8px — so a control
-       stays reachable without the extra height. h-11 and h-12 join the list
-       because that is the height the eye meets on a phone. From 640px the
-       utilities mean what they say again. Square controls shrink on both
-       axes; a full-width button only shrinks in height. Fields stay 44px.
-       The Ask AI bar is only as tall as the button inside it, so it shortens
-       with this floor. */
+       desktop ladder, and older buttons still carry h-11 (44px). Those
+       utilities are not breakpoint-scoped, so a phone inherited them.
+       The phone height is the Help topic pill (All topics, Getting
+       started), measured at 31.08px. h-11 and h-12 join the list because
+       that is the height the eye meets on a phone. From 640px the pill is
+       33.67px (the rule after the height restatement). Square controls
+       shrink on both axes; a full-width button only shrinks in height.
+       Fields stay 44px. The Ask AI bar is only as tall as the button
+       inside it, so it shortens with this height. */
     :is(button, a, [role='tab'], [role='button']):is(.h-7, .h-8, .h-9, .h-10, .h-11, .h-12, .min-h-7, .min-h-8, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .min-h-\[44px\]) {
       height: auto;
-      min-height: 39.71px;
+      min-height: 31.08px;
     }
     :is(button, a, [role='button']):is(.w-7, .w-8, .w-9, .w-10, .w-11, .min-w-\[44px\]),
     :is(button, a, [role='button']).h-10.w-10,
     :is(button, a, [role='button']).h-11.w-11,
     :is(button, a, [role='button']).h-12.w-12 {
-      width: 39.71px;
-      min-width: 39.71px;
+      width: 31.08px;
+      min-width: 31.08px;
     }
 
     /* What a fingertip still missed at 390px (measured on 15 pages, 60
@@ -1815,11 +1815,10 @@ html {
       min-height: 44px;
     }
     .tap-target-phone {
-      min-height: 39.71px;
-      min-width: 39.71px;
+      min-height: 31.08px;
+      min-width: 31.08px;
     }
-    /* The Ask AI bar measured 55.8px. 5% under that is 53.01. The button
-       inside is now 39.71, so the leftover is this padding plus the border. */
+    /* The Ask AI bar follows the button inside it (the topic-pill height). */
     [data-ask-ai] {
       padding-top: 5.65px;
       padding-bottom: 5.65px;
@@ -2404,6 +2403,25 @@ html {
 
 @media (min-width: 1024px) {
   .lg\:h-auto { height: auto; }
+}
+
+/* Help topic pills (All topics, Getting started) measure 33.67px from
+   640px. A single-line h-9…h-12 control comes down to that. One that
+   carries h-auto, or an explicit min-h-14 / min-h-16, keeps the height
+   its own label needs. */
+@media (min-width: 640px) {
+  :is(button, a, [role='button']):is(.h-9, .h-10, .h-11, .h-12, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .md\:h-9, .md\:h-10, .md\:min-h-9, .md\:min-h-10):not(.h-auto):not(.min-h-14):not(.min-h-16) {
+    height: auto;
+    min-height: 33.67px;
+  }
+  :is(button, a, [role='button']).h-10.w-10,
+  :is(button, a, [role='button']).h-11.w-11,
+  :is(button, a, [role='button']).h-12.w-12 {
+    width: 33.67px;
+    min-width: 33.67px;
+    height: 33.67px;
+    min-height: 33.67px;
+  }
 }
 
 [data-radix-select-trigger],
@@ -3954,6 +3972,47 @@ textarea[class~="border-input"]:focus,
     font-size: 12.921px;
     line-height: 1.5;
   }
+
+  /* A muted sentence ("Search our knowledge base or browse topics below",
+     and the same line under a heading on every page) was text-sm at
+     14.170, level with or above a title that sits at 14.148. It takes the
+     lead step, under that title. A subtitle, a stat, a one-line label and
+     a semibold value stay on their own steps. */
+  #main-content p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='page-stat-label']):not([class~='page-stat-meta']):not([class~='founder-dash-stat']):not([class~='founder-dash-stat-label']):not([class~='founder-dash-stat-meta']):not([class~='person-subtitle']):not([class~='card-subtitle']):not([class~='card-title']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='row-ellipsis']):not([class~='font-semibold']):not([class~='font-medium']),
+  #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']):not([class~='page-stat']),
+  [role='dialog'] p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='card-subtitle']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='font-semibold']):not([class~='font-medium']),
+  [role='alertdialog'] p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='card-subtitle']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='font-semibold']):not([class~='font-medium']) {
+    font-size: 12.921px;
+    line-height: 1.5;
+  }
+}
+
+/* The sentence under a heading, on tablet and desktop. The phone reading
+   scale puts the same paragraphs on the lead step. Attribute selectors,
+   so the rule is not folded into Tailwind's text-sm utility. At 1024 the
+   82% root would shrink a rem under the caption floor, so the size is
+   restated in the same rem the card body uses. */
+#main-content :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='card-subtitle']):not([class~='person-subtitle']):not([class~='font-semibold']):not([class~='font-medium']),
+#main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+[role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+[role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
+  font-size: 0.8606rem;
+  line-height: 1.55;
+}
+@media (min-width: 1024px) {
+  #main-content :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='card-subtitle']):not([class~='person-subtitle']):not([class~='font-semibold']):not([class~='font-medium']),
+  #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+  [role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+  [role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
+    font-size: 1.04954268rem;
+  }
+}
+
+/* A profile circle that is showing initials, inside a card, is 3% under
+   the size the card set. A loaded photo keeps that size. An organisation
+   mark adds a rounded square and is not this circle. */
+#main-content [data-card] [class~='rounded-full']:not([class~='rounded-md']):not([class~='rounded-lg']):not([class~='rounded-xl']):not([class~='rounded-2xl']):has(> .avatar-initials) {
+  scale: 0.97;
 }
 
 /* A description inside a card (a muted sentence that clamps or reads
