@@ -459,7 +459,9 @@ html {
        rgb(188, 227, 189) left white at 1.4:1. */
     --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
     --mint-mark: 138.4 29.2% 53.7%;       /* #66ab7c rgb(102, 171, 124): #71b687, 5% darker in OKLab lightness. Bay, bars, outlines */
-    --mint-ring: 138.4 35.8% 62.3%;       /* #7cc192 rgb(124, 193, 146): #71b687, 5% lighter. Pastel rings only */
+    --mint-ring: 138.5 34.3% 60.7%;       /* #78bd8e rgb(120, 189, 142): #71b687, 3% lighter. Pastel rings and mint buttons */
+    --mint-button-ink: 138.5 36% 18.5%;   /* #1e4029, 5.20:1 on the button fill. White on it is 2.22:1 */
+    --mint-ring-hover: 138.5 34.3% 55.5%; /* same green, a step darker; the ink still clears 4.5:1 */
     --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4067,10 +4069,11 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. Buttons stay the deeper green. "Bay", a green bar, and a
-   green outline (the help book, a profile circle) use --mint-mark, 5%
-   darker than #71b687. A pastel ring uses --mint-ring, 5% lighter.
-   A circle at h-8 or under takes a stronger edge. */
+/* Mint only. "Bay", a green bar, and a green outline (the help book, a
+   profile circle) use --mint-mark, 5% darker than #71b687. A pastel ring
+   and a filled button use --mint-ring, 3% lighter. The button letters are
+   a dark green: white on that fill is 2.22:1. A circle at h-8 or under
+   takes a stronger edge. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--mint-mark));
 }
@@ -4129,6 +4132,18 @@ html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))']
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
   stroke: hsl(var(--mint-mark) / 0.72);
+}
+/* Filled mint buttons take the ring colour. Outline buttons keep the
+   darker edge above. Hover darkens this fill, not the old deep green. */
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary'] {
+  background-color: hsl(var(--mint-ring));
+  color: hsl(var(--mint-button-ink));
+  border-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:hover {
+  background-color: hsl(var(--mint-ring-hover));
+  color: hsl(var(--mint-button-ink));
+  border-color: hsl(var(--mint-ring-hover));
 }
 
 /* A chip whose words already say the thing does not need a wash behind
