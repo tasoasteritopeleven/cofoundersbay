@@ -127,7 +127,7 @@ function BotBubble({ children }: { children: React.ReactNode }) {
 function UserBubble({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-end justify-end gap-2 animate-fade-in">
-      <div className="max-w-[80%] rounded-2xl rounded-br-sm bg-primary px-4 py-3">
+      <div className="max-w-[80%] rounded-2xl rounded-br-sm bg-primary px-4 py-3" data-own-message="">
         <p className="text-sm text-primary-foreground leading-relaxed">{children}</p>
       </div>
     </div>

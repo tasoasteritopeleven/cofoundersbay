@@ -812,10 +812,13 @@ export function UnifiedChatPopup() {
                                 </AvatarFallback>
                               </Avatar>
                             )}
-                            <div className={cn(
-                              'max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-relaxed',
-                              isMe ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-muted text-foreground',
-                            )}>
+                            <div
+                              data-own-message={isMe ? '' : undefined}
+                              className={cn(
+                                'max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-relaxed',
+                                isMe ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-muted text-foreground',
+                              )}
+                            >
                               {PREVIEW_MESSAGE_EL[msg.content]
                                 ? <BilingualText en={msg.content} el={PREVIEW_MESSAGE_EL[msg.content]} />
                                 : msg.content}

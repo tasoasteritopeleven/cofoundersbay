@@ -4071,14 +4071,12 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. "Bay" and a green outline (the help book, a profile circle)
-   use --mint-mark, 2% darker than #71b687. A pastel ring and a filled
-   button use --mint-ring, 2% lighter. The button letters are a dark green:
-   white on that fill is 2.27:1. Progress fills use the Apricot theme's
-   apricot; the weighted score bars use the Light theme's lilac. A circle
-   at h-8 or under takes a stronger edge. */
+/* Mint only. "Bay", the chat launcher and a green outline use the sent
+   message green (--primary, rgb(56, 134, 58)). A pastel ring and a filled
+   button use --mint-ring. The sent bubble takes that ring pastel; its
+   letters are the same green. A circle at h-8 or under takes a stronger edge. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
-  color: hsl(var(--mint-mark));
+  color: hsl(var(--primary));
 }
 html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
   --tw-ring-color: hsl(var(--mint-ring) / 0.39);
@@ -4121,35 +4119,41 @@ html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) >
    keeps the button pastel. Smaller circles take a stronger edge. */
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
-  border-color: hsl(var(--mint-mark) / 0.36);
+  border-color: hsl(var(--primary));
 }
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']),
 html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']) {
-  border-color: hsl(var(--mint-mark) / 0.65);
+  border-color: hsl(var(--primary));
 }
 html[data-theme="minimal"] circle.stroke-primary {
-  stroke: hsl(var(--mint-mark));
+  stroke: hsl(var(--primary));
 }
 html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) [class~='text-primary'] {
-  color: hsl(var(--mint-mark));
+  color: hsl(var(--primary));
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))'] {
-  stroke: hsl(var(--mint-mark));
+  stroke: hsl(var(--primary));
 }
 html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
-  stroke: hsl(var(--mint-mark) / 0.72);
+  stroke: hsl(var(--primary) / 0.72);
 }
 /* Filled mint buttons take the ring colour. Outline buttons keep the
    darker edge above. Hover darkens this fill, not the old deep green. */
-html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary'] {
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:not([data-chat-launcher]) {
   background-color: hsl(var(--mint-ring));
   color: hsl(var(--mint-button-ink));
   border-color: hsl(var(--mint-ring));
 }
-html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:hover {
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:not([data-chat-launcher]):hover {
   background-color: hsl(var(--mint-ring-hover));
   color: hsl(var(--mint-button-ink));
   border-color: hsl(var(--mint-ring-hover));
+}
+/* The sent message keeps the green from its old fill as the letters, and
+   takes the ring pastel as its fill. The chat launcher stays that green. */
+html[data-theme="minimal"] [data-own-message] {
+  background-color: hsl(var(--mint-ring));
+  color: hsl(var(--primary));
 }
 
 /* A chip whose words already say the thing does not need a wash behind

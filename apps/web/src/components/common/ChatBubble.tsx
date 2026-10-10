@@ -97,6 +97,7 @@ export function ChatBubble() {
         title={`${openLabel}. ${moveHint}`}
         aria-haspopup="dialog"
         aria-expanded={false}
+        data-chat-launcher=""
         className={cn(
           'pointer-events-auto relative flex items-center justify-center rounded-full shadow-none transition-colors duration-200',
           'bg-primary text-primary-foreground hover:bg-primary/90',

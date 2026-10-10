@@ -227,6 +227,7 @@ function MessageBubble({
           )}
 
           <div
+            data-own-message={isOwn ? '' : undefined}
             className={cn(
               'px-4 py-2.5 text-xs leading-relaxed shadow-sm',
               isOwn
