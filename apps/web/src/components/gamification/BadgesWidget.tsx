@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge as BadgeUI } from '@/components/ui/badge';
 import { useMyBadges } from '@/hooks/useGamification';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { CfbGlyph, type CfbGlyphName } from '@/components/icons/CfbGlyph';
 import { bilingualAria } from '@/lib/i18n/format';
 
@@ -18,7 +18,7 @@ export function BadgesWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
+          <CardTitle className="flex items-center gap-2">
             <CfbGlyph name="award" className="icon-md text-muted-foreground" />
             <BilingualText en="Badges" el="Εμβλήματα" wrap />
           </CardTitle>
@@ -38,7 +38,7 @@ export function BadgesWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
+          <CardTitle className="flex items-center gap-2">
             <CfbGlyph name="award" className="icon-md text-muted-foreground" />
             <BilingualText en="Badges" el="Εμβλήματα" wrap />
           </CardTitle>
@@ -73,87 +73,98 @@ export function BadgesWidget() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex flex-col gap-2 text-base">
-          <div className="flex min-w-0 items-center gap-2">
-            <CfbGlyph name="award" className="icon-md shrink-0 text-muted-foreground" />
-            <BilingualText en="Badges" el="Εμβλήματα" wrap />
-          </div>
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <span className="text-sm font-normal leading-snug text-muted-foreground">
+        <CardTitle className="flex min-w-0 items-center gap-2">
+          <CfbGlyph name="award" className="icon-md shrink-0 text-muted-foreground" />
+          <BilingualText en="Badges" el="Εμβλήματα" wrap />
+        </CardTitle>
+        <CardDescription className="flex min-w-0 flex-wrap items-center gap-2">
+          <span>
+            <BilingualText
+              en={`${badges.length} earned`}
+              el={`${badges.length} ${badges.length === 1 ? 'αποκτήθηκε' : 'αποκτήθηκαν'}`}
+              compact
+              wrap
+            />
+          </span>
+          {unseenCount > 0 && (
+            <BadgeUI variant="secondary" className="h-auto min-h-6 gap-1 whitespace-normal">
+              <CfbGlyph name="spark" className="icon-sm shrink-0" />
               <BilingualText
-                en={`${badges.length} earned`}
-                el={`${badges.length} ${badges.length === 1 ? 'αποκτήθηκε' : 'αποκτήθηκαν'}`}
-                stacked
+                en={`${unseenCount} new`}
+                el={`${unseenCount} ${unseenCount === 1 ? 'νέο' : 'νέα'}`}
+                compact
                 wrap
               />
-            </span>
-            {unseenCount > 0 && (
-              <BadgeUI variant="secondary" className="h-auto min-h-6 gap-1 whitespace-normal">
-                <CfbGlyph name="spark" className="icon-sm shrink-0" />
-                <BilingualText
-                  en={`${unseenCount} new`}
-                  el={`${unseenCount} ${unseenCount === 1 ? 'νέο' : 'νέα'}`}
-                  stacked
-                  wrap
-                />
-              </BadgeUI>
-            )}
-          </div>
-        </CardTitle>
+            </BadgeUI>
+          )}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-3">
+      <CardContent className="space-y-3">
+        {/* One row per badge, parted by hairlines: the medal as the mark,
+            the name and its rarity beside it, "New" at the right while it is
+            unseen. Framed medal tiles inside the card were cards in a card. */}
+        <ul className="divide-y divide-border">
           {badges.map((badge) => {
             const rarityEl = RARITY_EL[badge.rarity] ?? badge.rarity;
             const nameEl = BADGE_NAME_EL[badge.name];
             return (
-              <Link
-                key={badge.id}
-                href="/achievements"
-                aria-label={bilingualAria(
-                  `${badge.name}, ${badge.rarity}`,
-                  `${nameEl ?? badge.name}, ${rarityEl}`,
-                )}
-                className={cn(
-                  'relative flex flex-col items-center overflow-hidden rounded-2xl border border-primary/15 bg-primary/[0.04] p-3 text-center transition-colors hover:border-primary/30',
-                  !badge.seenAt && 'ring-1 ring-primary/50 shadow-[0_0_36px_-8px_hsl(var(--primary)/0.85)]',
-                )}
-              >
-                {!badge.seenAt && (
-                  <div className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.95)]" />
-                )}
-                <MedalFace
-                  id={badge.id}
-                  glyph={glyphForBadge(badge.iconName || badge.category)}
-                  rarity={badge.rarity}
+              <li key={badge.id} className="py-3 first:pt-0 last:pb-0">
+                <CardHead
+                  titleAs="p"
+                  mark={(
+                    <MedalFace
+                      id={badge.id}
+                      glyph={glyphForBadge(badge.iconName || badge.category)}
+                      rarity={badge.rarity}
+                    />
+                  )}
+                  title={(
+                    <Link
+                      href="/achievements"
+                      aria-label={bilingualAria(
+                        `${badge.name}, ${badge.rarity}`,
+                        `${nameEl ?? badge.name}, ${rarityEl}`,
+                      )}
+                      className="transition-colors hover:text-primary-accessible"
+                    >
+                      {nameEl
+                        ? <BilingualText en={badge.name} el={nameEl} compact wrap />
+                        : badge.name}
+                    </Link>
+                  )}
+                  subtitle={<BilingualText en={capitalise(badge.rarity)} el={capitalise(rarityEl)} compact wrap />}
+                  aside={!badge.seenAt ? (
+                    <BadgeUI variant="outline">
+                      <BilingualText en="New" el="Νέο" compact />
+                    </BadgeUI>
+                  ) : undefined}
                 />
-                <div className="relative mt-3 w-full text-sm font-semibold leading-snug">
-                  {nameEl
-                    ? <BilingualText en={badge.name} el={nameEl} stacked wrap />
-                    : badge.name}
-                </div>
-                <div className="relative mt-1.5 w-full text-2xs capitalize text-muted-foreground">
-                  <BilingualText en={badge.rarity} el={rarityEl} stacked wrap />
-                </div>
-              </Link>
+              </li>
             );
           })}
-        </div>
-        <Link
-          href="/achievements"
-          className="mt-4 inline-flex max-w-full items-start gap-1.5 text-xs leading-snug text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <BilingualText
-            en="Keep going to unlock more"
-            el="Συνεχίστε για να ξεκλειδώσετε περισσότερα"
-            stacked
-            wrap
-          />
-          <ArrowRight className="mt-0.5 icon-sm shrink-0" />
-        </Link>
+        </ul>
+        <CardFoot>
+          <Link
+            href="/achievements"
+            className="inline-flex max-w-full items-start gap-1.5 text-xs leading-snug text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <BilingualText
+              en="Keep going to unlock more"
+              el="Συνεχίστε για να ξεκλειδώσετε περισσότερα"
+              compact
+              wrap
+            />
+            <ArrowRight className="mt-0.5 icon-sm shrink-0" />
+          </Link>
+        </CardFoot>
       </CardContent>
     </Card>
   );
+}
+
+/** "common" → "Common": the API sends rarities in lower case. */
+function capitalise(value: string): string {
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 }
 
 function MedalFace({
@@ -168,13 +179,10 @@ function MedalFace({
   const fillId = `cfb-medal-fill-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const ring = rarityRing(rarity);
 
+  // The medal is the badge itself, so it keeps its glyph inside a card
+  // (data-keep-icon), at the 2.5rem of every card's mark.
   return (
-    <div className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center" aria-hidden="true">
-      <div
-        className="pointer-events-none absolute inset-[-6px] rounded-full border opacity-60"
-        style={{ borderColor: ring }}
-        aria-hidden="true"
-      />
+    <div data-keep-icon data-card-mark="" className="relative flex h-10 w-10 items-center justify-center rounded-full" aria-hidden="true">
       <svg viewBox="0 0 72 72" className="absolute inset-0 h-full w-full">
         <defs>
           <radialGradient id={fillId} cx="38%" cy="30%" r="72%">
@@ -183,19 +191,18 @@ function MedalFace({
             <stop offset="100%" stopColor="hsl(var(--card))" stopOpacity="0.95" />
           </radialGradient>
         </defs>
-        <circle cx="36" cy="36" r="31" fill={`url(#${fillId})`} />
+        <circle cx="36" cy="36" r="33" fill={`url(#${fillId})`} />
         <circle
           cx="36"
           cy="36"
-          r="31"
+          r="33"
           fill="none"
           stroke={ring}
-          strokeWidth="3"
+          strokeWidth="4"
         />
-        <circle cx="36" cy="36" r="24.5" fill="none" stroke="hsl(var(--primary) / 0.45)" strokeWidth="1.4" />
-        <circle cx="36" cy="36" r="20" fill="none" stroke="hsl(var(--background) / 0.55)" strokeWidth="1" />
+        <circle cx="36" cy="36" r="25" fill="none" stroke="hsl(var(--primary) / 0.45)" strokeWidth="2" />
       </svg>
-      <CfbGlyph name={glyph} className="relative icon-lg text-muted-foreground" />
+      <CfbGlyph name={glyph} className="relative icon-sm text-muted-foreground" />
     </div>
   );
 }

@@ -263,7 +263,9 @@ export function ConversationValidationMenu({
                 ) : (
                   <Hash className="mr-2 icon-sm" />
                 )}
-                {copied ? 'Hash copied!' : 'Copy validation hash'}
+                {copied
+                  ? <BilingualText en="Hash copied!" el="Το hash αντιγράφηκε!" compact />
+                  : <BilingualText en="Copy validation hash" el="Αντιγραφή hash επικύρωσης" compact />}
               </DropdownMenuItem>
             </>
           )}
@@ -277,7 +279,11 @@ export function ConversationValidationMenu({
             <ShieldAlert className="icon-md shrink-0 text-status-warning mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">
-                {otherUserName} requested two-party validation
+                <BilingualText
+                  en={`${otherUserName} requested two-party validation`}
+                  el={`${otherUserName}: αίτημα για επικύρωση δύο μερών`}
+                  wrap
+                />
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
                 <BilingualText en="Both parties will be able to save and verify the conversation transcript" el="Και τα δύο μέρη θα μπορούν να αποθηκεύσουν και να επαληθεύσουν το αντίγραφο της συνομιλίας" wrap />
@@ -294,7 +300,7 @@ export function ConversationValidationMenu({
                   ) : (
                     <Check className="icon-sm mr-1" />
                   )}
-                  Accept
+                  <BilingualText en="Accept" el="Αποδοχή" compact />
                 </Button>
                 <Button
                   size="sm"
@@ -360,7 +366,12 @@ export function ConversationValidationMenu({
                       {mode === 'two_party' && (
                         <p className="text-xs text-status-warning mt-1 flex items-center gap-1">
                           <AlertTriangle className="icon-sm" />
-                          Requires acceptance from {otherUserName}
+                          <BilingualText
+                            en={`Requires acceptance from ${otherUserName}`}
+                            el={`Χρειάζεται την αποδοχή του χρήστη ${otherUserName}`}
+                            compact
+                            wrap
+                          />
                         </p>
                       )}
                     </div>

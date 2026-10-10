@@ -471,14 +471,16 @@ export function ChatWindow({
                 size="md"
                 online={conversation.isOnline}
               />
+              {/* The thread's head reads like a card's: the name on the
+                  title step, the line under it on the subtitle step. */}
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="truncate text-sm font-semibold tracking-tight text-foreground">{conversation.recipientName}</span>
+                  <span className="card-title truncate text-foreground">{conversation.recipientName}</span>
                   <RoleBadge role={conversation.recipientRole || 'founder'} size="sm" className="hidden sm:inline-flex" />
                 </div>
-                <p className={cn('truncate text-xs', conversation.isOnline ? 'font-medium text-status-success' : 'text-muted-foreground')}>
+                <p className="card-subtitle truncate">
                   {conversation.isOnline
-                    ? t(messagesEn('online'), messagesEl('online'))
+                    ? <span className="font-medium text-status-success">{t(messagesEn('online'), messagesEl('online'))}</span>
                     : conversation.recipientHeadline
                       ? conversation.recipientHeadline
                       : conversation.lastSeen

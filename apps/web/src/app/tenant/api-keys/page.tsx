@@ -8,13 +8,12 @@ import {
   EyeOff,
   Trash2,
   MoreVertical,
-  Clock,
   Shield,
   CheckCircle,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -24,6 +23,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { EmptyTenantApiKeys } from '@/components/common/EmptyStates';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { cn } from '@/lib/utils';
 import { SampleDataNotice } from '@/components/common/SampleDataNotice';
 import { UnavailableMenuItem } from '@/components/common/UnavailableMenuItem';
@@ -53,51 +54,72 @@ function KeyRow({ apiKey }: { apiKey: ApiKey }) {
   const maskedKey = `${apiKey.prefix}${'•'.repeat(24)}`;
   const revealedKey = `${apiKey.prefix}abc123xyz789defghijklmnopqr`;
 
+  // The Opportunities card: the key's mark, its name, the state and the
+  // menu at the right; the key, its scopes and its dates start on the mark's
+  // edge.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="More options. Περισσότερες επιλογές" variant="ghost" size="icon" className="shrink-0">
+          <MoreVertical className="icon-sm" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* No key service exists; each item says so rather than closing silently. */}
+        <UnavailableMenuItem en="Edit Scopes" el="Επεξεργασία δικαιωμάτων" reasonEn="No key service yet." reasonEl="Δεν υπάρχει ακόμη υπηρεσία κλειδιών." />
+        <UnavailableMenuItem en="Regenerate" el="Αναδημιουργία" reasonEn="No key service yet." reasonEl="Δεν υπάρχει ακόμη υπηρεσία κλειδιών." />
+        <UnavailableMenuItem className="text-destructive-accessible" icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Revoke" el="Ανάκληση" reasonEn="Sample key - nothing to revoke." reasonEl="Δείγμα - δεν υπάρχει κάτι να ανακληθεί." />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
-    <div className={cn('p-4 rounded-lg border transition-all hover:border-primary/20', !apiKey.isActive && 'surface-inactive')}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="font-medium">{apiKey.name}</p>
-            {apiKey.isActive ? (
-              <Badge variant="outline" size="sm" className="bg-status-success-bg text-status-success border-status-success-border"><CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Active" el="Ενεργό" compact /></Badge>
-            ) : (
-              <Badge variant="outline" size="sm" className="bg-muted text-foreground"><BilingualText en="Inactive" el="Ανενεργό" compact /></Badge>
-            )}
-          </div>
-          <div className="flex items-center gap-2 mt-2">
-            <code tabIndex={0} className="min-w-0 flex-1 overflow-x-auto text-xs font-mono bg-muted px-2 py-1 rounded">{revealed ? revealedKey : maskedKey}</code>
-            <Button className="shrink-0" aria-label={revealed ? 'Hide key. Απόκρυψη κλειδιού' : 'Show key. Εμφάνιση κλειδιού'} aria-pressed={revealed} variant="ghost" size="icon" onClick={() => setRevealed(!revealed)}>
-              {revealed ? <EyeOff className="icon-sm" aria-hidden="true" /> : <Eye className="icon-sm" aria-hidden="true" />}
-            </Button>
-            <Button className="shrink-0" aria-label="Copy key. Αντιγραφή κλειδιού" variant="ghost" size="icon" onClick={() => void navigator.clipboard?.writeText(revealedKey)}><Copy className="icon-sm" aria-hidden="true" /></Button>
-          </div>
-          <div className="flex flex-wrap gap-1 mt-2">
-            {apiKey.scopes.map(s => (
-              <Badge key={s} variant="secondary" size="sm" translate="no">{s}</Badge>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><Clock className="icon-sm" aria-hidden="true" /><BilingualText en={`Created ${apiKey.createdAt}`} el={`Δημιουργήθηκε ${apiKey.createdAt}`} compact /></span>
-            {apiKey.lastUsed && <span><BilingualText en={`Last used ${apiKey.lastUsed}`} el={`Τελευταία χρήση ${apiKey.lastUsed}`} compact /></span>}
-            {apiKey.expiresAt && <span className="text-status-warning"><BilingualText en={`Expires ${apiKey.expiresAt}`} el={`Λήγει ${apiKey.expiresAt}`} compact /></span>}
-          </div>
+    <Card className={cn('transition-all hover:border-primary/20', !apiKey.isActive && 'surface-inactive')}>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+              <KeyRound className="icon-md" aria-hidden="true" />
+            </div>
+          )}
+          title={apiKey.name}
+          subtitle={<span className="font-mono" translate="no">{apiKey.prefix}</span>}
+          asideStays
+          aside={(
+            <>
+              {apiKey.isActive ? (
+                <Badge variant="outline" size="sm" className="bg-status-success-bg text-status-success border-status-success-border"><CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Active" el="Ενεργό" compact /></Badge>
+              ) : (
+                <Badge variant="outline" size="sm" className="bg-muted text-foreground"><BilingualText en="Inactive" el="Ανενεργό" compact /></Badge>
+              )}
+              {menu}
+            </>
+          )}
+        />
+        <div className="flex items-center gap-2">
+          <code tabIndex={0} className="min-w-0 flex-1 overflow-x-auto rounded bg-muted px-2 py-1 font-mono text-xs">{revealed ? revealedKey : maskedKey}</code>
+          <Button className="shrink-0" aria-label={revealed ? 'Hide key. Απόκρυψη κλειδιού' : 'Show key. Εμφάνιση κλειδιού'} aria-pressed={revealed} variant="ghost" size="icon" onClick={() => setRevealed(!revealed)}>
+            {revealed ? <EyeOff className="icon-sm" aria-hidden="true" /> : <Eye className="icon-sm" aria-hidden="true" />}
+          </Button>
+          <Button className="shrink-0" aria-label="Copy key. Αντιγραφή κλειδιού" variant="ghost" size="icon" onClick={() => void navigator.clipboard?.writeText(revealedKey)}><Copy className="icon-sm" aria-hidden="true" /></Button>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button aria-label="More options. Περισσότερες επιλογές" variant="ghost" size="icon" className="shrink-0">
-              <MoreVertical className="icon-sm" aria-hidden="true" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {/* No key service exists; each item says so rather than closing silently. */}
-            <UnavailableMenuItem en="Edit Scopes" el="Επεξεργασία δικαιωμάτων" reasonEn="No key service yet." reasonEl="Δεν υπάρχει ακόμη υπηρεσία κλειδιών." />
-            <UnavailableMenuItem en="Regenerate" el="Αναδημιουργία" reasonEn="No key service yet." reasonEl="Δεν υπάρχει ακόμη υπηρεσία κλειδιών." />
-            <UnavailableMenuItem className="text-destructive-accessible" icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Revoke" el="Ανάκληση" reasonEn="Sample key - nothing to revoke." reasonEl="Δείγμα - δεν υπάρχει κάτι να ανακληθεί." />
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
+        <FactLine
+          label="Scopes. Δικαιώματα"
+          items={apiKey.scopes.map((sc) => <span key={sc} className="font-mono" translate="no">{sc}</span>)}
+        />
+        <CardFoot
+          meta={(
+            <FactLine
+              items={[
+                <BilingualText key="created" en={`Created ${apiKey.createdAt}`} el={`Δημιουργήθηκε ${apiKey.createdAt}`} compact />,
+                apiKey.lastUsed ? <BilingualText key="used" en={`Last used ${apiKey.lastUsed}`} el={`Τελευταία χρήση ${apiKey.lastUsed}`} compact /> : null,
+                apiKey.expiresAt ? <span key="expires" className="text-status-warning"><BilingualText en={`Expires ${apiKey.expiresAt}`} el={`Λήγει ${apiKey.expiresAt}`} compact /></span> : null,
+              ]}
+            />
+          )}
+        />
+      </CardContent>
+    </Card>
   );
 }
 

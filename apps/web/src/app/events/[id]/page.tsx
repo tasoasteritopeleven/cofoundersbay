@@ -7,7 +7,8 @@ import { ArrowLeft, CalendarPlus, Clock, ExternalLink, MapPin, Share2, Users, Vi
 import { AppShell } from '@/components/layout/AppShell';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -270,7 +271,7 @@ export default function EventDetailPage() {
           {event.description && (
             <Card>
               <CardContent>
-                <p className="whitespace-pre-line text-sm leading-relaxed">{event.description}</p>
+                <p className="card-body whitespace-pre-line first-letter:uppercase">{event.description}</p>
               </CardContent>
             </Card>
           )}
@@ -278,10 +279,12 @@ export default function EventDetailPage() {
 
         <aside className="space-y-4">
           <Card>
-            <CardContent className="space-y-3">
-              <p className="text-sm font-semibold">
+            <CardHeader>
+              <CardTitle>
                 <BilingualText en="Your RSVP" el="Η απάντησή σας" compact />
-              </p>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
               {ended ? (
                 <Badge variant="secondary"><BilingualText en="This event has ended" el="Η εκδήλωση ολοκληρώθηκε" compact /></Badge>
               ) : (
@@ -310,21 +313,23 @@ export default function EventDetailPage() {
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={event.host?.avatarUrl ?? undefined} alt="" />
-                <AvatarFallback>{event.host?.displayName?.[0]?.toUpperCase() ?? '?'}</AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <p className="text-xs text-muted-foreground"><BilingualText en="Hosted by" el="Διοργανωτής" compact /></p>
-                {event.host?.id ? (
-                  <Link href={`/profiles/${event.host.id}`} className="truncate text-sm font-medium hover:text-primary-accessible">
+            <CardContent>
+              <CardHead
+                mark={(
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={event.host?.avatarUrl ?? undefined} alt="" />
+                    <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{event.host?.displayName?.[0]?.toUpperCase() ?? '?'}</AvatarFallback>
+                  </Avatar>
+                )}
+                title={event.host?.id ? (
+                  <Link href={`/profiles/${event.host.id}`} className="transition-colors hover:text-primary-accessible">
                     {event.host.displayName}
                   </Link>
                 ) : (
-                  <span className="text-sm font-medium">—</span>
+                  <span>{event.host?.displayName || '—'}</span>
                 )}
-              </div>
+                subtitle={<BilingualText en="Hosted by" el="Διοργανωτής" compact />}
+              />
             </CardContent>
           </Card>
         </aside>

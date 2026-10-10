@@ -18,6 +18,8 @@ import {
 import { AppShell } from '@/components/layout/AppShell';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -93,60 +95,76 @@ function ReportCard({ report }: { report: ModerationReport }) {
   const statusCfg = STATUS_CONFIG[report.status];
   const StatusIcon = statusCfg.icon;
 
+  // A report reads like every request card: the kind of report as its
+  // mark and title, who and where under it, its state and menu at the right,
+  // then the quoted content, the facts and the actions on the mark's edge.
   return (
     <Card className="transition-all hover:border-primary/20">
-      <CardContent>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="secondary" className={cn('text-xs border', typeCfg.chip)}>
-                <AlertTriangle className="mr-1 icon-sm" aria-hidden="true" />
-                <BilingualText en={typeCfg.label} el={typeCfg.labelEl} compact />
-              </Badge>
-              <Badge variant="secondary" className="text-xs capitalize"><BilingualText en={report.contentType} el={CONTENT_EL[report.contentType]} compact /></Badge>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" data-keep-icon className={cn('flex h-10 w-10 items-center justify-center rounded-xl border', typeCfg.chip)}>
+              <AlertTriangle className="icon-md" aria-hidden="true" />
+            </div>
+          )}
+          title={<BilingualText en={typeCfg.label} el={typeCfg.labelEl} compact />}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                <span key="against"><BilingualText en="Against" el="Κατά" compact />: <span className="text-foreground">{report.reportedUser}</span></span>,
+                <span key="in"><BilingualText en="In" el="Στην" compact />: {report.groupName}</span>,
+              ]}
+            />
+          )}
+          asideStays
+          aside={(
+            <>
               <Badge variant="outline" className={cn('text-xs border', statusCfg.chip)}>
                 <StatusIcon className="mr-1 icon-sm" aria-hidden="true" />
                 <BilingualText en={statusCfg.label} el={statusCfg.labelEl} compact />
               </Badge>
-              {report.priority === 'high' && (
-                <Badge variant="destructive" className="text-xs"><BilingualText en="High Priority" el="Υψηλή προτεραιότητα" compact /></Badge>
-              )}
-            </div>
-            <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2 italic">
-              &ldquo;{report.contentPreview}&rdquo;
-            </p>
-            <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
-              <span><BilingualText en="Reported by" el="Αναφορά από" compact />: <span className="font-medium text-foreground">{report.reportedBy}</span></span>
-              <span><BilingualText en="Against" el="Κατά" compact />: <span className="font-medium text-foreground">{report.reportedUser}</span></span>
-              <span><BilingualText en="In" el="Στην" compact />: <span className="font-medium text-foreground">{report.groupName}</span></span>
-              <span className="flex items-center gap-1"><Clock className="icon-sm" aria-hidden="true" /><BilingualText en={ageLabel(report.reportedHoursAgo).en} el={ageLabel(report.reportedHoursAgo).el} compact /></span>
-            </div>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Report actions. Ενέργειες αναφοράς">
-                <MoreVertical className="icon-sm" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {/* The queue is sample data (see the notice above the list):
-                  there is no group-report store behind it, so none of
-                  these can act, and each says so. */}
-              <UnavailableMenuItem icon={<Eye className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="View Content" el="Προβολή περιεχομένου" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
-              <UnavailableMenuItem icon={<CheckCircle className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Mark Resolved" el="Επίλυση" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
-              <UnavailableMenuItem icon={<XCircle className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Dismiss" el="Απόρριψη" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
-              <UnavailableMenuItem icon={<UserX className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Remove Member" el="Αφαίρεση μέλους" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
-              <UnavailableMenuItem className="text-destructive-accessible" icon={<Ban className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Ban User" el="Αποκλεισμός χρήστη" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        {report.status === 'pending' && (
-          <div className="flex gap-2 mt-3">
-            <Button size="sm" variant="default" className="h-7 text-xs" disabled title="Sample report - group reports have no queue yet"><CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Resolve" el="Επίλυση" compact /></Button>
-            <Button size="sm" variant="outline" className="h-7 text-xs" disabled title="Sample report - group reports have no queue yet"><XCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Dismiss" el="Απόρριψη" compact /></Button>
-            <Button size="sm" variant="outline" className="h-7 text-xs text-destructive-accessible border-destructive/30" disabled title="Sample report - group reports have no queue yet"><Ban className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Ban User" el="Αποκλεισμός χρήστη" compact /></Button>
-          </div>
-        )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Report actions. Ενέργειες αναφοράς">
+                      <MoreVertical className="icon-sm" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {/* The queue is sample data (see the notice above the list):
+                        there is no group-report store behind it, so none of
+                        these can act, and each says so. */}
+                    <UnavailableMenuItem icon={<Eye className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="View Content" el="Προβολή περιεχομένου" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
+                    <UnavailableMenuItem icon={<CheckCircle className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Mark Resolved" el="Επίλυση" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
+                    <UnavailableMenuItem icon={<XCircle className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Dismiss" el="Απόρριψη" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
+                    <UnavailableMenuItem icon={<UserX className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Remove Member" el="Αφαίρεση μέλους" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
+                    <UnavailableMenuItem className="text-destructive-accessible" icon={<Ban className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Ban User" el="Αποκλεισμός χρήστη" reasonEn="Sample report - group reports have no queue yet." reasonEl="Δείγμα - οι αναφορές ομάδων δεν έχουν ακόμη ουρά." />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+            </>
+          )}
+        />
+        <p className="card-body line-clamp-2 italic text-muted-foreground">
+          &ldquo;{report.contentPreview}&rdquo;
+        </p>
+        <FactLine
+          items={[
+            report.priority === 'high' ? (
+              <span key="priority" className="font-medium text-destructive-accessible"><BilingualText en="High Priority" el="Υψηλή προτεραιότητα" compact /></span>
+            ) : null,
+            <span key="content" className="capitalize"><BilingualText en={report.contentType} el={CONTENT_EL[report.contentType]} compact /></span>,
+            <span key="by"><BilingualText en="Reported by" el="Αναφορά από" compact />: <span className="font-medium text-foreground">{report.reportedBy}</span></span>,
+          ]}
+        />
+        <CardFoot meta={<BilingualText en={ageLabel(report.reportedHoursAgo).en} el={ageLabel(report.reportedHoursAgo).el} compact />}>
+          {report.status === 'pending' && (
+            <>
+              <Button size="sm" variant="default" disabled title="Sample report - group reports have no queue yet"><CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Resolve" el="Επίλυση" compact /></Button>
+              <Button size="sm" variant="outline" disabled title="Sample report - group reports have no queue yet"><XCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Dismiss" el="Απόρριψη" compact /></Button>
+              <Button size="sm" variant="outline" className="border-destructive/30 text-destructive-accessible" disabled title="Sample report - group reports have no queue yet"><Ban className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Ban User" el="Αποκλεισμός χρήστη" compact /></Button>
+            </>
+          )}
+        </CardFoot>
       </CardContent>
     </Card>
   );

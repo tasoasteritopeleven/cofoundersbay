@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStoredUser } from '@/hooks/useStoredUser';
 
 export type WhatsNewAudience = 'founder' | 'investor' | 'mentor' | 'org' | 'provider';
@@ -65,28 +65,32 @@ export function WhatsNewPanel({ audience }: { audience: WhatsNewAudience }) {
       // storage blocked: hidden for this page view
     }
   };
+  // A section card: its title and the line under it, the way out at the
+  // right, and rows without a frame of their own, each on the card's axis.
   return (
     <Card aria-labelledby="whats-new-heading">
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 id="whats-new-heading" className="card-title text-foreground">
+      <CardHeader>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <CardTitle id="whats-new-heading">
               <BilingualText en="What’s new" el="Τι νέο υπάρχει" compact />
-            </h2>
-            <p className="text-xs text-muted-foreground">
+            </CardTitle>
+            <CardDescription>
               <BilingualText en="Added on 7 and 8 October 2026. Each opens where you can try it." el="Προστέθηκαν στις 7 και 8 Οκτωβρίου 2026. Το καθένα ανοίγει εκεί που μπορείτε να το δοκιμάσετε." wrap />
-            </p>
+            </CardDescription>
           </div>
-          <Button size="sm" variant="ghost" onClick={hide}>
+          <Button size="sm" variant="ghost" className="-mr-2 shrink-0" onClick={hide}>
             <BilingualText en="Hide" el="Απόκρυψη" compact />
           </Button>
         </div>
-        <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      </CardHeader>
+      <CardContent>
+        <ul className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
           {items.map((item) => (
             <li key={item.href} className="min-w-0">
-              <Link href={item.href} className="axis-row block rounded-lg py-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Link href={item.href} className="axis-row block rounded-md py-2 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <span className="block text-sm font-medium text-foreground"><BilingualText en={item.en} el={item.el} compact /></span>
-                <span className="block text-xs text-muted-foreground"><BilingualText en={item.hintEn} el={item.hintEl} wrap /></span>
+                <span className="mt-0.5 block text-xs text-muted-foreground"><BilingualText en={item.hintEn} el={item.hintEl} wrap /></span>
               </Link>
             </li>
           ))}

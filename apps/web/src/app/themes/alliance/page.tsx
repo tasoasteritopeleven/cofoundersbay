@@ -34,7 +34,7 @@ import { MainLandmark } from '@/components/layout/AppShell';
 const SPECIMEN = [
   { name: 'Elena Papadopoulos', role: 'Founder & CEO at Harbor', badge: 'Founder', pitch: 'Building the operating system for early-stage founders. Looking for a technical cofounder.', tags: ['SaaS', 'Product', 'Seed'], place: 'Athens, Greece', sector: 'Software', banner: 'from-blue-500 via-indigo-500 to-violet-500' },
   { name: 'Marcus Chen', role: 'Technical cofounder · Full-stack', badge: 'Builder', pitch: 'Ships MVPs in weeks. Looking for a complementary business founder.', tags: ['TypeScript', 'AI', 'Developer tools'], place: 'Berlin, Germany', sector: 'Developer tools', banner: 'from-cyan-500 via-sky-500 to-blue-600' },
-  { name: 'Dr. Sarah Kim', role: 'Startup mentor · Ex-Google · 3x founder', badge: 'Mentor', pitch: 'Helping first-time founders reach product-market fit.', tags: ['Go-to-market', 'Leadership', 'Mentoring'], place: 'London, UK', sector: 'Marketplaces', banner: 'from-emerald-500 via-teal-500 to-cyan-600' },
+  { name: 'Dr. Sarah Kim', role: 'Startup mentor · Former product lead · 3x founder', badge: 'Mentor', pitch: 'Helping first-time founders reach product-market fit.', tags: ['Go-to-market', 'Leadership', 'Mentoring'], place: 'London, UK', sector: 'Marketplaces', banner: 'from-emerald-500 via-teal-500 to-cyan-600' },
   { name: 'Nikos Andreou', role: 'Angel investor · Seed', badge: 'Investor', pitch: 'Invests in Mediterranean B2B SaaS at pre-seed and seed.', tags: ['B2B', 'SaaS', 'Pre-seed'], place: 'Limassol, Cyprus', sector: 'Venture', banner: 'from-amber-500 via-orange-500 to-rose-500' },
 ] as const;
 

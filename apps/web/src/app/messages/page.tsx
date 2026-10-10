@@ -17,6 +17,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { PageContextualHelp } from '@/components/common/PageContextualHelp';
 import { CfbGlyph } from '@/components/icons/CfbGlyph';
 import { ThreadAvatar } from '@/components/messaging/ThreadAvatar';
+import { CardHead } from '@/components/common/CardAnatomy';
 import {
   messagesEn,
   messagesEl,
@@ -157,32 +158,36 @@ function IntroDetailPane({
         <p className="text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           <BilingualText en={messagesEn('connection_request')} el={messagesEl('connection_request')} compact />
         </p>
-        <div className="flex items-start gap-4">
-          <Link href={`/profiles/${request.requester.id}`} className="shrink-0">
-            <ThreadAvatar
-              name={request.requester.displayName}
-              src={request.requester.avatarUrl}
-              seed={request.requester.id}
-              size="lg"
-            />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <Link href={`/profiles/${request.requester.id}`} className="text-lg font-semibold tracking-tight text-foreground hover:underline">
-              {request.requester.displayName}
+        {/* The request as its card shows it: the person's mark, the name with
+            the role beside it and the headline under it, the date at the
+            right; the note under them starts on the mark's edge. */}
+        <CardHead
+          titleAs="p"
+          mark={(
+            <Link href={`/profiles/${request.requester.id}`} aria-label={bilingualAria(`Open ${request.requester.displayName}'s profile`, `Άνοιγμα προφίλ: ${request.requester.displayName}`)}>
+              <ThreadAvatar
+                name={request.requester.displayName}
+                src={request.requester.avatarUrl}
+                seed={request.requester.id}
+                size="md"
+              />
             </Link>
-            <div className="mt-1 flex flex-wrap items-center gap-2">
+          )}
+          title={(
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <Link href={`/profiles/${request.requester.id}`} className="transition-colors hover:text-primary-accessible">
+                {request.requester.displayName}
+              </Link>
               <RoleBadge role={request.requester?.role || 'founder'} size="sm" />
-              <span className="text-xs text-muted-foreground">{dateLabel}</span>
-            </div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {request.requester?.headline || (
-                <BilingualText en={messagesEn('headline_fallback')} el={messagesEl('headline_fallback')} compact />
-              )}
-            </p>
-          </div>
-        </div>
+            </span>
+          )}
+          subtitle={request.requester?.headline || (
+            <BilingualText en={messagesEn('headline_fallback')} el={messagesEl('headline_fallback')} compact />
+          )}
+          aside={dateLabel}
+        />
         {request.message && (
-          <blockquote className="rounded-2xl border border-border bg-muted/40 px-4 py-3 text-sm italic leading-relaxed text-foreground/80">
+          <blockquote className="card-body italic text-muted-foreground">
             {quoteEl ? (
               <BilingualText en={request.message} el={quoteEl} wrap />
             ) : (
@@ -196,7 +201,7 @@ function IntroDetailPane({
         <div className="flex flex-wrap gap-2">
           <Button
             size="sm"
-            className="h-9 gap-1.5 rounded-full px-4"
+            className="gap-1.5"
             disabled={responding}
             onClick={onAccept}
           >
@@ -206,7 +211,7 @@ function IntroDetailPane({
           <Button
             size="sm"
             variant="outline"
-            className="h-9 gap-1.5 rounded-full px-4"
+            className="gap-1.5"
             disabled={responding}
             onClick={onDecline}
           >
@@ -214,20 +219,22 @@ function IntroDetailPane({
             <BilingualText en={messagesEn('decline')} el={messagesEl('decline')} compact />
           </Button>
         </div>
+        {/* Outline, not ghost: a ghost button that starts the row put its
+            padding in front of its letters, off the pane's left edge. */}
         <div className="flex flex-wrap gap-2 border-t border-border pt-4">
-          <Button asChild size="sm" variant="ghost" className="h-8 rounded-full">
+          <Button asChild size="sm" variant="outline">
             <Link href={`/profiles/${request.requester.id}`}>
               <CfbGlyph name="people" className="icon-sm mr-1.5" />
               <BilingualText en={messagesEn('view_profile')} el={messagesEl('view_profile')} compact />
             </Link>
           </Button>
-          <Button asChild size="sm" variant="ghost" className="h-8 rounded-full">
+          <Button asChild size="sm" variant="outline">
             <Link href={`/matches/${request.requester.id}`}>
               <CfbGlyph name="matches" className="icon-sm mr-1.5" />
               <BilingualText en={messagesEn('view_match')} el={messagesEl('view_match')} compact />
             </Link>
           </Button>
-          <Button asChild size="sm" variant="ghost" className="h-8 rounded-full">
+          <Button asChild size="sm" variant="outline">
             <Link href="/discover">
               <CfbGlyph name="discover" className="icon-sm mr-1.5" />
               <BilingualText en={messagesEn('discover_people')} el={messagesEl('discover_people')} compact />
@@ -1075,8 +1082,12 @@ export default function MessagesPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-2 p-3">
+                  <div className="space-y-1 p-2">
                     {introRequests.map((req) => (
+                      // A row of the list, set like a card's head: the
+                      // person's mark, the name and the headline under it, the
+                      // date at the right; the note and the answers start on
+                      // the mark's edge. A row, not a tile: the pane is the card.
                       <div
                         key={req.id}
                         role="button"
@@ -1092,74 +1103,73 @@ export default function MessagesPage() {
                           }
                         }}
                         className={cn(
-                          'animate-fade-in cursor-pointer rounded-2xl bg-background/80 p-4 shadow-sm ring-1 transition-colors',
-                          selectedIntro?.id === req.id ? 'ring-primary/50 bg-muted/40' : 'ring-border/50 hover:bg-muted/20',
+                          'animate-fade-in cursor-pointer space-y-3 rounded-2xl p-3 transition-colors',
+                          selectedIntro?.id === req.id ? 'bg-muted/50' : 'hover:bg-muted/30',
                         )}
                       >
-                        <div className="flex items-start gap-3">
-                          <ThreadAvatar
-                            name={req.requester.displayName}
-                            src={req.requester?.avatarUrl}
-                            seed={req.requester.id}
-                            size="md"
-                          />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-2">
+                        <CardHead
+                          titleAs="p"
+                          mark={(
+                            <ThreadAvatar
+                              name={req.requester.displayName}
+                              src={req.requester?.avatarUrl}
+                              seed={req.requester.id}
+                              size="md"
+                            />
+                          )}
+                          title={(
+                            <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                               <Link
                                 href={`/profiles/${req.requester.id}`}
                                 onClick={(e) => e.stopPropagation()}
-                                className="truncate text-sm font-medium text-foreground hover:underline"
+                                className="transition-colors hover:text-primary-accessible"
                               >
                                 {req.requester.displayName}
                               </Link>
-                              <span className="shrink-0 text-xs text-muted-foreground">
-                                {new Date(req.createdAt).toLocaleDateString(primary === 'el' ? 'el-GR' : 'en-GB', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                })}
-                              </span>
-                            </div>
-                            <RoleBadge role={req.requester?.role || 'founder'} size="sm" className="mt-0.5" />
-                            {req.requester.headline && (
-                              <p className="mt-1 truncate text-2xs text-muted-foreground">{req.requester.headline}</p>
+                              <RoleBadge role={req.requester?.role || 'founder'} size="sm" />
+                            </span>
+                          )}
+                          subtitle={req.requester.headline ? <span className="line-clamp-2">{req.requester.headline}</span> : undefined}
+                          aside={new Date(req.createdAt).toLocaleDateString(primary === 'el' ? 'el-GR' : 'en-GB', {
+                            day: 'numeric',
+                            month: 'short',
+                          })}
+                        />
+                        {req.message && (
+                          <p className="card-body line-clamp-3 italic text-muted-foreground">
+                            {PREVIEW_MESSAGE_EL[req.message] ? (
+                              <BilingualText en={req.message} el={PREVIEW_MESSAGE_EL[req.message]} />
+                            ) : (
+                              <>&ldquo;{req.message}&rdquo;</>
                             )}
-                            {req.message && (
-                              <p className="mt-2 line-clamp-3 text-xs italic leading-relaxed text-foreground/70">
-                                {PREVIEW_MESSAGE_EL[req.message] ? (
-                                  <BilingualText en={req.message} el={PREVIEW_MESSAGE_EL[req.message]} />
-                                ) : (
-                                  <>&ldquo;{req.message}&rdquo;</>
-                                )}
-                              </p>
-                            )}
-                            <div className="mt-3 flex gap-2">
-                              <Button
-                                size="sm"
-                                className="h-7 gap-1 rounded-full px-3 text-xs"
-                                disabled={introResponding[req.id]}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  void handleIntroRespond(req.id, 'accepted');
-                                }}
-                              >
-                                <Check className="icon-sm" />
-                                <BilingualText en={messagesEn('accept')} el={messagesEl('accept')} compact />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-7 gap-1 rounded-full px-3 text-xs"
-                                disabled={introResponding[req.id]}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  void handleIntroRespond(req.id, 'declined');
-                                }}
-                              >
-                                <X className="icon-sm" />
-                                <BilingualText en={messagesEn('decline')} el={messagesEl('decline')} compact />
-                              </Button>
-                            </div>
-                          </div>
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Button
+                            size="sm"
+                            className="gap-1"
+                            disabled={introResponding[req.id]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleIntroRespond(req.id, 'accepted');
+                            }}
+                          >
+                            <Check className="icon-sm" />
+                            <BilingualText en={messagesEn('accept')} el={messagesEl('accept')} compact />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="gap-1"
+                            disabled={introResponding[req.id]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleIntroRespond(req.id, 'declined');
+                            }}
+                          >
+                            <X className="icon-sm" />
+                            <BilingualText en={messagesEn('decline')} el={messagesEl('decline')} compact />
+                          </Button>
                         </div>
                       </div>
                     ))}

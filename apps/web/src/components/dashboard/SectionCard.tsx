@@ -36,16 +36,22 @@ export function SectionCard({
   return (
     <Card className={className}>
       <CardHeader className="pb-3">
-        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-          <CardTitle className="flex min-w-0 items-center gap-2 text-base">
+        {/* One row: the title wraps before the way out does. A ghost link
+            that wrapped under the title started its own line with its
+            padding in front of its letters, 12px off the card's axis
+            (/dashboard/provider at 1440, "Recent reviews"). */}
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle className="flex min-w-0 flex-1 items-center gap-2">
             {Icon ? <Icon className="icon-sm shrink-0 text-muted-foreground" aria-hidden="true" /> : null}
             <BilingualText en={title} el={titleEl} />
           </CardTitle>
           {action ? (
-            <Button variant="ghost" size="sm" className="-mr-2 shrink-0" asChild>
+            // At most half the row: a long pair drops its second language
+            // (compact) rather than squeezing the title.
+            <Button variant="ghost" size="sm" className="-mr-2 min-w-0 max-w-[50%]" asChild>
               <Link href={action.href}>
-                <BilingualText en={action.label} el={action.labelEl} />
-                <ArrowRight className="ml-1 icon-sm" aria-hidden="true" />
+                <BilingualText en={action.label} el={action.labelEl} compact />
+                <ArrowRight className="ml-1 icon-sm shrink-0" aria-hidden="true" />
               </Link>
             </Button>
           ) : null}
@@ -67,7 +73,7 @@ export function QuickLinks({ links, label, title = 'Go to', titleEl = 'Μετά�
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base">
+        <CardTitle>
           <BilingualText en={title} el={titleEl} />
         </CardTitle>
       </CardHeader>
@@ -95,12 +101,67 @@ export function QuickLinks({ links, label, title = 'Go to', titleEl = 'Μετά�
   );
 }
 
-/** What a section says when it has no rows: one quiet, centred line in both languages. */
 /** An empty list's one line, on the card's left axis like the rows it stands in for. */
 export function EmptyLine({ en, el }: { en: string; el?: string }) {
   return (
     <p className="text-sm text-muted-foreground">
       <BilingualText en={en} el={el} stacked wrap />
     </p>
+  );
+}
+
+/**
+ * A row inside a section card, set like `CardHead`: a mark (a person's
+ * circle, an organisation's rounded square, or nothing), the title with the
+ * line under it, and one state, time or figure at the right - which drops
+ * under the line on a phone unless `asideStays`. The row has no frame of its
+ * own (`card-rows` draws the hairline between rows), and whatever it adds
+ * under its head - a sentence, a bar, its actions - starts on the mark's left
+ * edge, like the body of an Endorsements card.
+ *
+ * Its title sits a step under the section's own title (`text-sm
+ * font-medium`, the Members row step): a row set on `.card-title` read as
+ * loud as the section that holds it.
+ */
+export function RowHead({
+  mark,
+  title,
+  subtitle,
+  meta,
+  aside,
+  asideStays = false,
+  titleAs: Title = 'p',
+  className,
+}: {
+  mark?: ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
+  meta?: ReactNode;
+  aside?: ReactNode;
+  asideStays?: boolean;
+  titleAs?: 'p' | 'h3' | 'h4';
+  className?: string;
+}) {
+  const cols = mark
+    ? asideStays && aside ? 'grid-cols-[auto_minmax(50%,1fr)_auto]' : 'grid-cols-[auto_minmax(0,1fr)] sm:grid-cols-[auto_minmax(50%,1fr)_auto]'
+    : asideStays && aside ? 'grid-cols-[minmax(50%,1fr)_auto]' : 'grid-cols-[minmax(0,1fr)] sm:grid-cols-[minmax(50%,1fr)_auto]';
+  const asidePlace = asideStays
+    ? cn(mark ? 'col-start-3' : 'col-start-2', 'row-start-1 justify-end')
+    : cn(mark ? 'col-start-2 sm:col-start-3' : 'col-start-1 sm:col-start-2', 'row-start-2 mt-1 sm:row-start-1 sm:mt-0 sm:justify-end');
+  // `data-rail-keep-layout`: the page rail folds every `.grid` inside it to
+  // one column, which stacked the mark over the title (Top Matches in the
+  // founder's rail drew the avatar across the name).
+  return (
+    <div data-rail-keep-layout="" className={cn('grid grid-cols-1 items-start gap-x-3', cols, className)}>
+      {mark ? <div className={cn('col-start-1 row-start-1 shrink-0', aside && !asideStays && 'row-span-2 sm:row-span-1')}>{mark}</div> : null}
+      <div className={cn('min-w-0 row-start-1', mark ? 'col-start-2' : 'col-start-1')}>
+        <Title className="break-words text-sm font-medium text-foreground">{title}</Title>
+        {subtitle ? <div className="mt-0.5 break-words text-xs text-muted-foreground">{subtitle}</div> : null}
+        {meta ? <div className="mt-0.5 text-xs text-muted-foreground">{meta}</div> : null}
+      </div>
+      {aside ? (
+        <div className={cn('flex min-w-0 flex-wrap items-center gap-2 text-xs text-muted-foreground', asidePlace)}>{aside}</div>
+      ) : null}
+    </div>
   );
 }

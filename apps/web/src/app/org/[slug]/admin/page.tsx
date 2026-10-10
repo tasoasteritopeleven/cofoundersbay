@@ -565,9 +565,9 @@ export default function OrgAdminPage() {
             <ArrowLeft className="icon-md" aria-hidden="true" />
           </Button>
           <div className="flex min-w-0 flex-1 items-center gap-4">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-12 w-12 rounded-xl">
               <AvatarImage src={org.logo} />
-              <AvatarFallback className="bg-primary/10 text-primary-accessible text-lg">
+              <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible text-lg">
                 {org.name[0]}
               </AvatarFallback>
             </Avatar>
@@ -725,7 +725,7 @@ export default function OrgAdminPage() {
           <TabsContent value="invites">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Pending Invitations" el="Εκκρεμείς προσκλήσεις" compact /></CardTitle>
+                <CardTitle><BilingualText en="Pending Invitations" el="Εκκρεμείς προσκλήσεις" compact /></CardTitle>
                 <CardDescription><BilingualText en="Manage pending member invitations" el="Διαχείριση εκκρεμών προσκλήσεων" wrap /></CardDescription>
               </CardHeader>
               <CardContent>
@@ -745,7 +745,7 @@ export default function OrgAdminPage() {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base"><BilingualText en="Member Growth" el="Αύξηση μελών" compact /></CardTitle>
+                  <CardTitle><BilingualText en="Member Growth" el="Αύξηση μελών" compact /></CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[200px] flex flex-col items-center justify-center gap-3 text-muted-foreground">
@@ -756,7 +756,7 @@ export default function OrgAdminPage() {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base"><BilingualText en="Activity Overview" el="Επισκόπηση δραστηριότητας" compact /></CardTitle>
+                  <CardTitle><BilingualText en="Activity Overview" el="Επισκόπηση δραστηριότητας" compact /></CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[200px] flex flex-col items-center justify-center gap-3 text-muted-foreground">
@@ -771,7 +771,7 @@ export default function OrgAdminPage() {
           <TabsContent value="permissions">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Role Permissions" el="Δικαιώματα ρόλων" compact /></CardTitle>
+                <CardTitle><BilingualText en="Role Permissions" el="Δικαιώματα ρόλων" compact /></CardTitle>
                 <CardDescription><BilingualText en="What each role can do" el="Τι μπορεί να κάνει κάθε ρόλος" compact wrap /></CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -780,25 +780,25 @@ export default function OrgAdminPage() {
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className={cn('capitalize border', roleChip(role))}>
                         {role === 'owner' && <Crown className="icon-sm mr-1" />}
-                        {role}
+                        <StatusText value={role} />
                       </Badge>
                     </div>
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 text-sm">
                       {[
-                        'Invite members',
-                        'Remove members',
-                        'Manage roles',
-                        'Edit organization',
-                        'View analytics',
-                        'Manage projects',
+                        { en: 'Invite members', el: 'Πρόσκληση μελών' },
+                        { en: 'Remove members', el: 'Αφαίρεση μελών' },
+                        { en: 'Manage roles', el: 'Διαχείριση ρόλων' },
+                        { en: 'Edit organization', el: 'Επεξεργασία οργανισμού' },
+                        { en: 'View analytics', el: 'Προβολή αναλυτικών' },
+                        { en: 'Manage projects', el: 'Διαχείριση έργων' },
                       ].map((perm, i) => (
-                        <div key={perm} className="flex items-center gap-2">
+                        <div key={perm.en} className="flex items-center gap-2">
                           {(role === 'owner' || (role === 'admin' && i < 5) || (role === 'member' && i > 3)) ? (
                             <CheckCircle2 className={cn('icon-sm', STATUS.success.icon)} />
                           ) : (
                             <XCircle className="icon-sm text-muted-foreground" aria-hidden="true" />
                           )}
-                          <span className="text-muted-foreground">{perm}</span>
+                          <span className="min-w-0 text-muted-foreground"><BilingualText en={perm.en} el={perm.el} compact wrap /></span>
                         </div>
                       ))}
                     </div>

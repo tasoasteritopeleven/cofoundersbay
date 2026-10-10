@@ -22,6 +22,8 @@ import { qk } from '@/lib/query-keys';
 import { rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { BilingualText } from '@/components/common/BilingualText';
 import { FactLine } from '@/components/common/FactLine';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { StatusText } from '@/components/common/StatusText';
 
 const ComparisonChart = dynamic(
   () => import('./ComparisonChart').then((m) => ({ default: m.ComparisonChart })),
@@ -64,59 +66,84 @@ function ProfileColumn({
     .join('')
     .toUpperCase() || '??';
 
+  // The Connections card for each person compared: circle, name, headline
+  // and place, remove at the right; the score, the facts and the foot on
+  // the avatar's edge, so the columns read across at the same steps.
   return (
-    <div className="flex flex-col">
-      {/* Header with remove button */}
-      <div className="relative mb-4">
-        <button
-          onClick={onRemove}
-          className="absolute -right-2 -top-2 z-10 rounded-full bg-destructive p-1 text-destructive-foreground shadow-md hover:bg-destructive/90 transition-colors"
-          aria-label="Remove from comparison"
-        >
-          <X className="icon-sm" aria-hidden="true" />
-        </button>
-
-        <div className="flex flex-col items-center text-center">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
-            <AvatarImage src={profile.avatarUrl} />
-            <AvatarFallback className="text-base font-bold bg-primary/10 text-primary-accessible">
+    <CardContent className="space-y-3">
+      <CardHead
+        mark={(
+          <Avatar className="h-10 w-10 border border-primary/20">
+            <AvatarImage src={profile.avatarUrl} alt="" />
+            <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <h3 className="mt-3 font-semibold text-foreground line-clamp-1">
-            {profile.displayName}
-          </h3>
-          <p className="text-sm text-muted-foreground line-clamp-1">
-            {profile.headline || profile.role || 'No headline'}
-          </p>
-          {profile.location && (
-            <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-              <MapPin className="icon-sm" aria-hidden="true" />
-              <span>{profile.location}</span>
-            </div>
-          )}
-        </div>
-      </div>
+        )}
+        title={profile.displayName}
+        subtitle={<span className="line-clamp-1">{profile.headline || (profile.role ? <StatusText value={profile.role} /> : <BilingualText en="No headline" el="Χωρίς τίτλο" compact />)}</span>}
+        meta={profile.location ?? undefined}
+        asideStays
+        aside={(
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onRemove}
+            className="h-8 w-8 text-muted-foreground hover:text-destructive-accessible"
+            aria-label="Remove from comparison"
+          >
+            <X className="icon-sm" aria-hidden="true" />
+          </Button>
+        )}
+      />
 
-      {/* Match Score */}
+      {/* Match Score: a figure under the title's step, its label beside it. */}
       {profile.matchScore !== undefined && (
-        <div className="mb-4 rounded-lg bg-primary/5 p-3 text-center">
-          <p className="page-stat text-2xl font-bold text-primary-accessible">{profile.matchScore}%</p>
-          <p className="text-xs text-muted-foreground"><BilingualText en="Match Score" el="Βαθμός ταιριάσματος" compact /></p>
-        </div>
+        <p className="text-xs text-muted-foreground">
+          <span className="card-body font-semibold tabular-nums text-primary-accessible">{profile.matchScore}%</span>{' '}
+          <BilingualText en="Match Score" el="Βαθμός ταιριάσματος" compact />
+        </p>
       )}
 
+      {/* Skills */}
+      <div className="space-y-1">
+        <p className="text-xs font-medium text-muted-foreground"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
+        {(profile.skills?.length ?? 0) > 0 ? <FactLine className="text-foreground" items={(profile.skills ?? []).slice(0, 5).map((skill) => skill.name)} /> : <p className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></p>}
+      </div>
+
+      {/* Industries */}
+      <div className="space-y-1">
+        <p className="text-xs font-medium text-muted-foreground"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
+        {(profile.industries?.length ?? 0) > 0 ? <FactLine className="text-foreground" items={(profile.industries ?? []).slice(0, 3)} /> : <p className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></p>}
+      </div>
+
+      {/* Stage & Availability */}
+      <dl className="space-y-1.5 text-xs">
+        <div className="flex justify-between gap-3">
+          <dt className="text-muted-foreground"><BilingualText en="Stage" el="Στάδιο" compact /></dt>
+          <dd className="font-medium text-foreground">{profile.stage ? <StatusText value={profile.stage} /> : '—'}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-muted-foreground"><BilingualText en="Availability" el="Διαθεσιμότητα" compact /></dt>
+          <dd className="font-medium text-foreground">{profile.availability ? <StatusText value={profile.availability} /> : '—'}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-muted-foreground"><BilingualText en="Languages" el="Γλώσσες" compact /></dt>
+          <dd className="font-medium text-foreground">{profile.languages?.join(', ') || '—'}</dd>
+        </div>
+      </dl>
+
       {/* Quick Actions */}
-      <div className="flex gap-2 mb-4">
+      <CardFoot>
         {profile.connectionStatus === 'connected' ? (
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <Button variant="outline" size="sm" asChild>
             <a href={`/messages?user=${profile.id}`}>
               <MessageCircle className="icon-sm mr-1" aria-hidden="true" />
               <BilingualText en="Message" el="Μήνυμα" compact />
             </a>
           </Button>
         ) : profile.connectionStatus === 'pending' ? (
-          <Button variant="outline" size="sm" className="flex-1" disabled>
+          <Button variant="outline" size="sm" disabled title="Request sent · Το αίτημα στάλθηκε">
             <Clock className="icon-sm mr-1" aria-hidden="true" />
             <BilingualText en="Pending" el="Σε αναμονή" compact />
           </Button>
@@ -124,7 +151,6 @@ function ProfileColumn({
           <Button
             variant="default"
             size="sm"
-            className="flex-1"
             onClick={onConnect}
             disabled={isConnecting}
           >
@@ -132,40 +158,8 @@ function ProfileColumn({
             <BilingualText en="Connect" el="Σύνδεση" compact />
           </Button>
         )}
-      </div>
-
-      {/* Skills */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
-        <div>
-          {(profile.skills?.length ?? 0) > 0 ? <FactLine className="text-foreground sm:text-sm" items={(profile.skills ?? []).slice(0, 5).map((skill) => skill.name)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></span>}
-        </div>
-      </div>
-
-      {/* Industries */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-muted-foreground mb-2"><BilingualText en="Industries" el="Κλάδοι" compact /></p>
-        <div>
-          {(profile.industries?.length ?? 0) > 0 ? <FactLine className="text-foreground sm:text-sm" items={(profile.industries ?? []).slice(0, 3)} /> : <span className="text-xs text-muted-foreground"><BilingualText en="Not specified" el="Δεν έχει οριστεί" compact /></span>}
-        </div>
-      </div>
-
-      {/* Stage & Availability */}
-      <div className="space-y-2 text-sm">
-        <div className="flex justify-between">
-          <span className="text-muted-foreground"><BilingualText en="Stage" el="Στάδιο" compact /></span>
-          <span className="font-medium">{profile.stage || '—'}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground"><BilingualText en="Availability" el="Διαθεσιμότητα" compact /></span>
-          <span className="font-medium">{profile.availability || '—'}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground"><BilingualText en="Languages" el="Γλώσσες" compact /></span>
-          <span className="font-medium">{profile.languages?.join(', ') || '—'}</span>
-        </div>
-      </div>
-    </div>
+      </CardFoot>
+    </CardContent>
   );
 }
 
@@ -173,7 +167,7 @@ function AddProfileSlot({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/20 p-8 transition-colors hover:border-primary/40 hover:bg-secondary/40 min-h-[400px]"
+      className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-secondary/20 p-8 transition-colors hover:border-primary/40 hover:bg-secondary/40 min-h-48 sm:min-h-[400px]"
     >
       <div className="rounded-full bg-primary/10 p-4 mb-3">
         <Plus className="icon-xl text-primary-accessible" />
@@ -403,8 +397,8 @@ export default function ComparePage() {
         {profileIds.length === 0 && (
           <EmptyState
             illustration="search"
-            title="No profiles to compare"
-            description="Add profiles from your matches or search to compare them side by side"
+            title={<BilingualText en="No profiles to compare" el="Κανένα προφίλ για σύγκριση" compact wrap />}
+            description={<BilingualText en="Add profiles from your matches or search to compare them side by side" el="Προσθέστε προφίλ από τις αντιστοιχίσεις ή την αναζήτηση για να τα συγκρίνετε δίπλα-δίπλα" wrap />}
             askAiPrompt="Help me pick two or three people from my matches to compare as potential cofounders."
             action={
               <Button onClick={handleAdd}>
@@ -417,12 +411,14 @@ export default function ComparePage() {
 
         {/* Profile Columns */}
         {profileIds.length > 0 && (
+          // One column on a phone; side by side from the tablet up, so a
+          // compared card is never squeezed to a sliver at 390px.
           <div className={cn(
             'grid grid-cols-1 gap-6',
-            profileIds.length === 1 && 'grid-cols-1 max-w-md',
-            profileIds.length === 2 && 'grid-cols-2',
-            profileIds.length === 3 && 'grid-cols-3',
-            profileIds.length === 4 && 'grid-cols-4',
+            profileIds.length === 1 && 'max-w-md',
+            profileIds.length === 2 && 'sm:grid-cols-2',
+            profileIds.length === 3 && 'sm:grid-cols-2 lg:grid-cols-3',
+            profileIds.length === 4 && 'sm:grid-cols-2 xl:grid-cols-4',
           )}>
             {isLoading ? (
               Array.from({ length: profileIds.length }).map((_, i) => (
@@ -437,7 +433,7 @@ export default function ComparePage() {
             ) : (
               <>
                 {profiles?.map((profile) => (
-                  <Card key={profile.id} className="p-4">
+                  <Card key={profile.id}>
                     <ProfileColumn
                       profile={profile}
                       onRemove={() => handleRemove(profile.id)}

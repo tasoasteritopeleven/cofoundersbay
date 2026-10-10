@@ -30,6 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { LandingNav } from '@/components/layout/LandingNav';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { CookieChoicesButton } from '@/components/common/CookieChoicesButton';
 import { MainLandmark } from '@/components/layout/AppShell';
 import { NeedCard, type NeedCardView } from '@/components/commitments/NeedCard';
@@ -240,7 +241,9 @@ function SectionHeading({ eyebrow, title, lead }: { eyebrow: Pair; title: Pair; 
     <div className="mx-auto mb-12 max-w-3xl text-center">
       <Badge variant="outline" className="mb-3 border-primary/30 text-primary-accessible"><T p={eyebrow} /></Badge>
       <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl"><T p={title} wrap /></h2>
-      {lead ? <p className="mt-3 text-muted-foreground"><BilingualText en={lead.en} el={lead.el} wrap /></p> : null}
+      {/* Under the heading on every width: on a phone the heading sits on
+          the 15.343 title step and an unclassed lead (16.327) outranked it. */}
+      {lead ? <p className="mt-3 text-sm text-muted-foreground sm:text-base"><BilingualText en={lead.en} el={lead.el} wrap /></p> : null}
     </div>
   );
 }
@@ -342,14 +345,20 @@ export function LandingHome() {
           />
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {PROTECTIONS.map(({ icon: Icon, title, desc }) => (
-              <li key={title.en} className="flex min-w-0 gap-3 rounded-2xl border border-border bg-card p-5">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
-                  <Icon className="icon-sm text-primary-accessible" />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-foreground"><T p={title} wrap /></h3>
-                  <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
-                </div>
+              <li key={title.en} className="min-w-0 space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">
+                {/* The Endorsements card's head: a 2.5rem mark beside the
+                    title, the sentence under both on the mark's edge. */}
+                <CardHead
+                  titleAs="h3"
+                  className="items-center"
+                  mark={(
+                    <span data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
+                      <Icon className="icon-md text-primary-accessible" />
+                    </span>
+                  )}
+                  title={<T p={title} wrap />}
+                />
+                <p className="card-body text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
               </li>
             ))}
           </ul>
@@ -372,15 +381,15 @@ export function LandingHome() {
           />
           <ol className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {MOVES.map(({ title, note }, index) => (
-              <li key={title.en} className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border bg-card p-6">
+              <li key={title.en} className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:p-6">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold tabular-nums text-primary-foreground">{index + 1}</span>
-                <h3 className="text-lg font-semibold text-foreground"><T p={title} wrap /></h3>
-                <p className="text-sm leading-relaxed text-muted-foreground"><BilingualText en={note.en} el={note.el} wrap /></p>
+                <h3 className="card-title text-foreground"><T p={title} wrap /></h3>
+                <p className="card-body text-muted-foreground"><BilingualText en={note.en} el={note.el} wrap /></p>
               </li>
             ))}
           </ol>
           <div className="mt-10 flex flex-col items-center gap-4 text-center">
-            <p className="text-base font-medium text-foreground">
+            <p className="text-sm font-medium text-foreground sm:text-base">
               <BilingualText en="The agreement is the threshold, not the ceiling." el="Η συμφωνία είναι το κατώφλι, όχι το ταβάνι." wrap />
             </p>
             <ul className="flex flex-wrap justify-center gap-1.5" aria-label="What continues after the agreement · Τι συνεχίζεται μετά τη συμφωνία">
@@ -413,7 +422,7 @@ export function LandingHome() {
                     <Icon className="icon-sm" />
                     <T p={role} />
                   </Badge>
-                  <CardTitle className="text-base"><T p={headline} wrap /></CardTitle>
+                  <CardTitle><T p={headline} wrap /></CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {bullets.map((bullet) => (
@@ -439,13 +448,19 @@ export function LandingHome() {
           />
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map(({ icon: Icon, title, desc }) => (
-              <div key={title.en} className="flex min-w-0 gap-4 rounded-2xl border border-border bg-card/70 p-5">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
-                  <Icon className="icon-md text-muted-foreground" />
-                </div>
+              <div key={title.en} className="min-w-0 space-y-3 rounded-2xl border border-border bg-card/70 p-4 sm:p-5">
+                <CardHead
+                  titleAs="h3"
+                  className="items-center"
+                  mark={(
+                    <span data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" aria-hidden="true">
+                      <Icon className="icon-md text-primary-accessible" />
+                    </span>
+                  )}
+                  title={<T p={title} wrap />}
+                />
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-foreground"><T p={title} wrap /></h3>
-                  <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
+                  <p className="card-body text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
                 </div>
               </div>
             ))}
@@ -480,7 +495,7 @@ export function LandingHome() {
                   ? 'flex flex-col rounded-2xl border border-primary/40 bg-primary/[0.03] p-6'
                   : 'flex flex-col rounded-2xl border border-border bg-card/80 p-6'}
               >
-                <h3 className="text-lg font-semibold text-foreground"><T p={name} /></h3>
+                <h3 className="card-title text-foreground"><T p={name} /></h3>
                 <p className="mt-1 text-sm text-muted-foreground"><BilingualText en={desc.en} el={desc.el} wrap /></p>
                 <ul className="mt-5 flex-1 space-y-2.5">
                   {PLAN_HIGHLIGHTS[key].map((f) => (

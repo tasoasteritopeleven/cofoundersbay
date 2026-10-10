@@ -8,6 +8,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { CardHead } from '@/components/common/CardAnatomy';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { CfbGlyph } from '@/components/icons/CfbGlyph';
 import { BUILDER_BTN } from '@/components/builder/BuilderStageChrome';
 
@@ -113,45 +114,42 @@ function CapabilityCard({ spec }: { spec: ActionDeclaration }) {
   const reversal = reversalLabel(spec);
   const writes = spec.writes;
 
+  // One state at the head's right (whether it writes); how far it can be
+  // taken back is the caption under the title, and the explanation of it
+  // sits with the description on the card's left edge.
   return (
-    <article data-card="" className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
-      <CardHead
-        title={<BilingualText en={spec.label.en} el={spec.label.el} compact wrap />}
-        aside={(
-          <>
-            {writes ? (
-              <Badge variant="outline" className="border-status-warning-border/60 bg-status-warning-bg text-status-warning">
-                <BilingualText en="Writes" el="Γράφει" compact />
-              </Badge>
-            ) : (
-              <Badge variant="secondary">
-                <BilingualText en="Looks up" el="Αναζητά" compact />
-              </Badge>
-            )}
-            {reversal && (
-              <Badge variant="outline">
-                <BilingualText en={reversal.en} el={reversal.el} compact />
-              </Badge>
-            )}
-          </>
-        )}
-      />
-      <p className="card-body text-muted-foreground">
-        <BilingualText en={spec.description.en} el={spec.description.el} wrap />
-      </p>
-      {spec.reversal && spec.kind === 'mutation' && (
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          <BilingualText en={spec.reversal.explanation.en} el={spec.reversal.explanation.el} wrap />
+    <Card>
+      <CardContent className="space-y-3">
+        <CardHead
+          title={<BilingualText en={spec.label.en} el={spec.label.el} compact wrap />}
+          meta={reversal ? <BilingualText en={reversal.en} el={reversal.el} compact wrap /> : undefined}
+          aside={writes ? (
+            <Badge variant="outline" className="border-status-warning-border/60 bg-status-warning-bg text-status-warning">
+              <BilingualText en="Writes" el="Γράφει" compact />
+            </Badge>
+          ) : (
+            <Badge variant="secondary">
+              <BilingualText en="Looks up" el="Αναζητά" compact />
+            </Badge>
+          )}
+        />
+        <p className="card-body text-muted-foreground">
+          <BilingualText en={spec.description.en} el={spec.description.el} wrap />
         </p>
-      )}
-      {sample && (
-        <Button asChild variant="ghost" size="sm" className={`h-auto min-h-11 w-fit justify-start px-0 py-1.5 text-xs lg:px-0 hover:bg-transparent hover:underline ${BUILDER_BTN}`}>
-          <Link href={`/ai?q=${encodeURIComponent(sample.en)}`}>
-            <BilingualText en={`Try: “${sample.en}”`} el={`Δοκίμασε: «${sample.el}»`} compact wrap />
-          </Link>
-        </Button>
-      )}
-    </article>
+        {spec.reversal && spec.kind === 'mutation' && (
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            <BilingualText en={spec.reversal.explanation.en} el={spec.reversal.explanation.el} wrap />
+          </p>
+        )}
+        {sample && (
+          <Button asChild variant="ghost" size="sm" className={`h-auto min-h-11 w-fit justify-start px-0 py-1.5 text-xs lg:px-0 hover:bg-transparent hover:underline ${BUILDER_BTN}`}>
+            <Link href={`/ai?q=${encodeURIComponent(sample.en)}`}>
+              <BilingualText en={`Try: “${sample.en}”`} el={`Δοκίμασε: «${sample.el}»`} compact wrap />
+            </Link>
+          </Button>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

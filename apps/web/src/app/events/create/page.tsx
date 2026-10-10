@@ -26,11 +26,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import { bilingualInline } from '@/lib/i18n/format';
 import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 const EVENT_TYPES = [
   { value: 'networking', label: 'Networking', labelEl: 'Δικτύωση' },
@@ -62,8 +62,8 @@ function whenText(startAt: string, endAt: string, locale: 'en-GB' | 'el-GR' = 'e
 function FormSection({ icon: Icon, title, titleEl, children }: { icon: typeof Calendar; title: string; titleEl: string; children: React.ReactNode }) {
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
           <Icon className="icon-sm text-muted-foreground" aria-hidden="true" />
           <BilingualText en={title} el={titleEl} />
         </CardTitle>
@@ -330,53 +330,49 @@ export default function CreateEventPage() {
 
         {/* How the listing will read, and what it still lacks. */}
         <aside aria-label="Preview" className="min-w-0 space-y-4 lg:sticky lg:top-24">
+          {/* The listing as it will read: the event card's own head (mark,
+              title, kind), then the facts and the sentence on the mark's edge. */}
           <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                <BilingualText en="Preview" el="Προεπισκόπηση" />
-              </CardTitle>
-            </CardHeader>
             <CardContent className="space-y-3">
-              <Badge variant="secondary" size="sm" className="bg-primary/10 text-primary-accessible">
-                <BilingualText en={type.label} el={type.labelEl} compact />
-              </Badge>
-              <p className={cn('text-lg font-semibold leading-snug', !form.title.trim() && 'text-muted-foreground')}>
-                {form.title.trim() || <BilingualText en="Untitled event" el="Εκδήλωση χωρίς τίτλο" />}
+              <p className="text-xs font-medium text-muted-foreground">
+                <BilingualText en="Preview" el="Προεπισκόπηση" compact />
               </p>
-              <ul className="space-y-1.5 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <Clock className="mt-0.5 icon-sm shrink-0" aria-hidden="true" />
-                  <span className="min-w-0">
-                    {when ?? <BilingualText en="Pick a start time" el="Επιλέξτε ώρα έναρξης" wrap />}
-                    {when && form.timezone ? <span className="block text-xs">{form.timezone}</span> : null}
-                  </span>
+              <CardHead
+                mark={(
+                  <div data-card-mark="" data-keep-icon className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary-accessible">
+                    <Calendar className="icon-md" aria-hidden="true" />
+                  </div>
+                )}
+                title={form.title.trim()
+                  ? <span className="break-words">{form.title.trim()}</span>
+                  : <span className="text-muted-foreground"><BilingualText en="Untitled event" el="Εκδήλωση χωρίς τίτλο" compact /></span>}
+                subtitle={<BilingualText en={type.label} el={type.labelEl} compact />}
+              />
+              <ul className="space-y-1 text-xs text-muted-foreground">
+                <li className="min-w-0">
+                  {when ?? <BilingualText en="Pick a start time" el="Επιλέξτε ώρα έναρξης" wrap />}
+                  {when && form.timezone ? <> · {form.timezone}</> : null}
                 </li>
-                <li className="flex items-start gap-2">
-                  {form.isOnline ? <Video className="mt-0.5 icon-sm shrink-0" aria-hidden="true" /> : <MapPin className="mt-0.5 icon-sm shrink-0" aria-hidden="true" />}
-                  <span className="min-w-0 break-words">
-                    {place ?? <BilingualText en={form.isOnline ? 'Online · add the link' : 'Add a venue'} el={form.isOnline ? 'Διαδικτυακά · προσθέστε σύνδεσμο' : 'Προσθέστε χώρο'} wrap />}
-                  </span>
+                <li className="min-w-0 break-words">
+                  {place ?? <BilingualText en={form.isOnline ? 'Online · add the link' : 'Add a venue'} el={form.isOnline ? 'Διαδικτυακά · προσθέστε σύνδεσμο' : 'Προσθέστε χώρο'} wrap />}
                 </li>
-                <li className="flex items-start gap-2">
-                  <Users className="mt-0.5 icon-sm shrink-0" aria-hidden="true" />
-                  <span className="min-w-0">
-                    {capacity && capacity > 0 ? (
-                      <BilingualText en={`Up to ${capacity} attendees`} el={`Έως ${capacity} συμμετέχοντες`} wrap />
-                    ) : (
-                      <BilingualText en="No attendance limit" el="Χωρίς όριο συμμετοχής" wrap />
-                    )}
-                  </span>
+                <li className="min-w-0">
+                  {capacity && capacity > 0 ? (
+                    <BilingualText en={`Up to ${capacity} attendees`} el={`Έως ${capacity} συμμετέχοντες`} wrap />
+                  ) : (
+                    <BilingualText en="No attendance limit" el="Χωρίς όριο συμμετοχής" wrap />
+                  )}
                 </li>
               </ul>
               {form.description.trim() ? (
-                <p className="line-clamp-4 border-t border-border pt-3 text-sm leading-relaxed text-muted-foreground">{form.description.trim()}</p>
+                <p className="card-body line-clamp-4 text-muted-foreground first-letter:uppercase">{form.description.trim()}</p>
               ) : null}
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">
+            <CardHeader>
+              <CardTitle>
                 <BilingualText en="Before you publish" el="Πριν τη δημοσίευση" />
               </CardTitle>
             </CardHeader>

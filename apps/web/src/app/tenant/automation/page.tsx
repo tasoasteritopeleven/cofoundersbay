@@ -22,11 +22,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import {
-  Zap, Clock, Play, Pause, Trash2,
-  CheckCircle2, XCircle, AlertTriangle,
+  Zap, Play, Pause, Trash2,
   Settings, Bell, Users, GitMerge, CreditCard, RefreshCw,
 } from 'lucide-react';
 import { EmptyTenantAutomations } from '@/components/common/EmptyStates';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { EmptyState } from '@/components/common/EmptyState';
 import Link from 'next/link';
 import { qk } from '@/lib/query-keys';
@@ -126,12 +127,12 @@ function ConfigPanel({ tenantId }: { tenantId: string }) {
 
   return (
     <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
           <Settings className="icon-sm text-muted-foreground" />
           <BilingualText en="Automation Settings" el="Ρυθμίσεις αυτοματισμών" compact />
         </CardTitle>
-        <CardDescription className="text-xs">
+        <CardDescription>
           <BilingualText en="Control which automation categories are active for your organization." el="Ορίστε ποιες κατηγορίες αυτοματισμών είναι ενεργές για τον οργανισμό σας." wrap />
         </CardDescription>
       </CardHeader>
@@ -184,43 +185,54 @@ function RuleRow({ rule, tenantId, onRefresh }: { rule: AutomationRuleItem; tena
 
   const cat = TRIGGER_CATEGORY[rule.triggerType];
 
+  // The Opportunities card: the rule's mark, its name over its category and
+  // trigger, the state at the right; the sentence, then the runs and the
+  // controls in the foot.
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-medium text-sm">{rule.name}</span>
-            {rule.tenantId === null && (
-              <Badge variant="outline" className="text-xs text-muted-foreground"><BilingualText en="Platform" el="Πλατφόρμα" compact /></Badge>
-            )}
-            <Badge variant="secondary" className={`text-xs ${cat?.color ?? 'bg-muted text-muted-foreground'}`}>
-              {cat ? <BilingualText en={cat.label} el={cat.labelEl} compact /> : <BilingualText en="Other" el="Άλλο" compact />}
-            </Badge>
-            <Badge variant="outline" className="text-xs">
-              {TRIGGER_LABELS[rule.triggerType]
-                ? <BilingualText en={TRIGGER_LABELS[rule.triggerType].en} el={TRIGGER_LABELS[rule.triggerType].el} compact />
-                : rule.triggerType}
-            </Badge>
-            {rule.status === 'active'
-              ? <Badge className="bg-status-success-bg text-status-success text-xs"><BilingualText en="Active" el="Ενεργός" compact /></Badge>
-              : rule.status === 'paused'
-              ? <Badge className="bg-status-warning-bg text-status-warning text-xs"><BilingualText en="Paused" el="Σε παύση" compact /></Badge>
-              : <Badge variant="outline" className="text-xs"><StatusText value={rule.status} /></Badge>}
-          </div>
-          {rule.description && <p className="text-xs text-muted-foreground">{rule.description}</p>}
-          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><Zap className="icon-sm" />{rule.executionCount} runs</span>
-            {rule.failureCount > 0 && (
-              <span className="flex items-center gap-1 text-status-warning"><AlertTriangle className="icon-sm" />{rule.failureCount} failures</span>
-            )}
-            {rule.lastRunAt && (
-              <span className="flex items-center gap-1"><Clock className="icon-sm" />{new Date(rule.lastRunAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}</span>
-            )}
-            {rule.delaySeconds > 0 && <span>Delay: {rule.delaySeconds}s</span>}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1 shrink-0">
+    <Card className="transition-all hover:border-primary/20">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+              <Zap className="icon-md" aria-hidden="true" />
+            </div>
+          )}
+          title={rule.name}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                cat ? <BilingualText key="cat" en={cat.label} el={cat.labelEl} compact /> : <BilingualText key="cat" en="Other" el="Άλλο" compact />,
+                TRIGGER_LABELS[rule.triggerType]
+                  ? <BilingualText key="trigger" en={TRIGGER_LABELS[rule.triggerType].en} el={TRIGGER_LABELS[rule.triggerType].el} compact />
+                  : <span key="trigger" className="font-mono">{rule.triggerType}</span>,
+                rule.tenantId === null ? <BilingualText key="platform" en="Platform" el="Πλατφόρμα" compact /> : null,
+              ]}
+            />
+          )}
+          aside={rule.status === 'active'
+            ? <Badge variant="outline" className="border-status-success-border bg-status-success-bg text-xs text-status-success"><BilingualText en="Active" el="Ενεργός" compact /></Badge>
+            : rule.status === 'paused'
+            ? <Badge variant="outline" className="border-status-warning-border bg-status-warning-bg text-xs text-status-warning"><BilingualText en="Paused" el="Σε παύση" compact /></Badge>
+            : <Badge variant="outline" className="text-xs"><StatusText value={rule.status} /></Badge>}
+        />
+        {rule.description && <p className="card-body text-muted-foreground first-letter:uppercase">{rule.description}</p>}
+        <CardFoot
+          meta={(
+            <FactLine
+              items={[
+                <BilingualText key="runs" en={`${rule.executionCount} runs`} el={`${rule.executionCount} εκτελέσεις`} compact />,
+                rule.failureCount > 0 ? (
+                  <span key="failures" className="text-status-warning">
+                    <BilingualText en={`${rule.failureCount} failures`} el={`${rule.failureCount} αποτυχίες`} compact />
+                  </span>
+                ) : null,
+                rule.lastRunAt ? <span key="last" className="tabular-nums">{new Date(rule.lastRunAt).toLocaleDateString('en-GB', { timeZone: 'UTC' })}</span> : null,
+                rule.delaySeconds > 0 ? <BilingualText key="delay" en={`Delay: ${rule.delaySeconds}s`} el={`Καθυστέρηση: ${rule.delaySeconds}s`} compact /> : null,
+              ]}
+            />
+          )}
+        >
           <Button variant="ghost" size="icon" className="h-8 w-8" title="Run now" aria-label={`Run ${rule.name} now`} onClick={() => trigger.mutate()} disabled={trigger.isPending}>
             <Play className="icon-sm" />
           </Button>
@@ -243,9 +255,9 @@ function RuleRow({ rule, tenantId, onRefresh }: { rule: AutomationRuleItem; tena
               <Trash2 className="icon-sm" />
             </Button>
           )}
-        </div>
-      </div>
-    </div>
+        </CardFoot>
+      </CardContent>
+    </Card>
   );
 }
 

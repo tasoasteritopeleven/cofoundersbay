@@ -31,7 +31,7 @@ const relationship = (over: Partial<MentorshipRelationshipItem> = {}): Mentorshi
   completedAt: null,
   nextSessionAt: null,
   totalSessions: 2,
-  mentor: { id: 'mentor-1', displayName: 'Mentor One', headline: 'Ex-Google', avatarUrl: null },
+  mentor: { id: 'mentor-1', displayName: 'Mentor One', headline: 'Former product lead', avatarUrl: null },
   mentee: { id: 'mentee-1', displayName: 'Mentee One', headline: 'Founder', avatarUrl: null, role: 'founder' },
   ...over,
 });

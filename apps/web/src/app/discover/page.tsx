@@ -20,7 +20,6 @@ import {
   DollarSign,
   Briefcase,
   Star,
-  BadgeCheck,
   Bookmark,
   Search,
   X as XIcon,
@@ -32,6 +31,8 @@ import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailOptions, RailStats } from '@/components/layout/RailParts';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -529,47 +530,54 @@ export default function DiscoverPage() {
 
           {/* Featured strip when no query */}
           {!loading && !filters.q && hits.length > 0 && roleFilter === 'all' && (
-            <div className="rounded-xl border border-primary/15 bg-primary/[0.03] p-4">
-              <div className="mb-3 flex min-w-0 flex-wrap items-center gap-2">
-                <BadgeCheck className="icon-sm shrink-0 text-muted-foreground" />
-                <span className="text-sm font-semibold text-foreground">
+            // A section card: its title and the line under it, then the
+            // people as chips on the title's edge.
+            <Card className="border-primary/15 bg-primary/[0.03]">
+              <CardHeader>
+                <CardTitle>
                   <BilingualText en="Featured profiles" el="Προτεινόμενα προφίλ" compact />
-                </span>
-                <span className="hidden text-xs text-muted-foreground sm:inline">
+                </CardTitle>
+                <CardDescription className="hidden sm:block">
                   <BilingualText en="Top matches for your profile" el="Κορυφαίες αντιστοιχίσεις για το προφίλ σας" compact />
-                </span>
-              </div>
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 scrollbar-hide sm:flex-wrap">
-                {hits.slice(0, 4).map((h) => (
-                  <Link key={h.id} href={`/profiles/${h.userId}`}
-                    className="flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 hover:border-primary/40 hover:bg-muted/40 transition-all">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-xs font-bold text-muted-foreground">
-                      {initialsOf(h.displayName)}
-                    </div>
-                    <div className="min-w-0">
-                      {/* 100px cut "Elena Papadopoulos" by a fifth. These
-                          chips sit in a horizontal scroller, so a wider one
-                          costs nothing but a little scroll. */}
-                      {/* No cap and no ellipsis: these chips sit in a
-                          horizontal scroller and are already `shrink-0`, so a
-                          full name costs a little scroll and nothing else.
-                          Capped at 100px, "Elena Papadopoulos" lost two
-                          thirds of itself. */}
-                      <p className="whitespace-nowrap text-xs font-medium text-foreground">{h.displayName}</p>
-                      {/* The raw role ("founder") read as a lower-case enum once the
-                          DOM pass translated it («ιδρυτής»). */}
-                      <p className="whitespace-nowrap text-xs text-muted-foreground"><StatusText value={h.role} /></p>
-                    </div>
-                    {h.matchScore !== undefined && (
-                      <span className={cn(
-                        'ml-1 rounded-full px-1.5 py-0.5 text-xs font-bold',
-                        h.matchScore >= 80 ? STATUS.success.chip : h.matchScore >= 60 ? STATUS.info.chip : STATUS.neutral.chip,
-                      )}>{h.matchScore}%</span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* The people as rows on the card, each its circle with the
+                    name and role beside it: no framed chip around a person
+                    inside the card. The strip still scrolls on a phone. */}
+                <div className="-mx-1 flex gap-x-6 gap-y-3 overflow-x-auto px-1 pb-0.5 scrollbar-hide sm:flex-wrap">
+                  {hits.slice(0, 4).map((h) => (
+                    <Link key={h.id} href={`/profiles/${h.userId}`}
+                      className="group flex shrink-0 items-center gap-3 rounded-md">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={h.avatarUrl ?? undefined} alt="" />
+                        <AvatarFallback className="bg-muted text-xs font-semibold text-muted-foreground">
+                          {initialsOf(h.displayName)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        {/* No cap and no ellipsis: the strip scrolls, so a
+                            full name costs a little scroll and nothing else
+                            (capped at 100px, "Elena Papadopoulos" lost two
+                            thirds of itself). */}
+                        <p className="whitespace-nowrap text-sm font-medium text-foreground transition-colors group-hover:text-primary-accessible">{h.displayName}</p>
+                        {/* The raw role ("founder") read as a lower-case enum once the
+                            DOM pass translated it («ιδρυτής»). */}
+                        <p className="flex items-center gap-1.5 whitespace-nowrap text-xs text-muted-foreground">
+                          <StatusText value={h.role} />
+                          {h.matchScore !== undefined && (
+                            <span className={cn(
+                              'rounded-full px-1.5 py-0.5 text-2xs font-semibold tabular-nums',
+                              h.matchScore >= 80 ? STATUS.success.chip : h.matchScore >= 60 ? STATUS.info.chip : STATUS.neutral.chip,
+                            )}>{h.matchScore}%</span>
+                          )}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           )}
 
           {!loading && roleHits.length === 0 && hits.length > 0 && roleFilter !== 'all' && (
@@ -601,7 +609,7 @@ export default function DiscoverPage() {
           )}
 
           {!loading && promotedHits.length > 0 && (
-            <section aria-label="Promoted · Προώθηση" className="space-y-3 rounded-xl border border-border p-3 sm:p-4">
+            <section aria-label="Promoted · Προώθηση" className="space-y-3 border-b border-border pb-4">
               <div className="flex flex-wrap items-baseline gap-2">
                 <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-xs font-medium text-foreground">
                   <BilingualText en={PROMOTED_COPY.label.en} el={PROMOTED_COPY.label.el} compact />
@@ -658,12 +666,12 @@ export default function DiscoverPage() {
         <TabsContent value="suggestions" className="space-y-6 mt-6">
           <div className="flex min-w-0 items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
                   <Sparkles className="icon-md shrink-0 text-muted-foreground" />
-                  Suggested for you
+                  <BilingualText en="Suggested for you" el="Προτάσεις για εσάς" compact />
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                  Based on your profile and preferences
+                <p className="text-xs text-muted-foreground">
+                  <BilingualText en="Based on your profile and preferences" el="Με βάση το προφίλ και τις προτιμήσεις σας" compact wrap />
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   <BilingualText
@@ -694,14 +702,14 @@ export default function DiscoverPage() {
 
           {suggestionsLoaded && suggestions.length === 0 && (
             <EmptyState
-              title="No suggestions yet"
-              description="Complete your profile to get personalized recommendations."
+              title={<BilingualText en="No suggestions yet" el="Καμία πρόταση ακόμη" compact wrap />}
+              description={<BilingualText en="Complete your profile to get personalized recommendations." el="Συμπληρώστε το προφίλ σας για εξατομικευμένες προτάσεις." wrap />}
               illustration="rocket"
               askAiPrompt="I have no Discover suggestions. What should I add to my profile so recommendations appear?"
               action={
                 <Button className="gap-2" asChild>
                   <Link href="/profile/edit">
-                    Complete profile
+                    <BilingualText en="Complete profile" el="Συμπλήρωση προφίλ" compact />
                     <ArrowRight className="icon-sm" />
                   </Link>
                 </Button>
@@ -739,12 +747,12 @@ export default function DiscoverPage() {
         <TabsContent value="matches" className="space-y-6 mt-6">
           <div className="flex min-w-0 items-start justify-between gap-3">
               <div className="min-w-0">
-                <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+                <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
                   <TrendingUp className="icon-md shrink-0 text-muted-foreground" />
-                  Your Top Matches
+                  <BilingualText en="Your top matches" el="Οι κορυφαίες αντιστοιχίσεις σας" compact />
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                  People with the highest compatibility
+                <p className="text-xs text-muted-foreground">
+                  <BilingualText en="People with the highest compatibility" el="Άτομα με την υψηλότερη συμβατότητα" compact wrap />
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   <BilingualText
@@ -772,13 +780,13 @@ export default function DiscoverPage() {
 
           {suggestionsLoaded && suggestions.length === 0 && (
             <EmptyState
-              title="No matches yet"
-              description="Start by exploring profiles and indicating your interests."
+              title={<BilingualText en="No matches yet" el="Καμία αντιστοίχιση ακόμη" compact wrap />}
+              description={<BilingualText en="Start by exploring profiles and indicating your interests." el="Ξεκινήστε εξερευνώντας προφίλ και δηλώνοντας τα ενδιαφέροντά σας." wrap />}
               illustration="connection"
               askAiPrompt="Discover matches tab is empty. Help me find complementary people from the network."
               action={
                 <Button onClick={() => setActiveTab('search')}>
-                  Explore profiles
+                  <BilingualText en="Explore profiles" el="Εξερεύνηση προφίλ" compact />
                 </Button>
               }
             />

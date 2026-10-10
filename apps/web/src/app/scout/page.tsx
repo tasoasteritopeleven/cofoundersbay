@@ -8,7 +8,10 @@ import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailStats } from '@/components/layout/RailParts';
 import { BilingualText } from '@/components/common/BilingualText';
-import { CardHead } from '@/components/common/CardAnatomy';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { bilingualAria } from '@/lib/i18n/format';
+import { initialsOf } from '@/lib/utils';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { statusEl } from '@/components/common/StatusText';
 import { FormDraftNotice } from '@/components/common/FormDraftNotice';
@@ -40,17 +43,28 @@ const fromBrief = (b: ScoutBrief | null): Draft =>
 
 function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNode }) {
   const { success, error: showError } = useToast();
+  // The Connections card: the person's circle, name, headline and place,
+  // the fit at the right; the reasons, the suggested note and the foot (when
+  // it was proposed, then the ways on) on the avatar's edge.
   return (
     <Card>
       <CardContent className="space-y-3">
         <CardHead
+          mark={(
+            <Link href={`/profiles/${encodeURIComponent(p.person.id)}`} aria-label={bilingualAria(`Open ${p.person.displayName}'s profile`, `Άνοιγμα προφίλ: ${p.person.displayName}`)}>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={p.person?.avatarUrl ?? undefined} alt="" />
+                <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{initialsOf(p.person.displayName)}</AvatarFallback>
+              </Avatar>
+            </Link>
+          )}
           title={(
             <Link href={`/profiles/${encodeURIComponent(p.person.id)}`} className="hover:text-primary-accessible">
               {p.person.displayName}
             </Link>
           )}
-          subtitle={p.person.headline ?? undefined}
-          meta={p.person.location ?? undefined}
+          subtitle={p.person?.headline ?? undefined}
+          meta={p.person?.location ?? undefined}
           asideStays
           aside={(
             <span className="rounded-md border border-primary/15 bg-primary/[0.03] px-2 py-0.5 text-xs font-bold tabular-nums text-foreground" title="Fit with your brief · Ταίριασμα με το σημείωμα">
@@ -65,7 +79,7 @@ function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNo
             ))}
           </ul>
         ) : null}
-        <div className="space-y-1.5 border-t border-border pt-3">
+        <div className="space-y-1.5">
           <p className="text-xs font-medium text-muted-foreground"><BilingualText en="A first note you could send yourself" el="Ένα πρώτο σημείωμα που μπορείτε να στείλετε εσείς" compact /></p>
           <p className="card-body text-foreground">{p.draftNote}</p>
           <Button
@@ -77,16 +91,13 @@ function ProposalCard({ p, actions }: { p: ScoutProposal; actions: React.ReactNo
             <BilingualText en="Copy note" el="Αντιγραφή σημειώματος" compact />
           </Button>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <CardFoot meta={<><BilingualText en="Proposed" el="Προτάθηκε" compact /> <RelativeTime date={p.createdAt} /></>}>
           <Button asChild size="sm" variant="outline">
             <Link href={`/profiles/${encodeURIComponent(p.person.id)}`}><BilingualText en="Open profile" el="Άνοιγμα προφίλ" compact /></Link>
           </Button>
           <AskIntroButton targetId={p.person.id} targetName={p.person.displayName} />
           {actions}
-        </div>
-        <p className="text-xs text-muted-foreground">
-          <BilingualText en="Proposed" el="Προτάθηκε" compact /> <RelativeTime date={p.createdAt} />
-        </p>
+        </CardFoot>
       </CardContent>
     </Card>
   );
@@ -262,7 +273,7 @@ function ScoutContent() {
         <div className="empty:hidden"><FormDraftNotice filled={formDraft.filled} onDismiss={formDraft.dismiss} /></div>
         <Card>
           <CardHeader>
-            <CardTitle className="text-base"><BilingualText en="Your brief" el="Το σημείωμά σας" compact /></CardTitle>
+            <CardTitle><BilingualText en="Your brief" el="Το σημείωμά σας" compact /></CardTitle>
             <CardDescription><BilingualText en="Who you are looking for. The scout reads the member base against it." el="Ποιον ψάχνετε. Ο ανιχνευτής διαβάζει τα μέλη με βάση αυτό." wrap /></CardDescription>
           </CardHeader>
           <CardContent>

@@ -127,24 +127,24 @@ function MentorCard({ mentor }: { mentor: Mentor }) {
               <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
                 <StatusText value={mentor.status} />
               </Badge>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-label="More options" variant="ghost" size="icon">
-                      <MoreVertical className="icon-sm" aria-hidden="true" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/p/${mentor.userId}`}><BilingualText en="View Profile" el="Προβολή προφίλ" compact /></Link>
-                    </DropdownMenuItem>
-                    <UnavailableMenuItem en="Assign to Startup" el="Ανάθεση σε startup" reasonEn="Mentor assignments are not stored yet." reasonEl="Οι αναθέσεις μεντόρων δεν αποθηκεύονται ακόμη." />
-                    <UnavailableMenuItem en="View Sessions" el="Συνεδρίες" reasonEn="No organisation-wide session view yet." reasonEl="Δεν υπάρχει ακόμη προβολή συνεδριών ανά οργανισμό." />
-                    <DropdownMenuItem asChild>
-                      <Link href={`/messages?to=${mentor.userId}`}><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
-                    </DropdownMenuItem>
-                    <UnavailableMenuItem className="text-destructive-accessible" en="Remove from Pool" el="Αφαίρεση από τη δεξαμενή" reasonEn="The pool is read from mentor profiles; there is no pool membership to remove." reasonEl="Η δεξαμενή προκύπτει από τα προφίλ μεντόρων· δεν υπάρχει συμμετοχή για αφαίρεση." />
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button aria-label="More options" variant="ghost" size="icon">
+                    <MoreVertical className="icon-sm" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href={`/p/${mentor.userId}`}><BilingualText en="View Profile" el="Προβολή προφίλ" compact /></Link>
+                  </DropdownMenuItem>
+                  <UnavailableMenuItem en="Assign to Startup" el="Ανάθεση σε startup" reasonEn="Mentor assignments are not stored yet." reasonEl="Οι αναθέσεις μεντόρων δεν αποθηκεύονται ακόμη." />
+                  <UnavailableMenuItem en="View Sessions" el="Συνεδρίες" reasonEn="No organisation-wide session view yet." reasonEl="Δεν υπάρχει ακόμη προβολή συνεδριών ανά οργανισμό." />
+                  <DropdownMenuItem asChild>
+                    <Link href={`/messages?to=${mentor.userId}`}><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
+                  </DropdownMenuItem>
+                  <UnavailableMenuItem className="text-destructive-accessible" en="Remove from Pool" el="Αφαίρεση από τη δεξαμενή" reasonEn="The pool is read from mentor profiles; there is no pool membership to remove." reasonEl="Η δεξαμενή προκύπτει από τα προφίλ μεντόρων· δεν υπάρχει συμμετοχή για αφαίρεση." />
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           )}
         />
@@ -175,7 +175,7 @@ const SEED_MENTORS: Mentor[] = [
     id: '1',
     userId: 'mentor1',
     name: 'Sarah Chen',
-    headline: 'Former Google PM, AI/ML Expert',
+    headline: 'Former product manager, AI/ML expert',
     expertise: ['Product Strategy', 'AI/ML', 'Go-to-Market'],
     activeMentees: 3,
     maxMentees: 5,

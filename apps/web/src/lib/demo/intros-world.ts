@@ -44,7 +44,7 @@ const PEOPLE: Record<string, { displayName: string; headline: string | null }> =
   [ME]: { displayName: 'Alex Demo', headline: 'Founder · Athens founder networks' },
   'user-elena': { displayName: 'Elena Papadopoulos', headline: 'Founder & CEO at Harbor' },
   'user-marcus': { displayName: 'Marcus Chen', headline: 'Technical cofounder · Full-stack' },
-  'user-sarah': { displayName: 'Dr. Sarah Kim', headline: 'Startup mentor · Ex-Google · 3x founder' },
+  'user-sarah': { displayName: 'Dr. Sarah Kim', headline: 'Startup mentor · Former product lead · 3x founder' },
   'user-nikos': { displayName: 'Nikos Andreou', headline: 'Angel investor · Seed' },
   'user-sofia': { displayName: 'Sofia Alexiou', headline: 'Founder at Meltemi' },
   'user-yannis': { displayName: 'Yannis Petrou', headline: 'Founder at Kolo Labs' },

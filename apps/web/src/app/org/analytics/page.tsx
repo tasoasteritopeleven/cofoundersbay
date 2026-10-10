@@ -371,7 +371,7 @@ export default function OrgAnalyticsPage() {
                   <dt className="text-xs text-muted-foreground">
                     <BilingualText en={cell.en} el={cell.el} stacked wrap />
                   </dt>
-                  <dd className="mt-1 text-lg font-semibold tabular-nums">{cell.value}</dd>
+                  <dd className="card-body mt-1 font-semibold tabular-nums">{cell.value}</dd>
                   {cell.note ? <dd className="text-xs text-muted-foreground first-letter:uppercase">{cell.note}</dd> : null}
                 </div>
               ))}

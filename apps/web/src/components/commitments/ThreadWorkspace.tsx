@@ -633,7 +633,7 @@ export function ThreadWorkspace({ threadId }: { threadId: string }) {
               <VerifiedBadge methods={thread.verification.counterpartMethods} />
             </span>
           )}
-          subtitle={thread.counterpart.headline ?? undefined}
+          subtitle={thread.counterpart?.headline ?? undefined}
           aside={(
             <>
               <StepChip step={thread.step} />

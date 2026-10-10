@@ -1108,7 +1108,7 @@ const PEOPLE = [
     id: 'hit-sarah',
     userId: 'user-sarah',
     displayName: 'Dr. Sarah Kim',
-    headline: 'Startup mentor · Ex-Google · 3x founder',
+    headline: 'Startup mentor · Former product lead · 3x founder',
     bio: 'Helping first-time founders reach product-market fit.',
     avatarUrl: null,
     location: 'London, UK',
@@ -1275,7 +1275,7 @@ const CONNECTIONS = [
       displayName: 'Dr. Sarah Kim',
       avatarUrl: null,
       role: 'mentor',
-      headline: 'Startup mentor · Ex-Google',
+      headline: 'Startup mentor · Former product lead',
     },
   },
 ];
@@ -1974,7 +1974,7 @@ const PREVIEW_MENTORSHIP_RELATIONSHIPS = [
     mentor: {
       id: 'user-sarah',
       displayName: 'Dr. Sarah Kim',
-      headline: 'Startup mentor - Ex-Google - 3x founder',
+      headline: 'Startup mentor - Former product lead - 3x founder',
       avatarUrl: null,
     },
     mentee: {
@@ -2408,7 +2408,7 @@ function previewExpertReviews() {
   const sarah = {
     id: 'user-sarah',
     displayName: 'Dr. Sarah Kim',
-    headline: 'Startup mentor - Ex-Google - 3x founder',
+    headline: 'Startup mentor - Former product lead - 3x founder',
     avatarUrl: null,
   };
   const nikos = {

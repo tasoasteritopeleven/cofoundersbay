@@ -6,12 +6,9 @@ import {
   Calendar,
   Plus,
   Search,
-  MapPin,
-  Clock,
   Users,
   MoreVertical,
   Video,
-  Building,
   Edit,
   Trash2,
   Copy,
@@ -44,6 +41,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
 import { FactLine } from '@/components/common/FactLine';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
 
 type OrgEvent = {
   id: string;
@@ -189,7 +187,6 @@ function mockEvents(now: number, fmtDate: (v: number, o?: Intl.DateTimeFormatOpt
 function EventCard({ event, onDuplicate }: { event: OrgEvent; onDuplicate?: (e: OrgEvent) => void }) {
   const typeCfg = TYPE_CONFIG[event.type];
   const statusCfg = STATUS_CONFIG[event.status];
-  const typeColors = STATUS[typeCfg.tone];
   const statusColors = STATUS[statusCfg.tone];
   // An event without a cap (the API's capacity is optional, mapped to 0) has
   // no fill: dividing by it printed "156/0 attending · Infinity% full".
@@ -197,88 +194,111 @@ function EventCard({ event, onDuplicate }: { event: OrgEvent; onDuplicate?: (e: 
   const fill = capped ? Math.round((event.attendees / event.capacity) * 100) : 0;
   const fillColor = fill >= 90 ? STATUS.danger.icon : fill >= 70 ? STATUS.warning.icon : STATUS.success.icon;
 
+  // The Opportunities card: the event's mark, the title with its kind and
+  // place under it, the state and the menu at the right; the facts, the
+  // sentence and the capacity start on the mark's edge.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
+          <MoreVertical className="icon-sm" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* None of these had a handler. EventsController serves create
+            and read but no update or delete, so Edit and Delete say
+            so; Duplicate re-creates the event a week later; the public
+            page is /events/:id. */}
+        <UnavailableMenuItem
+          icon={<Edit className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
+          en="Edit"
+          el="Επεξεργασία"
+          reasonEn="Events cannot be edited after creation yet."
+          reasonEl="Οι εκδηλώσεις δεν επεξεργάζονται ακόμη μετά τη δημιουργία."
+        />
+        <DropdownMenuItem disabled={!onDuplicate} onSelect={() => onDuplicate?.(event)}>
+          <Copy className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Duplicate" el="Αντιγραφή" compact />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={`/events/${event.id}`}><ExternalLink className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="View Public Page" el="Δημόσια σελίδα" compact /></Link>
+        </DropdownMenuItem>
+        <UnavailableMenuItem
+          className="text-destructive-accessible"
+          icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
+          en="Delete"
+          el="Διαγραφή"
+          reasonEn="Events cannot be deleted yet."
+          reasonEl="Οι εκδηλώσεις δεν διαγράφονται ακόμη."
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold">{event.title}</h3>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+              {event.format === 'online' ? <Video className="icon-md" aria-hidden="true" /> : <Calendar className="icon-md" aria-hidden="true" />}
+            </div>
+          )}
+          title={(
+            <Link href={`/events/${event.id}`} className="transition-colors hover:text-primary-accessible">
+              {event.title}
+            </Link>
+          )}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                <BilingualText key="type" en={typeCfg.label} el={typeCfg.labelEl} compact />,
+                event.location,
+              ]}
+            />
+          )}
+          asideStays
+          aside={(
+            <>
               <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
                 {event.status === 'ongoing' && <span className={cn('mr-1 inline-block h-1.5 w-1.5 rounded-full animate-pulse bg-status-success-mark')} />}
                 <BilingualText en={statusCfg.label} el={statusCfg.labelEl} compact />
               </Badge>
-            </div>
-            <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Calendar className="icon-sm" aria-hidden="true" />{event.date}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="icon-sm" aria-hidden="true" />{event.time}
-              </span>
-              <span className="flex items-center gap-1">
-                {event.format === 'online' ? <Video className="icon-sm" aria-hidden="true" /> : <Building className="icon-sm" aria-hidden="true" />}
-                {event.location}
-              </span>
-              <span className="flex items-center gap-1">
-                <Users className="icon-sm" aria-hidden="true" />
-                <BilingualText
-                  en={`${capped ? `${event.attendees}/${event.capacity}` : event.attendees} attending`}
-                  el={`${capped ? `${event.attendees}/${event.capacity}` : event.attendees} συμμετέχουν`}
-                  compact
-                />
-              </span>
-            </div>
-            <p className="card-copy text-sm text-muted-foreground mt-2 line-clamp-2">{event.description}</p>
-            <FactLine className="mt-2" label={bilingualInline('Speakers', 'Ομιλητές')} items={event.speakers ?? []} />
-            <div className="flex items-center gap-3 mt-3">
-              <Badge variant="secondary" className={cn('text-xs border', typeColors.chip)}><BilingualText en={typeCfg.label} el={typeCfg.labelEl} compact /></Badge>
-              <span className="text-xs text-muted-foreground">
-                {capped ? (
-                  <span className={cn('font-medium', fillColor)}>
-                    <BilingualText en={`Capacity: ${fill}% full`} el={`Χωρητικότητα: ${fill}% πλήρης`} compact />
-                  </span>
-                ) : (
-                  <BilingualText en="No attendance cap" el="Χωρίς όριο συμμετοχής" compact />
-                )}
-              </span>
-            </div>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
-                <MoreVertical className="icon-sm" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {/* None of these had a handler. EventsController serves create
-                  and read but no update or delete, so Edit and Delete say
-                  so; Duplicate re-creates the event a week later; the public
-                  page is /events/:id. */}
-              <UnavailableMenuItem
-                icon={<Edit className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
-                en="Edit"
-                el="Επεξεργασία"
-                reasonEn="Events cannot be edited after creation yet."
-                reasonEl="Οι εκδηλώσεις δεν επεξεργάζονται ακόμη μετά τη δημιουργία."
-              />
-              <DropdownMenuItem disabled={!onDuplicate} onSelect={() => onDuplicate?.(event)}>
-                <Copy className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Duplicate" el="Αντιγραφή" compact />
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/events/${event.id}`}><ExternalLink className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="View Public Page" el="Δημόσια σελίδα" compact /></Link>
-              </DropdownMenuItem>
-              <UnavailableMenuItem
-                className="text-destructive-accessible"
-                icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
-                en="Delete"
-                el="Διαγραφή"
-                reasonEn="Events cannot be deleted yet."
-                reasonEl="Οι εκδηλώσεις δεν διαγράφονται ακόμη."
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+              {menu}
+            </>
+          )}
+        />
+        {event.description ? (
+          <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{event.description}</p>
+        ) : null}
+        <FactLine
+          label={bilingualInline('When and where', 'Πότε και πού')}
+          items={[
+            <span key="date" className="tabular-nums">{event.date}</span>,
+            event.time ? <span key="time" className="tabular-nums">{event.time}</span> : null,
+            event.format === 'online'
+              ? <BilingualText key="format" en="Online" el="Διαδικτυακά" compact />
+              : event.format === 'hybrid'
+                ? <BilingualText key="format" en="Hybrid" el="Υβριδικό" compact />
+                : <BilingualText key="format" en="In person" el="Δια ζώσης" compact />,
+            <BilingualText
+              key="attending"
+              en={`${capped ? `${event.attendees}/${event.capacity}` : event.attendees} attending`}
+              el={`${capped ? `${event.attendees}/${event.capacity}` : event.attendees} συμμετέχουν`}
+              compact
+            />,
+          ]}
+        />
+        <FactLine label={bilingualInline('Speakers', 'Ομιλητές')} items={event.speakers ?? []} />
+        <CardFoot
+          meta={capped ? (
+            <span className={cn('font-medium', fillColor)}>
+              <BilingualText en={`Capacity: ${fill}% full`} el={`Χωρητικότητα: ${fill}% πλήρης`} compact />
+            </span>
+          ) : (
+            <BilingualText en="No attendance cap" el="Χωρίς όριο συμμετοχής" compact />
+          )}
+        />
       </CardContent>
     </Card>
   );

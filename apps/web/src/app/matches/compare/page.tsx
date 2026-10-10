@@ -23,6 +23,7 @@ import { bilingualInline } from '@/lib/i18n/format';
 import { matchAxisEl } from '@/lib/i18n/strings-matches';
 import { bilingualAria } from '@/lib/i18n/format';
 import { FactLine } from '@/components/common/FactLine';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 /*
  * Matches side by side.
@@ -79,13 +80,13 @@ export default function MatchComparePage() {
   });
   const breakdowns: (MatchBreakdown | undefined)[] = breakdownQueries.map((q) => q.data);
 
-  const scoreOf = (i: number) => breakdowns[i]?.overall.score ?? people[i]?.matchScore ?? null;
+  const scoreOf = (i: number) => breakdowns[i]?.overall?.score ?? people[i]?.matchScore ?? null;
   const axes = Array.from(
     new Map(
       breakdowns.flatMap((b) => b?.breakdown ?? []).map((axis) => [axis.key, axis.label] as const),
     ).entries(),
   );
-  const axisScore = (i: number, key: string) => breakdowns[i]?.breakdown.find((a) => a.key === key)?.score ?? null;
+  const axisScore = (i: number, key: string) => breakdowns[i]?.breakdown?.find((a) => a.key === key)?.score ?? null;
   const leaderOf = (values: (number | null)[]) => {
     const present = values.filter((v): v is number => v != null);
     if (present.length < 2) return -1;
@@ -223,28 +224,36 @@ export default function MatchComparePage() {
                       <Button aria-label={bilingualAria(`Remove ${person.displayName} from the comparison`, `Αφαίρεση του/της ${person.displayName} από τη σύγκριση`)} variant="ghost" size="icon" className="absolute right-2 top-2 h-7 w-7" onClick={() => remove(person.userId)}>
                         <X className="icon-sm" aria-hidden="true" />
                       </Button>
-                      <div className="flex items-start gap-3 pr-8">
-                        <Avatar className="h-11 w-11 shrink-0">
-                          <AvatarImage src={person.avatarUrl ?? undefined} />
-                          <AvatarFallback className="bg-primary/10 text-primary-accessible">{initialsOf(person.displayName)}</AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0">
-                          <Link href={`/profiles/${person.userId}`} className="font-semibold text-foreground hover:text-primary-accessible">
-                            {person.displayName}
-                          </Link>
-                          <div className="mt-1"><RoleBadge role={person.role} size="sm" /></div>
-                          {person.headline ? <p className="mt-1 text-xs text-muted-foreground">{person.headline}</p> : null}
-                          {person.location ? <p className="text-xs text-muted-foreground">{person.location}</p> : null}
-                        </div>
-                      </div>
+                      {/* Each column's head is a card's head: the circle, the
+                          name with the role, the headline and the place. */}
+                      <CardHead
+                        className="pr-8"
+                        titleAs="p"
+                        mark={(
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={person.avatarUrl ?? undefined} alt="" />
+                            <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{initialsOf(person.displayName)}</AvatarFallback>
+                          </Avatar>
+                        )}
+                        title={(
+                          <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                            <Link href={`/profiles/${person.userId}`} className="transition-colors hover:text-primary-accessible">
+                              {person.displayName}
+                            </Link>
+                            <RoleBadge role={person.role} size="sm" />
+                          </span>
+                        )}
+                        subtitle={person.headline ? <span className="line-clamp-2">{person.headline}</span> : undefined}
+                        meta={person.location ?? undefined}
+                      />
                       <div className="mt-3 flex items-baseline gap-2">
                         <span className="page-stat text-2xl font-semibold tabular-nums text-primary-accessible">{scoreOf(i) ?? '—'}%</span>
                         {overallLeader === i && (
                           <Badge variant="success" size="sm" className="gap-1"><Crown className="h-3 w-3" aria-hidden="true" /><BilingualText en="Highest" el="Υψηλότερη" compact /></Badge>
                         )}
                       </div>
-                      {breakdowns[i]?.overall.confidence != null && (
-                        <p className="text-xs text-muted-foreground">{breakdowns[i]?.overall.confidence}% confidence</p>
+                      {breakdowns[i]?.overall?.confidence != null && (
+                        <p className="text-xs text-muted-foreground"><BilingualText en={`${breakdowns[i]?.overall?.confidence}% confidence`} el={`${breakdowns[i]?.overall?.confidence}% βεβαιότητα`} compact /></p>
                       )}
                       <div className="mt-3 flex gap-2">
                         <MessageButton userId={person.userId} displayName={person.displayName} variant="default" className="flex-1" />
@@ -327,7 +336,7 @@ export default function MatchComparePage() {
 
         {people.length >= 2 && (
           <SectionCard title="What the comparison says" titleEl="Τι λέει η σύγκριση" icon={Brain}>
-            <p className="text-sm text-muted-foreground">
+            <p className="card-body text-muted-foreground">
               <BilingualText en={summary.en} el={summary.el} wrap />
             </p>
             {overallLeader >= 0 && (

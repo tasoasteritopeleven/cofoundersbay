@@ -74,10 +74,10 @@ export function OpenToCard() {
   const lapsed = signal && !mine.data?.active;
 
   return (
-    <Card id="open-to" className="scroll-mt-16 shadow-sm border-border">
-      <CardHeader className="border-b border-border">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Compass className="icon-md text-primary-accessible" />
+    <Card id="open-to" className="scroll-mt-16">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Compass className="icon-md text-primary-accessible" aria-hidden="true" />
           <BilingualText en="Open to" el="Ανοιχτός/ή σε" compact />
         </CardTitle>
         <CardDescription>
@@ -88,7 +88,7 @@ export function OpenToCard() {
           />
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5 pt-5">
+      <CardContent className="space-y-5">
         <fieldset className="space-y-2">
           <legend className="text-sm font-medium text-foreground"><BilingualText en="I am open to" el="Είμαι ανοιχτός/ή σε" compact /></legend>
           <div className="flex flex-wrap gap-2">

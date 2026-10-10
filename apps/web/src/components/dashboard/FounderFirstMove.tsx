@@ -8,6 +8,8 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 import { COMMITMENT_KINDS, type CommitmentKind } from '@cofounderbay/shared';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardFoot } from '@/components/common/CardAnatomy';
 import { listCommitmentCards } from '@/lib/commitments-api';
 import { CMT } from '@/lib/i18n/strings-commitments';
 import { qk } from '@/lib/query-keys';
@@ -127,76 +129,81 @@ export function FounderFirstMove({
   /** The assistant's way in (drafts the card with the reader). */
   assist?: ReactNode;
 }) {
+  // A section card on the emphasis surface: the eyebrow, the question as
+  // its title and the sentence under it; the three kinds as rows without a
+  // frame of their own, on the card's axis; the steps; and a foot with the
+  // note at the left and the ways on at the right.
   return (
-    <section
-      aria-labelledby="founder-first-move-title"
-      className="rounded-2xl border border-primary/15 bg-primary/[0.03] p-5 sm:p-6"
-      data-first-move=""
-    >
-      <div className="space-y-2">
-        <p className="text-xs font-medium text-primary-accessible">
-          <BilingualText en="Start here" el="Ξεκινήστε εδώ" compact />
-        </p>
-        <h2 id="founder-first-move-title" className="text-xl font-semibold tracking-tight text-foreground">
-          <BilingualText en="Who does your startup need?" el="Ποιον χρειάζεται η startup σας;" wrap />
-        </h2>
-        <p className="max-w-prose text-sm text-muted-foreground">
-          <BilingualText
-            en="Post one need card. People who fit answer it, and you choose whom to talk to. Nothing is promised until both of you confirm the terms."
-            el="Δημοσιεύστε μία κάρτα ανάγκης. Όσοι ταιριάζουν απαντούν και εσείς επιλέγετε με ποιον θα μιλήσετε. Τίποτα δεν υπόσχεται κανείς πριν επιβεβαιώσετε και οι δύο τους όρους."
-            wrap
-          />
-        </p>
-      </div>
+    <Card className="border-primary/15 bg-primary/[0.03]" data-first-move="">
+      <section aria-labelledby="founder-first-move-title">
+        <CardHeader>
+          <p className="text-xs font-medium text-primary-accessible">
+            <BilingualText en="Start here" el="Ξεκινήστε εδώ" compact />
+          </p>
+          <CardTitle id="founder-first-move-title">
+            <BilingualText en="Who does your startup need?" el="Ποιον χρειάζεται η startup σας;" wrap />
+          </CardTitle>
+          <CardDescription className="max-w-prose">
+            <BilingualText
+              en="Post one need card. People who fit answer it, and you choose whom to talk to. Nothing is promised until both of you confirm the terms."
+              el="Δημοσιεύστε μία κάρτα ανάγκης. Όσοι ταιριάζουν απαντούν και εσείς επιλέγετε με ποιον θα μιλήσετε. Τίποτα δεν υπόσχεται κανείς πριν επιβεβαιώσετε και οι δύο τους όρους."
+              wrap
+            />
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <ul className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-3" aria-label="Kinds of need card · Είδη κάρτας ανάγκης">
+            {COMMITMENT_KINDS.map((kind) => (
+              <li key={kind} className="min-w-0">
+                <Link
+                  href={`/commitments/new?kind=${kind}`}
+                  className="axis-row group flex h-full min-w-0 flex-col gap-0.5 rounded-md py-2 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                    <BilingualText en={KIND_COPY[kind].label.en} el={KIND_COPY[kind].label.el} compact />
+                    <ArrowRight className="icon-sm shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    <BilingualText en={KIND_COPY[kind].hint.en} el={KIND_COPY[kind].hint.el} wrap />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-      <ul className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Kinds of need card · Είδη κάρτας ανάγκης">
-        {COMMITMENT_KINDS.map((kind) => (
-          <li key={kind} className="min-w-0">
-            <Link
-              href={`/commitments/new?kind=${kind}`}
-              className="group flex h-full min-w-0 flex-col gap-1.5 rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/30 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="flex items-center justify-between gap-2 text-sm font-medium text-foreground">
-                <BilingualText en={KIND_COPY[kind].label.en} el={KIND_COPY[kind].label.el} compact />
-                <ArrowRight className="icon-sm shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-              </span>
-              <span className="text-xs text-muted-foreground">
-                <BilingualText en={KIND_COPY[kind].hint.en} el={KIND_COPY[kind].hint.el} wrap />
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+          <ol className="grid grid-cols-1 gap-2 text-sm text-muted-foreground sm:grid-cols-3" aria-label="What happens next · Τι ακολουθεί">
+            {LADDER.map((step, i) => (
+              <li key={step.en} className="flex min-w-0 items-start gap-2">
+                <span
+                  className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-2xs font-semibold tabular-nums text-primary-accessible"
+                  aria-hidden="true"
+                >
+                  {i + 1}
+                </span>
+                <span className="min-w-0">
+                  <BilingualText en={step.en} el={step.el} wrap />
+                </span>
+              </li>
+            ))}
+          </ol>
 
-      <ol className="mt-5 grid grid-cols-1 gap-2 text-sm text-muted-foreground sm:grid-cols-3" aria-label="What happens next · Τι ακολουθεί">
-        {LADDER.map((step, i) => (
-          <li key={step.en} className="flex min-w-0 items-start gap-2">
-            <span
-              className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-2xs font-semibold tabular-nums text-primary-accessible"
-              aria-hidden="true"
-            >
-              {i + 1}
-            </span>
-            <span className="min-w-0">
-              <BilingualText en={step.en} el={step.el} wrap />
-            </span>
-          </li>
-        ))}
-      </ol>
-
-      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-primary/10 pt-4">
-        {assist}
-        <Link href="/opportunities" className="text-sm font-medium text-primary-accessible underline-offset-4 hover:underline">
-          <BilingualText en="See what others are asking for" el="Δείτε τι ζητούν άλλοι" compact />
-        </Link>
-        <span className="text-xs text-muted-foreground">
-          <BilingualText en={CMT.two_minutes.en} el={CMT.two_minutes.el} compact />
-        </span>
-        <Button type="button" variant="ghost" size="sm" className="ml-auto text-muted-foreground" onClick={onLater}>
-          <BilingualText en="Not now" el="Όχι τώρα" compact />
-        </Button>
-      </div>
-    </section>
+          <CardFoot
+            className="border-primary/10"
+            meta={<BilingualText en={CMT.two_minutes.en} el={CMT.two_minutes.el} compact />}
+          >
+            {assist}
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/opportunities">
+                <BilingualText en="See what others are asking for" el="Δείτε τι ζητούν άλλοι" compact />
+              </Link>
+            </Button>
+            <Button type="button" variant="ghost" size="sm" className="text-muted-foreground" onClick={onLater}>
+              <BilingualText en="Not now" el="Όχι τώρα" compact />
+            </Button>
+          </CardFoot>
+        </CardContent>
+      </section>
+    </Card>
   );
 }
 

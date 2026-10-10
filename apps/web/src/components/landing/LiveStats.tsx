@@ -56,11 +56,11 @@ export function LiveStatsStrip() {
 }
 
 const TILES: Array<{ key: keyof Omit<PublicStats, 'measuredAt'>; label: { en: string; el: string }; sub: { en: string; el: string } }> = [
-  { key: 'members', label: { en: 'Registered Members', el: 'Εγγεγραμμένα μέλη' }, sub: { en: 'founders, mentors & investors', el: 'ιδρυτές, μέντορες & επενδυτές' } },
-  { key: 'connections', label: { en: 'Accepted Connections', el: 'Αποδεκτές συνδέσεις' }, sub: { en: 'requests both people accepted', el: 'αιτήματα που αποδέχτηκαν και οι δύο' } },
-  { key: 'mentors', label: { en: 'Mentors Available', el: 'Διαθέσιμοι μέντορες' }, sub: { en: 'mentor, advisor, coach & course roles', el: 'ρόλοι μέντορα, συμβούλου & coach' } },
-  { key: 'events', label: { en: 'Events Listed', el: 'Εκδηλώσεις' }, sub: { en: 'online & in-person', el: 'διαδικτυακές & δια ζώσης' } },
-  { key: 'organizations', label: { en: 'Organizations', el: 'Οργανισμοί' }, sub: { en: 'incubators, accelerators & programmes here', el: 'θερμοκοιτίδες, επιταχυντές & προγράμματα εδώ' } },
+  { key: 'members', label: { en: 'Registered Members', el: 'Εγγεγραμμένα μέλη' }, sub: { en: 'Founders, mentors & investors', el: 'Ιδρυτές, μέντορες & επενδυτές' } },
+  { key: 'connections', label: { en: 'Accepted Connections', el: 'Αποδεκτές συνδέσεις' }, sub: { en: 'Requests both people accepted', el: 'Αιτήματα που αποδέχτηκαν και οι δύο' } },
+  { key: 'mentors', label: { en: 'Mentors Available', el: 'Διαθέσιμοι μέντορες' }, sub: { en: 'Mentor, advisor, coach & course roles', el: 'Ρόλοι μέντορα, συμβούλου & coach' } },
+  { key: 'events', label: { en: 'Events Listed', el: 'Εκδηλώσεις' }, sub: { en: 'Online & in-person', el: 'Διαδικτυακές & δια ζώσης' } },
+  { key: 'organizations', label: { en: 'Organizations', el: 'Οργανισμοί' }, sub: { en: 'Incubators, accelerators & programmes here', el: 'Θερμοκοιτίδες, επιταχυντές & προγράμματα εδώ' } },
 ];
 
 /**
@@ -83,7 +83,11 @@ export function LiveStatsSection({ heading }: { heading: ReactNode }) {
   );
 }
 
-/** The "By the numbers" grid. Absent until the counts arrive. */
+/**
+ * The "By the numbers" grid. Absent until the counts arrive. Stat cards:
+ * a figure, what it counts and what that covers, centred, at the figure's
+ * own size (the card anatomy leaves stat cards their display step).
+ */
 export function LiveStatsGrid() {
   const stats = usePublicStats();
   if (!stats) return null;

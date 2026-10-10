@@ -22,6 +22,7 @@ await ctx.addCookies([
 ]);
 await ctx.addInitScript(() => {
   try {
+    localStorage.setItem('user', JSON.stringify({ id: 'preview-demo-user', email: 'probe@cofounderbay.test', role: 'founder' }));
     localStorage.setItem('cfb_demo_data', '1');
     localStorage.setItem('cfb_cookie_consent', 'true');
     localStorage.setItem('cfb.dashboard.founder.full', '1');
@@ -37,9 +38,9 @@ for (const route of routes) {
   const m = await page.evaluate(() => {
     const main = document.querySelector('main#main-content') ?? document.querySelector('main') ?? document.body;
     const shown = (el) => el.checkVisibility?.({ checkOpacity: true, checkVisibilityCSS: true }) ?? true;
-    const FLOAT = '[role=dialog],[role=menu],[data-rail-surface],[data-rail-content],nav,header';
+    const FLOAT = '[role=dialog],[role=menu],[data-rail-surface],[data-rail-content],nav';
     const fs = (el) => parseFloat(getComputedStyle(el).fontSize);
-    const h1 = main.querySelector('h1');
+    const h1 = document.querySelector('main h1, h1');
     const cardTitles = [...main.querySelectorAll('[data-card] .card-title, [data-card] h2, [data-card] h3')].filter((el) => shown(el) && !el.closest(FLOAT)).map(fs);
     const minCardTitle = cardTitles.length ? Math.min(...cardTitles) : null;
     const heads = [...main.querySelectorAll('h2,h3,h4,[role=heading]')]

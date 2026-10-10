@@ -82,12 +82,12 @@ function InviteRow({ invite, onCancel, cancelling }: {
   cancelling: boolean;
 }) {
   const cfg = STATUS_CONFIG[invite.status];
+  // A row of the history card, on the card's axis with no frame of its own:
+  // the address and its dates, the state at the right. On a phone the state
+  // drops under the dates, so it never sits stranded beside the cancel button.
   return (
-    <div className="flex items-center gap-3 border-b border-border py-3 last:border-0">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary">
-        <Mail className="icon-sm text-muted-foreground" />
-      </div>
-      <div className="flex-1 min-w-0">
+    <li className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1.5 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center">
+      <div className="min-w-0">
         <p className="truncate text-sm font-medium text-foreground" translate="no">{invite.email}</p>
         {/* Dates stay pinned to UTC, as everywhere else on the platform, so a
             rendered day cannot shift under the reader's clock. */}
@@ -104,14 +104,16 @@ function InviteRow({ invite, onCancel, cancelling }: {
           />
         </p>
       </div>
-      <Badge className={cn('shrink-0 text-xs', cfg.color)}>
-        <BilingualText en={inviteEn(cfg.key)} el={inviteEl(cfg.key)} compact />
-      </Badge>
+      <div className="col-start-1 row-start-2 sm:col-start-2 sm:row-start-1">
+        <Badge className={cn('text-xs', cfg.color)}>
+          <BilingualText en={inviteEn(cfg.key)} el={inviteEl(cfg.key)} compact />
+        </Badge>
+      </div>
       {invite.status === 'pending' && (
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive-accessible"
+          className="col-start-2 row-start-1 h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive-accessible sm:col-start-3"
           onClick={() => onCancel(invite.id)}
           disabled={cancelling}
           aria-label={bilingualAria(inviteEn('cancel_invite'), inviteEl('cancel_invite'))}
@@ -119,7 +121,7 @@ function InviteRow({ invite, onCancel, cancelling }: {
           <X className="icon-sm" aria-hidden="true" />
         </Button>
       )}
-    </div>
+    </li>
   );
 }
 
@@ -316,7 +318,7 @@ export default function InvitePage() {
                 </p>
               </div>
             ) : (
-              <div>
+              <ul className="card-rows">
                 {invites.map((inv) => (
                   <InviteRow
                     key={inv.id}
@@ -328,7 +330,7 @@ export default function InvitePage() {
                     cancelling={cancellingId === inv.id && cancelMutation.isPending}
                   />
                 ))}
-              </div>
+              </ul>
             )}
           </CardContent>
         </Card>

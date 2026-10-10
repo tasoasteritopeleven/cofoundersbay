@@ -27,6 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { qk } from '@/lib/query-keys';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 
 interface BadgeItem {
   id: string;
@@ -53,6 +54,14 @@ const tierColors = {
   silver: 'text-muted-foreground ',
   gold: 'text-status-warning ',
   platinum: 'text-status-info ',
+};
+
+/** The tier in words, capitalised in both languages (it was printed "Gold Tier"). */
+const TIER_LABEL: Record<BadgeItem['tier'], { en: string; el: string }> = {
+  bronze: { en: 'Bronze', el: 'Χάλκινη' },
+  silver: { en: 'Silver', el: 'Ασημένια' },
+  gold: { en: 'Gold', el: 'Χρυσή' },
+  platinum: { en: 'Platinum', el: 'Πλατινένια' },
 };
 
 const tierBgColors = {
@@ -227,30 +236,29 @@ export function UserBadges({ live = true }: UserBadgesProps = {}) {
 
   return (
     <div className="space-y-6">
-      {/* Stats Overview */}
+      {/* Stats Overview: a section card; the count is a figure in the body,
+          no louder than the card's title. */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="icon-md text-muted-foreground" />
-                <BilingualText en="Achievements & Badges" el="Επιτεύγματα & διακρίσεις" compact />
-              </CardTitle>
-              <CardDescription>
-                <BilingualText en="Unlock badges by engaging with the community" el="Κερδίστε διακρίσεις συμμετέχοντας στην κοινότητα" wrap />
-              </CardDescription>
-            </div>
-            <div className="text-right">
-              <div className="page-stat text-xl font-bold">{earnedCount}/{totalCount}</div>
-              <div className="text-sm text-muted-foreground"><BilingualText en="Badges Earned" el="Διακρίσεις" compact /></div>
-            </div>
-          </div>
+          <CardTitle className="flex items-center gap-2">
+            <Trophy className="icon-md text-muted-foreground" />
+            <BilingualText en="Achievements & Badges" el="Επιτεύγματα & διακρίσεις" compact />
+          </CardTitle>
+          <CardDescription>
+            <BilingualText en="Unlock badges by engaging with the community" el="Κερδίστε διακρίσεις συμμετέχοντας στην κοινότητα" wrap />
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground"><BilingualText en="Overall Progress" el="Συνολική πρόοδος" compact /></span>
-              <span className="font-medium">{completionPercentage.toFixed(0)}%</span>
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs">
+              <span className="text-muted-foreground">
+                <span className="card-body font-semibold tabular-nums text-foreground">{earnedCount}/{totalCount}</span>{' '}
+                <BilingualText en="Badges Earned" el="Διακρίσεις" compact />
+              </span>
+              <span className="text-muted-foreground">
+                <BilingualText en="Overall Progress" el="Συνολική πρόοδος" compact />{' '}
+                <span className="font-medium tabular-nums text-foreground">{completionPercentage.toFixed(0)}%</span>
+              </span>
             </div>
             <Progress value={completionPercentage} className="h-2" />
           </div>
@@ -287,67 +295,70 @@ export function UserBadges({ live = true }: UserBadgesProps = {}) {
               const progressPercentage = hasProgress 
                 ? (badge.progress! / badge.requirement!) * 100 
                 : 0;
+              const tierLabel = TIER_LABEL[badge.tier];
 
+              // A badge reads like every card: its emblem as the mark, the
+              // name and its tier beside it, "Earned" at the head's right,
+              // and the sentence, the progress and the date on the emblem's
+              // left edge below.
               return (
                 <Card 
                   key={badge.id} 
                   className={cn(
-                    'relative overflow-hidden transition-all hover:border-primary/30',
+                    'transition-all hover:border-primary/30',
                     badge.earned && 'border-primary/50',
                     !badge.earned && 'opacity-75'
                   )}
                 >
-                  {badge.earned && (
-                    <div className="absolute top-2 right-2">
-                      <Badge variant="default" className="gap-1">
-                        <Award className="icon-sm" />
-                        <BilingualText en="Earned" el="Κερδήθηκε" compact />
-                      </Badge>
-                    </div>
-                  )}
-                  
-                  <CardHeader className="pb-3">
-                    <div className={cn(
-                      'w-16 h-16 rounded-full flex items-center justify-center mb-3',
-                      tierBgColors[badge.tier]
-                    )}>
-                      <Icon className={cn('icon-xl', tierColors[badge.tier])} />
-                    </div>
-                    
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      {badge.name}
-                      {badge.tier === 'platinum' && <Crown className="icon-sm text-muted-foreground" />}
-                      {badge.tier === 'gold' && <Sparkles className="icon-sm text-status-warning" />}
-                    </CardTitle>
-                    <CardDescription>{badge.description}</CardDescription>
-                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <CardHead
+                      mark={(
+                        <div
+                          data-keep-icon
+                          data-card-mark=""
+                          className={cn('flex h-10 w-10 items-center justify-center rounded-full', tierBgColors[badge.tier])}
+                        >
+                          <Icon className={cn('icon-md', tierColors[badge.tier])} aria-hidden="true" />
+                        </div>
+                      )}
+                      title={badge.name}
+                      subtitle={<BilingualText en={`${tierLabel.en} tier`} el={`Βαθμίδα: ${tierLabel.el}`} compact />}
+                      aside={badge.earned ? (
+                        <Badge variant="default" className="gap-1">
+                          <Award className="icon-sm" />
+                          <BilingualText en="Earned" el="Κερδήθηκε" compact />
+                        </Badge>
+                      ) : undefined}
+                    />
 
-                  <CardContent>
-                    {badge.earned ? (
-                      <div className="text-sm text-muted-foreground">
-                        Earned on {new Date(badge.earnedAt!).toLocaleDateString('en-GB', { timeZone: 'UTC' })}
-                      </div>
-                    ) : hasProgress ? (
+                    {badge.description ? (
+                      <p className="card-body text-muted-foreground first-letter:uppercase">{badge.description}</p>
+                    ) : null}
+
+                    {!badge.earned && hasProgress ? (
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center justify-between text-xs">
                           <span className="text-muted-foreground"><BilingualText en="Progress" el="Πρόοδος" compact /></span>
-                          <span className="font-medium">
+                          <span className="font-medium tabular-nums">
                             {badge.progress}/{badge.requirement}
                           </span>
                         </div>
                         <Progress value={progressPercentage} className="h-2" />
                       </div>
-                    ) : (
-                      <div className="text-sm text-muted-foreground">
-                        <BilingualText en="Not yet earned" el="Δεν έχει κερδηθεί" compact />
-                      </div>
-                    )}
+                    ) : null}
 
-                    <div className="mt-3">
-                      <Badge variant="outline" className="text-xs">
-                        {badge.tier.charAt(0).toUpperCase() + badge.tier.slice(1)} Tier
-                      </Badge>
-                    </div>
+                    <CardFoot
+                      meta={badge.earned ? (
+                        <BilingualText
+                          en={`Earned on ${new Date(badge.earnedAt!).toLocaleDateString('en-GB', { timeZone: 'UTC' })}`}
+                          el={`Κερδήθηκε στις ${new Date(badge.earnedAt!).toLocaleDateString('el-GR', { timeZone: 'UTC' })}`}
+                          compact
+                          wrap
+                        />
+                      ) : hasProgress ? undefined : (
+                        <BilingualText en="Not yet earned" el="Δεν έχει κερδηθεί" compact />
+                      )}
+                    />
                   </CardContent>
                 </Card>
               );

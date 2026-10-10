@@ -272,7 +272,7 @@ export default function PrivacyPage() {
             <Shield className="h-7 w-7 text-primary-accessible" />
           </div>
           <h1 className="text-3xl font-semibold text-foreground mb-2"><BilingualText en="Privacy Policy" el="Πολιτική απορρήτου" compact /></h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             <BilingualText en={`Last updated: ${LAST_UPDATED}`} el={`Τελευταία ενημέρωση: ${LAST_UPDATED_EL}`} compact />
           </p>
           {/* Legal text is not machine-translated: a paraphrase could promise something the policy does not. */}

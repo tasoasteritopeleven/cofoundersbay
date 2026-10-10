@@ -20,7 +20,7 @@ import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { readComposedPosts } from '@/lib/feed-demo';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { BilingualText } from '@/components/common/BilingualText';
-import { CardHead } from '@/components/common/CardAnatomy';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge, badgeVariants } from '@/components/ui/badge';
@@ -70,12 +70,12 @@ type FeedComment = {
   createdAt: string;
 };
 
-const POST_TYPE_CONFIG: Record<PostType, { icon: typeof Rocket; color: string; label: string }> = {
-  update: { icon: Sparkles, color: 'text-primary-accessible', label: 'Update' },
-  milestone: { icon: Target, color: 'text-status-success', label: 'Milestone' },
-  question: { icon: MessageCircle, color: 'text-status-warning', label: 'Question' },
-  announcement: { icon: TrendingUp, color: 'text-status-accent', label: 'Announcement' },
-  achievement: { icon: Award, color: 'text-status-accent', label: 'Achievement' },
+const POST_TYPE_CONFIG: Record<PostType, { icon: typeof Rocket; color: string; label: string; labelEl: string }> = {
+  update: { icon: Sparkles, color: 'text-primary-accessible', label: 'Update', labelEl: 'Ενημέρωση' },
+  milestone: { icon: Target, color: 'text-status-success', label: 'Milestone', labelEl: 'Ορόσημο' },
+  question: { icon: MessageCircle, color: 'text-status-warning', label: 'Question', labelEl: 'Ερώτηση' },
+  announcement: { icon: TrendingUp, color: 'text-status-accent', label: 'Announcement', labelEl: 'Ανακοίνωση' },
+  achievement: { icon: Award, color: 'text-status-accent', label: 'Achievement', labelEl: 'Επίτευγμα' },
 };
 
 const DEMO_POSTS: FeedPost[] = [
@@ -123,7 +123,7 @@ const DEMO_POSTS: FeedPost[] = [
       id: 'u3',
       displayName: 'Dr. Sarah Kim',
       avatarUrl: undefined,
-      headline: 'Startup Mentor | Ex-Google | 3x Founder',
+      headline: 'Startup Mentor | Former product lead | 3x Founder',
       role: 'mentor',
     },
     type: 'update',
@@ -195,8 +195,7 @@ function PostCard({
 }) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
-  const config = POST_TYPE_CONFIG[post.type];
-  const TypeIcon = config.icon;
+  const config = POST_TYPE_CONFIG[post.type] ?? POST_TYPE_CONFIG.update;
 
   // Track view when component mounts
   useEffect(() => {
@@ -205,7 +204,7 @@ function PostCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.id]);
 
-  const initials = post.author.displayName
+  const initials = (post.author?.displayName ?? '')
     .split(' ')
     .map((n) => n[0])
     .slice(0, 2)
@@ -213,44 +212,45 @@ function PostCard({
     .toUpperCase();
 
 
+  // The Endorsements card: the author's mark and name, their headline under
+  // it and the kind and time as a caption; the post, its tags and a foot
+  // with the counts and the actions all start on the mark's left edge.
   return (
     <Card
       id={`post-${post.id}`}
       tabIndex={-1}
-      className="overflow-hidden shadow-sm border-border hover:border-primary/30 transition-colors scroll-mt-24 focus:outline-none data-[linked=true]:ring-2 data-[linked=true]:ring-primary"
+      className="scroll-mt-24 transition-colors hover:border-primary/20 focus:outline-none data-[linked=true]:ring-2 data-[linked=true]:ring-primary"
     >
-      <CardHeader className="p-4 pb-2">
+      <CardContent className="space-y-3">
         <CardHead
           mark={(
             <Avatar className="h-10 w-10">
-              <AvatarImage src={post.author.avatarUrl} />
+              <AvatarImage src={post.author?.avatarUrl} alt="" />
               <AvatarFallback className="bg-primary/10 text-primary-accessible font-semibold">
                 {initials}
               </AvatarFallback>
             </Avatar>
           )}
           title={(
-            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <a href={`/profiles/${post.author.id}`} className="hover:underline">
-                {post.author.displayName}
-              </a>
-              <Badge variant="outline" className={cn('text-xs', config.color)}>
-                <TypeIcon className="icon-sm mr-1" />
-                {config.label}
-              </Badge>
-              {post.personalizationScore && (
-                <Badge variant="secondary" className="text-xs bg-status-info-bg text-status-info border-status-info-border">
-                  <Sparkles className="icon-sm mr-1" />
-                  <BilingualText en={`${Math.round(post.personalizationScore * 100)}% match`} el={`${Math.round(post.personalizationScore * 100)}% ταίριασμα`} compact />
-                </Badge>
-              )}
-            </span>
+            <a href={`/profiles/${post.author?.id}`} className="transition-colors hover:text-primary-accessible">
+              {post.author?.displayName}
+            </a>
           )}
-          subtitle={post.author.headline || undefined}
+          subtitle={post.author?.headline || undefined}
           /* Computed in an effect, not during render: the server's "now" is
              not the browser's, and the two disagreeing is what made this page
              fail hydration on every load. */
-          meta={<RelativeTime date={post.createdAt} />}
+          meta={(
+            <FactLine
+              items={[
+                <span key="kind" className={config.color}><BilingualText en={config.label} el={config.labelEl} compact /></span>,
+                <RelativeTime key="time" date={post.createdAt} />,
+                post.personalizationScore ? (
+                  <BilingualText key="match" en={`${Math.round(post.personalizationScore * 100)}% match`} el={`${Math.round(post.personalizationScore * 100)}% ταίριασμα`} compact />
+                ) : null,
+              ]}
+            />
+          )}
           asideStays
           aside={(
           <DropdownMenu>
@@ -262,65 +262,70 @@ function PostCard({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={onBookmark}>
                 <Bookmark className="icon-sm mr-2" />
-                {post.isBookmarked ? 'Remove Bookmark' : 'Bookmark'}
+                {post.isBookmarked
+                  ? <BilingualText en="Remove Bookmark" el="Αφαίρεση σελιδοδείκτη" compact />
+                  : <BilingualText en="Bookmark" el="Σελιδοδείκτης" compact />}
               </DropdownMenuItem>
               {/* Copy Link and Report had no handler. */}
               <DropdownMenuItem onSelect={onShare}>
                 <Link2 className="icon-sm mr-2" aria-hidden="true" />
-                Copy Link
+                <BilingualText en="Copy Link" el="Αντιγραφή συνδέσμου" compact />
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive-accessible" onSelect={onReport}>
                 <Flag className="icon-sm mr-2" aria-hidden="true" />
-                Report
+                <BilingualText en="Report" el="Αναφορά" compact />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           )}
         />
-        {post.relevanceReasons && post.relevanceReasons.length > 0 && (
-          <div className="mt-2 text-xs text-muted-foreground">
-            <span className="font-medium"><BilingualText en="Why you're seeing this" el="Γιατί το βλέπετε" compact />:</span> {post.relevanceReasons.join(', ')}
-          </div>
-        )}
-      </CardHeader>
-
-      <CardContent className="p-4 pt-2">
-        <p className="card-body text-foreground whitespace-pre-wrap">{post.content}</p>
-
-        {post.tags && post.tags.length > 0 && (
-          <FactLine className="mt-3" items={post.tags.map((tag) => `#${tag}`)} />
+        {(post.relevanceReasons?.length ?? 0) > 0 && (
+          <p className="text-xs text-muted-foreground">
+            <span className="font-medium"><BilingualText en="Why you're seeing this" el="Γιατί το βλέπετε" compact />:</span> {post.relevanceReasons?.join(', ')}
+          </p>
         )}
 
-        {/* Engagement Stats */}
-        <div className="flex items-center gap-4 mt-4 pt-3 border-t text-sm text-muted-foreground">
-          <span><BilingualText en={`${post.likes} likes`} el={`${post.likes} μου αρέσει`} compact /></span>
-          <span><BilingualText en={`${post.comments} comments`} el={`${post.comments} σχόλια`} compact /></span>
-          <span>{post.shares} shares</span>
-        </div>
+        <p className="card-body text-foreground whitespace-pre-wrap first-letter:uppercase">{post.content}</p>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t">
+        {(post.tags?.length ?? 0) > 0 && (
+          <FactLine items={(post.tags ?? []).map((tag) => `#${tag}`)} />
+        )}
+
+        {/* The counts at the left of the foot, the actions at its right. */}
+        <CardFoot
+          meta={(
+            <FactLine
+              items={[
+                <BilingualText key="likes" en={`${post.likes} likes`} el={`${post.likes} μου αρέσει`} compact />,
+                <BilingualText key="comments" en={`${post.comments} comments`} el={`${post.comments} σχόλια`} compact />,
+                <BilingualText key="shares" en={`${post.shares} shares`} el={`${post.shares} κοινοποιήσεις`} compact />,
+              ]}
+            />
+          )}
+        >
           <Button
             variant="ghost"
             size="sm"
             onClick={onLike}
+            aria-pressed={post.isLiked}
             className={cn(post.isLiked && 'text-primary-accessible')}
           >
-            <Heart className={cn('icon-sm mr-1', post.isLiked && 'fill-current')} />
-            Like
+            <Heart className={cn('icon-sm mr-1', post.isLiked && 'fill-current')} aria-hidden="true" />
+            <BilingualText en="Like" el="Μου αρέσει" compact />
           </Button>
           <Button
             variant="ghost"
             size="sm"
+            aria-expanded={showComments}
             onClick={() => setShowComments(!showComments)}
           >
-            <MessageCircle className="icon-sm mr-1" />
-            Comment
+            <MessageCircle className="icon-sm mr-1" aria-hidden="true" />
+            <BilingualText en="Comment" el="Σχόλιο" compact />
           </Button>
           <Button variant="ghost" size="sm" onClick={onShare}>
-            <Share2 className="icon-sm mr-1" />
-            Share
+            <Share2 className="icon-sm mr-1" aria-hidden="true" />
+            <BilingualText en="Share" el="Κοινοποίηση" compact />
           </Button>
           <Button
             variant="ghost"
@@ -337,39 +342,38 @@ function PostCard({
             <Bookmark className={cn('icon-sm sm:mr-1', post.isBookmarked && 'fill-current')} aria-hidden="true" />
             <span className="hidden sm:inline"><BilingualText en="Save" el="Αποθήκευση" compact /></span>
           </Button>
-        </div>
+        </CardFoot>
 
         {/* Comments Section */}
         {showComments && (
-          <div className="mt-4 pt-4 border-t space-y-4">
-            <div className="flex gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="text-xs">ME</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 flex gap-2">
-                {/* The page passed onComment={() => {}}: Send cleared the
-                    box and nothing was stored - there is no comment route
-                    for feed posts. Until there is, the box says so instead
-                    of swallowing what someone wrote. */}
-                <Textarea
-                  placeholder={bilingualInline('Comments on feed posts are not saved yet', 'Τα σχόλια σε δημοσιεύσεις δεν αποθηκεύονται ακόμη')}
-                  aria-label={bilingualAria('Comment', 'Σχόλιο')}
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  className="min-h-[60px] resize-none"
-                  disabled
-                />
-                <Button aria-label={bilingualAria('Post comment', 'Δημοσίευση σχολίου')}
-                  size="sm"
-                  disabled
-                  onClick={() => {
-                    onComment();
-                    setCommentText('');
-                  }}
-                >
-                  <Send className="icon-sm" />
-                </Button>
-              </div>
+          <div className="flex gap-3 border-t border-border pt-3">
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="text-xs">ME</AvatarFallback>
+            </Avatar>
+            <div className="flex min-w-0 flex-1 gap-2">
+              {/* The page passed onComment={() => {}}: Send cleared the
+                  box and nothing was stored - there is no comment route
+                  for feed posts. Until there is, the box says so instead
+                  of swallowing what someone wrote. */}
+              <Textarea
+                placeholder={bilingualInline('Comments on feed posts are not saved yet', 'Τα σχόλια σε δημοσιεύσεις δεν αποθηκεύονται ακόμη')}
+                aria-label={bilingualAria('Comment', 'Σχόλιο')}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                className="min-h-[60px] resize-none"
+                disabled
+              />
+              <Button aria-label={bilingualAria('Post comment', 'Δημοσίευση σχολίου')}
+                size="sm"
+                disabled
+                title="Comments on feed posts are not saved yet"
+                onClick={() => {
+                  onComment();
+                  setCommentText('');
+                }}
+              >
+                <Send className="icon-sm" />
+              </Button>
             </div>
           </div>
         )}

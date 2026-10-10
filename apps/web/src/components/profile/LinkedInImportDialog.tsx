@@ -206,13 +206,15 @@ export function LinkedInImportDialog({
             {rows.length === 0 ? (
               <p className="text-sm text-muted-foreground"><BilingualText en="Nothing new to fill." el="Τίποτα νέο για συμπλήρωση." compact /></p>
             ) : (
-              <ul className="space-y-2" aria-label="Fields to fill · Πεδία προς συμπλήρωση">
+              /* One group of choices, a hairline between them, rather than a
+                 frame around every field. */
+              <ul className="divide-y divide-border rounded-xl border border-border px-3" aria-label="Fields to fill · Πεδία προς συμπλήρωση">
                 {rows.map((k) => (
-                  <li key={k} className="flex items-start gap-3 rounded-lg border border-border p-2.5">
+                  <li key={k} className="flex items-start gap-3 py-2.5">
                     <Checkbox id={`import-${k}`} checked={chosen[k]} onCheckedChange={(v) => setChosen((c) => ({ ...c, [k]: v === true }))} className="mt-0.5" />
                     <label htmlFor={`import-${k}`} className="min-w-0 flex-1 text-sm">
                       <span className="font-medium text-foreground"><BilingualText en={LABELS[k].en} el={LABELS[k].el} compact /></span>
-                      <span className="mt-0.5 block whitespace-pre-line break-words text-muted-foreground">{values[k]}</span>
+                      <span className="card-body mt-0.5 block whitespace-pre-line break-words text-muted-foreground">{values[k]}</span>
                     </label>
                   </li>
                 ))}

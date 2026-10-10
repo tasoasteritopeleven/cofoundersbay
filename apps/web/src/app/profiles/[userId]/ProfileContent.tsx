@@ -45,7 +45,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RoleBadge } from '@/components/common/RoleBadge';
-import { statusEl } from '@/components/common/StatusText';
+import { StatusText, statusEl } from '@/components/common/StatusText';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/components/ui/toast';
 import { BilingualText } from '@/components/common/BilingualText';
@@ -102,7 +102,9 @@ function PayloadEntry({ entryKey, value }: { entryKey: string; value: RolePayloa
     return (
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <FactLine className="text-foreground sm:text-sm" items={value as string[]} />
+        {/* Enum values ("full_time", "pre_seed") read as words in both
+            languages; free text passes through, capitalised. */}
+        <FactLine className="text-sm text-foreground" items={(value as string[]).map((item) => <StatusText key={item} value={item} />)} />
       </div>
     );
   }
@@ -110,7 +112,7 @@ function PayloadEntry({ entryKey, value }: { entryKey: string; value: RolePayloa
     return (
       <div className="space-y-0.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <p className="text-sm text-foreground">{value}</p>
+        <p className="card-body text-foreground"><StatusText value={value} /></p>
       </div>
     );
   }
@@ -424,12 +426,12 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
         />
 
         {profile.bio && (
-          <Card className="shadow-sm border-border">
-            <CardHeader className="pb-3 border-b border-border">
-              <CardTitle className="text-lg font-semibold"><BilingualText en="About" el="Σχετικά" compact /></CardTitle>
+          <Card>
+            <CardHeader>
+              <CardTitle><BilingualText en="About" el="Σχετικά" compact /></CardTitle>
             </CardHeader>
-            <CardContent className="pt-5">
-              <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+            <CardContent>
+              <p className="card-body whitespace-pre-wrap text-muted-foreground first-letter:uppercase">
                 {profile.bio}
               </p>
             </CardContent>
@@ -441,24 +443,24 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
         <ProfileExperience payload={rolePayload as Record<string, unknown>} own={isOwnProfile} />
 
         {profile.skills?.length ? (
-          <Card className="shadow-sm border-border">
-            <CardHeader className="pb-3 border-b border-border">
-              <CardTitle className="text-lg font-semibold">
+          <Card>
+            <CardHeader>
+              <CardTitle>
                 <BilingualText en="Skills" el="Δεξιότητες" compact />
               </CardTitle>
             </CardHeader>
-            <CardContent className="pt-5">
-              <FactLine className="text-foreground sm:text-sm" items={profile.skills.map((s) => s.skillName)} />
+            <CardContent>
+              <FactLine className="text-sm text-foreground" items={profile.skills.map((s) => s.skillName)} />
             </CardContent>
           </Card>
         ) : null}
         {viewerId ? <SkillEvidencePanel userId={userId} /> : null}
 
         {Object.keys(rolePayload).filter((k) => k !== 'experience' && k !== 'education').length > 0 && (
-          <Card className="shadow-sm border-border">
-            <CardHeader className="pb-3 border-b border-border">
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                <RoleIcon className="icon-sm text-muted-foreground" />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <RoleIcon className="icon-sm text-muted-foreground" aria-hidden="true" />
                 <BilingualText
                   en={`${(profile.role ?? '').replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase())} details`}
                   el={`${(statusEl(profile.role) ?? profile.role ?? '').replace(/^./, (c) => c.toUpperCase())} — λεπτομέρειες`}
@@ -466,7 +468,7 @@ export default function PublicProfilePage({ userId }: { userId: string }) {
                 />
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 pt-5">
+            <CardContent className="space-y-4">
               {/* Generic role payload display */}
               <>{rolePayloadNodes}</>
 

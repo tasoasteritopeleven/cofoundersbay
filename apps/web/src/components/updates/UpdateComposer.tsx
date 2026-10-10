@@ -62,7 +62,7 @@ export function UpdateComposer({ initial, busy, onSend }: { initial?: Partial<Up
           </div>
         ))}
         {draft.metrics.length < L.metrics ? (
-          <Button type="button" size="sm" variant="ghost" onClick={() => setDraft({ ...draft, metrics: [...draft.metrics, { label: '', value: '' }] })}>
+          <Button type="button" size="sm" variant="outline" onClick={() => setDraft({ ...draft, metrics: [...draft.metrics, { label: '', value: '' }] })}>
             <BilingualText en="Add a figure" el="Προσθήκη μεγέθους" compact />
           </Button>
         ) : null}
@@ -73,7 +73,7 @@ export function UpdateComposer({ initial, busy, onSend }: { initial?: Partial<Up
           <Input key={i} aria-label={`Ask ${i + 1} · Αίτημα ${i + 1}`} maxLength={L.ask} placeholder="An intro to a dental chain in Thessaloniki" value={a} onChange={(e) => setDraft({ ...draft, asks: draft.asks.map((x, j) => (j === i ? e.target.value : x)) })} />
         ))}
         {draft.asks.length < L.asks ? (
-          <Button type="button" size="sm" variant="ghost" onClick={() => setDraft({ ...draft, asks: [...draft.asks, ''] })}>
+          <Button type="button" size="sm" variant="outline" onClick={() => setDraft({ ...draft, asks: [...draft.asks, ''] })}>
             <BilingualText en="Add an ask" el="Προσθήκη αιτήματος" compact />
           </Button>
         ) : null}

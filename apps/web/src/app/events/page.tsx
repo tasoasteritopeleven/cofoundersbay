@@ -352,7 +352,7 @@ export default function EventsPage() {
               <>
                 {featured && (
                   <div className="mb-6">
-                    <h2 className="mb-4 text-lg font-semibold text-foreground">
+                    <h2 className="mb-4 text-base font-semibold text-foreground">
                       <BilingualText en={firstLabel.en} el={firstLabel.el} compact />
                     </h2>
                     <EventCard

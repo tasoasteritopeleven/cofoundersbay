@@ -67,7 +67,7 @@ export function SkillEvidencePanel({ userId, editable = false }: { userId: strin
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base"><BilingualText en="Skills with evidence" el="Δεξιότητες με τεκμήρια" compact /></CardTitle>
+        <CardTitle><BilingualText en="Skills with evidence" el="Δεξιότητες με τεκμήρια" compact /></CardTitle>
         <CardDescription>
           <BilingualText
             en={editable ? 'Show where each skill was applied here. Only your own completed work can be linked.' : 'Where each skill was applied on CoFounderBay.'}
@@ -78,19 +78,19 @@ export function SkillEvidencePanel({ userId, editable = false }: { userId: strin
       </CardHeader>
       <CardContent className="space-y-4">
         {!list.length ? (
-          <p className="text-sm text-muted-foreground"><BilingualText en="Add skills to your profile to link evidence to them." el="Προσθέστε δεξιότητες στο προφίλ σας για να συνδέσετε τεκμήρια." wrap /></p>
+          <p className="card-body text-muted-foreground"><BilingualText en="Add skills to your profile to link evidence to them." el="Προσθέστε δεξιότητες στο προφίλ σας για να συνδέσετε τεκμήρια." wrap /></p>
         ) : (
           <ul className="divide-y divide-border">
             {list.map((s) => (
               <li key={s.name} className="space-y-1.5 py-3 first:pt-0 last:pb-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="text-sm font-medium text-foreground">{s.name}</span>
+                  <span className="min-w-0 break-words text-sm font-medium text-foreground">{s.name}</span>
                   <span className="text-xs text-muted-foreground">{summary(s)}</span>
                 </div>
                 {s.evidence.length ? (
                   <ul className="space-y-1">
                     {s.evidence.map((e) => (
-                      <li key={e.id} className="flex items-start justify-between gap-2 text-sm">
+                      <li key={e.id} className="card-body flex items-start justify-between gap-2">
                         <span className="min-w-0 text-muted-foreground">
                           <BilingualText en={SKILL_EVIDENCE_COPY[e.kind].en} el={SKILL_EVIDENCE_COPY[e.kind].el} compact />: <span className="text-foreground">{e.label}</span>
                         </span>

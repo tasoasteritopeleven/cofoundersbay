@@ -46,6 +46,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { EmptyTenantMembers } from '@/components/common/EmptyStates';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -137,84 +139,88 @@ type MemberActions = {
 };
 
 function MemberCard({ member, onRole, onRemove }: { member: Member } & MemberActions) {
+  // The Connections card: the avatar, the name over the address, the state
+  // and the menu at the right; the role, the dates and the engagement start
+  // on the avatar's edge.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
+          <MoreVertical className="icon-sm" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* All three had no handler. PATCH and DELETE
+            /tenants/:id/members/:userId exist. */}
+        {member.userId ? (
+          <DropdownMenuItem asChild>
+            <Link href={`/messages?to=${member.userId}`}><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem disabled><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        <p className="flex items-center gap-2 px-2 py-1 text-xs font-medium text-muted-foreground">
+          <Shield className="icon-sm" aria-hidden="true" /><BilingualText en="Change Role" el="Αλλαγή ρόλου" compact />
+        </p>
+        {TENANT_ROLES.map((r) => (
+          <DropdownMenuItem
+            key={r}
+            className="pl-8 capitalize"
+            disabled={!onRole || member.role === r}
+            onSelect={() => onRole?.(member, r)}
+          >
+            <StatusText value={r} />
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-destructive-accessible" disabled={!onRemove} onSelect={() => onRemove?.(member)}>
+          <UserX className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex items-start gap-4">
-          <div className="relative shrink-0">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={member.avatarUrl} />
-              <AvatarFallback>{initialsOf(member.name)}</AvatarFallback>
-            </Avatar>
-            {member.isOnline && (
-              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-status-success-mark border-2 border-background" />
-            )}
-          </div>
-          <div className="flex-1 min-w-0 space-y-2">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-sm">{member.name}</span>
-                  <Badge variant="outline" className={cn('text-2xs h-4 px-1.5', STATUS_COLORS[member.status])}>
-                    <StatusText value={member.status} />
-                  </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground">{member.email}</p>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
-                    <MoreVertical className="icon-sm" aria-hidden="true" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {/* All three had no handler. PATCH and DELETE
-                      /tenants/:id/members/:userId exist. */}
-                  {member.userId ? (
-                    <DropdownMenuItem asChild>
-                      <Link href={`/messages?to=${member.userId}`}><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem disabled><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></DropdownMenuItem>
-                  )}
-                  <DropdownMenuSeparator />
-                  <p className="flex items-center gap-2 px-2 py-1 text-xs font-medium text-muted-foreground">
-                    <Shield className="icon-sm" aria-hidden="true" /><BilingualText en="Change Role" el="Αλλαγή ρόλου" compact />
-                  </p>
-                  {TENANT_ROLES.map((r) => (
-                    <DropdownMenuItem
-                      key={r}
-                      className="pl-8 capitalize"
-                      disabled={!onRole || member.role === r}
-                      onSelect={() => onRole?.(member, r)}
-                    >
-                      <StatusText value={r} />
-                    </DropdownMenuItem>
-                  ))}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive-accessible" disabled={!onRemove} onSelect={() => onRemove?.(member)}>
-                    <UserX className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact />
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="secondary" size="sm"><StatusText value={member.role} /></Badge>
-              <span className="text-xs text-muted-foreground flex items-center gap-0.5">
-                <Clock className="icon-sm" aria-hidden="true" /><BilingualText en={`Joined ${member.joinedAt}`} el={`Μέλος από ${member.joinedAt}`} compact />
-              </span>
-              <span className="text-xs text-muted-foreground flex items-center gap-0.5">
-                <Activity className="icon-sm" aria-hidden="true" />Active {member.lastActive}
-              </span>
-              {member.milestonesCompleted != null && (
-                <span className="text-2xs text-status-success flex items-center gap-0.5">
-                  <CheckCircle2 className="icon-sm" />{member.milestonesCompleted} milestones
-                </span>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div className="relative">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={member.avatarUrl} alt="" />
+                <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{initialsOf(member.name)}</AvatarFallback>
+              </Avatar>
+              {member.isOnline && (
+                <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-status-success-mark" aria-hidden="true" />
               )}
             </div>
-            {member.engagementScore != null && <EngagementBar score={member.engagementScore} />}
-          </div>
-        </div>
+          )}
+          title={member.name}
+          subtitle={<span className="block truncate">{member.email}</span>}
+          asideStays
+          aside={(
+            <>
+              <Badge variant="outline" className={cn('text-xs', STATUS_COLORS[member.status])}>
+                <StatusText value={member.status} />
+              </Badge>
+              {menu}
+            </>
+          )}
+        />
+        <FactLine
+          items={[
+            <StatusText key="role" value={member.role} />,
+            <BilingualText key="joined" en={`Joined ${member.joinedAt}`} el={`Μέλος από ${member.joinedAt}`} compact />,
+            member.lastActive ? <BilingualText key="active" en={`Active ${member.lastActive}`} el={`Ενεργό ${member.lastActive}`} compact /> : null,
+            member.milestonesCompleted != null ? (
+              <span key="milestones" className="text-status-success">
+                <BilingualText en={`${member.milestonesCompleted} milestones`} el={`${member.milestonesCompleted} ορόσημα`} compact />
+              </span>
+            ) : null,
+          ]}
+        />
+        {member.engagementScore != null && <EngagementBar score={member.engagementScore} />}
       </CardContent>
     </Card>
   );
@@ -243,7 +249,7 @@ function InviteModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               value={emails}
               onChange={(e) => setEmails(e.target.value)}
               rows={3}
-              className="resize-none text-sm"
+              className="resize-none"
             />
           </div>
           <div className="space-y-1.5">
@@ -486,7 +492,7 @@ export default function TenantMembersPage() {
             {roles.map((role) => (
               <TabsTrigger key={role} value={role}>
                 <BilingualText
-                  en={`${role} (${members.filter((m) => m.role === role).length})`}
+                  en={`${role.charAt(0).toUpperCase()}${role.slice(1)} (${members.filter((m) => m.role === role).length})`}
                   el={`${statusEl(role) ?? role} (${members.filter((m) => m.role === role).length})`}
                   compact
                 />

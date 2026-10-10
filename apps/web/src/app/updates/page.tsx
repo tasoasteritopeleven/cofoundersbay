@@ -265,7 +265,7 @@ function UpdatesContent() {
                         </Button>
                       </>
                     ) : null}
-                    <Button size="sm" variant="ghost" disabled={visibility.isPending} onClick={() => void toggleVisibility(u)}>
+                    <Button size="sm" variant="outline" disabled={visibility.isPending} onClick={() => void toggleVisibility(u)}>
                       <BilingualText en={u.visibility === 'public' ? 'Followers only' : 'Make public'} el={u.visibility === 'public' ? 'Μόνο ακόλουθοι' : 'Δημόσια'} compact />
                     </Button>
                     <Button size="sm" variant="ghost" className="text-destructive-accessible" disabled={remove.isPending} onClick={() => void confirmDelete(u)}>

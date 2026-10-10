@@ -37,6 +37,9 @@ import {
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { choiceControl, rowOptions, usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { FactLine } from '@/components/common/FactLine';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 
 const REACTIONS = ['👍', '❤️', '🔥', '🎉', '💡'];
 
@@ -82,145 +85,152 @@ function PostCard({
     }
   };
 
-  const isOwn = currentUserId && post.author.id === currentUserId;
+  const isOwn = currentUserId && post.author?.id === currentUserId;
 
+  // A post reads like every card: the author's mark and name with the time
+  // under it, the post on the mark's edge, then the reactions in the foot.
   return (
-    <div className="rounded-xl border border-border bg-card/70 p-4 space-y-3 backdrop-blur">
-      {post.isPinned && (
-        <div className="flex items-center gap-1.5 text-xs text-primary-accessible font-medium">
-          <Pin className="icon-sm" aria-hidden="true" />
-          <BilingualText en="Pinned post" el="Καρφιτσωμένη δημοσίευση" compact />
-        </div>
-      )}
+    <Card className="transition-all hover:border-primary/20">
+      <CardContent className="space-y-3">
+        {post.isPinned && (
+          <p className="flex items-center gap-1.5 text-xs font-medium text-primary-accessible">
+            <Pin className="icon-sm" aria-hidden="true" />
+            <BilingualText en="Pinned post" el="Καρφιτσωμένη δημοσίευση" compact />
+          </p>
+        )}
 
-      <div className="flex items-start gap-3">
-        <Avatar className="h-9 w-9 shrink-0">
-          <AvatarImage src={post.author?.avatarUrl ?? undefined} />
-          <AvatarFallback className="text-xs">{post.author.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <span className="text-sm font-semibold">{post.author.displayName}</span>
-              <span className="ml-2 text-xs text-muted-foreground"><RelativeTime date={post.createdAt} format={formatRelativeTime} /></span>
-            </div>
-            {isOwn && (
-              <button aria-label="Delete post"
-                onClick={() => onDelete(post.id)}
-                className="rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive-accessible transition-colors"
-              >
-                <Trash2 className="icon-sm" />
-              </button>
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={post.author?.avatarUrl ?? undefined} alt="" />
+              <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{post.author?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
+            </Avatar>
+          )}
+          title={post.author?.displayName ?? <BilingualText en="Member" el="Μέλος" compact />}
+          subtitle={<RelativeTime date={post.createdAt} format={formatRelativeTime} />}
+          asideStays
+          aside={isOwn ? (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={bilingualAria('Delete post', 'Διαγραφή ανάρτησης')}
+              onClick={() => onDelete(post.id)}
+              className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive-accessible"
+            >
+              <Trash2 className="icon-sm" aria-hidden="true" />
+            </Button>
+          ) : undefined}
+        />
+
+        <p className="card-body whitespace-pre-wrap text-foreground/90 first-letter:uppercase">{post.content}</p>
+
+        {/* Media */}
+        {(post.mediaUrls?.length ?? 0) > 0 && (
+          <div className={cn('grid grid-cols-1 gap-2', (post.mediaUrls?.length ?? 0) > 1 ? 'grid-cols-2' : 'grid-cols-1')}>
+            {(post.mediaUrls ?? []).map((url, i) => (
+              <img key={i} src={url} alt="" className="max-h-64 w-full rounded-lg object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
+            ))}
+          </div>
+        )}
+
+        {/* Reactions and comments: framed controls, so their edge is the
+            card's axis rather than a ghost button's padding. */}
+        <CardFoot>
+          <div className="relative">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              aria-label={bilingualAria('React', 'Αντίδραση')}
+              aria-expanded={showReactions}
+              onClick={() => setShowReactions((p) => !p)}
+              className={cn('gap-1.5', post.myReaction && 'border-primary/30 bg-primary/10 text-primary-accessible')}
+            >
+              {post.myReaction ?? <Heart className="icon-sm" aria-hidden="true" />}
+              {post.reactionCount > 0 && <span className="tabular-nums">{post.reactionCount}</span>}
+            </Button>
+            {showReactions && (
+              <div className="absolute bottom-full left-0 z-10 mb-1 flex items-center gap-1 rounded-xl border border-border bg-popover p-1.5 shadow-xl">
+                {REACTIONS.map((emoji) => (
+                  <button
+                    key={emoji}
+                    type="button"
+                    aria-label={bilingualAria(`React ${emoji}`, `Αντίδραση ${emoji}`)}
+                    onClick={() => {
+                      onReact(post.id, emoji);
+                      setShowReactions(false);
+                    }}
+                    className="rounded-md p-1.5 text-base transition-colors hover:bg-accent"
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
-          <p className="card-body mt-1.5 text-foreground/90 whitespace-pre-wrap">{post.content}</p>
-        </div>
-      </div>
 
-      {/* Media */}
-      {post.mediaUrls.length > 0 && (
-        <div className={cn('grid grid-cols-1 gap-2', post.mediaUrls.length > 1 ? 'grid-cols-2' : 'grid-cols-1')}>
-          {post.mediaUrls.map((url, i) => (
-            <img key={i} src={url} alt="" className="rounded-lg object-cover max-h-64 w-full" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
-          ))}
-        </div>
-      )}
-
-      {/* Reactions & stats row */}
-      <div className="flex items-center gap-3 pt-1 border-t border-border">
-        <div className="relative">
-          <button
+          {/* The count and the verb read as one phrase: "6 Comment" put a
+              number in front of an imperative. */}
+          <Button
             type="button"
-            aria-label={bilingualAria('React', 'Αντίδραση')}
-            onClick={() => setShowReactions((p) => !p)}
-            className={cn(
-              'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors',
-              post.myReaction
-                ? 'bg-primary/15 text-primary-accessible'
-                : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground',
-            )}
+            variant="outline"
+            size="sm"
+            aria-expanded={showComments}
+            onClick={() => setShowComments((p) => !p)}
+            className="gap-1.5"
           >
-            {post.myReaction ?? <Heart className="icon-sm" />}
-            {post.reactionCount > 0 && <span>{post.reactionCount}</span>}
-          </button>
-          {showReactions && (
-            <div className="absolute bottom-full left-0 mb-1 flex items-center gap-1 rounded-xl border border-border bg-popover p-1.5 shadow-xl z-10">
-              {REACTIONS.map((emoji) => (
-                <button
-                  key={emoji}
-                  type="button"
-                  aria-label={bilingualAria(`React ${emoji}`, `Αντίδραση ${emoji}`)}
-                  onClick={() => {
-                    onReact(post.id, emoji);
-                    setShowReactions(false);
-                  }}
-                  className="rounded-lg p-1.5 text-base hover:bg-secondary/60 transition-colors"
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            <MessageCircle className="icon-sm" aria-hidden="true" />
+            {showComments
+              ? <BilingualText en="Hide comments" el="Απόκρυψη σχολίων" compact />
+              : post.commentCount === 0
+                ? <BilingualText en="Comment" el="Σχόλιο" compact />
+                : <BilingualText en={`${post.commentCount} ${post.commentCount === 1 ? 'comment' : 'comments'}`} el={`${post.commentCount} ${post.commentCount === 1 ? 'σχόλιο' : 'σχόλια'}`} compact />}
+          </Button>
+        </CardFoot>
 
-        {/* The count and the verb read as one phrase: "6 Comment" put a
-            number in front of an imperative. */}
-        <button
-          type="button"
-          aria-expanded={showComments}
-          onClick={() => setShowComments((p) => !p)}
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/60 hover:text-foreground transition-colors"
-        >
-          <MessageCircle className="icon-sm" aria-hidden="true" />
-          {showComments
-            ? 'Hide comments'
-            : post.commentCount === 0
-              ? 'Comment'
-              : `${post.commentCount} ${post.commentCount === 1 ? 'comment' : 'comments'}`}
-        </button>
-      </div>
-
-      {/* Comments */}
-      {showComments && (
-        <div className="space-y-3 pt-1">
-          {commentsQuery.isLoading && (
-            <div className="flex justify-center py-4"><Loader2 className="icon-md animate-spin text-primary/50" /></div>
-          )}
-          {(commentsQuery.data?.comments ?? []).map((c) => (
-            <div key={c.id} className="flex items-start gap-2.5">
-              <Avatar className="h-7 w-7 shrink-0">
-                <AvatarImage src={c.author?.avatarUrl ?? undefined} />
-                <AvatarFallback className="text-2xs">{c.author.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 rounded-xl bg-secondary/40 px-3 py-2">
-                <span className="text-xs font-semibold">{c.author.displayName}</span>
-                <span className="ml-2 text-2xs text-muted-foreground"><RelativeTime date={c.createdAt} format={formatRelativeTime} /></span>
-                <p className="mt-0.5 text-xs text-foreground/90">{c.content}</p>
+        {/* Comments */}
+        {showComments && (
+          <div className="space-y-3">
+            {commentsQuery.isLoading && (
+              <div className="flex justify-center py-4"><Loader2 className="icon-md animate-spin text-primary/50" /></div>
+            )}
+            {(commentsQuery.data?.comments ?? []).map((c) => (
+              <div key={c.id} className="flex items-start gap-2.5">
+                <Avatar className="h-7 w-7 shrink-0">
+                  <AvatarImage src={c.author?.avatarUrl ?? undefined} alt="" />
+                  <AvatarFallback className="text-2xs">{c.author?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0 flex-1 rounded-xl bg-secondary/40 px-3 py-2">
+                  <span className="text-xs font-semibold">{c.author?.displayName}</span>
+                  <span className="ml-2 text-2xs text-muted-foreground"><RelativeTime date={c.createdAt} format={formatRelativeTime} /></span>
+                  <p className="mt-0.5 break-words text-xs text-foreground/90">{c.content}</p>
+                </div>
               </div>
-            </div>
-          ))}
-          {isMember && (
-            <div className="flex items-center gap-2 pl-9">
-              <input
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleAddComment()}
-                placeholder={bilingualInline("Write a comment…", "Γράψτε ένα σχόλιο…")}
-                className="flex-1 rounded-xl border border-input bg-secondary/40 px-3 py-2 text-xs outline-none"
-              />
-              <Button aria-label={bilingualAria('Send comment', 'Αποστολή σχολίου')}
-                size="icon"
-                className="h-8 w-8 shrink-0"
-                disabled={submittingComment || !newComment.trim()}
-                onClick={handleAddComment}
-              >
-                {submittingComment ? <Loader2 className="icon-sm animate-spin" /> : <Send className="icon-sm" />}
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+            ))}
+            {isMember && (
+              <div className="flex items-center gap-2">
+                <input
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleAddComment()}
+                  aria-label={bilingualAria('Write a comment', 'Γράψτε ένα σχόλιο')}
+                  placeholder={bilingualInline("Write a comment…", "Γράψτε ένα σχόλιο…")}
+                  className="min-w-0 flex-1 rounded-xl border border-input bg-secondary/40 px-3 py-2 text-xs outline-none"
+                />
+                <Button aria-label={bilingualAria('Send comment', 'Αποστολή σχολίου')}
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                  disabled={submittingComment || !newComment.trim()}
+                  onClick={handleAddComment}
+                >
+                  {submittingComment ? <Loader2 className="icon-sm animate-spin" /> : <Send className="icon-sm" />}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -424,7 +434,9 @@ export default function GroupDetailPage() {
           <BilingualText en="Back to Groups" el="Πίσω στις κοινότητες" compact />
         </button>
 
-        <div className="rounded-2xl border border-border bg-card/70 overflow-hidden">
+        {/* The page's hero: its name is the page's display title and its
+            mark a hero's, so the card ladder does not apply to it. */}
+        <div data-card-hero="" className="rounded-2xl border border-border bg-card/70 overflow-hidden">
           {group.coverImageUrl ? (
             <div
               className="h-40 w-full bg-cover bg-center"
@@ -434,16 +446,17 @@ export default function GroupDetailPage() {
 
           {/* Without a cover the header starts at the card's edge: a blank
               band under an avatar half-sitting on it read as a missing image. */}
-          <div className={cn('relative px-6 pb-5', group.coverImageUrl ? '-mt-8' : 'pt-5')}>
+          <div className={cn('relative px-4 pb-5 sm:px-6', group.coverImageUrl ? '-mt-8' : 'pt-5')}>
             {/* On a phone the join button drops under the name instead of
                 being pushed off the card's right edge. */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex min-w-0 items-end gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-2 border-card bg-muted">
+                {/* The community's mark, as on its card in the directory. */}
+                <div data-card-mark="" data-keep-icon className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-2 border-card bg-muted">
                   {group.avatarUrl ? (
-                    <img src={group.avatarUrl} alt="" className="h-full w-full rounded-2xl object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
+                    <img src={group.avatarUrl} alt="" className="h-full w-full rounded-xl object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
                   ) : (
-                    <Users className="h-7 w-7 text-primary-accessible" />
+                    <Users className="h-7 w-7 text-primary-accessible" aria-hidden="true" />
                   )}
                 </div>
                 <div className="min-w-0 pb-1">
@@ -523,25 +536,28 @@ export default function GroupDetailPage() {
             <div className="space-y-4">
               {/* Create post */}
               {isMember && (
-                <div className="rounded-xl border border-border bg-card/70 p-4 space-y-3">
-                  <textarea
-                    value={newPost}
-                    onChange={(e) => setNewPost(e.target.value)}
-                    placeholder={bilingualInline("Share something with the group…", "Μοιραστείτε κάτι με την κοινότητα…")}
-                    className="w-full rounded-xl border border-input bg-secondary/30 px-3 py-2.5 text-sm outline-none resize-none"
-                    rows={3}
-                  />
-                  <div className="flex justify-end">
-                    <Button
-                      className="gap-2"
-                      disabled={submittingPost || !newPost.trim()}
-                      onClick={handleCreatePost}
-                    >
-                      {submittingPost ? <Loader2 className="icon-sm animate-spin" /> : <Send className="icon-sm" />}
-                      <BilingualText en="Post" el="Δημοσίευση" compact />
-                    </Button>
-                  </div>
-                </div>
+                <Card>
+                  <CardContent className="space-y-3">
+                    <Textarea
+                      value={newPost}
+                      onChange={(e) => setNewPost(e.target.value)}
+                      aria-label={bilingualAria('Share something with the group', 'Μοιραστείτε κάτι με την κοινότητα')}
+                      placeholder={bilingualInline("Share something with the group…", "Μοιραστείτε κάτι με την κοινότητα…")}
+                      className="resize-none"
+                      rows={3}
+                    />
+                    <div className="flex justify-end">
+                      <Button
+                        className="gap-2"
+                        disabled={submittingPost || !newPost.trim()}
+                        onClick={handleCreatePost}
+                      >
+                        {submittingPost ? <Loader2 className="icon-sm animate-spin" /> : <Send className="icon-sm" />}
+                        <BilingualText en="Post" el="Δημοσίευση" compact />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               )}
 
               {/* Posts */}
@@ -588,90 +604,99 @@ export default function GroupDetailPage() {
 
             {/* Sidebar */}
             <div className="space-y-4">
-              {/* Rules */}
-              {group.rules.length > 0 && (
-                <div className="rounded-xl border border-border bg-card/70 p-4 space-y-3">
-                  <h3 className="text-sm font-semibold"><BilingualText en="Group Rules" el="Κανόνες κοινότητας" compact /></h3>
-                  <ol className="space-y-2">
-                    {group.rules.map((rule, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
-                        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary-accessible text-2xs font-bold">
-                          {i + 1}
-                        </span>
-                        <div>
-                          <p className="font-medium text-foreground">{rule.title}</p>
+              {/* Rules: a section card; each rule's title and sentence
+                  start on the card's axis, the number in front of the title. */}
+              {(group.rules?.length ?? 0) > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle><BilingualText en="Group Rules" el="Κανόνες κοινότητας" compact /></CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ol className="space-y-2">
+                      {(group.rules ?? []).map((rule, i) => (
+                        <li key={i} className="text-xs text-muted-foreground">
+                          <p className="font-medium text-foreground"><span className="tabular-nums">{i + 1}.</span> {rule.title}</p>
                           {rule.description && <p className="mt-0.5">{rule.description}</p>}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </CardContent>
+                </Card>
               )}
 
-              {/* Recent members */}
+              {/* Recent members: rows without a frame of their own. */}
               {groupMembers.length > 0 && (
-                <div className="rounded-xl border border-border bg-card/70 p-4 space-y-3">
-                  <h3 className="text-sm font-semibold"><BilingualText en={`Members (${group.memberCount})`} el={`Μέλη (${group.memberCount})`} compact /></h3>
-                  <div className="space-y-2">
-                    {groupMembers.slice(0, 6).map((m) => (
-                      <div key={m.userId} className="flex items-center gap-2">
-                        <Avatar className="h-7 w-7 shrink-0">
-                          <AvatarImage src={m.user?.avatarUrl ?? undefined} />
-                          <AvatarFallback className="text-2xs">{m.user?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium truncate">{m.user?.displayName ?? <BilingualText en="Member" el="Μέλος" compact />}</p>
-                          {m.role !== 'member' && (
-                            <p className="text-2xs text-primary-accessible"><StatusText value={m.role} /></p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  {group.memberCount > 6 && (
-                    <button
-                      type="button"
-                      onClick={() => setActiveSection('members')}
-                      className="text-xs text-primary-accessible hover:underline focus-ring rounded-md"
-                    >
-                      <BilingualText en={`View all ${group.memberCount} members →`} el={`Όλα τα ${group.memberCount} μέλη →`} compact />
-                    </button>
-                  )}
-                </div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle><BilingualText en={`Members (${group.memberCount})`} el={`Μέλη (${group.memberCount})`} compact /></CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <ul className="space-y-2">
+                      {groupMembers.slice(0, 6).map((m) => (
+                        <li key={m.userId} className="flex items-center gap-2">
+                          <Avatar className="h-7 w-7 shrink-0">
+                            <AvatarImage src={m.user?.avatarUrl ?? undefined} alt="" />
+                            <AvatarFallback className="text-2xs">{m.user?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-xs font-medium">{m.user?.displayName ?? <BilingualText en="Member" el="Μέλος" compact />}</p>
+                            {m.role !== 'member' && (
+                              <p className="text-2xs text-primary-accessible"><StatusText value={m.role} /></p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    {group.memberCount > 6 && (
+                      <button
+                        type="button"
+                        onClick={() => setActiveSection('members')}
+                        className="rounded-md text-xs text-primary-accessible hover:underline focus-ring"
+                      >
+                        <BilingualText en={`View all ${group.memberCount} members →`} el={`Όλα τα ${group.memberCount} μέλη →`} compact />
+                      </button>
+                    )}
+                  </CardContent>
+                </Card>
               )}
             </div>
           </div>
         )}
 
-        {/* Members section */}
+        {/* Members section: a section card whose people are rows on its
+            axis, not a box each. */}
         {activeSection === 'members' && (
-          <div className="rounded-xl border border-border bg-card/70 p-4">
-            <h3 className="text-sm font-semibold mb-4"><BilingualText en={`All Members (${group.memberCount})`} el={`Όλα τα μέλη (${group.memberCount})`} compact /></h3>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {groupMembers.map((m) => (
-                <button
-                  type="button"
-                  key={m.userId}
-                  className="flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left hover:border-primary/30 transition-colors focus-ring"
-                  onClick={() => router.push(`/profiles/${m.userId}`)}
-                >
-                  <Avatar className="h-10 w-10 shrink-0">
-                    <AvatarImage src={m.user?.avatarUrl ?? undefined} />
-                    <AvatarFallback>{m.user?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <p className="text-sm font-medium truncate">{m.user?.displayName ?? 'Member'}</p>
-                    {m.user?.headline && (
-                      <p className="text-xs text-muted-foreground truncate">{m.user.headline}</p>
-                    )}
-                    {m.role !== 'member' && (
-                      <span className="text-2xs text-primary-accessible font-medium"><StatusText value={m.role} /></span>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle><BilingualText en={`All Members (${group.memberCount})`} el={`Όλα τα μέλη (${group.memberCount})`} compact /></CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {groupMembers.map((m) => (
+                  <button
+                    type="button"
+                    key={m.userId}
+                    className="axis-row flex items-center gap-3 rounded-md py-2 text-left transition-colors hover:bg-accent focus-ring"
+                    onClick={() => router.push(`/profiles/${m.userId}`)}
+                  >
+                    <Avatar className="h-10 w-10 shrink-0">
+                      <AvatarImage src={m.user?.avatarUrl ?? undefined} alt="" />
+                      <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{m.user?.displayName?.[0]?.toUpperCase() ?? 'U'}</AvatarFallback>
+                    </Avatar>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{m.user?.displayName ?? <BilingualText en="Member" el="Μέλος" compact />}</span>
+                      {m.user?.headline && (
+                        <span className="block truncate text-xs text-muted-foreground">{m.user.headline}</span>
+                      )}
+                      {m.role !== 'member' && (
+                        <span className="block text-2xs font-medium text-primary-accessible"><StatusText value={m.role} /></span>
+                      )}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
     </AppShell>

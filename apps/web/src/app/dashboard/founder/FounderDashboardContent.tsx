@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, CheckCircle2, Circle, AlertCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Circle, AlertCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
@@ -59,6 +59,7 @@ import {
 import { listCommitmentThreads } from '@/lib/commitments-api';
 import { nextAction as ladderNextAction, waitsOnMe } from '@/lib/commitments-next';
 import { MetricTile } from '@/components/dashboard/MetricTile';
+import { RowHead } from '@/components/dashboard/SectionCard';
 import { FirstRunTour, type TourStep } from '@/components/common/FirstRunTour';
 import { BehavioralNudge } from '@/components/behavioral/BehavioralNudge';
 import { XPProgressWidget } from '@/components/gamification/XPProgressWidget';
@@ -153,7 +154,7 @@ function AskAiButton({
 const PREVIEW_HEADLINE_EL: Record<string, string> = {
   'Founder & CEO at Harbor': 'Ιδρύτρια και CEO στο Harbor',
   'Technical cofounder · Full-stack': 'Τεχνικός συνιδρυτής · Full-stack',
-  'Startup mentor · Ex-Google · 3x founder': 'Μέντορας startups · πρώην Google · 3× ιδρύτρια',
+  'Startup mentor · Former product lead · 3x founder': 'Μέντορας startups · πρώην επικεφαλής προϊόντος · 3× ιδρύτρια',
   'Angel investor · Seed': 'Angel επενδυτής · Seed',
 };
 
@@ -289,31 +290,41 @@ function AttentionChips({
   );
 }
 
-function MatchPreviewCard({ match }: { match: SearchHit }) {
+/**
+ * A match as a row of the Top Matches card: the person's circle, the name
+ * over the headline and the score at the right - the CardHead anatomy
+ * without a frame of its own (a bordered box per match drew a card inside
+ * the card).
+ */
+function MatchPreviewRow({ match }: { match: SearchHit }) {
   const score = match.matchScore ?? 0;
   const scoreColor = score >= 85 ? STATUS.success.icon : score >= 70 ? 'text-primary-accessible' : STATUS.warning.icon;
   return (
-    <Link href={`/matches/${match.userId}`} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-3.5 transition-colors hover:border-border hover:bg-muted/30">
-      <Avatar className="h-10 w-10 shrink-0">
-        <AvatarImage src={match.avatarUrl ?? undefined} />
-        <AvatarFallback className="bg-muted text-sm font-medium text-muted-foreground">
-          {match.displayName?.[0]?.toUpperCase() ?? '?'}
-        </AvatarFallback>
-      </Avatar>
-      <div className="min-w-0 flex-1 space-y-1">
-        <p className="truncate text-sm font-medium">{match.displayName}</p>
-        <p className="truncate text-xs text-muted-foreground max-sm:line-clamp-2 max-sm:whitespace-normal">
-          {match.headline && PREVIEW_HEADLINE_EL[match.headline]
-            ? <BilingualText en={match.headline} el={PREVIEW_HEADLINE_EL[match.headline]} compact />
-            : match.headline}
-        </p>
-      </div>
-      <div className="flex shrink-0 items-center gap-1.5">
-        <span className={cn('flex items-center gap-0.5 text-sm font-bold tabular-nums', scoreColor)}>
-          <CfbGlyph name="spark" className="icon-sm" />{score}%
-        </span>
-        <ChevronRight className="icon-sm hidden text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 sm:block" />
-      </div>
+    <Link href={`/matches/${match.userId}`} className="axis-row group block rounded-md transition-colors hover:bg-accent focus-ring">
+      <RowHead
+        mark={(
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={match.avatarUrl ?? undefined} alt="" />
+            <AvatarFallback className="bg-muted text-sm font-medium text-muted-foreground">
+              {match.displayName?.[0]?.toUpperCase() ?? '?'}
+            </AvatarFallback>
+          </Avatar>
+        )}
+        title={<span className="block truncate">{match.displayName}</span>}
+        subtitle={match.headline ? (
+          <span className="line-clamp-2">
+            {PREVIEW_HEADLINE_EL[match.headline]
+              ? <BilingualText en={match.headline} el={PREVIEW_HEADLINE_EL[match.headline]} compact />
+              : match.headline}
+          </span>
+        ) : undefined}
+        asideStays
+        aside={(
+          <span className={cn('flex items-center gap-0.5 text-sm font-semibold tabular-nums', scoreColor)}>
+            <CfbGlyph name="spark" className="icon-sm" />{score}%
+          </span>
+        )}
+      />
     </Link>
   );
 }
@@ -329,7 +340,7 @@ function MilestoneRow({ milestone }: { milestone: DemoMilestone }) {
   return (
     <Link
       href="/milestones"
-      className="flex items-center gap-3 rounded-2xl p-1 -mx-1 transition-colors hover:bg-muted/40"
+      className="axis-row flex items-start gap-3 rounded-md py-1.5 transition-colors hover:bg-accent"
     >
       <div
         className="mt-0.5 shrink-0 text-muted-foreground"
@@ -344,8 +355,10 @@ function MilestoneRow({ milestone }: { milestone: DemoMilestone }) {
           : <Circle className="icon-sm text-muted-foreground" aria-hidden="true" />}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium truncate">
+        {/* The priority wraps under the title when both do not fit: in
+            the rail it squeezed the title to one letter. */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <p className="min-w-0 text-sm font-medium">
             <BilingualText en={milestone.titleEn} el={milestone.titleEl} compact wrap />
           </p>
           {/* 'warning', not 'destructive': high priority is not an error state, and
@@ -722,12 +735,12 @@ export default function FounderDashboardContent() {
           {/* Fundraising widget */}
           <Card>
             <CardHeader className="pb-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <CardTitle className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex min-w-0 flex-1 items-center gap-2">
                   <CfbGlyph name="wallet" className="icon-sm text-muted-foreground" />
-                  <BilingualText en={dashboardEn('fundraising')} el={dashboardEl('fundraising')} />
+                  <BilingualText en={dashboardEn('fundraising')} el={dashboardEl('fundraising')} compact />
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="gap-1" asChild>
+                <Button variant="ghost" size="sm" className="-mr-2 min-w-0 max-w-[50%] gap-1" asChild>
                   <Link href="/fundraising">
                     <BilingualText en={dashboardEn('open_tracker')} el={dashboardEl('open_tracker')} compact />
                     <ArrowRight className="icon-sm" />
@@ -746,15 +759,17 @@ export default function FounderDashboardContent() {
                             ? <BilingualText en={fundRound.name} el={fundRound.nameEl} compact />
                             : fundRound.name}
                         </p>
-                        <p className="page-figure font-bold text-foreground">
+                        {/* The amount is a value inside the card, a step under its
+                            title (the card text ladder), not a display figure. */}
+                        <p className="card-body font-semibold tabular-nums text-foreground">
                           {fundRound.currency}{(fundRound.raised / 1000).toFixed(0)}K
-                          <span className="ml-1 text-sm font-normal text-muted-foreground">
+                          <span className="ml-1 font-normal text-muted-foreground">
                             / {fundRound.currency}{(fundRound.target / 1000).toFixed(0)}K
                           </span>
                         </p>
                       </div>
                       <span className={cn(
-                        'shrink-0 text-sm font-bold',
+                        'shrink-0 card-body font-semibold tabular-nums',
                         fundingPct >= 75 ? STATUS.success.icon : fundingPct >= 40 ? STATUS.warning.icon : 'text-muted-foreground'
                       )}>
                         {fundingPct}%
@@ -792,7 +807,9 @@ export default function FounderDashboardContent() {
                   </p>
                 )}
                 <div className="space-y-2.5">
-                  <div className="flex flex-col gap-2.5 sm:flex-row">
+                  {/* One column in the rail (two side by side ran past its
+                      edge at 1440), two in the expanded view. */}
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                     <Button variant="outline" size="md" className="w-full gap-1.5" asChild>
                       <Link href="/fundraising" className="flex-1">
                         <CfbGlyph name="wallet" className="icon-sm" />
@@ -822,12 +839,12 @@ export default function FounderDashboardContent() {
            {/* Top Matches */}
           <Card>
             <CardHeader className="pb-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <CardTitle className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex min-w-0 flex-1 items-center gap-2">
                   <CfbGlyph name="matches" className="icon-sm text-muted-foreground" />
-                  <BilingualText en={dashboardEn('top_matches')} el={dashboardEl('top_matches')} />
+                  <BilingualText en={dashboardEn('top_matches')} el={dashboardEl('top_matches')} compact />
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="gap-1" asChild>
+                <Button variant="ghost" size="sm" className="-mr-2 min-w-0 max-w-[50%] gap-1" asChild>
                   <Link href="/matches">
                     <BilingualText en={dashboardEn('view_all')} el={dashboardEl('view_all')} compact />
                     <ArrowRight className="icon-sm" />
@@ -835,10 +852,14 @@ export default function FounderDashboardContent() {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2.5">
-              {recommendations?.suggestions?.slice(0, 4).map((match: SearchHit) => (
-                <MatchPreviewCard key={match.userId} match={match} />
-              ))}
+            <CardContent className="space-y-3">
+              {(recommendations?.suggestions?.length ?? 0) > 0 && (
+                <div className="card-rows">
+                  {recommendations?.suggestions?.slice(0, 4).map((match: SearchHit) => (
+                    <MatchPreviewRow key={match.userId} match={match} />
+                  ))}
+                </div>
+              )}
               {(recommendations?.suggestions?.length ?? 0) > 0 && (
                 <AskAiButton
                   variant="ghost"
@@ -849,15 +870,17 @@ export default function FounderDashboardContent() {
                 />
               )}
               {(!recommendations?.suggestions || recommendations.suggestions.length === 0) && (
-                <div className="rounded-xl border border-dashed border-border bg-muted/20 px-4 py-8 text-center">
-                  <CfbGlyph name="matches" className="mx-auto mb-3 icon-lg text-muted-foreground/50" />
+                // The empty list's line and its two ways on, on the card's
+                // axis: a dashed box inside the card was a card in a card.
+                <div className="space-y-3">
                   <p className="text-sm text-muted-foreground">
                     <BilingualText
                       en={dashboardEn('complete_profile_for_matches')}
                       el={dashboardEl('complete_profile_for_matches')}
+                      wrap
                     />
                   </p>
-                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+                  <div className="flex flex-wrap items-center gap-2.5">
                     <Button variant="outline" size="sm" className="gap-1.5" asChild>
                       <Link href="/profile/edit">
                         <CfbGlyph name="profile" className="icon-sm" />
@@ -878,12 +901,12 @@ export default function FounderDashboardContent() {
            {/* Milestones */}
           <Card>
             <CardHeader className="pb-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <CardTitle className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex min-w-0 flex-1 items-center gap-2">
                   <CfbGlyph name="flag" className="icon-sm text-muted-foreground" />
-                  <BilingualText en={dashboardEn('milestones')} el={dashboardEl('milestones')} />
+                  <BilingualText en={dashboardEn('milestones')} el={dashboardEl('milestones')} compact />
                 </CardTitle>
-                <Button variant="ghost" size="sm" className="gap-1" asChild>
+                <Button variant="ghost" size="sm" className="-mr-2 min-w-0 max-w-[50%] gap-1" asChild>
                   <Link href="/milestones">
                     <BilingualText en={dashboardEn('manage')} el={dashboardEl('manage')} compact />
                     <ArrowRight className="icon-sm" />
@@ -893,7 +916,7 @@ export default function FounderDashboardContent() {
             </CardHeader>
             <CardContent className="space-y-4">
               {usingDemoMilestones && (
-                <p className="page-stat-label leading-snug text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   <BilingualText
                     en="Sample timeline — manage live items on Milestones."
                     el="Δείγμα χρονοδιαγράμματος — διαχειριστείτε τα πραγματικά στα Ορόσημα."
@@ -967,7 +990,7 @@ export default function FounderDashboardContent() {
                 <span className="text-muted-foreground">
                   <BilingualText en={dashboardEn('completion')} el={dashboardEl('completion')} compact />
                 </span>
-                <span className={cn('font-bold', profilePct >= 80 ? STATUS.success.icon : STATUS.warning.icon)}>{profilePct}%</span>
+                <span className={cn('font-semibold tabular-nums', profilePct >= 80 ? STATUS.success.icon : STATUS.warning.icon)}>{profilePct}%</span>
               </div>
               <Progress value={profilePct} label={bilingualAria('Profile completeness', 'Πληρότητα προφίλ')} className="h-2" />
               {/* Two columns from `sm`: this card moved out of the 381px
@@ -1037,7 +1060,7 @@ export default function FounderDashboardContent() {
                     key={href}
                     href={href}
                     className={cn(
-                      'flex min-h-9 min-w-0 items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-foreground transition-colors hover:bg-muted/50',
+                      'axis-row flex min-h-9 min-w-0 items-center gap-2.5 rounded-md py-1.5 text-sm text-foreground transition-colors hover:bg-accent',
                       href === '/ai' && 'bg-primary/[0.04] font-medium',
                     )}
                   >
@@ -1046,7 +1069,7 @@ export default function FounderDashboardContent() {
                       className={cn('icon-sm shrink-0', href === '/ai' ? 'text-primary-accessible' : 'text-muted-foreground')}
                     />
                     {/* Stacked, like the sidebar: inline pairs wrapped or not by length, so rows alternated between one and two lines. */}
-                    <span className="min-w-0 leading-snug">
+                    <span className="min-w-0">
                       <BilingualText en={labelEn} el={labelEl} stacked wrap />
                     </span>
                   </Link>
@@ -1086,7 +1109,7 @@ export default function FounderDashboardContent() {
               width a header row held neither, and the link ran past the card edge. */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-start gap-2 text-sm">
+              <CardTitle className="flex items-start gap-2">
                 <CfbGlyph name="spark" className="mt-0.5 icon-sm shrink-0 text-muted-foreground" />
                 <BilingualText en={dashboardEn('recent_activity')} el={dashboardEl('recent_activity')} compact wrap />
               </CardTitle>
@@ -1096,13 +1119,13 @@ export default function FounderDashboardContent() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="flex items-start gap-3 rounded-xl px-1 py-2 transition-colors hover:bg-muted/40"
+                  className="axis-row flex items-start gap-3 rounded-md py-2 transition-colors hover:bg-accent"
                 >
                   <div className="mt-0.5 shrink-0 text-muted-foreground">
                     <CfbGlyph name={item.glyph} className="icon-sm" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-foreground leading-snug">
+                    <p className="text-xs text-foreground">
                       <BilingualText en={item.textEn} el={item.textEl} stacked wrap />
                     </p>
                     <p className="text-xs text-muted-foreground mt-0.5">
@@ -1117,7 +1140,7 @@ export default function FounderDashboardContent() {
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-start gap-2 text-sm">
+              <CardTitle className="flex items-start gap-2">
                 <CfbGlyph name="calendar" className="mt-0.5 icon-sm shrink-0 text-muted-foreground" />
                 <BilingualText en={dashboardEn('upcoming')} el={dashboardEl('upcoming')} compact wrap />
               </CardTitle>
@@ -1133,13 +1156,13 @@ export default function FounderDashboardContent() {
                     <Link
                       key={event.id}
                       href="/events"
-                      className="flex items-start gap-3 rounded-xl px-1 py-1.5 transition-colors hover:bg-muted/40"
+                      className="axis-row flex items-start gap-3 rounded-md py-1.5 transition-colors hover:bg-accent"
                     >
                       <div className="mt-0.5 shrink-0 text-muted-foreground">
                         <CfbGlyph name="calendar" className={cn('icon-sm', isUrgent ? cfg.icon : 'text-muted-foreground')} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium leading-snug text-foreground">
+                        <p className="text-xs font-medium text-foreground">
                           <BilingualText en={event.titleEn} el={event.titleEl} compact wrap />
                         </p>
                         <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
@@ -1165,11 +1188,11 @@ export default function FounderDashboardContent() {
                 <RailListLink href="/events" en="Open events" el="Άνοιγμα εκδηλώσεων" />
                 </>
               ) : (
-                <div className="rounded-xl bg-muted/40 p-3 text-center">
-                  <p className="text-xs text-muted-foreground">
-                    <BilingualText en="No events this week" el="Δεν υπάρχουν εκδηλώσεις αυτή την εβδομάδα" />
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    <BilingualText en="No events this week" el="Δεν υπάρχουν εκδηλώσεις αυτή την εβδομάδα" wrap />
                   </p>
-                  <Button variant="ghost" size="sm" className="mt-1.5 gap-1" asChild>
+                  <Button variant="outline" size="sm" className="gap-1" asChild>
                     <Link href="/events">
                       <BilingualText en="Browse events" el="Περιήγηση εκδηλώσεων" /> <ArrowRight className="icon-sm" />
                     </Link>

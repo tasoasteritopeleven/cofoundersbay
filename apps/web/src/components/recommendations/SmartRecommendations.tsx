@@ -100,7 +100,7 @@ export function SmartRecommendations() {
       id: '4',
       type: 'person',
       title: 'Michael Rodriguez',
-      subtitle: 'Angel Investor | Ex-Google PM',
+      subtitle: 'Angel Investor | Former product manager',
       description: 'Investing in early-stage B2B SaaS startups',
       matchScore: 85,
       matchReasons: [

@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { useToast } from '@/components/ui/toast';
 import { bilingualInline } from '@/lib/i18n/format';
 import { useBilingualString } from '@/lib/i18n/LanguagePreferenceContext';
@@ -168,29 +169,34 @@ export function GiveEndorsementDialog({
             </label>
 
             {picked ? (
-              <div className="flex items-center gap-2.5 rounded-xl border border-border bg-secondary/40 p-2.5">
-                <Avatar className="h-8 w-8 shrink-0">
-                  <AvatarImage src={picked.avatarUrl ?? undefined} alt="" />
-                  <AvatarFallback>{picked.displayName.slice(0, 2).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{picked.displayName}</p>
-                  {picked.headline && (
-                    <p className="truncate text-xs text-muted-foreground">{picked.headline}</p>
+              /* The person as their card shows them (ApplyModal's summary):
+                 the mark, the name with the headline under it, and the one
+                 control at the head's right. */
+              <div className="rounded-xl border border-border p-4">
+                <CardHead
+                  titleAs="p"
+                  mark={(
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={picked.avatarUrl ?? undefined} alt="" />
+                      <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{picked.displayName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
                   )}
-                </div>
-                {/* The recipient is changeable unless the page fixed it. */}
-                {!recipient && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={bilingualInline('Choose someone else', 'Επιλογή άλλου ατόμου')}
-                    onClick={() => setPicked(null)}
-                  >
-                    <X className="icon-sm" />
-                  </Button>
-                )}
+                  title={picked.displayName}
+                  subtitle={picked.headline || undefined}
+                  // The recipient is changeable unless the page fixed it.
+                  aside={!recipient ? (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={bilingualInline('Choose someone else', 'Επιλογή άλλου ατόμου')}
+                      onClick={() => setPicked(null)}
+                    >
+                      <X className="icon-sm" />
+                    </Button>
+                  ) : undefined}
+                  asideStays
+                />
               </div>
             ) : (
               <>

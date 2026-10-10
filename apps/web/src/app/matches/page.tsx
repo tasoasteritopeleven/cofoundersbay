@@ -23,11 +23,11 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MatchCard } from '@/components/common/MatchCard';
-import { ListRowCard } from '@/components/common/ListRowCard';
 import type { CommitmentStep } from '@cofounderbay/shared';
 import { StepChip } from '@/components/commitments/OutcomeChip';
 import { listCommitmentThreads } from '@/lib/commitments-api';
 import { RoleBadge } from '@/components/common/RoleBadge';
+import { StatusText } from '@/components/common/StatusText';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/toast';
 import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
@@ -43,6 +43,7 @@ import { bilingualInline } from '@/lib/i18n/format';
 import { FirstRunTour, type TourStep } from '@/components/common/FirstRunTour';
 import { CfbGlyph } from '@/components/icons/CfbGlyph';
 import { FactLine } from '@/components/common/FactLine';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 
 const MATCHES_TOUR: TourStep[] = [
   {
@@ -285,63 +286,102 @@ function MatchListRow({
   const score = hit.matchScore ?? 50;
   const tier = getTier(score);
   const colors = tierStyle(tier);
+  const stroke = TIER_STROKE[tier];
   const initials = hit.displayName.slice(0, 2).toUpperCase();
+  const circ = 2 * Math.PI * 23;
 
-  const skills = hit.skillNames ?? [];
-  const facts = [
-    hit.location,
-    ...skills.slice(0, 3),
-    skills.length > 3 ? `+${skills.length - 3}` : null,
-    ...matchReasons.slice(0, 2).map((r) => r.text),
-    commitment ? commitment.step : null,
-  ].filter(Boolean).join(' · ');
-
+  // The Connections card in a row: the score ring around the person's circle
+  // is the mark (2.5rem, as every card's), the name and headline beside it,
+  // the tier at the right; skills, reasons and the foot on the ring's edge.
   return (
-    <ListRowCard
-      mark={(
-        <Link href={`/profiles/${hit.userId}`}>
-          <Avatar className="h-10 w-10 shrink-0">
-            <AvatarImage src={hit.avatarUrl ?? undefined} />
-            <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">{initials}</AvatarFallback>
-          </Avatar>
-        </Link>
-      )}
-      title={hit.displayName}
-      titleHref={`/profiles/${hit.userId}`}
-      badge={(
-        <Badge variant="outline" className={cn('text-xs', colors.chip)}>
-          {tier.charAt(0).toUpperCase() + tier.slice(1)} · {score}%
-        </Badge>
-      )}
-      headline={hit.headline}
-      detail={facts}
-      actions={(
-        <>
-          <button type="button" onClick={onPass} className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:text-destructive-accessible" aria-label={`Pass on ${hit.displayName}`}>
-            <X className="icon-sm" />
-          </button>
-          <button
-            type="button"
-            onClick={onSave}
-            aria-pressed={isSaved}
-            aria-label={isSaved ? `${hit.displayName} is on your shortlist` : `Save ${hit.displayName} to your shortlist`}
-            className={cn('flex h-8 w-8 items-center justify-center rounded-full', isSaved ? STATUS.warning.icon : 'text-muted-foreground')}
-          >
-            {isSaved ? <BookmarkCheck className="icon-sm" /> : <Bookmark className="icon-sm" />}
-          </button>
-          <button type="button" onClick={onBreakdown} className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground" aria-label="Breakdown">
-            <BarChart3 className="icon-sm" />
-          </button>
-          <Button size="sm" variant="secondary" onClick={onMessage} aria-label="Message">
-            <MessageCircle className="icon-sm" />
+    <Card className="shadow-sm border-border hover:border-primary/30 transition-all group">
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="relative h-10 w-10 shrink-0">
+              <svg viewBox="0 0 52 52" className="absolute inset-0 h-10 w-10" aria-hidden="true">
+                <circle cx={26} cy={26} r={23} fill="none" stroke="hsl(var(--border))" strokeWidth={3} />
+                <circle cx={26} cy={26} r={23} fill="none" stroke={stroke} strokeWidth={3}
+                  strokeDasharray={`${(score / 100) * circ} ${circ}`}
+                  strokeDashoffset={circ * 0.25}
+                  strokeLinecap="round" />
+              </svg>
+              <Link href={`/profiles/${hit.userId}`} className="absolute inset-1 rounded-full" aria-label={bilingualAria(`Open ${hit.displayName}'s profile`, `Άνοιγμα προφίλ: ${hit.displayName}`)}>
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={hit.avatarUrl ?? undefined} alt="" />
+                  <AvatarFallback className="text-xs font-semibold">{initials}</AvatarFallback>
+                </Avatar>
+              </Link>
+            </div>
+          )}
+          title={(
+            <Link href={`/profiles/${hit.userId}`} className="transition-colors hover:text-primary-accessible">
+              {hit.displayName}
+            </Link>
+          )}
+          subtitle={hit.headline ? <span className="line-clamp-1">{hit.headline}</span> : undefined}
+          // The place, and where a commitment stands, on the title's edge;
+          // the tier is the head's one pill at the right.
+          meta={(hit.location || commitment) ? (
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {hit.location ? <span>{hit.location}</span> : null}
+              {commitment ? (
+                <Link href={commitment.href} className="inline-flex rounded-full"><StepChip step={commitment.step} /></Link>
+              ) : null}
+            </span>
+          ) : undefined}
+          aside={(
+            <Badge variant="outline" className={cn('border text-xs tabular-nums', colors.chip)}>
+              <BilingualText en={`${matchesEn(`tier_${tier}` as const)} · ${score}%`} el={`${matchesEl(`tier_${tier}` as const)} · ${score}%`} compact />
+            </Badge>
+          )}
+        />
+
+        {/* Skills and reasons: facts on the ring's edge. */}
+        {((hit.skillNames ?? []).length > 0 || matchReasons.length > 0) && (
+          <div className="space-y-1">
+            <FactLine
+              items={[...(hit.skillNames ?? []).slice(0, 5), (hit.skillNames ?? []).length > 5 ? `+${(hit.skillNames ?? []).length - 5}` : null]}
+            />
+            <FactLine
+              label={bilingualAria('Why you match', 'Γιατί ταιριάζετε')}
+              items={matchReasons.slice(0, 3).map((r) => r.text)}
+            />
+          </div>
+        )}
+
+        {/* Foot: pass and save at the left, the next steps at the right. */}
+        <CardFoot
+          meta={(
+            <div className="flex items-center gap-1.5">
+              <button onClick={onPass}
+                className="flex h-10 w-10 items-center justify-center gap-1.5 rounded-full border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-accessible sm:w-auto sm:px-3"
+                aria-label={`Pass on ${hit.displayName}`}>
+                <X className="icon-sm" />
+                <span className="hidden sm:inline text-xs"><BilingualText en="Pass" el="Παράβλεψη" compact /></span>
+              </button>
+              <button onClick={onSave}
+                className={cn('flex h-10 w-10 items-center justify-center gap-1.5 rounded-full border border-border transition-colors sm:w-auto sm:px-3', isSaved ? STATUS.warning.icon : 'text-muted-foreground hover:text-status-warning')}
+                aria-pressed={isSaved}
+                aria-label={isSaved ? `${hit.displayName} is on your shortlist` : `Save ${hit.displayName} to your shortlist`}>
+                {isSaved ? <BookmarkCheck className="icon-sm" /> : <Bookmark className="icon-sm" />}
+                <span className="hidden sm:inline text-xs"><BilingualText en={isSaved ? 'Saved' : 'Save'} el={isSaved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact /></span>
+              </button>
+            </div>
+          )}
+        >
+          <Button size="sm" variant="ghost" onClick={onBreakdown} className="gap-1.5 text-muted-foreground hover:text-primary-accessible">
+            <BarChart3 className="icon-sm" /> <BilingualText en="Breakdown" el="Ανάλυση" compact />
           </Button>
-          <Button size="sm" onClick={onConnect} className="gap-1">
-            <Heart className="icon-sm" />
-            <BilingualText en="Connect" el="Σύνδεση" compact />
+          <Button size="sm" variant="outline" onClick={onMessage} className="gap-1.5">
+            <MessageCircle className="icon-sm" /> <BilingualText en="Message" el="Μήνυμα" compact />
           </Button>
-        </>
-      )}
-    />
+          <Button size="sm" onClick={onConnect} className="gap-1.5">
+            <Heart className="icon-sm" /> <BilingualText en="Connect" el="Σύνδεση" compact />
+          </Button>
+        </CardFoot>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -380,65 +420,58 @@ function MatchPreviewPanel({
         </div>
 
         <div className="space-y-4 p-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]">
-          {/* Avatar + name */}
-          <div className="flex flex-col items-center text-center pt-1">
-            <Avatar className="h-16 w-16 border-2 border-border">
-              <AvatarImage src={hit.avatarUrl ?? undefined} />
-              <AvatarFallback className="text-base font-bold bg-muted">
-                {hit.displayName.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <h3 className="person-name mt-3 font-display text-base font-semibold text-foreground">{hit.displayName}</h3>
-            <RoleBadge role={hit.role} size="sm" showIcon className="mt-1" />
-            {hit.headline && (
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{hit.headline}</p>
+          {/* The person, set as every card's head: circle, name with its
+              role, headline; the score at the right. */}
+          <CardHead
+            mark={(
+              <Avatar className="h-10 w-10 border border-border">
+                <AvatarImage src={hit.avatarUrl ?? undefined} alt="" />
+                <AvatarFallback className="bg-muted text-sm font-semibold">
+                  {hit.displayName.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
             )}
-          </div>
-
-          {/* Score */}
-          <div className="flex items-center justify-center gap-3">
-            <div className="text-center">
-              <p className={cn('text-2xl font-bold tabular-nums', colors.icon)}>{score}%</p>
-              <p className={cn('text-2xs font-bold tracking-wider uppercase mt-0.5', colors.icon)}>
-                {tier.charAt(0).toUpperCase() + tier.slice(1)}
-              </p>
-            </div>
-          </div>
-
-          {/* Meta */}
-          <div className="flex flex-wrap gap-2">
-            {hit.location && (
-              <span className="flex items-center gap-1 rounded-full bg-secondary/40 px-2.5 py-1 text-xs text-muted-foreground">
-                <MapPin className="icon-sm" /> {hit.location}
+            title={(
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                {hit.displayName}
+                <RoleBadge role={hit.role} size="sm" showIcon />
               </span>
             )}
-            {hit.availability && (
-              <span className="flex items-center gap-1 rounded-full bg-secondary/40 px-2.5 py-1 text-xs text-muted-foreground">
-                <Clock className="icon-sm" /> {hit.availability}
+            subtitle={hit.headline ? <span className="line-clamp-3">{hit.headline}</span> : undefined}
+            asideStays
+            aside={(
+              <span className="flex flex-col items-end">
+                <span className={cn('card-body font-semibold tabular-nums', colors.icon)}>{score}%</span>
+                <span className={cn('text-xs font-medium', colors.icon)}>
+                  <BilingualText en={matchesEn(`tier_${tier}` as const)} el={matchesEl(`tier_${tier}` as const)} compact />
+                </span>
               </span>
             )}
-          </div>
+          />
+
+          {/* Place and availability: facts, not pills. */}
+          <FactLine items={[hit.location, hit.availability ? <StatusText key="availability" value={hit.availability} /> : null]} />
 
           {/* Skills */}
           {(hit.skillNames ?? []).length > 0 && (
             <div>
-              <p className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
-              <FactLine className="text-foreground sm:text-sm" items={hit.skillNames ?? []} />
+              <p className="mb-1 text-xs font-medium text-muted-foreground"><BilingualText en="Skills" el="Δεξιότητες" compact /></p>
+              <FactLine className="text-foreground" items={hit.skillNames ?? []} />
             </div>
           )}
 
           {/* Match reasons */}
           {matchReasons.length > 0 && (
             <div>
-              <p className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Why you match" el="Γιατί ταιριάζετε" compact /></p>
-              <div className="space-y-1.5">
+              <p className="mb-1 text-xs font-medium text-muted-foreground"><BilingualText en="Why you match" el="Γιατί ταιριάζετε" compact /></p>
+              <ul className="space-y-1">
                 {matchReasons.map((r, i) => (
-                  <div key={i} className="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs bg-muted/60">
-                    <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', TIER_DOT[tier])} />
-                    <span className="text-foreground">{r.text}</span>
-                  </div>
+                  <li key={i} className="flex items-start gap-2 text-xs text-foreground">
+                    <span className={cn('mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full', TIER_DOT[tier])} aria-hidden="true" />
+                    <span className="min-w-0 first-letter:uppercase">{r.text}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
 
@@ -455,7 +488,7 @@ function MatchPreviewPanel({
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="flex-1 gap-1.5" onClick={onSave}>
                 {isSaved ? <BookmarkCheck className={cn('icon-sm', STATUS.warning.icon)} /> : <Bookmark className="icon-sm" />}
-                {isSaved ? 'Saved' : 'Save'}
+                <BilingualText en={isSaved ? 'Saved' : 'Save'} el={isSaved ? 'Αποθηκεύτηκε' : 'Αποθήκευση'} compact />
               </Button>
               <Button variant="outline" size="sm" className="flex-1 gap-1.5 hover:text-destructive-accessible" onClick={onPass}>
                 <X className="icon-sm" /> <BilingualText en="Pass" el="Παράλειψη" compact />
@@ -1024,41 +1057,46 @@ export default function MatchesPage() {
         )}
 
         {/* ── Insights banner (excellent matches) ── */}
-        {hasToken && !isLoading && counts.excellent > 0 && (
-          <div className={cn('flex flex-col gap-3 rounded-xl border bg-status-success-bg/40 p-4 animate-in fade-in slide-in-from-top-1 duration-300 sm:flex-row sm:items-center sm:justify-between sm:gap-4', STATUS.success.border)}>
-            <div className="flex min-w-0 items-start gap-3 sm:items-center">
-              <div className={cn('shrink-0 rounded-lg p-2', STATUS.success.bg)}>
-                <Award className={cn('icon-md', STATUS.success.icon)} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-foreground">
+        {hasToken && !isLoading && counts.excellent > 0 && (() => {
+          const bannerActions = (
+            <>
+              {lastPassed && (
+                <Button size="sm" variant="ghost" onClick={handleUndoPass} className="gap-1.5 text-muted-foreground">
+                  <RotateCcw className="icon-sm" /> <BilingualText en="Undo" el="Αναίρεση" compact />
+                </Button>
+              )}
+              <Button size="sm" variant="outline" onClick={() => setActiveFilter('excellent')} className="gap-1.5">
+                <BilingualText en="View" el="Προβολή" compact /> <ChevronRight className="icon-sm" />
+              </Button>
+            </>
+          );
+          // A card's head: the news as the title, the top score under it;
+          // the way to them at the right, under the line on a phone.
+          return (
+            <div className={cn('space-y-3 rounded-2xl border bg-status-success-bg/40 p-4 animate-in fade-in slide-in-from-top-1 duration-300', STATUS.success.border)}>
+              <CardHead
+                titleAs="p"
+                title={(
                   <BilingualText
                     en={`${counts.excellent} excellent ${counts.excellent === 1 ? 'match' : 'matches'} ready to connect`}
                     el={`${counts.excellent} ${counts.excellent === 1 ? 'εξαιρετική αντιστοίχιση έτοιμη' : 'εξαιρετικές αντιστοιχίσεις έτοιμες'} για σύνδεση`}
                     wrap
                   />
-                </p>
-                <p className="mt-0.5 text-xs text-muted-foreground">
+                )}
+                subtitle={(
                   <BilingualText
                     en={`Top score ${topScore}% · These profiles are highly compatible, so reach out now`}
                     el={`Κορυφαία βαθμολογία ${topScore}% · Αυτά τα προφίλ σάς ταιριάζουν πολύ, στείλτε μήνυμα τώρα`}
                     wrap
                   />
-                </p>
-              </div>
+                )}
+                asideClassName="hidden sm:flex"
+                aside={bannerActions}
+              />
+              <div className="flex flex-wrap items-center gap-2 sm:hidden">{bannerActions}</div>
             </div>
-            <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
-              {lastPassed && (
-                <Button size="sm" variant="ghost" onClick={handleUndoPass} className="gap-1.5 text-xs h-8 text-muted-foreground">
-                  <RotateCcw className="icon-sm" /> <BilingualText en="Undo" el="Αναίρεση" compact />
-                </Button>
-              )}
-              <Button size="sm" variant="outline" onClick={() => setActiveFilter('excellent')} className="gap-1.5 h-8 text-xs">
-                <BilingualText en="View" el="Προβολή" compact /> <ChevronRight className="icon-sm" />
-              </Button>
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── No data at all ── */}
         {hasToken && !isLoading && visible.length === 0 && (

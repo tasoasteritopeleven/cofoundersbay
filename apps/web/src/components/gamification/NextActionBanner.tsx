@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { cn } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria } from '@/lib/i18n/format';
@@ -104,67 +106,67 @@ export function NextActionBanner({ action, expiresAt, className }: NextActionBan
   const cta = interpolate(action.cta, action.vars);
   const ctaEl = action.ctaEl ? interpolate(action.ctaEl, action.vars) : undefined;
 
-  return (
-    <div
-      className={cn(
-        'relative rounded-2xl border px-4 py-3.5 pr-10 transition-all sm:pr-4',
-        ac.border,
-        ac.bg,
-        className,
-      )}
-    >
-      <button
-        type="button"
-        onClick={handleDismiss}
-        className="absolute right-2 top-2 rounded-xl p-1.5 text-muted-foreground/50 transition-colors hover:bg-muted/60 hover:text-muted-foreground sm:hidden"
-        title={bilingualAria('Dismiss', 'Απόρριψη')}
-        aria-label={bilingualAria('Dismiss next-action suggestion', 'Απόρριψη επόμενης ενέργειας')}
-      >
-        <X className="icon-sm" />
-      </button>
+  const dismissLabel = bilingualAria('Dismiss next-action suggestion', 'Απόρριψη επόμενης ενέργειας');
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold leading-snug text-foreground">
-              <BilingualText en={label} el={labelEl} />
-            </p>
-            <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-              <BilingualText en={description} el={descriptionEl} />
-            </p>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className={cn('mt-2.5 sm:hidden', ac.cta)}
-            >
-              <Link href={action.href}>
-                <BilingualText en={cta} el={ctaEl} compact />
-              </Link>
-            </Button>
-          </div>
-        <div className="hidden shrink-0 items-center gap-2 sm:flex">
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className={ac.cta}
-          >
-            <Link href={action.href}>
-              <BilingualText en={cta} el={ctaEl} compact />
-            </Link>
-          </Button>
-          <button
-            type="button"
-            onClick={handleDismiss}
-            className="rounded-xl p-1 text-muted-foreground/50 transition-colors hover:bg-muted/60 hover:text-muted-foreground"
-            title={bilingualAria('Dismiss', 'Απόρριψη')}
-            aria-label={bilingualAria('Dismiss next-action suggestion', 'Απόρριψη επόμενης ενέργειας')}
-          >
-            <X className="icon-sm" />
-          </button>
-        </div>
-      </div>
-    </div>
+  // The head every card has: the action as the title and the sentence under
+  // it; the call to action and the dismiss at the head's right from `sm`. On
+  // a phone the dismiss stays at the top right and the call to action sits
+  // under the sentence, on the card's axis.
+  return (
+    <Card className={cn('relative transition-all', ac.border, ac.bg, className)}>
+      <CardContent className="space-y-3">
+        <button
+          type="button"
+          onClick={handleDismiss}
+          className="absolute right-2 top-2 rounded-xl p-1.5 text-muted-foreground/50 transition-colors hover:bg-muted/60 hover:text-muted-foreground sm:hidden"
+          title={bilingualAria('Dismiss', 'Απόρριψη')}
+          aria-label={dismissLabel}
+        >
+          <X className="icon-sm" />
+        </button>
+
+        <CardHead
+          titleAs="p"
+          className="pr-8 sm:pr-0"
+          title={<BilingualText en={label} el={labelEl} />}
+          subtitle={<BilingualText en={description} el={descriptionEl} />}
+          asideClassName="hidden sm:flex sm:flex-nowrap"
+          aside={(
+            <>
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className={ac.cta}
+              >
+                <Link href={action.href}>
+                  <BilingualText en={cta} el={ctaEl} compact />
+                </Link>
+              </Button>
+              <button
+                type="button"
+                onClick={handleDismiss}
+                className="rounded-xl p-1 text-muted-foreground/50 transition-colors hover:bg-muted/60 hover:text-muted-foreground"
+                title={bilingualAria('Dismiss', 'Απόρριψη')}
+                aria-label={dismissLabel}
+              >
+                <X className="icon-sm" />
+              </button>
+            </>
+          )}
+        />
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          className={cn('sm:hidden', ac.cta)}
+        >
+          <Link href={action.href}>
+            <BilingualText en={cta} el={ctaEl} compact />
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 

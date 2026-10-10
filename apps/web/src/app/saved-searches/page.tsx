@@ -18,8 +18,8 @@ import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailStats } from '@/components/layout/RailParts';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ListRowCard } from '@/components/common/ListRowCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -73,76 +73,114 @@ function SearchCard({
   const lastRunDate = search.lastRun ? new Date(search.lastRun) : null;
   const timeAgo = lastRunDate ? formatTimeAgo(lastRunDate) : fill('never_run');
 
+  // The Opportunities card for a search: its name with the words it runs
+  // under it, new results at the right; the filters as facts; the foot
+  // carries what it found and when, and the controls.
   return (
-    <ListRowCard
-      mark={(
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
-          <Search className="icon-md" aria-hidden="true" />
-        </div>
-      )}
-      title={search.name}
-      badge={search.newResults && search.newResults > 0 ? (
-        <Badge variant="default" className="bg-primary text-primary-foreground">
-          <BilingualText {...fill('new_badge', { n: search.newResults })} compact />
-        </Badge>
-      ) : undefined}
-      headline={search.query}
-      detail={[
-        search.scope === 'need_cards' ? 'Need cards' : null,
-        ...(search.filters?.kinds ?? []),
-        search.filters?.remote?.length ? 'Remote' : null,
-        ...(search.filters?.roles ?? []),
-        ...(search.filters?.industries ?? []).slice(0, 2),
-        ...(search.filters?.locations ?? []).slice(0, 1),
-        filterCount > 3 ? `+${filterCount - 3}` : null,
-        `${search.resultCount ?? 0}`,
-        timeAgo.en,
-      ].filter(Boolean).join(' · ')}
-      actions={(
-        <>
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={search.alertsEnabled}
-                onCheckedChange={() => onToggleAlerts(search.alertsEnabled)}
-                aria-label={bilingualAria(savedSearchesEn('toggle_alerts'), savedSearchesEl('toggle_alerts'))}
-              />
-              {search.alertsEnabled ? (
-                <Bell className="icon-sm text-muted-foreground" />
-              ) : (
-                <BellOff className="icon-sm text-muted-foreground" aria-hidden="true" />
-              )}
-            </div>
+    <Card className="group hover:border-primary/30 transition-colors">
+      <CardContent className="space-y-3">
+        <CardHead
+          title={search.name}
+          subtitle={search.query ? <span className="block truncate first-letter:uppercase">{search.query}</span> : undefined}
+          aside={search.newResults && search.newResults > 0 ? (
+            <Badge variant="default" className="bg-primary text-primary-foreground">
+              <BilingualText {...fill('new_badge', { n: search.newResults })} compact />
+            </Badge>
+          ) : undefined}
+        />
 
-            <Button variant="outline" size="sm" onClick={onRun}>
-              <Play className="icon-sm mr-1 shrink-0" aria-hidden="true" />
-              <BilingualText en={savedSearchesEn('run')} el={savedSearchesEl('run')} compact wrap />
-            </Button>
+        {/* Filters: what the search holds, as one fact line (they were
+            up to seven badges, each with its own glyph). */}
+        <FactLine
+          label={bilingualAria('Filters', 'Φίλτρα')}
+          items={[
+            search.scope === 'need_cards' ? <BilingualText key="scope" en="Need cards" el="Κάρτες ανάγκης" compact /> : null,
+            ...(search.filters?.kinds ?? []).map((k) => <StatusText key={`kind-${k}`} value={k} />),
+            search.filters?.remote?.length ? <BilingualText key="remote" en="Remote" el="Εξ αποστάσεως" compact /> : null,
+            ...(search.filters?.roles ?? []).map((r) => <StatusText key={`role-${r}`} value={r} />),
+            ...(search.filters?.industries ?? []).slice(0, 2),
+            ...(search.filters?.locations ?? []).slice(0, 1),
+            filterCount > 3 ? <BilingualText key="more" {...fill('more_filters', { n: filterCount - 3 })} compact /> : null,
+          ]}
+        />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label={bilingualAria(savedSearchesEn('more_actions'), savedSearchesEl('more_actions'))}
-                >
-                  <MoreHorizontal className="icon-sm" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={onEdit}>
-                  <Edit2 className="icon-sm mr-2 shrink-0" aria-hidden="true" />
-                  <BilingualText en={savedSearchesEn('edit')} el={savedSearchesEl('edit')} compact />
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onDelete} className="text-destructive-accessible">
-                  <Trash2 className="icon-sm mr-2 shrink-0" aria-hidden="true" />
-                  <BilingualText en={savedSearchesEn('delete')} el={savedSearchesEl('delete')} compact />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-        </>
-      )}
-    />
+        <CardFoot
+          meta={(
+            <FactLine
+              items={[
+                <BilingualText key="results" {...fill('results_count', { n: search.resultCount ?? 0 })} compact wrap />,
+                lastRunDate ? (
+                  <RelativeTime
+                    key="last-run"
+                    date={lastRunDate}
+                    format={(d) => {
+                      const ago = formatTimeAgo(d);
+                      return (
+                        <BilingualText
+                          en={fill('last_run', { when: ago.en }).en}
+                          el={fill('last_run', { when: ago.el }).el}
+                          compact
+                          wrap
+                        />
+                      );
+                    }}
+                  />
+                ) : (
+                  <BilingualText
+                    key="last-run"
+                    en={fill('last_run', { when: timeAgo.en }).en}
+                    el={fill('last_run', { when: timeAgo.el }).el}
+                    compact
+                    wrap
+                  />
+                ),
+              ]}
+            />
+          )}
+        >
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={search.alertsEnabled}
+              onCheckedChange={() => onToggleAlerts(search.alertsEnabled)}
+              aria-label={bilingualAria(savedSearchesEn('toggle_alerts'), savedSearchesEl('toggle_alerts'))}
+            />
+            {search.alertsEnabled ? (
+              <Bell className="icon-sm text-muted-foreground" aria-hidden="true" />
+            ) : (
+              <BellOff className="icon-sm text-muted-foreground" aria-hidden="true" />
+            )}
+          </div>
+
+          <Button variant="outline" size="sm" onClick={onRun}>
+            <Play className="icon-sm mr-1 shrink-0" aria-hidden="true" />
+            <BilingualText en={savedSearchesEn('run')} el={savedSearchesEl('run')} compact wrap />
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={bilingualAria(savedSearchesEn('more_actions'), savedSearchesEl('more_actions'))}
+              >
+                <MoreHorizontal className="icon-sm" aria-hidden="true" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={onEdit}>
+                <Edit2 className="icon-sm mr-2 shrink-0" aria-hidden="true" />
+                <BilingualText en={savedSearchesEn('edit')} el={savedSearchesEl('edit')} compact />
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onDelete} className="text-destructive-accessible">
+                <Trash2 className="icon-sm mr-2 shrink-0" aria-hidden="true" />
+                <BilingualText en={savedSearchesEn('delete')} el={savedSearchesEl('delete')} compact />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardFoot>
+      </CardContent>
+    </Card>
   );
 }
 

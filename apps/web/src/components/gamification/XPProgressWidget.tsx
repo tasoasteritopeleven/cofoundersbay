@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useMyXP, useMyStreak } from '@/hooks/useGamification';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { CfbGlyph } from '@/components/icons/CfbGlyph';
 import { bilingualAria } from '@/lib/i18n/format';
 import { LEVEL_LABEL_EL, REPUTATION_STRINGS } from '@/lib/i18n/strings-reputation';
@@ -30,7 +31,7 @@ export function XPProgressWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
+          <CardTitle className="flex items-center gap-2">
             <CfbGlyph name="award" className="icon-md text-muted-foreground" />
             <BilingualText en="Progress & XP" el="Πρόοδος & XP" compact wrap />
           </CardTitle>
@@ -69,28 +70,25 @@ export function XPProgressWidget() {
   return (
     <Card className="min-w-0 overflow-hidden">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
+        <CardTitle className="flex items-center gap-2">
           <CfbGlyph name="award" className="icon-md text-muted-foreground" />
           <BilingualText en="Progress & XP" el="Πρόοδος & XP" compact wrap />
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center text-lg font-semibold tabular-nums text-foreground">
+          {/* The level as the mark, its name as the title and the points
+              under it - the head every card has. */}
+          <CardHead
+            titleAs="p"
+            mark={(
+              <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-semibold tabular-nums text-foreground">
                 {xp.level}
               </div>
-              <div className="min-w-0">
-                <div className="text-lg font-semibold leading-snug">
-                  <BilingualText en={xp.levelLabel} el={LEVEL_LABEL_EL[xp.level] ?? xp.levelLabel} compact wrap />
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {xp.totalXp.toLocaleString('en-GB')} XP
-                </div>
-              </div>
-            </div>
-          </div>
+            )}
+            title={<BilingualText en={xp.levelLabel} el={LEVEL_LABEL_EL[xp.level] ?? xp.levelLabel} compact wrap />}
+            subtitle={<span className="tabular-nums">{xp.totalXp.toLocaleString('en-GB')} XP</span>}
+          />
 
           <div className="space-y-1">
             <Progress value={xp.levelProgress} label={bilingualAria('Level progress', 'Πρόοδος επιπέδου')} className="h-2" />
@@ -110,17 +108,16 @@ export function XPProgressWidget() {
           </div>
         </div>
 
+        {/* The streak is a row of the card, under a hairline, not a tinted
+            tile inside it. */}
         {streak && (
-          <div className="flex min-w-0 items-start justify-between gap-2 overflow-hidden rounded-2xl bg-muted/40 p-2.5">
-            <div className="flex min-w-0 items-start gap-2">
-              <CfbGlyph name="spark" className="icon-md mt-0.5 shrink-0 text-muted-foreground" />
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold leading-snug">
-                  <BilingualText en={streakDaysEn} el={streakDaysEl} compact wrap />
-                </div>
-                <div className="text-xs leading-snug text-muted-foreground">
-                  <BilingualText en={bestEn} el={bestEl} compact wrap />
-                </div>
+          <div className="flex min-w-0 items-start justify-between gap-2 border-t border-border pt-4">
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold leading-snug">
+                <BilingualText en={streakDaysEn} el={streakDaysEl} compact wrap />
+              </div>
+              <div className="text-xs leading-snug text-muted-foreground">
+                <BilingualText en={bestEn} el={bestEl} compact wrap />
               </div>
             </div>
             {streak.currentStreak >= 7 && (

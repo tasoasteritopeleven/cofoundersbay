@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { rowTitleClass } from '@/components/common/ListRowCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BilingualText } from '@/components/common/BilingualText';
@@ -42,6 +41,7 @@ import { qk } from '@/lib/query-keys';
 import { choiceControl, rowOptions, usePageControls, usePageList } from '@/lib/page-controls';
 import { usePopupChat } from '@/contexts/PopupChatContext';
 import { FactLine } from '@/components/common/FactLine';
+import { CardHead } from '@/components/common/CardAnatomy';
 
 type SearchCategory = SearchCategoryKey;
 
@@ -182,71 +182,65 @@ function ResultCard({ result }: { result: SearchResult }) {
 
   const config = typeConfig[result.type] || typeConfig.user;
   const Icon = config.icon;
+  // People are circles; jobs, events, groups and opportunities are rounded
+  // squares, as their organisations' marks are.
+  const shape = result.type === 'user' ? '' : 'rounded-xl';
 
+  // The Opportunities card for any result: the mark, the title with what it
+  // is under it, the sentence, the facts, all on the mark's left edge.
   return (
     <Link
       href={result.href}
-      className="block rounded-xl focus-visible:outline-none"
+      className="block rounded-2xl focus-visible:outline-none"
     >
       <Card className="group hover:border-primary/50 transition-all duration-150">
-        <CardContent className="flex items-start gap-4" style={{ ['--card-rail' as string]: '3.5rem' }}>
-          <div className="shrink-0">
-            {result.imageUrl ? (
-              <Avatar data-keep-icon="" className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-                <AvatarImage src={result.imageUrl} />
-                <AvatarFallback className="bg-primary/10 text-primary-accessible">
+        <CardContent className="space-y-3">
+          <CardHead
+            mark={result.imageUrl ? (
+              <Avatar className={cn('h-10 w-10', shape)}>
+                <AvatarImage src={result.imageUrl} alt="" />
+                <AvatarFallback className={cn('bg-primary/10 text-primary-accessible', shape)}>
                   {result.title[0]?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             ) : (
-              <div data-keep-icon="" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary-accessible ring-2 ring-primary/20">
-                <Icon className={cn('icon-md', config.color)} />
+              <div data-card-mark="" data-keep-icon="" className={cn('flex h-10 w-10 items-center justify-center bg-muted', shape || 'rounded-full')}>
+                <Icon className={cn('icon-md', config.color)} aria-hidden="true" />
               </div>
             )}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className={rowTitleClass}>
-                {result.title}
-              </h3>
-              <Badge variant="secondary" className="text-2xs shrink-0">
-                <BilingualText
-                  en={resultTypeEn(result.type as SearchResultTypeKey)}
-                  el={resultTypeEl(result.type as SearchResultTypeKey)}
-                  compact
-                  secondaryFrom="lg"
-                />
-              </Badge>
-            </div>
-            <div className="card-axis">
-              {result.subtitle ? (
-                <p className="truncate text-sm text-muted-foreground">{result.subtitle}</p>
-              ) : null}
-              {(result.description || result.highlight || result.meta?.location || result.meta?.date || (result.tags && result.tags.length > 0)) ? (
-                <p className="card-copy mt-1 line-clamp-2 text-xs text-muted-foreground">
-                  {result.highlight ? (
-                    <SanitizedHtml as="span" profile="highlight" html={result.highlight} />
-                  ) : result.description}
-                  {[
-                    result.meta?.location,
-                    result.meta?.date,
-                    ...(result.tags ?? []).slice(0, 3),
-                    (result.tags?.length ?? 0) > 3 ? `+${(result.tags?.length ?? 0) - 3}` : null,
-                  ].filter(Boolean).length > 0 ? (
-                    <>
-                      {(result.description || result.highlight) ? ' · ' : null}
-                      {[
-                        result.meta?.location,
-                        result.meta?.date,
-                        ...(result.tags ?? []).slice(0, 3),
-                        (result.tags?.length ?? 0) > 3 ? `+${(result.tags?.length ?? 0) - 3}` : null,
-                      ].filter(Boolean).join(' · ')}
-                    </>
-                  ) : null}
-                </p>
-              ) : null}
-            </div>
-          </div>
+            title={<span className="transition-colors group-hover:text-primary-accessible">{result.title}</span>}
+            subtitle={(
+              <FactLine
+                className="text-sm"
+                items={[
+                  result.subtitle ? <span key="subtitle" className="first-letter:uppercase">{result.subtitle}</span> : null,
+                  <BilingualText
+                    key="type"
+                    en={resultTypeEn(result.type as SearchResultTypeKey)}
+                    el={resultTypeEl(result.type as SearchResultTypeKey)}
+                    compact
+                    secondaryFrom="lg"
+                  />,
+                ]}
+              />
+            )}
+          />
+
+          {result.description && (
+            <p className="card-body line-clamp-2 text-muted-foreground">
+              {result.highlight ? (
+                <SanitizedHtml as="span" profile="highlight" html={result.highlight} />
+              ) : (
+                result.description
+              )}
+            </p>
+          )}
+
+          <FactLine items={[result.meta?.location, result.meta?.date]} />
+
+          {result.tags && result.tags.length > 0 && (
+            <FactLine items={[...result.tags.slice(0, 3), result.tags.length > 3 ? `+${result.tags.length - 3}` : null]} />
+          )}
         </CardContent>
       </Card>
     </Link>
@@ -637,95 +631,47 @@ export default function SearchPage() {
               />
             </h3>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Link href="/discover" className="group">
-                <Card className="hover:border-primary/50 transition-colors">
-                  <CardContent className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-status-info-bg">
-                      <Users className="icon-md text-status-info" />
-                    </div>
-                    <div>
-                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                        <BilingualText
-                          en={searchEn('discover_people_title')}
-                          el={searchEl('discover_people_title')}
-                        />
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        <BilingualText
-                          en={searchEn('discover_people_desc')}
-                          el={searchEl('discover_people_desc')}
-                        />
-                      </p>
-                    </div>
+              <Link href="/discover" className="group block rounded-2xl">
+                <Card className="h-full hover:border-primary/50 transition-colors">
+                  <CardContent>
+                    <CardHead
+                      titleAs="p"
+                      title={<span className="transition-colors group-hover:text-primary-accessible"><BilingualText en={searchEn('discover_people_title')} el={searchEl('discover_people_title')} /></span>}
+                      subtitle={<BilingualText en={searchEn('discover_people_desc')} el={searchEl('discover_people_desc')} />}
+                    />
                   </CardContent>
                 </Card>
               </Link>
-              <Link href="/mentoring" className="group">
-                <Card className="hover:border-primary/50 transition-colors">
-                  <CardContent className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-status-accent-bg">
-                      <GraduationCap className="icon-md text-status-accent" />
-                    </div>
-                    <div>
-                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                        <BilingualText
-                          en={searchEn('find_mentors_title')}
-                          el={searchEl('find_mentors_title')}
-                        />
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        <BilingualText
-                          en={searchEn('find_mentors_desc')}
-                          el={searchEl('find_mentors_desc')}
-                        />
-                      </p>
-                    </div>
+              <Link href="/mentoring" className="group block rounded-2xl">
+                <Card className="h-full hover:border-primary/50 transition-colors">
+                  <CardContent>
+                    <CardHead
+                      titleAs="p"
+                      title={<span className="transition-colors group-hover:text-primary-accessible"><BilingualText en={searchEn('find_mentors_title')} el={searchEl('find_mentors_title')} /></span>}
+                      subtitle={<BilingualText en={searchEn('find_mentors_desc')} el={searchEl('find_mentors_desc')} />}
+                    />
                   </CardContent>
                 </Card>
               </Link>
-              <Link href="/jobs" className="group">
-                <Card className="hover:border-primary/50 transition-colors">
-                  <CardContent className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-status-success-bg">
-                      <Briefcase className="icon-md text-status-success" />
-                    </div>
-                    <div>
-                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                        <BilingualText
-                          en={searchEn('browse_jobs_title')}
-                          el={searchEl('browse_jobs_title')}
-                        />
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        <BilingualText
-                          en={searchEn('browse_jobs_desc')}
-                          el={searchEl('browse_jobs_desc')}
-                        />
-                      </p>
-                    </div>
+              <Link href="/jobs" className="group block rounded-2xl">
+                <Card className="h-full hover:border-primary/50 transition-colors">
+                  <CardContent>
+                    <CardHead
+                      titleAs="p"
+                      title={<span className="transition-colors group-hover:text-primary-accessible"><BilingualText en={searchEn('browse_jobs_title')} el={searchEl('browse_jobs_title')} /></span>}
+                      subtitle={<BilingualText en={searchEn('browse_jobs_desc')} el={searchEl('browse_jobs_desc')} />}
+                    />
                   </CardContent>
                 </Card>
               </Link>
-              <Link href="/events" className="group">
-                <Card className="hover:border-primary/50 transition-colors">
-                  <CardContent className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-status-warning-bg">
-                      <Calendar className="icon-md text-status-warning" />
-                    </div>
-                    <div>
-                      <p className="page-section text-lg font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                        <BilingualText
-                          en={searchEn('upcoming_events_title')}
-                          el={searchEl('upcoming_events_title')}
-                        />
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        <BilingualText
-                          en={searchEn('upcoming_events_desc')}
-                          el={searchEl('upcoming_events_desc')}
-                        />
-                      </p>
-                    </div>
+              <Link href="/events" className="group block rounded-2xl">
+                <Card className="h-full hover:border-primary/50 transition-colors">
+                  <CardContent>
+                    <CardHead
+                      titleAs="p"
+                      title={<span className="transition-colors group-hover:text-primary-accessible"><BilingualText en={searchEn('upcoming_events_title')} el={searchEl('upcoming_events_title')} /></span>}
+                      subtitle={<BilingualText en={searchEn('upcoming_events_desc')} el={searchEl('upcoming_events_desc')} />}
+                    />
                   </CardContent>
                 </Card>
               </Link>

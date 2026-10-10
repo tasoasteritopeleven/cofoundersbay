@@ -10,6 +10,8 @@ import {
 import { AppShell } from '@/components/layout/AppShell';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -83,56 +85,69 @@ function ProviderCard({
     ? !!(provider.samlEntryPoint || provider.samlMetadataUrl)
     : !!(provider.oidcIssuerUrl && provider.oidcClientId);
 
+  // The Opportunities card: the provider's mark, its name over its protocol
+  // and state, the switch and delete at the right; the callback URL and the
+  // endpoints start on the mark's edge.
   return (
     <Card className={provider.isActive ? undefined : 'surface-inactive'}>
-      <CardContent>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <Key className="icon-sm text-muted-foreground shrink-0" aria-hidden="true" />
-              <h3 className="font-semibold">{provider.providerName}</h3>
-              <Badge variant="secondary" size="sm" className="uppercase">{provider.providerType}</Badge>
-              {isConfigured ? (
-                <Badge variant="outline" size="sm" className="bg-status-success-bg text-status-success border-status-success-border">
-                  <CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Configured" el="Ρυθμισμένος" compact />
-                </Badge>
-              ) : (
-                <Badge variant="outline" size="sm" className="bg-status-warning-bg text-status-warning border-status-warning-border">
-                  <AlertCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Needs configuration" el="Χρειάζεται ρύθμιση" compact />
-                </Badge>
-              )}
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+              <Key className="icon-md" aria-hidden="true" />
             </div>
-            <div className="mt-2 flex min-w-0 items-center gap-2">
-              <span className="shrink-0 text-xs text-muted-foreground"><BilingualText en="Callback URL" el="URL επιστροφής" compact /></span>
-              <code className="min-w-0 truncate rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{callbackUrl}</code>
+          )}
+          title={provider.providerName}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                <span key="type" className="uppercase">{provider.providerType}</span>,
+                isConfigured ? (
+                  <span key="state" className="text-status-success"><BilingualText en="Configured" el="Ρυθμισμένος" compact /></span>
+                ) : (
+                  <span key="state" className="text-status-warning"><BilingualText en="Needs configuration" el="Χρειάζεται ρύθμιση" compact /></span>
+                ),
+              ]}
+            />
+          )}
+          asideStays
+          aside={(
+            <>
+              <Switch checked={provider.isActive} onCheckedChange={() => onToggle(provider)} aria-label={bilingualInline(`${provider.providerName} active`, `${provider.providerName} ενεργός`)} />
               <button
                 type="button"
-                onClick={copy}
-                className="tap-target shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-                aria-label={copied ? bilingualInline('Callback URL copied', 'Το URL επιστροφής αντιγράφηκε') : bilingualInline('Copy the callback URL', 'Αντιγραφή του URL επιστροφής')}
+                aria-label={bilingualInline(`Delete ${provider.providerName}`, `Διαγραφή ${provider.providerName}`)}
+                onClick={() => void handleDelete()}
+                className="tap-target text-muted-foreground transition-colors hover:text-destructive-accessible"
               >
-                {copied ? <Check className="icon-sm text-status-success" aria-hidden="true" /> : <Copy className="icon-sm" aria-hidden="true" />}
+                <Trash2 className="icon-sm" aria-hidden="true" />
               </button>
-            </div>
+            </>
+          )}
+        />
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="shrink-0 text-xs text-muted-foreground"><BilingualText en="Callback URL" el="URL επιστροφής" compact /></span>
+          <code className="min-w-0 truncate rounded bg-muted px-1.5 py-0.5 font-mono text-xs">{callbackUrl}</code>
+          <button
+            type="button"
+            onClick={copy}
+            className="tap-target shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={copied ? bilingualInline('Callback URL copied', 'Το URL επιστροφής αντιγράφηκε') : bilingualInline('Copy the callback URL', 'Αντιγραφή του URL επιστροφής')}
+          >
+            {copied ? <Check className="icon-sm text-status-success" aria-hidden="true" /> : <Copy className="icon-sm" aria-hidden="true" />}
+          </button>
+        </div>
+        {provider.oidcIssuerUrl || provider.samlEntryPoint ? (
+          <div className="space-y-1">
             {provider.oidcIssuerUrl && (
-              <p className="text-xs text-muted-foreground mt-1"><BilingualText en="Issuer" el="Εκδότης" compact />: {provider.oidcIssuerUrl}</p>
+              <p className="break-all text-xs text-muted-foreground"><BilingualText en="Issuer" el="Εκδότης" compact />: {provider.oidcIssuerUrl}</p>
             )}
             {provider.samlEntryPoint && (
-              <p className="text-xs text-muted-foreground mt-1"><BilingualText en="Entry point" el="Σημείο εισόδου" compact />: {provider.samlEntryPoint}</p>
+              <p className="break-all text-xs text-muted-foreground"><BilingualText en="Entry point" el="Σημείο εισόδου" compact />: {provider.samlEntryPoint}</p>
             )}
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <Switch checked={provider.isActive} onCheckedChange={() => onToggle(provider)} aria-label={bilingualInline(`${provider.providerName} active`, `${provider.providerName} ενεργός`)} />
-            <button
-              type="button"
-              aria-label={bilingualInline(`Delete ${provider.providerName}`, `Διαγραφή ${provider.providerName}`)}
-              onClick={() => void handleDelete()}
-              className="tap-target text-muted-foreground hover:text-destructive-accessible transition-colors"
-            >
-              <Trash2 className="icon-sm" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
+        ) : null}
       </CardContent>
     </Card>
   );
@@ -147,39 +162,42 @@ function DomainRow({
   onDelete: (id: string) => void;
   onVerify: (id: string) => void;
 }) {
+  // A row of the card's head without its frame: the domain's mark, the
+  // address over what it does, the state and the remove control at the right.
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg border">
-      <div className="flex items-center gap-3">
-        <Globe className="icon-sm text-muted-foreground" aria-hidden="true" />
-        <div>
-          <p className="text-sm font-medium">@{mapping.domain}</p>
-          <p className="text-xs text-muted-foreground">
-            {mapping.autoRedirectToSSO
-              ? <BilingualText en="Sends matching emails straight to SSO" el="Στέλνει τα αντίστοιχα email κατευθείαν στο SSO" compact />
-              : <BilingualText en="Offers SSO to matching emails" el="Προτείνει SSO στα αντίστοιχα email" compact />}
-          </p>
+    <CardHead
+      titleAs="h4"
+      mark={(
+        <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+          <Globe className="icon-md" aria-hidden="true" />
         </div>
-      </div>
-      <div className="flex items-center gap-2">
-        {mapping.isVerified ? (
-          <Badge variant="outline" className="text-xs bg-status-success-bg text-status-success border-status-success-border">
-            <CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Verified" el="Επαληθευμένο" compact />
-          </Badge>
-        ) : (
-          <button type="button" onClick={() => onVerify(mapping.id)} className="tap-target text-xs text-primary-accessible hover:underline">
-            <BilingualText en="Mark verified" el="Σήμανση ως επαληθευμένο" compact />
+      )}
+      title={<span className="break-all">@{mapping.domain}</span>}
+      subtitle={mapping.autoRedirectToSSO
+        ? <BilingualText en="Sends matching emails straight to SSO" el="Στέλνει τα αντίστοιχα email κατευθείαν στο SSO" compact wrap />
+        : <BilingualText en="Offers SSO to matching emails" el="Προτείνει SSO στα αντίστοιχα email" compact wrap />}
+      aside={(
+        <>
+          {mapping.isVerified ? (
+            <Badge variant="outline" className="text-xs bg-status-success-bg text-status-success border-status-success-border">
+              <CheckCircle className="mr-1 icon-sm" aria-hidden="true" /><BilingualText en="Verified" el="Επαληθευμένο" compact />
+            </Badge>
+          ) : (
+            <Button type="button" size="sm" variant="outline" onClick={() => onVerify(mapping.id)}>
+              <BilingualText en="Mark verified" el="Σήμανση ως επαληθευμένο" compact />
+            </Button>
+          )}
+          <button
+            type="button"
+            aria-label={bilingualInline(`Remove @${mapping.domain}`, `Αφαίρεση @${mapping.domain}`)}
+            onClick={() => onDelete(mapping.id)}
+            className="tap-target text-muted-foreground transition-colors hover:text-destructive-accessible"
+          >
+            <X className="icon-sm" aria-hidden="true" />
           </button>
-        )}
-        <button
-          type="button"
-          aria-label={bilingualInline(`Remove @${mapping.domain}`, `Αφαίρεση @${mapping.domain}`)}
-          onClick={() => onDelete(mapping.id)}
-          className="tap-target ml-1 text-muted-foreground transition-colors hover:text-destructive-accessible"
-        >
-          <X className="icon-sm" aria-hidden="true" />
-        </button>
-      </div>
-    </div>
+        </>
+      )}
+    />
   );
 }
 
@@ -463,8 +481,8 @@ export default function TenantSSOPage() {
 
             {showNewProvider && (
               <Card className="border-primary/15 bg-primary/[0.03]">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm"><BilingualText en="New identity provider" el="Νέος πάροχος ταυτότητας" compact /></CardTitle>
+                <CardHeader>
+                  <CardTitle><BilingualText en="New identity provider" el="Νέος πάροχος ταυτότητας" compact /></CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-2" role="group" aria-label={bilingualInline('Protocol', 'Πρωτόκολλο')}>
@@ -573,7 +591,7 @@ export default function TenantSSOPage() {
           <TabsContent value="policy" className="mt-4 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="SSO mode" el="Λειτουργία SSO" compact /></CardTitle>
+                <CardTitle><BilingualText en="SSO mode" el="Λειτουργία SSO" compact /></CardTitle>
                 <CardDescription><BilingualText en="How SSO sits beside password sign-in for your organisation's members." el="Πώς συνυπάρχει το SSO με τη σύνδεση με κωδικό για τα μέλη του οργανισμού σας." wrap /></CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -597,17 +615,18 @@ export default function TenantSSOPage() {
                     <div className="space-y-1">
                       <label htmlFor="sso-selected-provider" className="text-sm font-medium"><BilingualText en="Identity provider" el="Πάροχος ταυτότητας" compact /></label>
                       <select id="sso-selected-provider" value={selectedProviderId} onChange={e => setSelectedProviderId(e.target.value)}
-                        className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
+                        className="w-full rounded-xl border border-input bg-background px-3 py-2">
                         <option value="">{bilingualInline('None selected', 'Καμία επιλογή')}</option>
                         {providers?.map(p => <option key={p.id} value={p.id}>{p.providerName} ({p.providerType.toUpperCase()})</option>)}
                       </select>
                     </div>
 
+                    <div className="card-rows">
                     {[
                       { key: 'allowPasswordFallback', label: 'Allow password fallback', labelEl: 'Να επιτρέπεται ο κωδικός', desc: 'Members may also sign in with email and password', descEl: 'Τα μέλη μπορούν να συνδεθούν και με email και κωδικό', value: allowPasswordFallback, set: setAllowPasswordFallback },
                       { key: 'autoProvision', label: 'Create accounts on first sign-in (JIT)', labelEl: 'Δημιουργία λογαριασμού στην πρώτη σύνδεση (JIT)', desc: 'A member signing in with SSO for the first time gets an account', descEl: 'Όποιος συνδέεται πρώτη φορά με SSO αποκτά λογαριασμό', value: autoProvision, set: setAutoProvision },
                     ].map(({ key, label, labelEl, desc, descEl, value, set }) => (
-                      <div key={key} className="flex items-center justify-between gap-3 p-3 rounded-lg border">
+                      <div key={key} className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-sm font-medium"><BilingualText en={label} el={labelEl} wrap /></p>
                           <p className="text-xs text-muted-foreground"><BilingualText en={desc} el={descEl} wrap /></p>
@@ -615,6 +634,7 @@ export default function TenantSSOPage() {
                         <Switch checked={value} onCheckedChange={set} aria-label={bilingualInline(label, labelEl)} />
                       </div>
                     ))}
+                    </div>
                   </>
                 )}
               </CardContent>
@@ -624,14 +644,14 @@ export default function TenantSSOPage() {
               <>
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-base"><BilingualText en="New members" el="Νέα μέλη" compact /></CardTitle>
+                    <CardTitle><BilingualText en="New members" el="Νέα μέλη" compact /></CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="space-y-1">
                         <label htmlFor="sso-default-role" className="text-sm font-medium"><BilingualText en="Default role for new SSO members" el="Προεπιλεγμένος ρόλος νέων μελών SSO" compact wrap /></label>
                         <select id="sso-default-role" value={defaultRole} onChange={e => setDefaultRole(e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm">
+                          className="w-full rounded-xl border border-input bg-background px-3 py-2">
                           {['founder', 'investor', 'mentor', 'member'].map(r => <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</option>)}
                         </select>
                       </div>
@@ -652,7 +672,7 @@ export default function TenantSSOPage() {
 
                 {showAdvanced && (
                   <Card>
-                    <CardContent className="pt-4 space-y-4">
+                    <CardContent className="space-y-4">
                       <div className="space-y-1">
                         <label htmlFor="sso-redirect" className="text-sm font-medium"><BilingualText en="Page after sign-in" el="Σελίδα μετά τη σύνδεση" compact /></label>
                         <Input id="sso-redirect" value={postLoginRedirect} onChange={e => setPostLoginRedirect(e.target.value)} placeholder={bilingualInline('/dashboard (blank for the default)', '/dashboard (κενό για την προεπιλογή)')} />
@@ -662,8 +682,8 @@ export default function TenantSSOPage() {
                         <Input id="sso-allowed-domains" value={allowedDomains} onChange={e => setAllowedDomains(e.target.value)} placeholder={bilingualInline('uoa.gr, di.uoa.gr (comma-separated)', 'uoa.gr, di.uoa.gr (με κόμμα)')} />
                         <p className="text-xs text-muted-foreground"><BilingualText en="Leave empty to allow any domain." el="Αφήστε κενό για οποιονδήποτε τομέα." compact wrap /></p>
                       </div>
-                      <div className="flex items-center justify-between p-3 rounded-lg border">
-                        <div>
+                      <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
+                        <div className="min-w-0">
                           <p className="text-sm font-medium"><BilingualText en="Enforce email domain" el="Επιβολή τομέα email" compact /></p>
                           <p className="text-xs text-muted-foreground"><BilingualText en="Refuse SSO sign-ins from domains not on the allowed list" el="Απόρριψη συνδέσεων SSO από τομείς εκτός λίστας" wrap /></p>
                         </div>
@@ -690,7 +710,7 @@ export default function TenantSSOPage() {
           <TabsContent value="domains" className="mt-4 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Email domains" el="Τομείς email" compact /></CardTitle>
+                <CardTitle><BilingualText en="Email domains" el="Τομείς email" compact /></CardTitle>
                 <CardDescription>
                   <BilingualText
                     en="Someone who types an email at one of these domains on the sign-in page is offered your organisation's SSO."
@@ -721,7 +741,7 @@ export default function TenantSSOPage() {
                     <p className="text-xs mt-1"><BilingualText en="Add your organisation's email domain so the sign-in page can offer SSO." el="Προσθέστε τον τομέα email του οργανισμού σας ώστε η σελίδα σύνδεσης να προτείνει SSO." wrap /></p>
                   </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="card-rows">
                     {domainMappings.map(m => (
                       <DomainRow key={m.id} mapping={m}
                         onDelete={id => deleteDomainMut.mutate(id)}

@@ -54,7 +54,9 @@ export function CardHead({
     ? cn(mark ? 'col-start-3' : 'col-start-2', 'row-start-1')
     : cn(mark ? 'col-start-2 sm:col-start-3' : 'col-start-1 sm:col-start-2', 'row-start-2 mt-1.5 sm:row-start-1 sm:mt-0 sm:pt-0.5');
   return (
-    <div className={cn('grid items-start gap-x-3', cols, className)}>
+    // `data-rail-keep-layout`: the page rail folds every `.grid` inside it
+    // to one column, which would stack the mark over the title.
+    <div data-rail-keep-layout="" className={cn('grid grid-cols-1 items-start gap-x-3', cols, className)}>
       {mark ? <div className={cn('col-start-1 row-start-1 shrink-0', aside && !asideStays && 'row-span-2 sm:row-span-1')}>{mark}</div> : null}
       <div className={cn('min-w-0 row-start-1', mark ? 'col-start-2' : 'col-start-1')}>
         <Title className={cn('card-title break-words text-foreground', titleClassName)}>{title}</Title>

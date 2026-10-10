@@ -149,7 +149,7 @@ const DEMO_DECK: PublicPitchDeck = {
       order: 6,
       content: {
         members: [
-          { name: 'Elena Papadopoulos', role: 'CEO & Co-founder', background: 'Ex-Google, 2x founder' },
+          { name: 'Elena Papadopoulos', role: 'CEO & Co-founder', background: 'Former product lead, 2x founder' },
           { name: 'Marcus Chen', role: 'CTO & Co-founder', background: 'Ex-Meta, MIT CS' },
           { name: 'Dr. Sarah Kim', role: 'Head of AI', background: 'PhD Stanford, Ex-DeepMind' },
         ],

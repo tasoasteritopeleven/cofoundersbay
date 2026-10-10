@@ -50,11 +50,13 @@ export function FeedPostComposer({ onPost }: Props) {
   };
 
   return (
+    // The writer's mark beside the field; the type, attachments and Post sit
+    // under it on the card's own edge, not indented beside the avatar.
     <Card>
-      <CardContent>
+      <CardContent className="space-y-3">
         <div className="flex gap-3">
           <Avatar className="h-10 w-10 shrink-0">
-            <AvatarFallback>ME</AvatarFallback>
+            <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">ME</AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
             <Textarea
@@ -70,66 +72,66 @@ export function FeedPostComposer({ onPost }: Props) {
                 isExpanded ? 'min-h-[100px]' : 'min-h-[40px]',
               )}
             />
-
-            {failed && (
-              <p id={errorId} role="alert" className="mt-2 text-sm text-destructive-accessible">
-                <BilingualText
-                  en="Couldn't post. Your draft is still here, so you can try again."
-                  el="Η δημοσίευση απέτυχε. Το προσχέδιό σας παραμένει, ώστε να δοκιμάσετε ξανά."
-                  wrap
-                />
-              </p>
-            )}
-
-            {isExpanded && (
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t pt-3">
-                <div className="flex min-w-0 flex-wrap gap-1" role="group" aria-label={bilingualAria('Post type', 'Τύπος δημοσίευσης')}>
-                  {TYPES.map(({ type, icon: Icon, color, en, el }) => (
-                    <Button
-                      key={type}
-                      variant={postType === type ? 'secondary' : 'ghost'}
-                      size="sm"
-                      onClick={() => setPostType(type)}
-                      aria-label={bilingualAria(en, el)}
-                      aria-pressed={postType === type}
-                      className="gap-1"
-                    >
-                      <Icon className={cn('icon-sm', color)} aria-hidden="true" />
-                      <span className="hidden sm:inline"><BilingualText en={en} el={el} /></span>
-                    </Button>
-                  ))}
-                </div>
-                <div className="ml-auto flex shrink-0 gap-2">
-                  {/* An image and a link need somewhere to upload to, and the
-                      feed has no server yet. Disabled and labelled, rather
-                      than looking available and doing nothing. */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    disabled
-                    aria-label={bilingualAria('Attach an image — not available yet', 'Επισύναψη εικόνας — μη διαθέσιμο ακόμη')}
-                    title={bilingualAria('Attach an image — not available yet', 'Επισύναψη εικόνας — μη διαθέσιμο ακόμη')}
-                  >
-                    <ImageIcon className="icon-sm" aria-hidden="true" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    disabled
-                    aria-label={bilingualAria('Attach a link — not available yet', 'Επισύναψη συνδέσμου — μη διαθέσιμο ακόμη')}
-                    title={bilingualAria('Attach a link — not available yet', 'Επισύναψη συνδέσμου — μη διαθέσιμο ακόμη')}
-                  >
-                    <Link2 className="icon-sm" aria-hidden="true" />
-                  </Button>
-                  <Button size="sm" onClick={handleSubmit} disabled={!content.trim() || busy} aria-busy={busy || undefined}>
-                    <Send className="icon-sm mr-1" aria-hidden="true" />
-                    {busy ? <BilingualText en="Posting…" el="Δημοσίευση…" /> : <BilingualText en="Post" el="Δημοσίευση" />}
-                  </Button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
+
+        {failed && (
+          <p id={errorId} role="alert" className="text-sm text-destructive-accessible">
+            <BilingualText
+              en="Couldn't post. Your draft is still here, so you can try again."
+              el="Η δημοσίευση απέτυχε. Το προσχέδιό σας παραμένει, ώστε να δοκιμάσετε ξανά."
+              wrap
+            />
+          </p>
+        )}
+
+        {isExpanded && (
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+            <div className="flex min-w-0 flex-wrap gap-1" role="group" aria-label={bilingualAria('Post type', 'Τύπος δημοσίευσης')}>
+              {TYPES.map(({ type, icon: Icon, color, en, el }) => (
+                <Button
+                  key={type}
+                  variant={postType === type ? 'secondary' : 'ghost'}
+                  size="sm"
+                  onClick={() => setPostType(type)}
+                  aria-label={bilingualAria(en, el)}
+                  aria-pressed={postType === type}
+                  className="gap-1"
+                >
+                  <Icon className={cn('icon-sm', color)} aria-hidden="true" />
+                  <span className="hidden sm:inline"><BilingualText en={en} el={el} /></span>
+                </Button>
+              ))}
+            </div>
+            <div className="ml-auto flex shrink-0 gap-2">
+              {/* An image and a link need somewhere to upload to, and the
+                  feed has no server yet. Disabled and labelled, rather
+                  than looking available and doing nothing. */}
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled
+                aria-label={bilingualAria('Attach an image — not available yet', 'Επισύναψη εικόνας — μη διαθέσιμο ακόμη')}
+                title={bilingualAria('Attach an image — not available yet', 'Επισύναψη εικόνας — μη διαθέσιμο ακόμη')}
+              >
+                <ImageIcon className="icon-sm" aria-hidden="true" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled
+                aria-label={bilingualAria('Attach a link — not available yet', 'Επισύναψη συνδέσμου — μη διαθέσιμο ακόμη')}
+                title={bilingualAria('Attach a link — not available yet', 'Επισύναψη συνδέσμου — μη διαθέσιμο ακόμη')}
+              >
+                <Link2 className="icon-sm" aria-hidden="true" />
+              </Button>
+              <Button size="sm" onClick={handleSubmit} disabled={!content.trim() || busy} aria-busy={busy || undefined}>
+                <Send className="icon-sm mr-1" aria-hidden="true" />
+                {busy ? <BilingualText en="Posting…" el="Δημοσίευση…" /> : <BilingualText en="Post" el="Δημοσίευση" />}
+              </Button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

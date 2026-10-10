@@ -35,8 +35,11 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { StatusText } from '@/components/common/StatusText';
 import { getOrCreateDirectConversation } from '@/lib/api';
+import { bilingualAria } from '@/lib/i18n/format';
 import { cn, initialsOf } from '@/lib/utils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -64,7 +67,9 @@ export type CollaborationStarterProps = {
 type CollabAction = {
   id: string;
   label: string;
+  labelEl: string;
   description: string;
+  descriptionEl: string;
   icon: React.ElementType;
   variant: 'default' | 'outline' | 'secondary';
   href?: string;
@@ -100,7 +105,9 @@ export function CollaborationStarter({
     {
       id: 'message',
       label: 'Send a message',
+      labelEl: 'Αποστολή μηνύματος',
       description: 'Start the conversation',
+      descriptionEl: 'Ξεκινήστε τη συζήτηση',
       icon: MessageCircle,
       variant: 'default',
       onClick: handleMessage,
@@ -108,7 +115,9 @@ export function CollaborationStarter({
     {
       id: 'project',
       label: 'Create a project',
+      labelEl: 'Δημιουργία project',
       description: 'Collaborate on something together',
+      descriptionEl: 'Συνεργαστείτε σε κάτι μαζί',
       icon: FolderPlus,
       variant: 'outline',
       href: `/projects/create?collaborator=${otherUser.id}`,
@@ -116,7 +125,9 @@ export function CollaborationStarter({
     {
       id: 'milestone',
       label: 'Set a goal',
+      labelEl: 'Ορισμός στόχου',
       description: 'Define a shared first milestone',
+      descriptionEl: 'Ορίστε ένα πρώτο κοινό ορόσημο',
       icon: Target,
       variant: 'outline',
       href: `/milestones/new?with=${otherUser.id}`,
@@ -124,7 +135,9 @@ export function CollaborationStarter({
     {
       id: 'schedule',
       label: 'Schedule a call',
+      labelEl: 'Προγραμματισμός κλήσης',
       description: 'Find a time to meet',
+      descriptionEl: 'Βρείτε χρόνο να συναντηθείτε',
       icon: Calendar,
       variant: 'outline',
       href: `/messages?to=${otherUser.id}&action=schedule`,
@@ -147,32 +160,46 @@ export function CollaborationStarter({
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) onDismiss?.(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="relative">
-                <Avatar className="h-11 w-11 ring-2 ring-status-success">
-                  <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-sm">
-                    {initialsOf(otherUser.displayName)}
-                  </AvatarFallback>
-                  {otherUser.avatarUrl && <AvatarFallback>{otherUser.displayName[0]}</AvatarFallback>}
-                </Avatar>
-                <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-status-success-mark text-ink">
-                  <Handshake className="icon-sm" />
-                </span>
-              </div>
-              <div>
-                <DialogTitle className="text-lg">
-                  You&rsquo;re connected with {otherUser.displayName}!
-                </DialogTitle>
-                <DialogDescription className="mt-0.5">
-                  {otherUser.headline ?? 'Ready to start collaborating?'}
-                </DialogDescription>
-              </div>
-            </div>
+            <DialogTitle>
+              <BilingualText
+                en={`You\u2019re connected with ${otherUser.displayName}!`}
+                el={`Συνδεθήκατε με ${otherUser.displayName}!`}
+                compact
+                wrap
+              />
+            </DialogTitle>
+            <DialogDescription>
+              <BilingualText en="Ready to start collaborating?" el="Έτοιμοι να ξεκινήσετε τη συνεργασία;" wrap />
+            </DialogDescription>
           </DialogHeader>
+
+          {/* The person as their card shows them: the mark, the name and the
+              headline under it, on one left edge. */}
+          <div className="rounded-xl border border-border p-4">
+            <CardHead
+              titleAs="p"
+              mark={(
+                <div className="relative">
+                  <Avatar className="h-10 w-10 ring-2 ring-status-success">
+                    <AvatarImage src={otherUser.avatarUrl ?? undefined} alt="" />
+                    <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold text-sm">
+                      {initialsOf(otherUser.displayName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span data-keep-icon="" className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-status-success-mark text-ink">
+                    <Handshake className="icon-sm" aria-hidden="true" />
+                  </span>
+                </div>
+              )}
+              title={otherUser.displayName}
+              subtitle={otherUser.headline || undefined}
+              meta={otherUser.role ? <StatusText value={otherUser.role} /> : undefined}
+            />
+          </div>
 
           <div className="space-y-2 py-2">
             <p className="text-sm text-muted-foreground mb-3">
-              What would you like to do next?
+              <BilingualText en="What would you like to do next?" el="Τι θα θέλατε να κάνετε στη συνέχεια;" wrap />
             </p>
             {actions.map((action) => {
               const Icon = action.icon;
@@ -192,8 +219,12 @@ export function CollaborationStarter({
                     <Icon className="h-4.5 w-4.5 text-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground">{action.label}</p>
-                    <p className="text-xs text-muted-foreground">{action.description}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      <BilingualText en={action.label} el={action.labelEl} compact wrap />
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      <BilingualText en={action.description} el={action.descriptionEl} compact wrap />
+                    </p>
                   </div>
                   <ChevronRight className="icon-sm text-muted-foreground shrink-0" />
                 </button>
@@ -201,14 +232,16 @@ export function CollaborationStarter({
             })}
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-border">
-            <p className="text-xs text-muted-foreground">You can always do this later from your connections</p>
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-3 border-t border-border">
+            <p className="min-w-0 text-xs text-muted-foreground">
+              <BilingualText en="You can always do this later from your connections" el="Μπορείτε να το κάνετε αργότερα από τις συνδέσεις σας" wrap />
+            </p>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => { setOpen(false); onDismiss?.(); }}
             >
-              Maybe later
+              <BilingualText en="Maybe later" el="Ίσως αργότερα" compact />
             </Button>
           </div>
         </DialogContent>
@@ -224,9 +257,12 @@ export function CollaborationStarter({
         className,
       )}>
         <Sparkles className="icon-sm shrink-0 text-status-success" />
-        <p className="flex-1 text-sm text-foreground">
-          <span className="font-medium">New connection:</span>{' '}
-          {otherUser.displayName} accepted your request.
+        <p className="min-w-0 flex-1 text-sm text-foreground">
+          <BilingualText
+            en={`New connection: ${otherUser.displayName} accepted your request.`}
+            el={`Νέα σύνδεση: ${otherUser.displayName} αποδέχτηκε το αίτημά σας.`}
+            wrap
+          />
         </p>
         <div className="flex items-center gap-2 shrink-0">
           <Button
@@ -237,12 +273,12 @@ export function CollaborationStarter({
             disabled={loading === 'message'}
           >
             <MessageCircle className="icon-sm" />
-            Message
+            <BilingualText en="Message" el="Μήνυμα" compact />
           </Button>
           <Button size="sm" variant="outline" className="h-7 text-xs gap-1" asChild>
             <Link href={`/projects/create?collaborator=${otherUser.id}`}>
               <FolderPlus className="icon-sm" />
-              Collaborate
+              <BilingualText en="Collaborate" el="Συνεργασία" compact />
             </Link>
           </Button>
         </div>
@@ -250,7 +286,7 @@ export function CollaborationStarter({
           <button
             onClick={onDismiss}
             className="ml-1 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Dismiss"
+            aria-label={bilingualAria('Dismiss', 'Απόρριψη')}
           >
             <X className="icon-sm" />
           </button>
@@ -259,33 +295,38 @@ export function CollaborationStarter({
     );
   }
 
-  // ── Inline mode (default — compact action strip below a connection card) ───
+  // ── Inline mode (default — the foot of a connection card) ──────────────────
+  // It sits under the connection's card as that card's foot: its first word
+  // on the card's left edge (16px on a phone, 24px from sm, the card's own
+  // padding), the next steps beside it.
   return (
     <div className={cn(
-      'flex flex-wrap items-center gap-2 rounded-b-xl border-t border-border bg-muted/30 px-4 py-2.5',
+      'flex flex-wrap items-center gap-2 rounded-b-xl border-t border-border bg-muted/30 px-4 py-3 sm:px-6',
       className,
     )}>
-      <span className="text-xs text-muted-foreground mr-1">Next step:</span>
+      <span className="mr-1 text-xs text-muted-foreground">
+        <BilingualText en="Next step:" el="Επόμενο βήμα:" compact />
+      </span>
       <Button
         size="sm"
         variant="secondary"
-        className="h-7 text-xs gap-1"
+        className="gap-1"
         onClick={handleMessage}
         disabled={loading === 'message'}
       >
         <MessageCircle className="icon-sm" />
-        Message
+        <BilingualText en="Message" el="Μήνυμα" compact />
       </Button>
-      <Button size="sm" variant="outline" className="h-7 text-xs gap-1" asChild>
+      <Button size="sm" variant="outline" className="gap-1" asChild>
         <Link href={`/projects/create?collaborator=${otherUser.id}`}>
           <FolderPlus className="icon-sm" />
-          Start project
+          <BilingualText en="Start project" el="Έναρξη project" compact />
         </Link>
       </Button>
-      <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-muted-foreground" asChild>
+      <Button size="sm" variant="ghost" className="gap-1 text-muted-foreground" asChild>
         <Link href={`/milestones/new?with=${otherUser.id}`}>
           <Target className="icon-sm" />
-          Set milestone
+          <BilingualText en="Set milestone" el="Ορισμός ορόσημου" compact />
         </Link>
       </Button>
     </div>

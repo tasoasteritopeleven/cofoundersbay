@@ -190,37 +190,37 @@ function ApplicationCard({
                 <StatusIcon className="icon-sm" />
                 <StatusText value={application.status} />
               </Badge>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button aria-label="More options" variant="ghost" size="icon">
-                      <MoreVertical className="icon-sm" aria-hidden="true" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={() => onReview(application)}><BilingualText en="Review Application" el="Έλεγχος αίτησης" compact /></DropdownMenuItem>
-                    {/*
-                      * "Mark as Shortlisted" and "Schedule Interview" are gone
-                      * rather than left inert: the participant status enum has
-                      * no shortlisted state and there is no interview to
-                      * schedule against. Accept and Reject write the two
-                      * statuses that do exist.
-                      */}
-                    <DropdownMenuItem
-                      className={STATUS.success.text}
-                      disabled={!onDecide || application.status === 'accepted'}
-                      onClick={() => onDecide?.(application, 'accepted')}
-                    >
-                      <BilingualText en="Accept" el="Αποδοχή" compact />
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-destructive-accessible"
-                      disabled={!onDecide || application.status === 'rejected'}
-                      onClick={() => onDecide?.(application, 'rejected')}
-                    >
-                      <BilingualText en="Reject" el="Απόρριψη" compact />
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button aria-label="More options" variant="ghost" size="icon">
+                    <MoreVertical className="icon-sm" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => onReview(application)}><BilingualText en="Review Application" el="Έλεγχος αίτησης" compact /></DropdownMenuItem>
+                  {/*
+                    * "Mark as Shortlisted" and "Schedule Interview" are gone
+                    * rather than left inert: the participant status enum has
+                    * no shortlisted state and there is no interview to
+                    * schedule against. Accept and Reject write the two
+                    * statuses that do exist.
+                    */}
+                  <DropdownMenuItem
+                    className={STATUS.success.text}
+                    disabled={!onDecide || application.status === 'accepted'}
+                    onClick={() => onDecide?.(application, 'accepted')}
+                  >
+                    <BilingualText en="Accept" el="Αποδοχή" compact />
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive-accessible"
+                    disabled={!onDecide || application.status === 'rejected'}
+                    onClick={() => onDecide?.(application, 'rejected')}
+                  >
+                    <BilingualText en="Reject" el="Απόρριψη" compact />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           )}
         />

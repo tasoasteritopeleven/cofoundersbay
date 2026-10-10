@@ -39,6 +39,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { BilingualText } from '@/components/common/BilingualText';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { initialsOf } from '@/lib/utils';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 
 /*
@@ -400,13 +403,22 @@ export default function OrgSettingsPage() {
                     <Link href={slug ? `/org/${slug}/admin` : '/org/dashboard'}><BilingualText en="Invite Member" el="Πρόσκληση μέλους" compact /></Link>
                   </Button>
                 </div>
-                <div className="space-y-2">
+                {/* Rows of a card's head without their frames: the person,
+                    their address under the name, the role at the right. */}
+                <div className="card-rows">
                   {(membersQuery.data ?? []).map((member) => (
-                    <div key={member.id} className="flex items-center justify-between p-3 rounded-lg border">
-                      <div>
-                        <p className="font-medium">{memberName(member)}</p>
-                        <p className="text-sm text-muted-foreground">{member.user?.email}</p>
-                      </div>
+                    <CardHead
+                      key={member.id}
+                      titleAs="h4"
+                      mark={(
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={member.user?.profile?.avatarUrl ?? undefined} alt="" />
+                          <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{initialsOf(memberName(member))}</AvatarFallback>
+                        </Avatar>
+                      )}
+                      title={memberName(member)}
+                      subtitle={member.user?.email ? <span className="block truncate">{member.user.email}</span> : undefined}
+                      aside={(
                       <Select
                         value={member.role}
                         onValueChange={(role) =>
@@ -425,7 +437,8 @@ export default function OrgSettingsPage() {
                           <SelectItem value="member"><BilingualText en="Member" el="Μέλος" compact /></SelectItem>
                         </SelectContent>
                       </Select>
-                    </div>
+                      )}
+                    />
                   ))}
                   {!membersQuery.data && (
                     <p className="text-xs text-muted-foreground">
@@ -457,10 +470,10 @@ export default function OrgSettingsPage() {
                   { key: 'mentorSelfRegistration', label: 'Mentor Self-Registration', hint: 'Allow mentors to request to join your pool' },
                   { key: 'workspaceAccess', label: 'Startup Workspace Access', hint: 'Org admins can view all startup workspaces' },
                 ].map((p) => (
-                  <div key={p.key} className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{p.label}</p>
-                      <p className="text-sm text-muted-foreground">{p.hint}</p>
+                  <div key={p.key} className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium">{p.label}</p>
+                      <p className="text-xs text-muted-foreground">{p.hint}</p>
                     </div>
                     <Switch
                       aria-label={p.label}
@@ -491,41 +504,38 @@ export default function OrgSettingsPage() {
                   Plan and payment details are illustrative — billing is not connected to the
                   organisation yet.
                 </p>
-                <div className="p-4 rounded-lg border bg-primary/5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold">Organization Pro</p>
-                      <p className="text-sm text-muted-foreground">$299/month · Billed annually</p>
-                    </div>
-                    <Button variant="outline" disabled title="Billing is not connected yet"><BilingualText en="Change Plan" el="Αλλαγή πλάνου" compact /></Button>
+                {/* The plan, the usage and the payment method as rows of the
+                    card, not as cards drawn inside it. */}
+                <div className="card-rows">
+                  <CardHead
+                    titleAs="h4"
+                    title="Organization Pro"
+                    subtitle="$299/month · Billed annually"
+                    aside={<Button size="sm" variant="outline" disabled title="Billing is not connected yet"><BilingualText en="Change Plan" el="Αλλαγή πλάνου" compact /></Button>}
+                  />
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium"><BilingualText en="Usage" el="Χρήση" compact /></p>
+                    <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      <div>
+                        <dt className="text-xs text-muted-foreground"><BilingualText en="Startups" el="Startups" compact /></dt>
+                        <dd className="card-body font-semibold tabular-nums">32 / 50</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-muted-foreground"><BilingualText en="Team Members" el="Μέλη ομάδας" compact /></dt>
+                        <dd className="card-body font-semibold tabular-nums">5 / 10</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-muted-foreground"><BilingualText en="Programs" el="Προγράμματα" compact /></dt>
+                        <dd className="card-body font-semibold tabular-nums">4 / Unlimited</dd>
+                      </div>
+                    </dl>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-medium"><BilingualText en="Usage" el="Χρήση" compact /></p>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <div className="p-3 rounded-lg border">
-                      <p className="text-sm text-muted-foreground"><BilingualText en="Startups" el="Startups" compact /></p>
-                      <p className="page-stat text-xl font-bold">32 / 50</p>
-                    </div>
-                    <div className="p-3 rounded-lg border">
-                      <p className="text-sm text-muted-foreground"><BilingualText en="Team Members" el="Μέλη ομάδας" compact /></p>
-                      <p className="page-stat text-xl font-bold">5 / 10</p>
-                    </div>
-                    <div className="p-3 rounded-lg border">
-                      <p className="text-sm text-muted-foreground"><BilingualText en="Programs" el="Προγράμματα" compact /></p>
-                      <p className="page-stat text-xl font-bold">4 / Unlimited</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <p className="font-medium"><BilingualText en="Payment Method" el="Τρόπος πληρωμής" compact /></p>
-                  <div className="flex items-center justify-between p-3 rounded-lg border">
-                    <div className="flex items-center gap-3">
-                      <CreditCard className="icon-md" aria-hidden="true" />
-                      <span>•••• •••• •••• 4242</span>
-                    </div>
-                    <Button variant="ghost" size="sm" disabled title="Billing is not connected yet"><BilingualText en="Update" el="Ενημέρωση" compact /></Button>
-                  </div>
+                  <CardHead
+                    titleAs="h4"
+                    title={<BilingualText en="Payment Method" el="Τρόπος πληρωμής" compact />}
+                    subtitle={<span className="tabular-nums">•••• •••• •••• 4242</span>}
+                    aside={<Button variant="outline" size="sm" disabled title="Billing is not connected yet"><BilingualText en="Update" el="Ενημέρωση" compact /></Button>}
+                  />
                 </div>
               </CardContent>
             </Card>

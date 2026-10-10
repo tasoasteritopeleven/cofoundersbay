@@ -95,10 +95,10 @@ export function VerificationCard() {
   const hasWorkEmail = signals.some((s) => s.method === 'work_email');
 
   return (
-    <Card id="verification" className="scroll-mt-16 shadow-sm border-border">
-      <CardHeader className="border-b border-border">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <BadgeCheck className="icon-md text-primary-accessible" />
+    <Card id="verification" className="scroll-mt-16">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BadgeCheck className="icon-md text-primary-accessible" aria-hidden="true" />
           <BilingualText en="Verification" el="Επαλήθευση" compact />
         </CardTitle>
         <CardDescription className="space-y-1">
@@ -106,7 +106,7 @@ export function VerificationCard() {
           <span className="block"><BilingualText en={ROLE_VERIFICATION_COPY.en} el={ROLE_VERIFICATION_COPY.el} wrap /></span>
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5 pt-5">
+      <CardContent className="space-y-5">
         {signals.length ? (
           <ul className="card-rows" aria-label="Your verifications · Οι επαληθεύσεις σας">
             {signals.map((s) => (

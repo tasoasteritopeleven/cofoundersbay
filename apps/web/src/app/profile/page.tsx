@@ -32,7 +32,6 @@ import {
   Target,
   Rocket,
   Users,
-  DollarSign,
   Star,
   Award,
   Activity,
@@ -176,7 +175,7 @@ function RoleDetails({ role, payload }: { role: string; payload: Record<string, 
     return (
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
-        <FactLine className="text-foreground sm:text-sm" items={(arr as string[]).map((item) => <StatusText key={item} value={item} />)} />
+        <FactLine className="text-sm text-foreground" items={(arr as string[]).map((item) => <StatusText key={item} value={item} />)} />
       </div>
     );
   };
@@ -187,7 +186,7 @@ function RoleDetails({ role, payload }: { role: string; payload: Record<string, 
       <div className="space-y-0.5">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
         {/* Enum values ("idea", "full_time") read as words; free text passes through. */}
-        <p className="text-sm text-foreground">{typeof val === 'string' ? <StatusText value={val} /> : String(val)}</p>
+        <p className="card-body text-foreground">{typeof val === 'string' ? <StatusText value={val} /> : String(val)}</p>
       </div>
     );
   };
@@ -222,17 +221,17 @@ function RoleDetails({ role, payload }: { role: string; payload: Record<string, 
     : null;
 
   return (
-    <Card className="shadow-sm border-border">
-      <CardHeader className="pb-3 border-b border-border">
-        <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <Icon className="icon-md text-muted-foreground" />
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Icon className="icon-md text-muted-foreground" aria-hidden="true" />
           <BilingualText
             en={`${role.charAt(0).toUpperCase() + role.slice(1)} ${profileEn('details_suffix')}`}
             el={`${profileEl(role as 'founder' | 'mentor' | 'investor' | 'org') || role} — ${profileEl('details_suffix')}`}
           />
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-5 pt-5">
+      <CardContent className="space-y-5">
         {role === 'founder' && (
           <>
             {renderValue(payload.stage, <BilingualText en={profileEn('startup_stage')} el={profileEl('startup_stage')} stacked />)}
@@ -564,7 +563,7 @@ export default function ProfilePage() {
             ) : null,
           ]}
           openTo={<OwnOpenToPill openTo={trust.openTo} />}
-          aside={<RoleBadge role={profile.role} size="sm" className="!pl-0" />}
+          aside={<RoleBadge role={profile.role} />}
           actions={
             <>
               <Button size="sm" className="gap-2" asChild>
@@ -609,11 +608,11 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 gap-6">
           <div className="space-y-6">
             {/* Bio */}
-            <Card className="animate-fade-in stagger-1 shadow-sm border-border">
-              <CardHeader className="pb-3 border-b border-border">
-                <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <UserIcon className="icon-md text-muted-foreground" />
+            <Card className="animate-fade-in stagger-1">
+              <CardHeader>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="flex items-center gap-2">
+                    <UserIcon className="icon-md text-muted-foreground" aria-hidden="true" />
                     <BilingualText en={profileEn('about')} el={profileEl('about')} />
                   </CardTitle>
                   <AIInsightButton
@@ -625,14 +624,14 @@ export default function ProfilePage() {
                   />
                 </div>
               </CardHeader>
-              <CardContent className="pt-5">
+              <CardContent>
                 {profile.bio ? (
-                  <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+                  <p className="card-body whitespace-pre-wrap text-muted-foreground first-letter:uppercase">
                     {profile.bio}
                   </p>
                 ) : (
                   <div>
-                    <p className="text-sm text-muted-foreground mb-3">
+                    <p className="card-body mb-3 text-muted-foreground">
                       <BilingualText en={profileEn('bio_empty_hint')} el={profileEl('bio_empty_hint')} />
                     </p>
                     <Button variant="outline" size="sm" asChild>
@@ -660,41 +659,33 @@ export default function ProfilePage() {
             const words = (v: unknown): string[] =>
               (Array.isArray(v) ? v : [v]).filter((x): x is string => typeof x === 'string' && x.trim() !== '');
             const shownBelow = profile.role === 'founder';
-            const cards: { icon: React.ElementType; labelEn: string; labelEl: string; values: string[] }[] = [
-              { icon: Target, labelEn: profileEn('looking_for'), labelEl: profileEl('looking_for'), values: words(p.lookingFor) },
-              { icon: Rocket, labelEn: profileEn('startup_stage'), labelEl: profileEl('startup_stage'), values: shownBelow ? [] : words(p.stage) },
-              { icon: Users, labelEn: profileEn('commitment'), labelEl: profileEl('commitment'), values: shownBelow ? [] : words(p.commitment) },
-              { icon: DollarSign, labelEn: profileEn('compensation'), labelEl: profileEl('compensation'), values: words(p.compensation) },
+            const cards: { labelEn: string; labelEl: string; values: string[] }[] = [
+              { labelEn: profileEn('looking_for'), labelEl: profileEl('looking_for'), values: words(p.lookingFor) },
+              { labelEn: profileEn('startup_stage'), labelEl: profileEl('startup_stage'), values: shownBelow ? [] : words(p.stage) },
+              { labelEn: profileEn('commitment'), labelEl: profileEl('commitment'), values: shownBelow ? [] : words(p.commitment) },
+              { labelEn: profileEn('compensation'), labelEl: profileEl('compensation'), values: words(p.compensation) },
             ].filter((c) => c.values.length > 0);
             if (!cards.length) return null;
             return (
-              <Card className="animate-fade-in stagger-2 shadow-sm border-border">
-                <CardHeader className="pb-3 border-b border-border">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Target className="icon-md text-muted-foreground" />
+              <Card className="animate-fade-in stagger-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="icon-md text-muted-foreground" aria-hidden="true" />
                     <BilingualText en={profileEn('what_looking_for')} el={profileEl('what_looking_for')} />
                   </CardTitle>
                 </CardHeader>
-                <CardContent className={cn('grid grid-cols-1 gap-4 pt-5', cards.length > 1 && 'sm:grid-cols-2')}>
-                  {cards.map(({ icon: Icon, labelEn, labelEl, values }) => (
-                    <div key={labelEn} className="min-w-0">
-                      <div className="mb-2 flex items-start gap-2.5">
-                        <div className="shrink-0 p-1.5 rounded-md bg-primary/10 text-primary-accessible">
-                          <Icon className="icon-sm" />
-                        </div>
-                        {/* min-w-0 lets this flex item shrink — without it the card
-                            pushed the page sideways at 640px. `wrap` is what it
-                            does once it has shrunk: "Startup stage · Στάδιο
-                            νεοφυούς επιχείρησης" is 185px in the 41px two of these
-                            cards leave at 1024px, and uppercase with wide tracking
-                            makes the label wider than it reads. */}
-                        <span className="min-w-0 text-xs font-semibold uppercase leading-snug tracking-wide text-muted-foreground">
-                          <BilingualText en={labelEn} el={labelEl} compact wrap />
-                        </span>
-                      </div>
-                      <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-medium text-foreground">
-                        {values.map((v) => <StatusText key={v} value={v} />)}
+                {/* Label over value, each pair on the title's left edge, the
+                    way the details card below reads. The pairs carried an
+                    icon well each, a second axis in front of the labels. */}
+                <CardContent className={cn('grid grid-cols-1 gap-4', cards.length > 1 && 'sm:grid-cols-2')}>
+                  {cards.map(({ labelEn, labelEl, values }) => (
+                    <div key={labelEn} className="min-w-0 space-y-1">
+                      {/* min-w-0 and `wrap`: "Startup stage · Στάδιο νεοφυούς
+                          επιχείρησης" is wider than two columns leave at 1024px. */}
+                      <p className="min-w-0 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                        <BilingualText en={labelEn} el={labelEl} compact wrap />
                       </p>
+                      <FactLine className="text-sm font-medium text-foreground" items={values.map((v) => <StatusText key={v} value={v} />)} />
                     </div>
                   ))}
                 </CardContent>
@@ -711,11 +702,11 @@ export default function ProfilePage() {
 
           {/* Skill proficiency bars */}
           {profile.skills && profile.skills.length > 0 && (
-            <Card className="animate-fade-in stagger-3 shadow-sm border-border">
-              <CardHeader className="pb-3 border-b border-border">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <BarChart3 className="icon-md text-muted-foreground" />
+            <Card className="animate-fade-in stagger-3">
+              <CardHeader>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="icon-md text-muted-foreground" aria-hidden="true" />
                     <BilingualText en={profileEn('top_skills')} el={profileEl('top_skills')} />
                   </CardTitle>
                   <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs text-primary-accessible" asChild>
@@ -725,7 +716,7 @@ export default function ProfilePage() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="pt-5">
+              <CardContent>
                 {/* A level shows only when the person declared one. The bars
                     used to invent both a level and a percentage from the
                     skill's place in the list. */}
@@ -768,11 +759,11 @@ export default function ProfilePage() {
           {/* Portfolio placeholder. It used to stretch to the right column's
               height, which drew a 550px dashed box around one line of text;
               the empty state keeps its own height now. */}
-          <Card className="animate-fade-in shadow-sm border-border">
-            <CardHeader className="pb-3 border-b border-border">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                  <FolderOpen className="icon-md text-muted-foreground" />
+          <Card className="animate-fade-in">
+            <CardHeader>
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex items-center gap-2">
+                  <FolderOpen className="icon-md text-muted-foreground" aria-hidden="true" />
                   <BilingualText en={profileEn('portfolio_showcase')} el={profileEl('portfolio_showcase')} />
                 </CardTitle>
                 <Button asChild variant="ghost" size="sm" className="h-8 gap-1 text-xs text-primary-accessible">
@@ -782,21 +773,21 @@ export default function ProfilePage() {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="pt-5">
+            <CardContent>
+              {/* An empty state on the title's left edge: what it is, what
+                  it is for, and the one way to start. The round icon well in
+                  front of it was a second, larger mark with nothing to mark. */}
               <div className="flex flex-col items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                  <FolderOpen className="icon-lg" />
-                </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">
                     <BilingualText en={profileEn('showcase_title')} el={profileEl('showcase_title')} />
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1 max-w-prose">
+                  <p className="card-body mt-1 max-w-prose text-muted-foreground">
                     <BilingualText en={profileEn('showcase_desc')} el={profileEl('showcase_desc')} />
                   </p>
                 </div>
                 <Button variant="outline" size="sm" className="gap-1.5" asChild>
-                  <Link href="/profile/edit" className="mt-2">
+                  <Link href="/profile/edit">
                     <Plus className="icon-sm" /> <BilingualText en={profileEn('add_first_item')} el={profileEl('add_first_item')} />
                   </Link>
                 </Button>

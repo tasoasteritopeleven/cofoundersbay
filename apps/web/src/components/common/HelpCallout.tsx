@@ -76,7 +76,7 @@ export function HelpCallout({
   );
 
   const body = (
-    <div className="space-y-1.5 pl-9 text-muted-foreground [&_a]:text-primary-accessible [&_a]:underline-offset-2 [&_a:hover]:underline [&_strong]:font-semibold [&_strong]:text-foreground">
+    <div className="space-y-1.5 text-muted-foreground [&_a]:text-primary-accessible [&_a]:underline-offset-2 [&_a:hover]:underline [&_strong]:font-semibold [&_strong]:text-foreground">
       {children}
     </div>
   );
@@ -169,8 +169,11 @@ export function HelpCallout({
           to two lines of supporting text, read once and then dismissed, not to
           body copy anyone reads at length.
 
-          `pl-9` holds the body under the title's text rather than under its
-          icon, so the block has one left edge. */}
+          The body starts on the callout's own left edge, like the body of
+          every card under its head: on the book mark's edge where the mark
+          shows, on the title's where the page body hides decorative glyphs
+          (globals.css "Decorative icons"). The old `pl-9` hung it 36px in
+          from a title that, with its glyph hidden, started at the edge. */}
       {body}
     </div>
   );

@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RelativeTime } from '@/components/common/RelativeTime';
+import { CardHead } from '@/components/common/CardAnatomy';
 import { useDraggable } from '@/hooks/useDraggable';
 import { usePopupChat } from '@/contexts/PopupChatContext';
 import { useMessaging, useMessagingUnreadCount } from '@/contexts/MessagingContext';
@@ -98,56 +99,59 @@ function formatTime(d: Date) {
 
 function ConvoItem({ conv, selected, onClick }: { conv: Conversation; selected: boolean; onClick: () => void }) {
   const previewEl = PREVIEW_MESSAGE_EL[conv.lastMessage];
+  const unread = conv.unreadCount > 0;
+  // A conversation row set like a card's head: the person's mark, the name
+  // as the title, the last message on the line under it, the time and the
+  // unread count at the right.
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
-        'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors',
+        'block w-full rounded-lg p-3 text-left transition-colors',
         selected ? 'bg-primary/10' : 'hover:bg-muted/60',
       )}
     >
-      <div className="relative shrink-0">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src={conv.recipientAvatar ?? undefined} />
-          <AvatarFallback className="text-xs font-semibold bg-primary/15 text-primary-accessible">
-            {conv.recipientName[0]?.toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        {conv.isOnline && (
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-status-success-mark ring-2 ring-background" />
+      <CardHead
+        titleAs="p"
+        asideStays
+        mark={(
+          <div className="relative">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={conv.recipientAvatar ?? undefined} />
+              <AvatarFallback className="text-xs font-semibold bg-primary/15 text-primary-accessible">
+                {conv.recipientName[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            {conv.isOnline && (
+              <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-status-success-mark ring-2 ring-background" />
+            )}
+          </div>
         )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-1">
-          <span className={cn(
-            'text-sm truncate',
-            conv.unreadCount > 0 ? 'font-semibold text-foreground' : 'font-medium text-foreground/90',
-          )}>
-            {conv.recipientName}
-          </span>
-          <span className="text-2xs text-muted-foreground shrink-0 tabular-nums">
-            <RelativeTime date={conv.lastMessageTime} short />
-          </span>
-        </div>
-        <div className="flex items-center justify-between gap-1 mt-0.5">
-          <p className={cn(
-            'text-xs truncate',
-            conv.unreadCount > 0 ? 'text-foreground/75 font-medium' : 'text-muted-foreground',
-          )}>
+        title={<span className="block truncate">{conv.recipientName}</span>}
+        titleClassName={unread ? undefined : 'text-foreground/90'}
+        subtitle={(
+          <span className={cn('block truncate', unread && 'font-medium text-foreground/75')}>
             {conv.lastMessage
               ? (previewEl
                 ? <BilingualText en={conv.lastMessage} el={previewEl} compact />
                 : conv.lastMessage)
               : <BilingualText en={messagesEn('no_messages_yet_short')} el={messagesEl('no_messages_yet_short')} compact />}
-          </p>
-          {conv.unreadCount > 0 && (
-            <span className="flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-primary px-1 text-2xs font-bold text-primary-foreground shrink-0">
-              {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
+          </span>
+        )}
+        aside={(
+          <>
+            <span className="tabular-nums">
+              <RelativeTime date={conv.lastMessageTime} short />
             </span>
-          )}
-        </div>
-      </div>
+            {unread && (
+              <span className="flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-primary px-1 text-2xs font-bold text-primary-foreground shrink-0">
+                {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
+              </span>
+            )}
+          </>
+        )}
+      />
     </button>
   );
 }

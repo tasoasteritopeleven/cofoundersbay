@@ -18,11 +18,8 @@ const ALLOWED: Record<string, string> = {
   'src/components/builder/MVPPlanner.tsx': 'removable goal chips in the planner',
   'src/components/research/NodeTagsEditor.tsx': 'removable tags on a canvas node, in its editor',
   'src/app/investor/scouting/page.tsx': 'active filters, each removable',
-  'src/app/tenant/api-keys/page.tsx': 'API scopes are identifiers, read as tokens',
-  'src/app/tenant/webhooks/page.tsx': 'webhook event names are identifiers, read as tokens',
   'src/app/org/analytics/page.tsx': 'a programme taking applications is a state',
   'src/app/matches/[userId]/page.tsx': 'the match explanation highlights what two people share',
-  'src/app/themes/alliance/page.tsx': 'a preview of a third-party theme, drawn as that theme draws it',
 };
 
 // On Windows join() gives backslashes while ALLOWED keys are forward-slash

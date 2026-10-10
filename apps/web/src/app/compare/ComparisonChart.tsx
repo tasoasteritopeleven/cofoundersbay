@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart3 } from 'lucide-react';
+import { BilingualText } from '@/components/common/BilingualText';
 
 type CompareProfileMin = {
   id: string;
@@ -43,8 +44,8 @@ export function ComparisonChart({ profiles }: { profiles: CompareProfileMin[] })
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="icon-md text-muted-foreground" />
-          Comparison Overview
+          <BarChart3 className="icon-md text-muted-foreground" aria-hidden="true" />
+          <BilingualText en="Comparison overview" el="Επισκόπηση σύγκρισης" compact />
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -53,7 +54,9 @@ export function ComparisonChart({ profiles }: { profiles: CompareProfileMin[] })
             <XAxis type="number" domain={[0, 100]} />
             <YAxis type="category" dataKey="dimension" width={100} tick={{ fontSize: 12 }} />
             <Tooltip />
-            <Legend />
+            {/* The legend names on the caption step, never louder than the
+                card's title (recharts sets them at the root size). */}
+            <Legend formatter={(value) => <span className="text-xs">{value}</span>} />
             {profiles.map((p, i) => (
               <Bar
                 key={p.id}

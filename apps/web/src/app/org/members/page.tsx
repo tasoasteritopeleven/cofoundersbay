@@ -20,7 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCurrentOrg } from '@/hooks/useCurrentOrg';
 import { listOrganizationMembers, type OrgAdminMember } from '@/lib/api';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -33,6 +33,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { EmptyOrgMembers } from '@/components/common/EmptyStates';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { cn, initialsOf } from '@/lib/utils';
 import { STATUS, type StatusTone } from '@/lib/semantic-colors';
 import { UnavailableButton } from '@/components/common/UnavailableButton';
@@ -117,76 +119,82 @@ function MemberRow({ member, live, adminHref }: { member: OrgMember; live: boole
   const roleCfg = ROLE_CONFIG[member.role];
   const RoleIcon = roleCfg.icon;
 
+  // A row of the Connections card, without its frame: the avatar, the name
+  // over the address, the role, title and join date as one caption line;
+  // the menu stays at the right.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
+          <MoreVertical className="icon-sm" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* None had a handler. Roles and removal are managed on the
+            organisation's admin page, which writes membership rows; this
+            directory lists cohort members by user id. */}
+        {adminHref ? (
+          <DropdownMenuItem asChild>
+            <Link href={adminHref}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Role" el="Επεξεργασία ρόλου" compact /></Link>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem disabled><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Role" el="Επεξεργασία ρόλου" compact /></DropdownMenuItem>
+        )}
+        {live ? (
+          <DropdownMenuItem asChild>
+            <Link href={`/messages?to=${member.userId}`}><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem disabled><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        {adminHref ? (
+          <DropdownMenuItem asChild className="text-destructive-accessible">
+            <Link href={adminHref}><UserMinus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact /></Link>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem disabled className="text-destructive-accessible">
+            <UserMinus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact />
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
-    <div className="flex items-center gap-4 py-3 border-b border-border last:border-0 hover:bg-muted/30 rounded-lg transition-colors">
-      <Avatar className="h-9 w-9 shrink-0">
-        <AvatarImage src={member.avatarUrl} />
-        <AvatarFallback className="text-sm font-medium">{initialsOf(member.name).toUpperCase()}</AvatarFallback>
-      </Avatar>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium">{member.name}</p>
+    <CardHead
+      mark={(
+        <Avatar className="h-10 w-10">
+          <AvatarImage src={member.avatarUrl} alt="" />
+          <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">{initialsOf(member.name).toUpperCase()}</AvatarFallback>
+        </Avatar>
+      )}
+      title={member.name}
+      subtitle={member.email ? <span className="block truncate">{member.email}</span> : undefined}
+      meta={(
+        <FactLine
+          items={[
+            <span key="role" className="inline-flex items-center gap-1">
+              <RoleIcon className={cn('icon-sm', roleCfg.tone === 'neutral' && member.role === 'viewer' ? 'text-muted-foreground' : STATUS[roleCfg.tone].icon)} aria-hidden="true" />
+              <BilingualText en={roleCfg.label} el={roleCfg.labelEl} compact />
+            </span>,
+            member.department,
+            // No endpoint records when a member was last seen; the join date
+            // is what the membership row carries.
+            member.joinedAt ? <BilingualText key="joined" en={`Joined ${member.joinedAt}`} el={`Μέλος από ${member.joinedAt}`} compact /> : null,
+          ]}
+        />
+      )}
+      asideStays
+      aside={(
+        <>
           {member.status === 'invited' && (
             <Badge variant="outline" className={cn('text-xs border', STATUS.warning.chip)}><BilingualText en="Invited" el="Προσκλήθηκε" compact /></Badge>
           )}
-        </div>
-        {member.email ? (
-          <p className="text-xs text-muted-foreground truncate">{member.email}</p>
-        ) : null}
-        <p className="mt-0.5 text-xs text-muted-foreground md:hidden">
-          <BilingualText en={roleCfg.label} el={roleCfg.labelEl} compact />{member.department ? ` · ${member.department}` : ''}
-          {member.joinedAt ? <> · <BilingualText en={`Joined ${member.joinedAt}`} el={`Μέλος από ${member.joinedAt}`} compact /></> : ''}
-        </p>
-      </div>
-      <div className="hidden md:flex items-center gap-1 w-28 shrink-0">
-        <RoleIcon className={cn('icon-sm', roleCfg.tone === 'neutral' && member.role === 'viewer' ? 'text-muted-foreground' : STATUS[roleCfg.tone].icon)} />
-        <span className="text-xs font-medium"><BilingualText en={roleCfg.label} el={roleCfg.labelEl} compact /></span>
-      </div>
-      <div className="hidden lg:block w-44 shrink-0">
-        <p className="text-xs text-muted-foreground">{member.department ?? '—'}</p>
-      </div>
-      {/* No endpoint records when a member was last seen; the join date is
-          what the membership row carries. */}
-      <div className="hidden sm:block w-28 shrink-0">
-        <span className="text-xs tabular-nums text-muted-foreground">{member.joinedAt || '—'}</span>
-      </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button aria-label="More options" variant="ghost" size="icon" className="shrink-0">
-            <MoreVertical className="icon-sm" aria-hidden="true" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {/* None had a handler. Roles and removal are managed on the
-              organisation's admin page, which writes membership rows; this
-              directory lists cohort members by user id. */}
-          {adminHref ? (
-            <DropdownMenuItem asChild>
-              <Link href={adminHref}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Role" el="Επεξεργασία ρόλου" compact /></Link>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem disabled><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Role" el="Επεξεργασία ρόλου" compact /></DropdownMenuItem>
-          )}
-          {live ? (
-            <DropdownMenuItem asChild>
-              <Link href={`/messages?to=${member.userId}`}><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem disabled><Mail className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></DropdownMenuItem>
-          )}
-          <DropdownMenuSeparator />
-          {adminHref ? (
-            <DropdownMenuItem asChild className="text-destructive-accessible">
-              <Link href={adminHref}><UserMinus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact /></Link>
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem disabled className="text-destructive-accessible">
-              <UserMinus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Remove Member" el="Αφαίρεση μέλους" compact />
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+          {menu}
+        </>
+      )}
+    />
   );
 }
 
@@ -311,20 +319,14 @@ export default function OrgMembersPage() {
           </TabsList>
           <TabsContent value={activeTab} className="mt-4">
             <Card>
-              <CardHeader className="pb-2">
-                <div className="hidden md:flex items-center gap-4 px-1 text-xs text-muted-foreground font-medium">
-                  <div className="w-9 shrink-0" />
-                  <div className="flex-1"><BilingualText en="Name / Email" el="Όνομα / Email" compact /></div>
-                  <div className="w-28 shrink-0"><BilingualText en="Role" el="Ρόλος" compact /></div>
-                  <div className="hidden lg:block w-44 shrink-0"><BilingualText en="Title" el="Τίτλος" compact /></div>
-                  <div className="hidden sm:block w-28 shrink-0"><BilingualText en="Joined" el="Εγγράφηκε" compact /></div>
-                  <div className="w-7 shrink-0" />
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                {filtered.map(member => (
-                  <MemberRow key={member.id} member={member} live={live.length > 0} adminHref={slug ? `/org/${slug}/admin` : null} />
-                ))}
+              <CardContent>
+                {filtered.length > 0 ? (
+                  <div className="card-rows">
+                    {filtered.map(member => (
+                      <MemberRow key={member.id} member={member} live={live.length > 0} adminHref={slug ? `/org/${slug}/admin` : null} />
+                    ))}
+                  </div>
+                ) : null}
                 {filtered.length === 0 && (
                   <EmptyOrgMembers filtersActive={filtersActive} onClearFilters={clearFilters} />
                 )}

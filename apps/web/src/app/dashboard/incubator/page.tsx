@@ -26,7 +26,7 @@ import { Badge } from '@/components/ui/badge';
 import { BilingualText } from '@/components/common/BilingualText';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { MetricTile } from '@/components/dashboard/MetricTile';
-import { EmptyLine, QuickLinks, SectionCard } from '@/components/dashboard/SectionCard';
+import { EmptyLine, QuickLinks, RowHead, SectionCard } from '@/components/dashboard/SectionCard';
 import { DashboardGreeting } from '@/components/dashboard/DashboardGreeting';
 import { useSession } from '@/hooks/useSession';
 import { useCurrentOrg } from '@/hooks/useCurrentOrg';
@@ -187,12 +187,12 @@ export default function IncubatorDashboard() {
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="gap-1.5">
             <Building className="icon-sm" aria-hidden="true" />
-            {orgName ?? 'Incubator admin'}
+            {orgName ?? <BilingualText en="Incubator admin" el="Διαχείριση θερμοκοιτίδας" compact />}
           </Badge>
           <Button size="sm" asChild>
             <Link href="/tenant/programs">
               <Plus className="mr-1.5 icon-sm" aria-hidden="true" />
-              New program
+              <BilingualText en="New program" el="Νέο πρόγραμμα" compact />
             </Link>
           </Button>
         </div>
@@ -265,32 +265,42 @@ export default function IncubatorDashboard() {
               {waiting.slice(0, 5).map(({ row, program }) => {
                 const name = row.user.profile?.displayName ?? 'Applicant';
                 const startup = startupOf(row.user.profile?.headline);
+                // The applicant's circle, the startup over the program and
+                // when, and the two ways to answer at the right (under the
+                // line on a phone, on the title's edge).
                 return (
-                  <div key={row.id} className="flex flex-wrap items-center gap-3 sm:flex-nowrap">
-                    <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarFallback className="bg-muted text-foreground">{initialsOf(name)}</AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1 basis-40">
-                      <p className="truncate text-sm font-medium">
+                  <RowHead
+                    key={row.id}
+                    mark={(
+                      <Avatar className="h-10 w-10">
+                        <AvatarFallback className="bg-muted text-foreground">{initialsOf(name)}</AvatarFallback>
+                      </Avatar>
+                    )}
+                    title={(
+                      <span className="block truncate">
                         {startup ?? name}
                         {startup ? <span className="font-normal text-muted-foreground"> · {name}</span> : null}
-                      </p>
-                      <p className="truncate text-xs text-muted-foreground">
+                      </span>
+                    )}
+                    subtitle={(
+                      <span className="block truncate">
                         {program.title} · <RelativeTime date={row.appliedAt} format={formatRelativeTime} />
-                        {row.score != null ? <> · <BilingualText en={`score ${row.score}`} el={`βαθμός ${row.score}`} compact /></> : null}
-                      </p>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      <Button size="sm" variant="outline" asChild>
-                        <Link href="/org/applications"><BilingualText en="Review" el="Αξιολόγηση" compact /></Link>
-                      </Button>
-                      <Button size="icon" variant="ghost" aria-label={`Message ${name} to schedule a call`} asChild>
-                        <Link href={`/messages?to=${row.userId}`}>
-                          <MessageCircle className="icon-sm" aria-hidden="true" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
+                        {row.score != null ? <> · <BilingualText en={`Score ${row.score}`} el={`Βαθμός ${row.score}`} compact /></> : null}
+                      </span>
+                    )}
+                    aside={(
+                      <>
+                        <Button size="sm" variant="outline" asChild>
+                          <Link href="/org/applications"><BilingualText en="Review" el="Αξιολόγηση" compact /></Link>
+                        </Button>
+                        <Button size="icon" variant="ghost" aria-label={`Message ${name} to schedule a call`} asChild>
+                          <Link href={`/messages?to=${row.userId}`}>
+                            <MessageCircle className="icon-sm" aria-hidden="true" />
+                          </Link>
+                        </Button>
+                      </>
+                    )}
+                  />
                 );
               })}
               {!loading && waiting.length === 0 && (
@@ -309,13 +319,13 @@ export default function IncubatorDashboard() {
                     href={`/programs/${program.id}`}
                     className="axis-row block rounded-md transition-colors hover:bg-accent focus-ring"
                   >
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="text-sm font-medium">{program.title}</span>
-                      <Badge size="sm" variant={badge.variant}><BilingualText en={badge.en} el={badge.el} compact /></Badge>
-                    </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">
-                      <BilingualText en={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} applications`} el={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} αιτήσεις`} compact wrap />
-                    </p>
+                    <RowHead
+                      title={program.title}
+                      subtitle={(
+                        <BilingualText en={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} applications`} el={`${shortDate(program.startDate)} – ${shortDate(program.endDate)} · ${program.applicationCount} αιτήσεις`} compact wrap />
+                      )}
+                      aside={<Badge size="sm" variant={badge.variant}><BilingualText en={badge.en} el={badge.el} compact /></Badge>}
+                    />
                     {pct != null && (
                       <div className="mt-2 flex items-center gap-3">
                         <Progress value={pct} className="h-1.5 flex-1" aria-label={`${program.title}: ${program.participantCount} of ${program.capacity} places filled`} />
@@ -333,25 +343,28 @@ export default function IncubatorDashboard() {
             </SectionCard>
 
             <SectionCard title="Startups in programs" titleEl="Startups σε προγράμματα" icon={Rocket} action={{ href: '/org/startups', label: 'All startups', labelEl: 'Όλες οι startups' }} contentClassName="card-rows">
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {inPrograms.map(({ row, program }) => {
-                  const name = row.user.profile?.displayName ?? 'Founder';
-                  const startup = startupOf(row.user.profile?.headline) ?? name;
-                  return (
-                    <div key={row.id} className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9 shrink-0 rounded-lg">
-                        <AvatarFallback className="rounded-lg bg-primary/10 font-semibold text-primary-accessible">{startup[0]?.toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">{startup}</p>
-                        <p className="truncate text-xs text-muted-foreground">
-                          {name} · {program.title.split(' · ')[0]}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              {/* Startups are rounded squares, the founder and the program
+                  under the name: two columns of rows, no frame per row. */}
+              {inPrograms.length > 0 && (
+                <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                  {inPrograms.map(({ row, program }) => {
+                    const name = row.user.profile?.displayName ?? 'Founder';
+                    const startup = startupOf(row.user.profile?.headline) ?? name;
+                    return (
+                      <RowHead
+                        key={row.id}
+                        mark={(
+                          <Avatar className="h-10 w-10 rounded-xl">
+                            <AvatarFallback className="rounded-xl bg-primary/10 font-semibold text-primary-accessible">{startup[0]?.toUpperCase()}</AvatarFallback>
+                          </Avatar>
+                        )}
+                        title={<span className="block truncate">{startup}</span>}
+                        subtitle={<span className="block truncate">{name} · {program.title.split(' · ')[0]}</span>}
+                      />
+                    );
+                  })}
+                </div>
+              )}
               {!loading && inPrograms.length === 0 && (
                 <EmptyLine en="Accepted applicants appear here once their program starts." el="Οι αποδεκτοί εμφανίζονται εδώ όταν ξεκινά το πρόγραμμά τους." />
               )}
@@ -371,24 +384,25 @@ export default function IncubatorDashboard() {
               ]}
             />
 
-            <SectionCard title="Coming up" titleEl="Επόμενα" icon={CalendarClock} contentClassName="space-y-3">
+            <SectionCard title="Coming up" titleEl="Επόμενα" icon={CalendarClock} contentClassName="card-rows">
               {comingUp.map((item) => (
-                <div key={item.id} className="flex items-start justify-between gap-3 text-sm">
-                  <div className="min-w-0">
-                    <p className="font-medium">
-                      <BilingualText en={item.en} el={item.el} />
-                    </p>
-                    <p className="truncate text-xs text-muted-foreground">{item.program.title}</p>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <p className="text-xs font-medium tabular-nums">{shortDate(item.iso)}</p>
-                    <p className={cn('text-xs tabular-nums', item.days <= 7 ? 'text-status-warning' : 'text-muted-foreground')}>
+                <RowHead
+                  key={item.id}
+                  title={<BilingualText en={item.en} el={item.el} />}
+                  subtitle={<span className="block truncate">{item.program.title}</span>}
+                  // How far off, under the program on the title's axis; the
+                  // date alone at the right. Stacked at the right, the
+                  // countdown line hung 214px in from the axis at 1440.
+                  meta={(
+                    <span className={cn('tabular-nums', item.days <= 7 && 'text-status-warning')}>
                       {item.days === 0
-                        ? <BilingualText en="today" el="σήμερα" compact />
-                        : <BilingualText en={`in ${item.days}d`} el={`σε ${item.days} ημ.`} compact />}
-                    </p>
-                  </div>
-                </div>
+                        ? <BilingualText en="Today" el="Σήμερα" compact />
+                        : <BilingualText en={`In ${item.days}d`} el={`Σε ${item.days} ημ.`} compact />}
+                    </span>
+                  )}
+                  asideStays
+                  aside={<span className="font-medium tabular-nums text-foreground">{shortDate(item.iso)}</span>}
+                />
               ))}
               {!loading && comingUp.length === 0 && (
                 <EmptyLine en="No program date is ahead." el="Καμία ημερομηνία προγράμματος μπροστά." />

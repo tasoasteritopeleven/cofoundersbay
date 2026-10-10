@@ -8,15 +8,13 @@ import {
   Trash2,
   CheckCircle,
   XCircle,
-  Clock,
   RefreshCw,
   ArrowRight,
-  Activity,
   MoreVertical,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -27,6 +25,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { EmptyTenantWebhooks } from '@/components/common/EmptyStates';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { cn } from '@/lib/utils';
 import { SampleDataNotice } from '@/components/common/SampleDataNotice';
 import { UnavailableMenuItem } from '@/components/common/UnavailableMenuItem';
@@ -83,55 +83,64 @@ function WebhookCard({ webhook }: { webhook: WebhookItem }) {
   const [active, setActive] = useState(webhook.isActive);
   const truncUrl = webhook.url.length > 48 ? webhook.url.slice(0, 48) + '…' : webhook.url;
 
+  // The Opportunities card: the endpoint's mark, its address over its
+  // delivery record, the switch and the menu at the right; the events start
+  // on the mark's edge and the last delivery sits in the foot.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="More options. Περισσότερες επιλογές" variant="ghost" size="icon">
+          <MoreVertical className="icon-sm" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {/* No webhook service exists, so none of these can act.
+            They stay visible - they are what this surface is for -
+            and say why they are unavailable instead of silently
+            closing the menu. */}
+        <UnavailableMenuItem icon={<Edit className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Edit" el="Επεξεργασία" reasonEn="No webhook backend yet." reasonEl="Δεν υπάρχει ακόμη backend webhooks." />
+        <UnavailableMenuItem icon={<RefreshCw className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Resend Last" el="Επαναποστολή τελευταίου" reasonEn="No deliveries are sent yet." reasonEl="Δεν αποστέλλονται ακόμη παραδόσεις." />
+        <UnavailableMenuItem icon={<ArrowRight className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="View Logs" el="Αρχεία καταγραφής" reasonEn="No delivery log exists yet." reasonEl="Δεν υπάρχει ακόμη αρχείο παραδόσεων." />
+        <UnavailableMenuItem className="text-destructive-accessible" icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Delete" el="Διαγραφή" reasonEn="Sample endpoint - nothing to delete." reasonEl="Δείγμα - δεν υπάρχει κάτι να διαγραφεί." />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
-    <Card className={cn('transition-all', !active && 'surface-inactive')}>
-      <CardContent>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <code className="text-xs font-mono bg-muted px-2 py-0.5 rounded truncate max-w-xs">{truncUrl}</code>
-              <Button aria-label="Copy URL. Αντιγραφή URL" variant="ghost" size="icon" onClick={() => void navigator.clipboard?.writeText(webhook.url)}>
-                <Copy className="icon-sm" aria-hidden="true" />
-              </Button>
+    <Card className={cn('transition-all hover:border-primary/20', !active && 'surface-inactive')}>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <div data-card-mark="" className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+              <Webhook className="icon-md" aria-hidden="true" />
             </div>
-            <div className="flex flex-wrap gap-1 mt-2">
-              {webhook.events.map(e => (
-                <Badge key={e} variant="secondary" size="sm" translate="no">{e}</Badge>
-              ))}
-            </div>
-            <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-              {webhook.lastTriggered && <span className="flex items-center gap-1"><Clock className="icon-sm" aria-hidden="true" />{webhook.lastTriggered}</span>}
-              <span className="flex items-center gap-1">
-                <Activity className="icon-sm" aria-hidden="true" />
-                <BilingualText
-                  en={`${webhook.successRate}% success · ${webhook.totalDeliveries} deliveries`}
-                  el={`${webhook.successRate}% επιτυχία · ${webhook.totalDeliveries} παραδόσεις`}
-                  compact
-                />
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Switch checked={active} onCheckedChange={setActive} aria-label={`Deliver to ${truncUrl}`} />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button aria-label="More options. Περισσότερες επιλογές" variant="ghost" size="icon">
-                  <MoreVertical className="icon-sm" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {/* No webhook service exists, so none of these can act.
-                    They stay visible - they are what this surface is for -
-                    and say why they are unavailable instead of silently
-                    closing the menu. */}
-                <UnavailableMenuItem icon={<Edit className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Edit" el="Επεξεργασία" reasonEn="No webhook backend yet." reasonEl="Δεν υπάρχει ακόμη backend webhooks." />
-                <UnavailableMenuItem icon={<RefreshCw className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Resend Last" el="Επαναποστολή τελευταίου" reasonEn="No deliveries are sent yet." reasonEl="Δεν αποστέλλονται ακόμη παραδόσεις." />
-                <UnavailableMenuItem icon={<ArrowRight className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="View Logs" el="Αρχεία καταγραφής" reasonEn="No delivery log exists yet." reasonEl="Δεν υπάρχει ακόμη αρχείο παραδόσεων." />
-                <UnavailableMenuItem className="text-destructive-accessible" icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />} en="Delete" el="Διαγραφή" reasonEn="Sample endpoint - nothing to delete." reasonEl="Δείγμα - δεν υπάρχει κάτι να διαγραφεί." />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+          )}
+          title={<span className="break-all font-mono" translate="no">{truncUrl}</span>}
+          subtitle={(
+            <BilingualText
+              en={`${webhook.successRate}% success · ${webhook.totalDeliveries} deliveries`}
+              el={`${webhook.successRate}% επιτυχία · ${webhook.totalDeliveries} παραδόσεις`}
+              compact
+              wrap
+            />
+          )}
+          asideStays
+          aside={(
+            <>
+              <Switch checked={active} onCheckedChange={setActive} aria-label={`Deliver to ${truncUrl}`} />
+              {menu}
+            </>
+          )}
+        />
+        <FactLine
+          label="Events. Συμβάντα"
+          items={webhook.events.map((e) => <span key={e} className="font-mono" translate="no">{e}</span>)}
+        />
+        <CardFoot meta={webhook.lastTriggered || undefined}>
+          <Button aria-label="Copy URL. Αντιγραφή URL" variant="ghost" size="icon" onClick={() => void navigator.clipboard?.writeText(webhook.url)}>
+            <Copy className="icon-sm" aria-hidden="true" />
+          </Button>
+        </CardFoot>
       </CardContent>
     </Card>
   );
@@ -201,7 +210,7 @@ export default function TenantWebhooksPage() {
             </div>
             {/* The header's "Add webhook" is the one place to add one; this
                 card repeated it as a second disabled button. */}
-            <p className="rounded-xl border border-dashed border-border p-4 text-center text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               <BilingualText
                 en="New endpoints are added from the header once webhook delivery is available."
                 el="Νέα endpoints προστίθενται από την κεφαλίδα μόλις γίνει διαθέσιμη η αποστολή webhooks."

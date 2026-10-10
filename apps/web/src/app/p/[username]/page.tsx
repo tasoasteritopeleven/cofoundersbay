@@ -12,7 +12,9 @@ import {
   CheckCircle2, Star, Zap, Target, PenLine,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { initialsOf } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { RoleBadge } from '@/components/common/RoleBadge';
@@ -49,44 +51,47 @@ function deriveProfileFields(profile: PublicProfile) {
   return { firstName, lastName, skills, interests, achievements, lookingFor, isVerified, isAvailable, website, linkedin, twitter, github, joinedAt, connectionsCount, projectsCount };
 }
 
-function EndorsementCard({ endorsement }: { endorsement: EndorsementItem }) {
+/**
+ * One endorsement as a row of the Endorsements section, read the way the
+ * Endorsements page's card reads: who wrote it (mark, name, headline, the
+ * relationship), then the skill, the quote and what the platform saw of the
+ * work, all on the mark's left edge. It was a framed box inside the card
+ * with the author under the quote.
+ */
+function EndorsementRow({ endorsement }: { endorsement: EndorsementItem }) {
+  const author = endorsement.fromUser?.displayName ?? 'Member';
   return (
-    <div data-card="" data-surface="card" className="rounded-lg border border-border p-4">
-      <p className="text-sm italic leading-relaxed text-muted-foreground">"{endorsement.content}"</p>
-      {endorsement.skill && (
-        <Badge variant="secondary" className="mt-2 text-xs">
-          {endorsement.skill}
-        </Badge>
-      )}
-      <div className="flex items-center gap-3 mt-4">
-        <Avatar className="h-10 w-10">
-          <AvatarImage src={endorsement.fromUser?.avatarUrl ?? undefined} />
-          <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm">
-            {endorsement.fromUser.displayName[0]}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <p className="person-name font-semibold text-foreground">{endorsement.fromUser.displayName}</p>
-          <EndorsementBasisLine basis={endorsement.basis} />
-          {endorsement.relationship && (
-            <p className="text-xs text-muted-foreground">{endorsement.relationship}</p>
-          )}
-          {!endorsement.relationship && endorsement.fromUser.headline && (
-            <p className="text-xs text-muted-foreground line-clamp-1">{endorsement.fromUser.headline}</p>
-          )}
-        </div>
+    <li className="space-y-3 py-4 first:pt-0 last:pb-0">
+      <CardHead
+        titleAs="p"
+        mark={(
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={endorsement.fromUser?.avatarUrl ?? undefined} alt="" />
+            <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">
+              {initialsOf(author)}
+            </AvatarFallback>
+          </Avatar>
+        )}
+        title={author}
+        subtitle={endorsement.fromUser?.headline || undefined}
+        meta={endorsement.relationship ? (
+          <BilingualText en={`Relationship: ${endorsement.relationship}`} el={`Σχέση: ${endorsement.relationship}`} compact wrap />
+        ) : undefined}
+      />
+      <div className="space-y-1.5">
+        {endorsement.skill ? <p className="text-xs font-medium text-muted-foreground">{endorsement.skill}</p> : null}
+        <blockquote className="card-body italic text-muted-foreground">“{endorsement.content}”</blockquote>
+        <EndorsementBasisLine basis={endorsement.basis} />
       </div>
-    </div>
+    </li>
   );
 }
 
 function EndorsementsSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="divide-y divide-border">
       {[1, 2].map((i) => (
-        <div key={i} className="rounded-lg border border-border p-4">
-          <Skeleton className="h-4 w-full mb-2" />
-          <Skeleton className="h-4 w-3/4 mb-4" />
+        <div key={i} className="space-y-3 py-4 first:pt-0 last:pb-0">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-full" />
             <div className="space-y-1">
@@ -94,6 +99,8 @@ function EndorsementsSkeleton() {
               <Skeleton className="h-3 w-32" />
             </div>
           </div>
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
         </div>
       ))}
     </div>
@@ -265,7 +272,7 @@ export default function PublicProfilePage() {
             {/* About */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="About" el="Σχετικά" compact /></CardTitle>
+                <CardTitle><BilingualText en="About" el="Σχετικά" compact /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -280,13 +287,13 @@ export default function PublicProfilePage() {
             {lookingFor.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Target className="icon-md text-muted-foreground" />
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="icon-md text-muted-foreground" aria-hidden="true" />
                     <BilingualText en="Looking For" el="Αναζητά" compact />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <FactLine className="text-foreground sm:text-sm" items={lookingFor} />
+                  <FactLine className="text-sm text-foreground" items={lookingFor} />
                 </CardContent>
               </Card>
             )}
@@ -297,9 +304,9 @@ export default function PublicProfilePage() {
             {/* Endorsements / Testimonials */}
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Star className="icon-md text-status-warning" />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="icon-md text-status-warning" aria-hidden="true" />
                     <BilingualText en="Endorsements" el="Συστάσεις" compact />
                   </CardTitle>
                   <Button variant="outline" size="sm" className="gap-1.5 text-xs" asChild>
@@ -314,15 +321,14 @@ export default function PublicProfilePage() {
                 {endorsementsLoading ? (
                   <EndorsementsSkeleton />
                 ) : endorsements.length > 0 ? (
-                  <div className="space-y-4">
+                  <ul className="divide-y divide-border">
                     {endorsements.map((endorsement) => (
-                      <EndorsementCard key={endorsement.id} endorsement={endorsement} />
+                      <EndorsementRow key={endorsement.id} endorsement={endorsement} />
                     ))}
-                  </div>
+                  </ul>
                 ) : (
                   <div>
-                    <Star className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" aria-hidden="true" />
-                    <p className="text-sm text-muted-foreground">
+                    <p className="card-body text-muted-foreground">
                       <BilingualText en="No endorsements yet" el="Δεν υπάρχουν συστάσεις ακόμα" compact />
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -359,12 +365,12 @@ export default function PublicProfilePage() {
             {/* Skills */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Skills" el="Δεξιότητες" compact /></CardTitle>
+                <CardTitle><BilingualText en="Skills" el="Δεξιότητες" compact /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {skills.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No skills listed" el="Δεν έχουν καταχωριστεί δεξιότητες" compact /></p>}
-                  <FactLine className="text-foreground sm:text-sm" items={skills} />
+                  <FactLine className="text-sm text-foreground" items={skills} />
                 </div>
               </CardContent>
             </Card>
@@ -372,12 +378,12 @@ export default function PublicProfilePage() {
             {/* Interests */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Interests" el="Ενδιαφέροντα" compact /></CardTitle>
+                <CardTitle><BilingualText en="Interests" el="Ενδιαφέροντα" compact /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-1.5">
                   {interests.length === 0 && <p className="text-sm text-muted-foreground"><BilingualText wrap en="No interests listed" el="Δεν έχουν καταχωριστεί ενδιαφέροντα" compact /></p>}
-                  <FactLine className="text-foreground sm:text-sm" items={interests} />
+                  <FactLine className="text-sm text-foreground" items={interests} />
                 </div>
               </CardContent>
             </Card>
@@ -386,8 +392,8 @@ export default function PublicProfilePage() {
             {achievements.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Award className="icon-md text-status-warning" />
+                  <CardTitle className="flex items-center gap-2">
+                    <Award className="icon-md text-status-warning" aria-hidden="true" />
                     <BilingualText en="Achievements" el="Επιτεύγματα" compact />
                   </CardTitle>
                 </CardHeader>
@@ -395,8 +401,8 @@ export default function PublicProfilePage() {
                   <ul className="space-y-2">
                     {achievements.map((achievement, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm">
-                        <Award className="icon-sm text-status-warning shrink-0" />
-                        <span className="text-muted-foreground">{achievement}</span>
+                        <Award className="icon-sm text-status-warning shrink-0" aria-hidden="true" />
+                        <span className="text-muted-foreground first-letter:uppercase">{achievement}</span>
                       </li>
                     ))}
                   </ul>
@@ -407,7 +413,7 @@ export default function PublicProfilePage() {
             {/* Links */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base"><BilingualText en="Links" el="Σύνδεσμοι" compact /></CardTitle>
+                <CardTitle><BilingualText en="Links" el="Σύνδεσμοι" compact /></CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {!website && !linkedin && !twitter && !github && (
@@ -448,15 +454,18 @@ export default function PublicProfilePage() {
               </CardContent>
             </Card>
 
-            {/* CTA */}
+            {/* CTA: a section card - the question as its title, the line
+                under it, the one action. */}
             <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-semibold text-foreground mb-2">
-                  <BilingualText en={`Want to connect with ${firstName}?`} el={`Θέλετε να συνδεθείτε με ${firstName};`} wrap />
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
+              <CardHeader>
+                <CardTitle>
+                  <BilingualText en={`Want to connect with ${firstName}?`} el={`Θέλετε να συνδεθείτε με ${firstName};`} compact wrap />
+                </CardTitle>
+                <CardDescription>
                   <BilingualText en={`Join CoFounderBay to message and connect with founders like ${firstName}.`} el={`Εγγραφείτε στο CoFounderBay για μηνύματα και συνδέσεις με ιδρυτές όπως ${firstName}.`} wrap />
-                </p>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <Button className="w-full" asChild>
                   <Link href="/register"><BilingualText en="Join CoFounderBay free" el="Εγγραφείτε δωρεάν στο CoFounderBay" compact wrap /></Link>
                 </Button>

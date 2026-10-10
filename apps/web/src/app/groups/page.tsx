@@ -55,9 +55,7 @@ import { qk } from '@/lib/query-keys';
 
 import { pressableProps } from '@/lib/pressable';
 import { FactLine } from '@/components/common/FactLine';
-import { CardHead } from '@/components/common/CardAnatomy';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { initialsOf } from '@/lib/utils';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
 const CATEGORIES = ['All', 'Founders', 'Tech', 'Marketing', 'Design', 'Finance', 'Product', 'Operations', 'Legal'];
 
 const TYPE_FILTERS = [
@@ -69,7 +67,7 @@ const TYPE_FILTERS = [
 ];
 
 const COVER_TONES = [
-  'bg-primary/12',
+  'bg-primary/10',
   'bg-status-success-bg',
   'bg-status-warning-bg',
   'bg-status-info-bg',
@@ -131,12 +129,16 @@ function GroupCard({
       <CardContent className="space-y-3">
         <CardHead
           mark={(
-            <Avatar className="h-10 w-10 rounded-xl">
-              <AvatarImage src={group.avatarUrl ?? undefined} alt="" />
-              <AvatarFallback data-keep-icon className="rounded-xl bg-muted text-xs font-semibold text-muted-foreground">
-                {initialsOf(group.name)}
-              </AvatarFallback>
-            </Avatar>
+            // The community's mark stands in for its logo: content, so the
+            // decorative-icon rule must not take it (an empty mark column
+            // pushed the title 12px off the body's edge).
+            <div data-card-mark="" data-keep-icon className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-muted text-muted-foreground">
+              {group.avatarUrl ? (
+                <img src={group.avatarUrl} alt={group.name} className="h-10 w-10 object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" width={40} height={40} />
+              ) : (
+                <Users className="icon-md" aria-hidden="true" />
+              )}
+            </div>
           )}
           title={group.name}
           subtitle={(
@@ -158,33 +160,36 @@ function GroupCard({
           <p className="card-body line-clamp-2 text-muted-foreground">{group.description}</p>
         )}
 
-        <FactLine items={group.tags.slice(0, 4)} />
+        <FactLine items={(group.tags ?? []).slice(0, 4)} />
 
-        <div
-          className="flex items-center justify-between pt-2 border-t border-border"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <FactLine
-            items={[
-              <BilingualText key="members" en={`${group.memberCount.toLocaleString('en-GB')} members`} el={`${group.memberCount.toLocaleString('el-GR')} μέλη`} compact />,
-              <BilingualText key="posts" en={`${group.postCount.toLocaleString('en-GB')} posts`} el={`${group.postCount.toLocaleString('el-GR')} αναρτήσεις`} compact />,
-            ]}
-          />
-          <Button
-            variant={group.isMember ? 'outline' : 'default'}
-            size="sm"
-            className="gap-1 text-xs h-7 px-3"
-            disabled={loading}
-            onClick={() => onToggle(group.id, group.isMember)}
-          >
-            {loading ? (
-              <Loader2 className="icon-sm animate-spin" />
-            ) : group.isMember ? (
-              <><LogOut className="icon-sm" /> <BilingualText en="Leave" el="Αποχώρηση" compact /></>
-            ) : (
-              <><UserPlus className="icon-sm" /> <BilingualText en="Join" el="Συμμετοχή" compact /></>
+        {/* The foot keeps its clicks to itself: the card opens the group. */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <CardFoot
+            meta={(
+              <FactLine
+                items={[
+                  <BilingualText key="members" en={`${(group.memberCount ?? 0).toLocaleString('en-GB')} members`} el={`${(group.memberCount ?? 0).toLocaleString('el-GR')} μέλη`} compact />,
+                  <BilingualText key="posts" en={`${(group.postCount ?? 0).toLocaleString('en-GB')} posts`} el={`${(group.postCount ?? 0).toLocaleString('el-GR')} αναρτήσεις`} compact />,
+                ]}
+              />
             )}
-          </Button>
+          >
+            <Button
+              variant={group.isMember ? 'outline' : 'default'}
+              size="sm"
+              className="gap-1"
+              disabled={loading}
+              onClick={() => onToggle(group.id, group.isMember)}
+            >
+              {loading ? (
+                <Loader2 className="icon-sm animate-spin" />
+              ) : group.isMember ? (
+                <><LogOut className="icon-sm" aria-hidden="true" /> <BilingualText en="Leave" el="Αποχώρηση" compact /></>
+              ) : (
+                <><UserPlus className="icon-sm" aria-hidden="true" /> <BilingualText en="Join" el="Συμμετοχή" compact /></>
+              )}
+            </Button>
+          </CardFoot>
         </div>
       </CardContent>
     </Card>

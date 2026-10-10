@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import {
   Building2, MapPin, Globe, Mail, Calendar, Users,
-  Briefcase, GraduationCap, ExternalLink,
+  Briefcase, GraduationCap, ExternalLink, type LucideIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getOrgOpportunities, getOrgCohorts, getOrgMembers, type OrgProfile, type OpportunityItem, type CohortItem, type OrgMember } from '@/lib/api';
-import { formatRelativeTime } from '@/lib/utils';
+import { cn, formatRelativeTime } from '@/lib/utils';
 import { RelativeTime } from '@/components/common/RelativeTime';
 import { AppShell } from '@/components/layout/AppShell';
 import { ListEmptyState } from '@/components/common/EmptyStates';
@@ -23,6 +23,20 @@ import { StatusText } from '@/components/common/StatusText';
 import { ProfileHero } from '@/components/profile/ProfileHero';
 import { FollowButton } from '@/components/updates/FollowButton';
 import { FactLine } from '@/components/common/FactLine';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
+
+/** The organisation's rounded square, the kind's glyph standing in for a
+ * missing logo (the Programs card's mark). */
+function OrgMark({ org, icon: Icon }: { org: OrgProfile; icon: LucideIcon }) {
+  return (
+    <Avatar className="h-10 w-10 rounded-xl">
+      <AvatarImage src={org.avatarUrl ?? undefined} alt="" />
+      <AvatarFallback data-keep-icon className="rounded-xl bg-primary/10 text-primary-accessible">
+        <Icon className="icon-md" aria-hidden="true" />
+      </AvatarFallback>
+    </Avatar>
+  );
+}
 
 interface OrgContentProps {
   org: OrgProfile;
@@ -115,7 +129,7 @@ export function OrgContent({ org, slug }: OrgContentProps) {
         {org.description ? (
           <Card>
             <CardContent>
-              <p className="max-w-3xl text-sm leading-relaxed text-foreground/80">{org.description}</p>
+              <p className="card-body max-w-3xl text-foreground/80 first-letter:uppercase">{org.description}</p>
             </CardContent>
           </Card>
         ) : null}
@@ -210,35 +224,38 @@ export function OrgContent({ org, slug }: OrgContentProps) {
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {opportunities.map((opp) => (
-                  <Card key={opp.id} className="group hover:border-border transition-all duration-150">
-                    <CardContent className="pt-5 pb-4">
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="text-sm font-semibold text-foreground group-hover:text-primary-accessible transition-colors line-clamp-2">
+                  // The Opportunities card: the organisation's mark, the
+                  // title with the kind and place under it, the state at
+                  // the right; the sentence and the foot on the mark's edge.
+                  <Card key={opp.id} className="transition-all hover:border-primary/20">
+                    <CardContent className="space-y-3">
+                      <CardHead
+                        mark={<OrgMark org={org} icon={Briefcase} />}
+                        title={(
+                          <Link href={`/opportunities#opportunity-${encodeURIComponent(opp.id)}`} className="transition-colors hover:text-primary-accessible">
                             {opp.title}
-                          </h3>
-                          <Badge
-                            variant={opp.isActive ? 'default' : 'secondary'}
-                            className="shrink-0 text-xs h-5"
-                          >
+                          </Link>
+                        )}
+                        subtitle={(
+                          <FactLine
+                            className="text-sm"
+                            items={[<StatusText key="type" value={opp.type} />, opp.location]}
+                          />
+                        )}
+                        aside={(
+                          <Badge variant="outline" className={cn('text-xs', opp.isActive ? 'border-primary/30 bg-primary/10 text-primary-accessible' : 'text-muted-foreground')}>
                             {opp.isActive ? <BilingualText en="Active" el="Ενεργή" compact /> : <BilingualText en="Closed" el="Έκλεισε" compact />}
                           </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          <StatusText value={opp.type} />{opp.location ? ` · ${opp.location}` : ''}
-                        </p>
-                        {opp.description && (
-                          <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2">{opp.description}</p>
                         )}
-                        <div className="flex items-center justify-between pt-1">
-                          <span className="text-xs text-muted-foreground">
-                            <RelativeTime date={opp.createdAt} format={formatRelativeTime} />
-                          </span>
-                          <Button size="sm" variant="ghost" className="h-7 text-xs px-3" asChild>
-                            <Link href={`/opportunities#opportunity-${encodeURIComponent(opp.id)}`}><BilingualText en="View" el="Προβολή" compact /></Link>
-                          </Button>
-                        </div>
-                      </div>
+                      />
+                      {opp.description && (
+                        <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{opp.description}</p>
+                      )}
+                      <CardFoot meta={<RelativeTime date={opp.createdAt} format={formatRelativeTime} />}>
+                        <Button size="sm" variant="outline" asChild>
+                          <Link href={`/opportunities#opportunity-${encodeURIComponent(opp.id)}`}><BilingualText en="View" el="Προβολή" compact /></Link>
+                        </Button>
+                      </CardFoot>
                     </CardContent>
                   </Card>
                 ))}
@@ -272,34 +289,35 @@ export function OrgContent({ org, slug }: OrgContentProps) {
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {cohorts.map((cohort) => (
-                  <Card key={cohort.id} className="group hover:border-border transition-all duration-150">
-                    <CardContent className="pt-5 pb-4">
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="text-sm font-semibold text-foreground group-hover:text-primary-accessible transition-colors">
-                            {cohort.name}
-                          </h3>
-                          <Badge
-                            variant={cohort.isActive ? 'default' : 'secondary'}
-                            className="shrink-0 text-xs h-5"
-                          >
+                  <Card key={cohort.id} className="transition-all hover:border-primary/20">
+                    <CardContent className="space-y-3">
+                      <CardHead
+                        mark={<OrgMark org={org} icon={GraduationCap} />}
+                        title={cohort.name}
+                        subtitle={(
+                          <FactLine
+                            className="text-sm"
+                            items={[org.name, <BilingualText key="kind" en="Programme" el="Πρόγραμμα" compact />]}
+                          />
+                        )}
+                        aside={(
+                          <Badge variant="outline" className={cn('text-xs', cohort.isActive ? 'border-primary/30 bg-primary/10 text-primary-accessible' : 'text-muted-foreground')}>
                             {cohort.isActive ? <BilingualText en="Active" el="Ενεργό" compact /> : <BilingualText en="Inactive" el="Ανενεργό" compact />}
                           </Badge>
-                        </div>
-                        {cohort.description && (
-                          <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2">{cohort.description}</p>
                         )}
-                        <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Users className="icon-sm" />
-                            <BilingualText en={`${cohort._count.members} members`} el={`${cohort._count.members} μέλη`} compact />
-                          </span>
-                          {cohort.capacity && <span><BilingualText en={`Capacity ${cohort.capacity}`} el={`Χωρητικότητα ${cohort.capacity}`} compact /></span>}
-                          {cohort.startDate && (
-                            <span><BilingualText en={`Starts ${new Date(cohort.startDate).toLocaleDateString('en-GB', { timeZone: 'UTC' })}`} el={`Ξεκινά ${new Date(cohort.startDate).toLocaleDateString('el-GR', { timeZone: 'UTC' })}`} compact /></span>
-                          )}
-                        </div>
-                      </div>
+                      />
+                      {cohort.description && (
+                        <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{cohort.description}</p>
+                      )}
+                      <FactLine
+                        items={[
+                          <BilingualText key="members" en={`${cohort._count?.members ?? 0} members`} el={`${cohort._count?.members ?? 0} μέλη`} compact />,
+                          cohort.capacity ? <BilingualText key="capacity" en={`Capacity ${cohort.capacity}`} el={`Χωρητικότητα ${cohort.capacity}`} compact /> : null,
+                          cohort.startDate ? (
+                            <BilingualText key="start" en={`Starts ${new Date(cohort.startDate).toLocaleDateString('en-GB', { timeZone: 'UTC' })}`} el={`Ξεκινά ${new Date(cohort.startDate).toLocaleDateString('el-GR', { timeZone: 'UTC' })}`} compact />
+                          ) : null,
+                        ]}
+                      />
                     </CardContent>
                   </Card>
                 ))}
@@ -336,40 +354,25 @@ export function OrgContent({ org, slug }: OrgContentProps) {
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {members.map((member) => (
-                  <Card key={member.id} className="group hover:border-border transition-all duration-150">
-                    <CardContent className="pt-5 pb-4">
-                      <div className="flex items-start gap-3">
-                        <Avatar className="h-10 w-10 shrink-0">
-                          <AvatarImage src={member.avatarUrl ?? undefined} />
-                          <AvatarFallback className="bg-primary/10 text-primary-accessible text-sm font-semibold">
-                            {member.displayName?.[0]?.toUpperCase() ?? 'M'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <Link
-                            href={`/profiles/${member.id}`}
-                            className="text-sm font-semibold text-foreground hover:text-primary-accessible transition-colors line-clamp-1"
-                          >
+                  <Card key={member.id} className="transition-all hover:border-primary/20">
+                    <CardContent className="space-y-3">
+                      <CardHead
+                        mark={(
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.avatarUrl ?? undefined} />
+                            <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">
+                              {member.displayName?.[0]?.toUpperCase() ?? 'M'}
+                            </AvatarFallback>
+                          </Avatar>
+                        )}
+                        title={(
+                          <Link href={`/profiles/${member.id}`} className="transition-colors hover:text-primary-accessible">
                             {member.displayName}
                           </Link>
-                          <div className="mt-1 space-y-1">
-                          {member.headline && (
-                            <p className="text-xs text-muted-foreground line-clamp-2">{member.headline}</p>
-                          )}
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            <Badge variant="outline" className="text-2xs h-5">
-                              {member.cohortName}
-                            </Badge>
-                            {member.location && (
-                              <span className="flex items-center gap-1 text-2xs text-muted-foreground">
-                                <MapPin className="h-2.5 w-2.5" />
-                                {member.location}
-                              </span>
-                            )}
-                          </div>
-                          </div>
-                        </div>
-                      </div>
+                        )}
+                        subtitle={member.headline ? <span className="line-clamp-2">{member.headline}</span> : undefined}
+                      />
+                      <FactLine items={[member.cohortName, member.location]} />
                     </CardContent>
                   </Card>
                 ))}
@@ -380,26 +383,26 @@ export function OrgContent({ org, slug }: OrgContentProps) {
           {/* About */}
           <TabsContent value="about">
             <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="text-base"><BilingualText en={`About ${org.name}`} el={`Σχετικά με ${org.name}`} wrap /></CardTitle>
+              <CardHeader>
+                <CardTitle><BilingualText en={`About ${org.name}`} el={`Σχετικά με ${org.name}`} wrap /></CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
                 {org.mission && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Mission" el="Αποστολή" compact /></h3>
-                    <p className="text-sm text-foreground/80 leading-relaxed">{org.mission}</p>
+                    <p className="card-body text-foreground/80 first-letter:uppercase">{org.mission}</p>
                   </div>
                 )}
                 {org.industry && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Industry" el="Κλάδος" compact /></h3>
-                    <FactLine className="text-foreground sm:text-sm" items={org.industry.split(',').map((ind: string) => ind.trim())} />
+                    <FactLine className="text-sm text-foreground" items={org.industry.split(',').map((ind: string) => ind.trim())} />
                   </div>
                 )}
                 {org.focus && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2"><BilingualText en="Focus Areas" el="Πεδία εστίασης" compact /></h3>
-                    <FactLine className="text-foreground sm:text-sm" items={org.focus.split(',').map((f: string) => f.trim())} />
+                    <FactLine className="text-sm text-foreground" items={org.focus.split(',').map((f: string) => f.trim())} />
                   </div>
                 )}
                 {org.size && (

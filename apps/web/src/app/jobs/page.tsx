@@ -8,7 +8,6 @@ import {
   Briefcase,
   MapPin,
   Wifi,
-  Building2,
   Search,
   Plus,
   ExternalLink,
@@ -43,12 +42,14 @@ import { useToast } from '@/components/ui/toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn, initialsOf } from '@/lib/utils';
 import { BilingualText } from '@/components/common/BilingualText';
+import { StatusText } from '@/components/common/StatusText';
 import { SaveItemButton } from '@/components/common/SaveItemButton';
-import { ListRowCard } from '@/components/common/ListRowCard';
 import { jobsEn, jobsEl } from '@/lib/i18n/strings-jobs';
 import { bilingualInline } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
 import { choiceControl, usePageControls, usePageList } from '@/lib/page-controls';
+import { CardHead, CardFoot } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 
 const ROLE_FILTERS = [
   { value: 'all',         labelKey: 'role_all' as const,         icon: Briefcase },
@@ -71,25 +72,71 @@ const EMPLOYMENT_TYPES = [
 ] as const;
 
 function JobCard({ job, featured = false }: { job: JobPostingView; featured?: boolean }) {
-  const place = job.isRemote
-    ? jobsEn('remote')
-    : (job.location ?? jobsEn('location_unknown'));
+  // The Opportunities card: the poster's mark, the role's title with the
+  // poster and the kind of work under it, then the facts and the actions,
+  // all on the mark's left edge.
   return (
-    <ListRowCard
-      className={featured ? 'border-primary/15' : undefined}
-      mark={(
-        <Avatar className="h-10 w-10 shrink-0 ring-2 ring-primary/20">
-          <AvatarImage src={job.creator?.avatarUrl ?? undefined} />
-          <AvatarFallback className="bg-primary/20 text-primary-accessible font-semibold">
-            {initialsOf(job.creator.displayName)}
-          </AvatarFallback>
-        </Avatar>
-      )}
-      title={job.title}
-      titleHref={job.creator?.id ? `/profiles/${job.creator.id}` : undefined}
-      headline={[job.creator.displayName, job.role, job.type, place].filter(Boolean).join(' · ')}
-      actions={<SaveItemButton kind="job" itemId={job.id} title={job.title} />}
-    />
+    <Card className={cn(
+      'card-interactive group transition-all hover:border-primary/20',
+      featured && 'border-primary/15 bg-primary/[0.03]'
+    )}>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={job.creator?.avatarUrl ?? undefined} alt="" />
+              <AvatarFallback className="bg-primary/10 font-semibold text-primary-accessible">
+                {initialsOf(job.creator?.displayName ?? '')}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          title={<span className="transition-colors group-hover:text-primary-accessible">{job.title}</span>}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                job.creator?.displayName,
+                job.type ? <StatusText key="type" value={job.type} /> : null,
+              ]}
+            />
+          )}
+          asideStays
+          aside={featured ? (
+            // A state, not decoration: kept through the card's icon rule.
+            <span data-keep-icon role="img" aria-label={bilingualInline('Featured', 'Προτεινόμενη')} className="inline-flex">
+              <Star className="icon-sm fill-status-warning text-status-warning" aria-hidden="true" />
+            </span>
+          ) : undefined}
+        />
+
+        <FactLine
+          items={[
+            job.role ? <StatusText key="role" value={job.role} /> : null,
+            // "Remote — EU time zones" already says remote; the word is added
+            // only when the place does not.
+            job.isRemote && !/remote/i.test(job.location ?? '') ? <BilingualText key="remote" en={jobsEn('remote')} el={jobsEl('remote')} compact /> : null,
+            job.location || null,
+            !job.location && !job.isRemote
+              ? <BilingualText key="where" en={jobsEn('location_unknown')} el={jobsEl('location_unknown')} compact />
+              : null,
+          ]}
+        />
+
+        <CardFoot>
+          <SaveItemButton kind="job" itemId={job.id} title={job.title} />
+          {/* "View" linked to /discover (API) or back to /jobs (demo) for
+              every role; it opens the poster's profile when the poster is known. */}
+          {job.creator?.id ? (
+            <Button variant="outline" size="sm" className="gap-1" asChild>
+              <Link href={`/profiles/${job.creator.id}`}>
+                <ExternalLink className="icon-sm" aria-hidden="true" />
+                <BilingualText en="View poster" el="Προβολή εκδότη" compact />
+              </Link>
+            </Button>
+          ) : null}
+        </CardFoot>
+      </CardContent>
+    </Card>
   );
 }
 

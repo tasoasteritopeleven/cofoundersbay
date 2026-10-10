@@ -161,7 +161,7 @@ ${notes.slice(0, 3000)}`;
     if (!profile.avatarUrl) { missing.push('Profile photo'); } else { score += 15; }
     if (!profile.headline || profile.headline.length < 10) {
       missing.push('Professional headline');
-      improvements.push('Add a headline that describes your role and focus area (e.g. "Founder @ HealthTech startup | ex-Google")');
+      improvements.push('Add a headline that describes your role and focus area (e.g. "Founder @ HealthTech startup | former product lead")');
     } else { score += 20; }
 
     if (!profile.bio || profile.bio.length < 50) {

@@ -16,10 +16,12 @@ import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailOptions } from '@/components/layout/RailParts';
 import { BilingualText } from '@/components/common/BilingualText';
 import { RelativeTime } from '@/components/common/RelativeTime';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { StatusText } from '@/components/common/StatusText';
 import { notificationsEn, notificationsEl } from '@/lib/i18n/strings-notifications';
 import { bilingualAria } from '@/lib/i18n/format';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { AIInsightButton } from '@/components/ai/AIInsightButton';
@@ -99,8 +101,8 @@ function groupByDate(notifications: NotificationItem[]): { label: string; items:
 
 function NotificationSkeleton() {
   return (
-    <div className="flex items-start gap-3 border-b border-border px-4 py-4">
-      <Skeleton className="h-9 w-9 rounded-full shrink-0" />
+    <div className="flex items-start gap-3 border-b border-border px-4 py-4 sm:px-6">
+      <Skeleton className="h-10 w-10 rounded-full shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-3.5 w-40" />
         <Skeleton className="h-3 w-64" />
@@ -128,12 +130,15 @@ const NotificationRow = memo(function NotificationRow({
   const isUnread = !item.readAt;
   const Icon = TYPE_ICONS[item.type] ?? Bell;
   const colorClass = TYPE_COLORS[item.type] ?? TYPE_COLORS.system;
-  const typeLabel = TYPE_LABELS[item.type] ?? { en: item.type, el: item.type };
+  const typeLabel = TYPE_LABELS[item.type];
 
+  // A row of the list card, set like every card's head: the type's mark, the
+  // notification as the title with its kind under it, the time at the right;
+  // the sentence and the row's actions start on the mark's left edge.
   return (
     <div
       className={cn(
-        'group flex items-start gap-3 px-4 py-4 transition-colors hover:bg-muted/30',
+        'group flex items-start gap-3 px-4 py-4 transition-colors hover:bg-muted/30 sm:px-6',
         'border-b border-border last:border-0',
         isUnread && 'bg-primary/[0.03]',
         selected && 'bg-primary/5',
@@ -146,50 +151,43 @@ const NotificationRow = memo(function NotificationRow({
           aria-checked={!!selected}
           aria-label={bilingualAria(`Select: ${item.title}`, `Επιλογή: ${item.title}`)}
           onClick={() => onSelect?.(item.id)}
-          className="mt-1 shrink-0 text-muted-foreground hover:text-primary-accessible transition-colors"
+          className="mt-3 shrink-0 text-muted-foreground hover:text-primary-accessible transition-colors"
         >
           {selected ? <SquareCheck className="icon-sm text-muted-foreground" aria-hidden="true" /> : <Square className="icon-sm" aria-hidden="true" />}
         </button>
       )}
 
-      {/* Icon */}
-      {/* The type's glyph is the row's mark (the badge naming the type is
-          hidden on a phone), so it stays on screen in every row. */}
-      <div className="relative mt-0.5 shrink-0" data-keep-icon="">
-        <div className={cn('flex h-9 w-9 items-center justify-center rounded-full', colorClass)}>
-          <Icon className="icon-sm" />
-        </div>
-        {isUnread && (
-          <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-1.5 min-w-0">
-            {/* The title is the notification. On a 360px row it was sharing space
-                with this badge and the timestamp and losing 57% of itself —
-                "Elena Papadopoulos sent a connection reque…". Two lines on a phone,
-                one from sm up. */}
-            <p className={cn('text-sm leading-snug line-clamp-2 sm:truncate', isUnread ? 'font-medium text-foreground' : 'text-foreground/80')}>
-              {item.title}
-            </p>
-            {/* Redundant on a phone: the coloured icon to the left already encodes
-                the type. Shown again from sm, where there is room for both. */}
-            <Badge variant="secondary" className="hidden sm:inline-flex text-2xs px-1.5 py-0 h-4 shrink-0 capitalize">
-              <BilingualText en={typeLabel.en} el={typeLabel.el} compact />
-            </Badge>
-          </div>
-          <span className="shrink-0 text-2xs text-muted-foreground"><RelativeTime date={item.createdAt} absoluteAfterDays={7} /></span>
-        </div>
+      <div className="min-w-0 flex-1 space-y-3">
+        <CardHead
+          titleAs="p"
+          mark={(
+            // The type's glyph is the row's mark, so it stays on screen in
+            // every row (data-keep-icon on the well itself: the in-card
+            // decorative-icon rule spares only a glyph whose parent carries
+            // it); the dot over it says the row is unread.
+            <div className="relative">
+              <div data-card-mark="" data-keep-icon="" className={cn('flex h-10 w-10 items-center justify-center rounded-full', colorClass)}>
+                <Icon className="icon-md" aria-hidden="true" />
+              </div>
+              {isUnread && (
+                <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" />
+              )}
+            </div>
+          )}
+          title={item.title}
+          titleClassName={cn('first-letter:uppercase', !isUnread && 'text-foreground/80')}
+          subtitle={typeLabel
+            ? <BilingualText en={typeLabel.en} el={typeLabel.el} compact />
+            : <StatusText value={item.type} />}
+          aside={<RelativeTime date={item.createdAt} absoluteAfterDays={7} />}
+        />
         {item.body && (
-          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">{item.body}</p>
+          <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{item.body}</p>
         )}
         {/* Always shown: at opacity-0 until hover the three actions were
             invisible on touch screens yet still took taps, and on a desktop
             they left an empty band under every row. */}
-        <div className="mt-2 flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           {item.link && (
             <Link
               href={item.link}
@@ -481,7 +479,7 @@ export default function NotificationsPage() {
     >
       <div className="">
         {/* Notification list */}
-        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+        <Card className="overflow-hidden">
           {isError ? (
             <div className="flex flex-col items-center gap-3 py-16 text-center">
               <BellOff className="icon-xl text-muted-foreground/50" />
@@ -531,7 +529,7 @@ export default function NotificationsPage() {
           ) : (
             grouped.map(({ label, items }) => (
               <div key={label}>
-                <div className="px-4 py-2 border-b border-border bg-muted/30">
+                <div className="border-b border-border bg-muted/30 px-4 py-2 sm:px-6">
                   <p className="text-2xs font-semibold uppercase tracking-widest text-muted-foreground">
                     <BilingualText en={label} el={GROUP_EL[label] ?? label} compact />
                   </p>
@@ -550,7 +548,7 @@ export default function NotificationsPage() {
               </div>
             ))
           )}
-        </div>
+        </Card>
 
         {notifications.length > 0 && (
           <p className="mt-3 text-center text-xs text-muted-foreground">

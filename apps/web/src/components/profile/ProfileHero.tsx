@@ -48,7 +48,7 @@ export function ProfileHero({
   meta?: ReactNode[];
   /** The "Open to" line (someone else's) or setting (one's own). */
   openTo?: ReactNode;
-  /** Role and similar marks, beside the text on wide screens. */
+  /** Role and similar marks, at the right of the photo's foot. */
   aside?: ReactNode;
   /** What the reader can do: connect, message, follow, edit, share. */
   actions?: ReactNode;
@@ -63,37 +63,45 @@ export function ProfileHero({
   const Heading = headingLevel;
   const facts = (meta ?? []).filter(Boolean);
   return (
-    <section aria-label={ariaLabel ?? `${name} · Profile · Προφίλ`} className={cn('relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm', className)}>
+    <section data-card="" data-surface="card" aria-label={ariaLabel ?? `${name} · Profile · Προφίλ`} className={cn('relative overflow-hidden rounded-2xl border border-border bg-card', className)}>
       <div className="h-20 w-full bg-primary/[0.05] sm:h-24 md:h-28" aria-hidden="true" />
-      <div className="relative px-5 pb-5 sm:px-6 sm:pb-6">
+      {/* The section's padding is a card's (16px on a phone, 24px from 640),
+          so the hero's text sits on the same left axis as the section cards
+          under it. */}
+      <div className="relative px-4 pb-4 sm:px-6 sm:pb-6">
         <div className="-mt-12 flex flex-col gap-4 sm:-mt-14 md:-mt-16">
-          <div className="relative inline-block self-start">
-            <Avatar className={cn('h-24 w-24 ring-4 ring-background sm:h-28 sm:w-28 md:h-32 md:w-32', shape === 'organisation' && 'rounded-2xl')}>
-              <AvatarImage src={avatarUrl ?? undefined} alt="" className={shape === 'organisation' ? 'rounded-2xl' : undefined} />
-              <AvatarFallback className={cn('bg-primary/10 text-3xl font-semibold text-primary-accessible', shape === 'organisation' && 'rounded-2xl')} data-keep-icon="">
-                {name?.[0]?.toUpperCase() ?? '?'}
-              </AvatarFallback>
-            </Avatar>
-            {avatarMark}
+          {/* The photo, and the role (or an organisation's industry) at the
+              right of its foot: beside the text it dropped under the facts on
+              a phone and started a line a pill's padding off the axis. */}
+          <div className="flex min-w-0 items-end justify-between gap-3">
+            <div className="relative inline-block shrink-0">
+              <Avatar className={cn('h-24 w-24 ring-4 ring-background sm:h-28 sm:w-28 md:h-32 md:w-32', shape === 'organisation' && 'rounded-2xl')}>
+                <AvatarImage src={avatarUrl ?? undefined} alt="" className={shape === 'organisation' ? 'rounded-2xl' : undefined} />
+                <AvatarFallback className={cn('bg-primary/10 text-3xl font-semibold text-primary-accessible', shape === 'organisation' && 'rounded-2xl')} data-keep-icon="">
+                  {name?.[0]?.toUpperCase() ?? '?'}
+                </AvatarFallback>
+              </Avatar>
+              {avatarMark}
+            </div>
+            {aside ? <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 pb-1">{aside}</div> : null}
           </div>
 
-          <div className="flex min-w-0 flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0 space-y-1.5">
-              <div className="flex min-w-0 flex-wrap items-center gap-2">
-                <Heading className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">{name}</Heading>
-                {nameBadge}
-              </div>
-              {headline ? <div className="card-subtitle">{headline}</div> : null}
-              {facts.length ? (
-                <ul className="facts-dotted flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-xs text-muted-foreground">
-                  {facts.map((fact, i) => (
-                    <li key={i} className="flex min-w-0 items-center gap-1.5">{fact}</li>
-                  ))}
-                </ul>
-              ) : null}
-              {openTo ? <div className="pt-1">{openTo}</div> : null}
+          {/* One left axis: name, headline, facts and the "Open to" line all
+              start on the photo's edge. */}
+          <div className="min-w-0 space-y-1.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <Heading className="min-w-0 break-words text-xl font-semibold tracking-tight text-foreground md:text-2xl">{name}</Heading>
+              {nameBadge}
             </div>
-            {aside ? <div className="flex shrink-0 flex-wrap items-center gap-2">{aside}</div> : null}
+            {headline ? <div className="break-words text-base text-muted-foreground first-letter:uppercase">{headline}</div> : null}
+            {facts.length ? (
+              <ul className="facts-dotted flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-sm text-muted-foreground">
+                {facts.map((fact, i) => (
+                  <li key={i} className="flex min-w-0 items-center gap-1.5">{fact}</li>
+                ))}
+              </ul>
+            ) : null}
+            {openTo ? <div className="pt-1">{openTo}</div> : null}
           </div>
 
           {actions ? <div className="flex flex-wrap items-center gap-2 border-t border-border pt-4">{actions}</div> : null}

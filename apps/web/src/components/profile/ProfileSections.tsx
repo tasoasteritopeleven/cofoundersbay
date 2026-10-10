@@ -35,18 +35,23 @@ import { initialsOf } from '@/lib/utils';
  * this product keeps out of view (LinkedIn comparison §7).
  */
 
+/**
+ * A section card: the title on the card ladder (no size of its own), an
+ * optional action at its right, and rows under it without frames of their
+ * own - every row starts on the title's left edge.
+ */
 function SectionCard({ id, titleEn, titleEl, action, children }: { id: string; titleEn: string; titleEl: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <Card id={id} className="scroll-mt-20 shadow-sm border-border" aria-labelledby={`${id}-title`}>
-      <CardHeader className="pb-3 border-b border-border">
+    <Card id={id} className="scroll-mt-20" aria-labelledby={`${id}-title`}>
+      <CardHeader>
         <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
-          <CardTitle id={`${id}-title`} className="text-lg font-semibold">
+          <CardTitle id={`${id}-title`}>
             <BilingualText en={titleEn} el={titleEl} compact />
           </CardTitle>
           {action}
         </div>
       </CardHeader>
-      <CardContent className="pt-5">{children}</CardContent>
+      <CardContent>{children}</CardContent>
     </Card>
   );
 }
@@ -89,8 +94,8 @@ export function ProfileActivity({ userId, own }: { userId: string; own: boolean 
       {loading ? (
         <p className="text-sm text-muted-foreground"><BilingualText en="Loading…" el="Φόρτωση…" compact /></p>
       ) : empty ? (
-        <div className="space-y-3 text-sm text-muted-foreground">
-          <p>
+        <div className="space-y-3 text-muted-foreground">
+          <p className="card-body">
             {own ? (
               <BilingualText en="Nothing published yet. A monthly update or a need card is what people here read first." el="Τίποτα δημοσιευμένο ακόμη. Μια μηνιαία ενημέρωση ή μια κάρτα ανάγκης είναι ό,τι διαβάζουν πρώτα εδώ." wrap />
             ) : (
@@ -119,10 +124,10 @@ export function ProfileActivity({ userId, own }: { userId: string; own: boolean 
                 {updates.slice(0, 3).map((u) => (
                   <li key={u.id} className="min-w-0 py-2.5 first:pt-0 last:pb-0">
                     <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                      <p className="min-w-0 text-sm font-medium text-foreground">{u.title}</p>
+                      <p className="min-w-0 break-words text-sm font-medium text-foreground first-letter:uppercase">{u.title}</p>
                       {u.createdAt ? <span className="shrink-0 text-xs text-muted-foreground"><RelativeTime date={u.createdAt} /></span> : null}
                     </div>
-                    <p className="card-copy line-clamp-2 text-sm text-muted-foreground">{u.body}</p>
+                    <p className="card-body line-clamp-2 text-muted-foreground">{u.body}</p>
                   </li>
                 ))}
               </ul>
@@ -154,20 +159,24 @@ export function ProfileActivity({ userId, own }: { userId: string; own: boolean 
 function OrgMark({ name }: { name: string }) {
   // Organisations are rounded squares; people are circles (AGENTS.md).
   return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted text-sm font-semibold text-muted-foreground" aria-hidden="true" data-keep-icon="">
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted text-sm font-semibold text-muted-foreground" aria-hidden="true" data-keep-icon="">
       {initialsOf(name || '·')}
     </span>
   );
 }
 
-/** `org` names the mark: the company for a role, the school for a degree. */
+/**
+ * `org` names the mark: the company for a role, the school for a degree. A
+ * row, not a card: the organisation's mark, and beside it the role over the
+ * company over the years, a step under the section's title.
+ */
 function EntryRow({ title, sub, org, span }: { title: string; sub: string; org: string; span: { en: string; el: string } }) {
   return (
-    <li className="flex min-w-0 gap-3 py-3 first:pt-0 last:pb-0">
+    <li className="flex min-w-0 items-start gap-x-3 py-3 first:pt-0 last:pb-0">
       <OrgMark name={org || title || sub} />
       <div className="min-w-0">
-        <p className="text-sm font-medium text-foreground">{title || sub}</p>
-        {title && sub ? <p className="text-sm text-muted-foreground">{sub}</p> : null}
+        <p className="break-words text-sm font-medium text-foreground">{title || sub}</p>
+        {title && sub ? <p className="card-body break-words text-muted-foreground">{sub}</p> : null}
         {span.en ? <p className="text-xs text-muted-foreground"><BilingualText en={span.en} el={span.el} compact /></p> : null}
       </div>
     </li>
@@ -196,7 +205,7 @@ export function ProfileExperience({ payload, own }: { payload: Record<string, un
               {experience.map((e, i) => <EntryRow key={`${e.company}-${e.title}-${i}`} title={e.title} sub={e.company} org={e.company} span={spanOf(e)} />)}
             </ul>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="card-body text-muted-foreground">
               <BilingualText
                 en="Add the roles you have held, or bring them from LinkedIn on the edit page; nothing is saved until you press Save."
                 el="Προσθέστε τους ρόλους που είχατε ή φέρτε τους από το LinkedIn στη σελίδα επεξεργασίας· τίποτα δεν αποθηκεύεται πριν πατήσετε Αποθήκευση."
@@ -324,7 +333,7 @@ export function ProfileRecommendations({ userId }: { userId: string }) {
                   <span className="font-medium">{e.fromUser?.displayName ?? 'Member'}</span>
                   {e.skill ? <span className="text-muted-foreground"> · {e.skill}</span> : null}
                 </p>
-                {e.content ? <p className="card-copy line-clamp-3 text-sm text-muted-foreground">“{e.content}”</p> : null}
+                {e.content ? <p className="line-clamp-3 text-sm text-muted-foreground">“{e.content}”</p> : null}
                 {basis.length ? (
                   <p className="text-xs text-status-success">
                     <BilingualText

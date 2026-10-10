@@ -71,7 +71,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-name`} className="text-sm font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-name`} className="text-sm font-medium">
               <BilingualText en="Community name" el="Όνομα κοινότητας" compact /> *
             </label>
             <Input
@@ -84,7 +84,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-slug`} className="text-sm font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-slug`} className="text-sm font-medium">
               <BilingualText en="Slug (URL)" el="Slug (URL)" compact /> *
             </label>
             <div className="flex items-center gap-0 rounded-lg border border-input overflow-hidden">
@@ -93,7 +93,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
                 id={`${fieldId}-slug`}
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: slugify(e.target.value) }))}
-                className="flex-1 bg-transparent px-3 py-2 text-sm outline-none"
+                className="min-w-0 flex-1 bg-transparent px-3 py-2 outline-none"
                 placeholder="saas-founders-hub"
                 required
               />
@@ -101,14 +101,14 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-desc`} className="text-sm font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-desc`} className="text-sm font-medium">
               <BilingualText en="Description" el="Περιγραφή" compact />
             </label>
             <textarea
               id={`${fieldId}-desc`}
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-              className="w-full rounded-xl border border-input bg-transparent px-3 py-2 text-sm outline-none resize-none"
+              className="w-full resize-none rounded-md border border-input bg-transparent px-3 py-2 outline-none"
               rows={3}
               placeholder={bilingualInline("What is this group about?", "Ποιο είναι το θέμα της κοινότητας;")}
             />
@@ -116,14 +116,14 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label htmlFor={`${fieldId}-category`} className="text-sm font-medium text-muted-foreground">
+              <label htmlFor={`${fieldId}-category`} className="text-sm font-medium">
                 <BilingualText en="Category" el="Κατηγορία" compact />
               </label>
               <select
                 id={`${fieldId}-category`}
                 value={form.category}
                 onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-                className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none"
               >
                 <option value="">{bilingualInline('None', 'Καμία')}</option>
                 {CATEGORIES.map((c) => (
@@ -133,7 +133,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
             </div>
 
             <div className="space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground">
+              <p className="text-sm font-medium">
                 <BilingualText en="Privacy" el="Απόρρητο" compact />
               </p>
               <div className="flex gap-2" role="group" aria-label={bilingualInline('Privacy', 'Απόρρητο')}>
@@ -159,7 +159,7 @@ export function CreateGroupModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor={`${fieldId}-tags`} className="text-sm font-medium text-muted-foreground">
+            <label htmlFor={`${fieldId}-tags`} className="text-sm font-medium">
               <BilingualText en="Tags (comma-separated)" el="Ετικέτες (με κόμμα)" compact />
             </label>
             <Input

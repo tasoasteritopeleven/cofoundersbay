@@ -141,7 +141,7 @@ export function UserMenu({
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel className="font-normal">
           <div className="flex min-w-0 flex-col space-y-1">
-            <p className={`font-medium leading-tight ${IDENTITY_LINE}`}>
+            <p className={`font-medium leading-snug ${IDENTITY_LINE}`}>
               {user?.displayName ?? <BilingualText en="User" el="Χρήστης" />}
             </p>
             {user?.email && (

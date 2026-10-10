@@ -48,6 +48,8 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria, bilingualInline } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
 import { useDateFormat } from '@/lib/i18n/useDateFormat';
+import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 
 type ManagedGroup = {
   id: string;
@@ -83,84 +85,104 @@ type GroupActions = {
 
 function GroupCard({ group, onInvite, onDelete }: { group: ManagedGroup } & GroupActions) {
   const privacyCfg = PRIVACY_CONFIG[group.privacy];
-  const PrivacyIcon = privacyCfg.icon;
 
+  // The Opportunities card: the community's mark and name with its kind,
+  // privacy and the reader's role under it, the menu at the right, then the
+  // sentence and a foot with the figures and the way in, on the mark's edge.
   return (
-    <Card className={cn('transition-all hover:border-primary/30', !group.isActive && 'surface-inactive')}>
-      <CardContent>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1 min-w-0">
-            <Avatar className="h-10 w-10 rounded-xl shrink-0">
-              <AvatarFallback className="rounded-xl bg-primary/10 text-primary-accessible font-bold">
-                {group.name[0]}
+    <Card className={cn('transition-all hover:border-primary/20', !group.isActive && 'surface-inactive')}>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Avatar className="h-10 w-10 rounded-xl">
+              <AvatarFallback className="rounded-xl bg-primary/10 font-semibold text-primary-accessible">
+                {group.name?.[0] ?? '?'}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <Link href={`/groups/${group.id}`} className="font-semibold hover:text-primary-accessible transition-colors">
-                  {group.name}
-                </Link>
-                <Badge variant="secondary" className="text-xs"><StatusText value={group.category} /></Badge>
-                <Badge variant="outline" className={cn('text-xs gap-1', privacyCfg.iconClass)}>
-                  <PrivacyIcon className="icon-sm" />
-                  <BilingualText en={privacyCfg.label} el={privacyCfg.labelEl} compact />
-                </Badge>
-                <Badge variant="secondary" className="text-xs capitalize"><StatusText value={group.role} /></Badge>
-                {!group.isActive && <Badge variant="secondary" className="text-xs text-muted-foreground"><BilingualText en="Archived" el="Αρχειοθετημένη" compact /></Badge>}
-              </div>
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{group.description}</p>
-              <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Users className="icon-sm" aria-hidden="true" /><BilingualText en={`${group.memberCount.toLocaleString('en-GB')} members`} el={`${group.memberCount.toLocaleString('el-GR')} μέλη`} compact /></span>
-                <span className="flex items-center gap-1"><MessageSquare className="icon-sm" aria-hidden="true" /><BilingualText en={`${group.postCount} posts`} el={`${group.postCount} αναρτήσεις`} compact /></span>
-                <span className="flex items-center gap-1"><TrendingUp className="icon-sm" aria-hidden="true" /><BilingualText en={`Active ${group.lastActivity}`} el={`Δραστηριότητα ${group.lastActivity}`} compact /></span>
-                {group.pendingRequests && group.pendingRequests > 0 && (
-                  <Badge variant="destructive" className="text-xs"><BilingualText en={`${group.pendingRequests} pending`} el={`${group.pendingRequests} σε αναμονή`} compact /></Badge>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/groups/${group.id}`}>
-                <Eye className="mr-1.5 icon-sm" /><BilingualText en="View" el="Προβολή" compact />
-              </Link>
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Actions for ${group.name}`}>
-                  <MoreVertical className="icon-sm" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {/* All four had no handler. Editing and settings happen on
-                    the group itself; inviting shares its link; deleting is
-                    the owner's, and the server enforces that. */}
-                <DropdownMenuItem asChild>
-                  <Link href={`/groups/${group.id}`}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Group" el="Επεξεργασία κοινότητας" compact /></Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => onInvite(group)}><UserPlus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Invite Members" el="Πρόσκληση μελών" compact /></DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`/groups/${group.id}?section=members`}><Settings className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Group Settings" el="Ρυθμίσεις κοινότητας" compact /></Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {group.role === 'owner' ? (
-                  <DropdownMenuItem className="text-destructive-accessible" onSelect={() => void onDelete(group)}>
-                    <Trash2 className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Delete group" el="Διαγραφή κοινότητας" compact />
+          )}
+          title={(
+            <Link href={`/groups/${group.id}`} className="transition-colors hover:text-primary-accessible">
+              {group.name}
+            </Link>
+          )}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                <StatusText key="category" value={group.category} />,
+                <BilingualText key="privacy" en={privacyCfg.label} el={privacyCfg.labelEl} compact />,
+                <StatusText key="role" value={group.role} />,
+              ]}
+            />
+          )}
+          asideStays
+          aside={(
+            <>
+              {!group.isActive && <Badge variant="outline" className="text-xs text-muted-foreground"><BilingualText en="Archived" el="Αρχειοθετημένη" compact /></Badge>}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Actions for ${group.name}`}>
+                    <MoreVertical className="icon-sm" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {/* All four had no handler. Editing and settings happen on
+                      the group itself; inviting shares its link; deleting is
+                      the owner's, and the server enforces that. */}
+                  <DropdownMenuItem asChild>
+                    <Link href={`/groups/${group.id}`}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Group" el="Επεξεργασία κοινότητας" compact /></Link>
                   </DropdownMenuItem>
-                ) : (
-                  <UnavailableMenuItem
-                    className="text-destructive-accessible"
-                    icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
-                    en="Delete group"
-                    el="Διαγραφή κοινότητας"
-                    reasonEn="Only the owner can delete a group."
-                    reasonEl="Μόνο ο ιδιοκτήτης μπορεί να διαγράψει μια κοινότητα."
-                  />
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+                  <DropdownMenuItem onSelect={() => onInvite(group)}><UserPlus className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Invite Members" el="Πρόσκληση μελών" compact /></DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/groups/${group.id}?section=members`}><Settings className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Group Settings" el="Ρυθμίσεις κοινότητας" compact /></Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {group.role === 'owner' ? (
+                    <DropdownMenuItem className="text-destructive-accessible" onSelect={() => void onDelete(group)}>
+                      <Trash2 className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Delete group" el="Διαγραφή κοινότητας" compact />
+                    </DropdownMenuItem>
+                  ) : (
+                    <UnavailableMenuItem
+                      className="text-destructive-accessible"
+                      icon={<Trash2 className="mr-2 mt-0.5 icon-sm" aria-hidden="true" />}
+                      en="Delete group"
+                      el="Διαγραφή κοινότητας"
+                      reasonEn="Only the owner can delete a group."
+                      reasonEl="Μόνο ο ιδιοκτήτης μπορεί να διαγράψει μια κοινότητα."
+                    />
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
+        />
+
+        {group.description ? (
+          <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{group.description}</p>
+        ) : null}
+
+        <CardFoot
+          meta={(
+            <FactLine
+              items={[
+                <BilingualText key="members" en={`${(group.memberCount ?? 0).toLocaleString('en-GB')} members`} el={`${(group.memberCount ?? 0).toLocaleString('el-GR')} μέλη`} compact />,
+                <BilingualText key="posts" en={`${group.postCount ?? 0} posts`} el={`${group.postCount ?? 0} αναρτήσεις`} compact />,
+                <BilingualText key="active" en={`Active ${group.lastActivity}`} el={`Δραστηριότητα ${group.lastActivity}`} compact />,
+                group.pendingRequests && group.pendingRequests > 0 ? (
+                  <span key="pending" className="font-medium text-destructive-accessible">
+                    <BilingualText en={`${group.pendingRequests} pending`} el={`${group.pendingRequests} σε αναμονή`} compact />
+                  </span>
+                ) : null,
+              ]}
+            />
+          )}
+        >
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/groups/${group.id}`}>
+              <Eye className="mr-1.5 icon-sm" aria-hidden="true" /><BilingualText en="View" el="Προβολή" compact />
+            </Link>
+          </Button>
+        </CardFoot>
       </CardContent>
     </Card>
   );

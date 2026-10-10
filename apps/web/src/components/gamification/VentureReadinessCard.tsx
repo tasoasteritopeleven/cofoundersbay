@@ -173,11 +173,13 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        {/* The gauge is the figure. The sentences sit under it, on the
-            card's left axis, the same edge as the title. */}
-        <div className="mb-4 space-y-3">
+        {/* The gauge is the card's mark: beside it only the two short lines
+            that name the score (they fit in its height at 390px). The
+            sentences after them start on the gauge's left edge, the card's
+            axis - beside it they ran past its foot 104px in from that edge. */}
+        <div className="flex items-center gap-4">
           <RadialGauge score={vrs.overall} />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className={cn('text-sm font-semibold', tierColor)}>
               <BilingualText en={`${tierEn} progress`} el={`${tierEl} πρόοδος`} />
             </p>
@@ -187,35 +189,34 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
                 el={`Ζυγισμένος σε ${dimensionCount} διαστάσεις προόδου ιδρυτή`}
               />
             </p>
-            {/* Two different questions used to share the word "readiness": how
-                much of the platform this founder has put to work, and how close
-                the venture is to raising. Name the other one and link it. */}
-            <p className="mt-1 text-xs text-muted-foreground">
-              <Link href="/readiness" className="underline underline-offset-2 hover:text-foreground">
-                <BilingualText
-                  en="Investor and accelerator readiness is scored separately"
-                  el="Η ετοιμότητα για επενδυτές και επιταχυντές βαθμολογείται ξεχωριστά"
-                  compact wrap
-                />
-              </Link>
-            </p>
-            {vrs.lowestDimension?.href && (
-              <div className={cn('mt-2 flex items-start gap-1.5 text-xs', STATUS.warning.text)}>
-                <CfbGlyph name="spark" className="icon-sm mt-0.5 shrink-0" />
-                <span className="min-w-0 text-pretty">
-                  <BilingualText en="Lowest" el="Χαμηλότερη" compact />{': '}
-                  <Link href={vrs.lowestDimension.href} className="font-medium underline underline-offset-2">
-                    <BilingualText
-                      en={vrs.lowestDimension.label}
-                      el={ventureDimensionEl(vrs.lowestDimension.key, vrs.lowestDimension.label)}
-                      compact
-                    />
-                  </Link>{' '}
-                  ({vrs.lowestDimension.score}%)
-                </span>
-              </div>
-            )}
           </div>
+        </div>
+        <div className="mb-4 mt-3 space-y-1.5">
+          {vrs.lowestDimension?.href && (
+            <p className={cn('text-xs text-pretty', STATUS.warning.text)}>
+              <BilingualText en="Lowest" el="Χαμηλότερη" compact />{': '}
+              <Link href={vrs.lowestDimension.href} className="font-medium underline underline-offset-2">
+                <BilingualText
+                  en={vrs.lowestDimension.label}
+                  el={ventureDimensionEl(vrs.lowestDimension.key, vrs.lowestDimension.label)}
+                  compact
+                />
+              </Link>{' '}
+              ({vrs.lowestDimension.score}%)
+            </p>
+          )}
+          {/* Two different questions used to share the word "readiness": how
+              much of the platform this founder has put to work, and how close
+              the venture is to raising. Name the other one and link it. */}
+          <p className="text-xs text-muted-foreground">
+            <Link href="/readiness" className="underline underline-offset-2 hover:text-foreground">
+              <BilingualText
+                en="Investor and accelerator readiness is scored separately"
+                el="Η ετοιμότητα για επενδυτές και επιταχυντές βαθμολογείται ξεχωριστά"
+                compact wrap
+              />
+            </Link>
+          </p>
         </div>
 
         <ul className={cn('space-y-2.5', compact && 'hidden')}>

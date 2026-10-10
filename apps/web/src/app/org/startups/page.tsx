@@ -3,13 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
-  Rocket,
   Search,
-  Filter,
-  ChevronRight,
-  TrendingUp,
-  Users,
-  Calendar,
   MoreVertical,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
@@ -18,7 +12,7 @@ import { useCurrentOrg } from '@/hooks/useCurrentOrg';
 import { getOrgCohorts, getOrgMembers, type OrgMember } from '@/lib/api';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
@@ -36,6 +30,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { EmptyOrgStartups } from '@/components/common/EmptyStates';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 import { cn } from '@/lib/utils';
 import { UnavailableMenuItem } from '@/components/common/UnavailableMenuItem';
 import { STATUS, type StatusTone } from '@/lib/semantic-colors';
@@ -105,100 +101,101 @@ const STARTUP_STATUS_TONE: Record<Startup['status'], StatusTone> = {
 function StartupCard({ startup }: { startup: Startup }) {
   const statusColors = STATUS[STARTUP_STATUS_TONE[startup.status]];
 
+  // The Programs card: the startup's rounded square, its name over sector
+  // and stage, the state and the menu at the right; the facts and the
+  // progress start on the mark's edge.
+  const menu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Open actions for ${startup.name}`}>
+          <MoreVertical className="icon-sm" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link href={`/profiles/${startup.id}`}><BilingualText en="View Details" el="Λεπτομέρειες" compact /></Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/builder"><BilingualText en="Open Workspace" el="Άνοιγμα χώρου εργασίας" compact /></Link>
+        </DropdownMenuItem>
+        {/* A cohort "startup" is its member (id = user id, see
+            toStartup), so details are their profile and a message
+            opens a thread with them. Both links pointed at
+            /org/startups/:id, which never existed. */}
+        <UnavailableMenuItem
+          en="Assign Mentor"
+          el="Ανάθεση μέντορα"
+          reasonEn="Mentor assignments are not stored yet."
+          reasonEl="Οι αναθέσεις μεντόρων δεν αποθηκεύονται ακόμη."
+        />
+        <DropdownMenuItem asChild>
+          <Link href={`/messages?to=${startup.id}`}><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
     <Card className="transition-all hover:border-primary/30">
-      <CardContent>
-        <div className="flex gap-4">
-          <Avatar className="h-10 w-10 rounded-lg">
-            <AvatarImage src={startup.logoUrl} />
-            <AvatarFallback className="rounded-lg bg-primary/10 text-primary-accessible font-semibold">
-              {startup.name?.[0]?.toUpperCase() ?? '?'}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <Link href={`/profiles/${startup.id}`} className="font-medium hover:text-primary-accessible transition-colors">
-                  {startup.name}
-                </Link>
-                <p className="text-sm text-muted-foreground">
-                  {startup.industry}
-                  {startup.stage && startup.stage !== '\u2014' ? ` · ${startup.stage}` : ''}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
-                  <StatusText value={startup.status} />
-                </Badge>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={`Open actions for ${startup.name}`}>
-                      <MoreVertical className="icon-sm" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/profiles/${startup.id}`}><BilingualText en="View Details" el="Λεπτομέρειες" compact /></Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/builder"><BilingualText en="Open Workspace" el="Άνοιγμα χώρου εργασίας" compact /></Link>
-                    </DropdownMenuItem>
-                    {/* A cohort "startup" is its member (id = user id, see
-                        toStartup), so details are their profile and a message
-                        opens a thread with them. Both links pointed at
-                        /org/startups/:id, which never existed. */}
-                    <UnavailableMenuItem
-                      en="Assign Mentor"
-                      el="Ανάθεση μέντορα"
-                      reasonEn="Mentor assignments are not stored yet."
-                      reasonEl="Οι αναθέσεις μεντόρων δεν αποθηκεύονται ακόμη."
-                    />
-                    <DropdownMenuItem asChild>
-                      <Link href={`/messages?to=${startup.id}`}><BilingualText en="Send Message" el="Αποστολή μηνύματος" compact /></Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
+      <CardContent className="space-y-3">
+        <CardHead
+          mark={(
+            <Link href={`/profiles/${startup.id}`} aria-label={bilingualInline(`Open ${startup.name}`, `Άνοιγμα: ${startup.name}`)}>
+              <Avatar className="h-10 w-10 rounded-xl">
+                <AvatarImage src={startup.logoUrl} alt="" />
+                <AvatarFallback className="rounded-xl bg-primary/10 font-semibold text-primary-accessible">
+                  {startup.name?.[0]?.toUpperCase() ?? '?'}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          )}
+          title={(
+            <Link href={`/profiles/${startup.id}`} className="transition-colors hover:text-primary-accessible">
+              {startup.name}
+            </Link>
+          )}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                startup.industry,
+                startup.stage && startup.stage !== '\u2014' ? startup.stage : null,
+              ]}
+            />
+          )}
+          asideStays
+          aside={(
+            <>
+              <Badge variant="outline" className={cn('text-xs border', statusColors.chip)}>
+                <StatusText value={startup.status} />
+              </Badge>
+              {menu}
+            </>
+          )}
+        />
 
-            <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <Rocket className="icon-sm" aria-hidden="true" />
-                {startup.program}
-              </span>
-              {startup.teamSize != null && (
-                <span className="flex items-center gap-1">
-                  <Users className="icon-sm" aria-hidden="true" />
-                  <BilingualText en={`${startup.teamSize} members`} el={`${startup.teamSize} μέλη`} compact />
-                </span>
-              )}
-              <span className="flex items-center gap-1">
-                <Calendar className="icon-sm" aria-hidden="true" />
-                {startup.cohort}
-              </span>
-            </div>
+        <FactLine
+          items={[
+            startup.program !== '\u2014' ? startup.program : null,
+            startup.teamSize != null ? (
+              <BilingualText key="team" en={`${startup.teamSize} members`} el={`${startup.teamSize} μέλη`} compact />
+            ) : null,
+            startup.cohort !== startup.program && startup.cohort !== '\u2014' ? startup.cohort : null,
+            startup.readinessScore != null ? (
+              <BilingualText key="readiness" en={`Readiness ${startup.readinessScore}%`} el={`Ετοιμότητα ${startup.readinessScore}%`} compact />
+            ) : null,
+          ]}
+        />
 
-            {(startup.progress != null || startup.readinessScore != null) && (
-              <div className="flex items-center gap-4 mt-3">
-                {startup.progress != null && (
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-muted-foreground"><BilingualText en="Progress" el="Πρόοδος" compact /></span>
-                      <span className="font-medium">{startup.progress}%</span>
-                    </div>
-                    <Progress value={startup.progress} className="h-1.5" />
-                  </div>
-                )}
-                {startup.readinessScore != null && (
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground"><BilingualText en="Readiness" el="Ετοιμότητα" compact /></p>
-                    <p className="text-sm font-medium">{startup.readinessScore}%</p>
-                  </div>
-                )}
-              </div>
-            )}
+        {startup.progress != null && (
+          <div>
+            <div className="mb-1 flex items-center justify-between gap-3 text-xs">
+              <span className="text-muted-foreground"><BilingualText en="Progress" el="Πρόοδος" compact /></span>
+              <span className="font-medium tabular-nums">{startup.progress}%</span>
+            </div>
+            <Progress value={startup.progress} className="h-1.5" />
           </div>
-        </div>
+        )}
       </CardContent>
     </Card>
   );

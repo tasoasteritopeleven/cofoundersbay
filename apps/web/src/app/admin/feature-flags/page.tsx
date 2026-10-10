@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import {
-  Zap, Search, Plus, MoreVertical, Users, Percent,
+  Zap, Search, Plus, MoreVertical, Percent,
   FlaskConical, CheckCircle2, XCircle, AlertTriangle,
   Edit, Trash2, Copy, RefreshCw, Info,
 } from 'lucide-react';
@@ -47,6 +47,8 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualInline } from '@/lib/i18n/format';
 import { bilingualAria } from '@/lib/i18n/format';
 import { StatusText } from '@/components/common/StatusText';
+import { CardHead } from '@/components/common/CardAnatomy';
+import { FactLine } from '@/components/common/FactLine';
 
 type FlagStatus = 'enabled' | 'disabled' | 'rollout' | 'experiment';
 type FlagTarget = 'all' | 'beta' | 'admins' | 'specific_tenants' | 'percentage';
@@ -168,69 +170,84 @@ function FlagCard({ flag, onToggle, onEdit, onCopyKey, onDelete }: { flag: Featu
   const StatusIcon = statusCfg.icon;
   const isEnabled = flag.status !== 'disabled';
 
+  // The Endorsements card's anatomy: the flag's name over its key and kind,
+  // the switch and the menu at the head's right (they stay there on a
+  // phone), then the sentence, the rollout and the facts on one left axis.
   return (
-    <Card className={cn('transition-all', !isEnabled && 'surface-inactive')}>
-      <CardContent>
-        <div className="flex items-start gap-4">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold">{flag.name}</span>
-              <code className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded text-muted-foreground">{flag.key}</code>
-              <Badge variant="outline" className={cn('text-xs', statusCfg.color)}>
-                <StatusIcon className="mr-1 icon-sm" aria-hidden="true" />
-                <BilingualText en={statusCfg.label} el={statusCfg.labelEl} compact />
-              </Badge>
-              <Badge className={cn('text-xs border-0', CATEGORY_COLORS[flag.category])}>
-                <StatusText value={flag.category} />
-              </Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mt-1">{flag.description}</p>
-
-            {flag.status === 'rollout' && flag.rolloutPct !== undefined && (
-              <div className="mt-3 space-y-1">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span><BilingualText en="Rollout Progress" el="Πρόοδος διάθεσης" compact /></span>
-                  <span>{flag.rolloutPct}%</span>
-                </div>
-                <Progress value={flag.rolloutPct} className="h-1.5" />
-              </div>
-            )}
-
-            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1 whitespace-nowrap">
-                <Users className="icon-sm" />
-                {flag.affectedUsers?.toLocaleString('en-GB') ?? 0} affected
-              </span>
-              <span className="whitespace-nowrap"><BilingualText en="Updated" el="Ενημερώθηκε" compact /> <RelativeTime date={flag.updatedAt} format={formatRelativeTime} /></span>
-              <span className="min-w-0 truncate">By {flag.createdBy}</span>
-            </div>
-          </div>
-          <div className="ml-auto flex shrink-0 items-center gap-3">
-            <Switch
-              checked={isEnabled}
-              onCheckedChange={(v) => void onToggle(flag.id, v)}
-              className="mt-0.5"
-              aria-label={isEnabled
-                ? bilingualAria(`Disable ${flag.name}`, `Απενεργοποίηση: ${flag.name}`)
-                : bilingualAria(`Enable ${flag.name}`, `Ενεργοποίηση: ${flag.name}`)}
+    <Card className={cn('transition-all hover:border-primary/20', !isEnabled && 'surface-inactive')}>
+      <CardContent className="space-y-3">
+        <CardHead
+          title={flag.name}
+          subtitle={(
+            <FactLine
+              className="text-sm"
+              items={[
+                <code key="key" className="font-mono text-xs">{flag.key}</code>,
+                <StatusText key="category" value={flag.category} />,
+              ]}
             />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-label="More options" variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-                <MoreVertical className="icon-sm" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {/* None of these four had a handler. The experiments API they
-                  map to has PATCH and DELETE (admin.controller.ts). */}
-              <DropdownMenuItem onSelect={() => onEdit(flag, 'details')}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Flag" el="Επεξεργασία σημαίας" compact /></DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => onEdit(flag, 'rollout')}><Percent className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Set rollout %" el="Ορισμός ποσοστού διάθεσης" compact /></DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => onCopyKey(flag)}><Copy className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Copy Key" el="Αντιγραφή κλειδιού" compact /></DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive-accessible" onSelect={() => onDelete(flag)}><Trash2 className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Delete" el="Διαγραφή" compact /></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          )}
+          meta={(
+            <Badge variant="outline" className={cn('mt-1 text-xs', statusCfg.color)}>
+              <StatusIcon className="mr-1 icon-sm" aria-hidden="true" />
+              <BilingualText en={statusCfg.label} el={statusCfg.labelEl} compact />
+            </Badge>
+          )}
+          asideStays
+          aside={(
+            <>
+              <Switch
+                checked={isEnabled}
+                onCheckedChange={(v) => void onToggle(flag.id, v)}
+                aria-label={isEnabled
+                  ? bilingualAria(`Disable ${flag.name}`, `Απενεργοποίηση: ${flag.name}`)
+                  : bilingualAria(`Enable ${flag.name}`, `Ενεργοποίηση: ${flag.name}`)}
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button aria-label="More options" variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                    <MoreVertical className="icon-sm" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {/* None of these four had a handler. The experiments API they
+                      map to has PATCH and DELETE (admin.controller.ts). */}
+                  <DropdownMenuItem onSelect={() => onEdit(flag, 'details')}><Edit className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Edit Flag" el="Επεξεργασία σημαίας" compact /></DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onEdit(flag, 'rollout')}><Percent className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Set rollout %" el="Ορισμός ποσοστού διάθεσης" compact /></DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onCopyKey(flag)}><Copy className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Copy Key" el="Αντιγραφή κλειδιού" compact /></DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive-accessible" onSelect={() => onDelete(flag)}><Trash2 className="mr-2 icon-sm" aria-hidden="true" /><BilingualText en="Delete" el="Διαγραφή" compact /></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
+        />
+
+        {flag.description ? (
+          <p className="card-body line-clamp-2 text-muted-foreground first-letter:uppercase">{flag.description}</p>
+        ) : null}
+
+        {flag.status === 'rollout' && flag.rolloutPct !== undefined && (
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span><BilingualText en="Rollout Progress" el="Πρόοδος διάθεσης" compact /></span>
+              <span className="tabular-nums">{flag.rolloutPct}%</span>
+            </div>
+            <Progress value={flag.rolloutPct} className="h-1.5" aria-label={bilingualAria('Rollout progress', 'Πρόοδος διάθεσης')} />
           </div>
-        </div>
+        )}
+
+        <FactLine
+          items={[
+            <BilingualText
+              key="affected"
+              en={`${(flag.affectedUsers ?? 0).toLocaleString('en-GB')} affected`}
+              el={`${(flag.affectedUsers ?? 0).toLocaleString('el-GR')} επηρεάζονται`}
+              compact
+            />,
+            <span key="updated"><BilingualText en="Updated" el="Ενημερώθηκε" compact /> <RelativeTime date={flag.updatedAt} format={formatRelativeTime} /></span>,
+            <BilingualText key="by" en={`By ${flag.createdBy}`} el={`Από ${flag.createdBy}`} compact />,
+          ]}
+        />
       </CardContent>
     </Card>
   );
