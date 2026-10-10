@@ -18,13 +18,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // A pastel fill with a dark label of its own hue (Cursor's
-        // "Upgrade", Windsurf's "Download"): the primary action is still
-        // the one coloured thing in a row, without a saturated block and
-        // white text pulling the eye from every page header. Hover deepens
-        // toward the mid tone instead of fading out.
+        // A coloured fill with a white label. The fill is deep enough that
+        // the letters clear 4.6:1. Hover darkens the same fill; mixing toward
+        // the mid tone would lighten Cyan, whose mid is the pale tint.
         default:
-          'bg-primary text-primary-foreground hover:bg-[color-mix(in_hsl,hsl(var(--primary))_82%,hsl(var(--primary-mid)))]',
+          'bg-primary text-primary-foreground hover:bg-[color-mix(in_hsl,hsl(var(--primary))_86%,black)]',
         // A fill or an edge, never both. The outline is the same hairline as a
         // card (cursor.com "Adjust Plan"): never --input, which is a field edge.
         secondary:

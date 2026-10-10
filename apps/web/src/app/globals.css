@@ -57,22 +57,21 @@ html {
     /* One tone recipe, four hues (lilac here; cyan, mint and apricot in the
        named themes). Lilac, mint and apricot carry chroma 30 and the same
        relative luminance as the reference buttons (0.49: Windsurf #34e8bb,
-       Windsurf #f09f6d). Cyan's solid accent is #66bce1, halfway between
-       the earlier #87b6eb and #31c1d6.
+       Windsurf #f09f6d). Cyan's tint is #66bce1; its solid fill is #207da5
+       so a white label clears 4.6:1.
        Read from the reference pixels, then solved for contrast:
        .probes/sample_pixels.mjs, .probes/tone_solver2.cjs.
 
        --primary        the accent wherever it is solid: buttons, active pills,
-                        rings, bars, avatars, badges, chart series. A lively
-                        fill with a near-black ink label of its own hue
-                        (--primary-foreground, 9.6:1) - Cursor's "Upgrade",
-                        Windsurf's "Download"
+                        rings, bars, avatars, badges, chart series. The fill
+                        is deep enough for a white label (--primary-foreground,
+                        >=4.6:1)
        --primary-mid    the deeper tone, only for faint tints (/5../40), which
                         a pastel cannot carry
        --primary-accessible  link and emphasis text, >=5:1 on a card
        --ink            the label on any lively status mark */
-    --primary: 250 74% 82.6%;
-    --primary-foreground: 250 30% 9.5%;
+    --primary: 250 74% 63.9%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 250 45.9% 59%;             /* tints only (/5../40) */
     /* 50%, not 55%: the accent's text tone also sits on the accent's own
        tints (bg-primary/10..20 draw from --primary-mid), on 38 avatars,
@@ -197,8 +196,8 @@ html {
     --card-foreground: 220 10% 93%;
     --popover: 222 20% 11.4%;
     --popover-foreground: 220 10% 93%;
-    --primary: 248 47% 76.6%;
-    --primary-foreground: 248 32% 12%;
+    --primary: 248 47% 59.6%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-accessible: 248 50% 82%;
     --secondary: 232 16% 13.8%;
     --secondary-foreground: 232 10% 93%;
@@ -248,7 +247,7 @@ html {
     color-scheme: dark;
   }
 
-  /* ── "Cyan" (id: alliance) — #66bce1 on a cool page.
+  /* ── "Cyan" (id: alliance) — solid #207da5, tint #66bce1, on a cool page.
      Neutral-cool surfaces; the accent lives in the accent-lock block below. ── */
   [data-theme="alliance"] {
     --shadow-color: 200 40% 18%;
@@ -367,8 +366,8 @@ html {
   }
 
   .role-founder {
-    --primary: 250 74% 82.6%;
-    --primary-foreground: 250 30% 9.5%;
+    --primary: 250 74% 63.9%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 250 45.9% 59%;             /* tints only (/5../40) */
     --primary-accessible: 250 40.7% 50%;
     --accent: 232 10% 94.2%;
@@ -376,17 +375,17 @@ html {
     --ring: 250 40.7% 55%;
   }
   html.dark.role-founder {
-    --primary: 248 47% 76.6%;
+    --primary: 248 47% 59.6%;
     --primary-accessible: 248 50% 82%;
     --accent: 232 14% 15.5%;
     --ring: 248 47% 76.6%;
-    --primary-foreground: 248 32% 12%;
+    --primary-foreground: 0 0% 100%;
     --accent-foreground: 220 10% 93%;
   }
 
   .role-mentor {
-    --primary: 190 74% 58.7%;
-    --primary-foreground: 190 30% 9.5%;
+    --primary: 190 74% 33.5%;             /* white label, 4.63:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 190 45.9% 38%;             /* tints only (/5../40) */
     --primary-accessible: 190 40.7% 31.5%;
     --accent: 232 10% 94.2%;
@@ -394,17 +393,17 @@ html {
     --ring: 190 40.7% 36.5%;
   }
   html.dark.role-mentor {
-    --primary: 190 28.5% 61.4%;
+    --primary: 190 28.5% 40.9%;
     --primary-accessible: 190 37.5% 76%;
     --accent: 232 14% 15.5%;
     --ring: 190 28.5% 61.4%;
-    --primary-foreground: 190 30% 10%;
+    --primary-foreground: 0 0% 100%;
     --accent-foreground: 220 10% 93%;
   }
 
   .role-investor {
-    --primary: 32 74% 67%;
-    --primary-foreground: 32 30% 9.5%;
+    --primary: 32 74% 37.8%;              /* white label, 4.63:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 32 45.9% 41%;              /* tints only (/5../40) */
     --primary-accessible: 32 40.7% 34.25%;
     --accent: 232 10% 94.2%;
@@ -412,17 +411,17 @@ html {
     --ring: 32 40.7% 39.25%;
   }
   html.dark.role-investor {
-    --primary: 32 28.5% 61.4%;
+    --primary: 32 28.5% 42.9%;
     --primary-accessible: 32 30% 70%;
     --accent: 232 14% 15.5%;
     --ring: 32 28.5% 61.4%;
-    --primary-foreground: 32 30% 10%;
+    --primary-foreground: 0 0% 100%;
     --accent-foreground: 220 10% 93%;
   }
 
   .role-org {
-    --primary: 262 74% 81.8%;
-    --primary-foreground: 262 30% 9.5%;
+    --primary: 262 74% 61.8%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 262 45.9% 57.75%;          /* tints only (/5../40) */
     --primary-accessible: 262 40.7% 49.5%;
     --accent: 232 10% 94.2%;
@@ -430,11 +429,11 @@ html {
     --ring: 262 40.7% 54.5%;
   }
   html.dark.role-org {
-    --primary: 258 35.5% 69%;
+    --primary: 258 35.5% 56%;
     --primary-accessible: 258 37.5% 76%;
     --accent: 232 14% 15.5%;
     --ring: 258 35.5% 69%;
-    --primary-foreground: 258 28% 12%;
+    --primary-foreground: 0 0% 100%;
     --accent-foreground: 220 10% 93%;
   }
 
@@ -445,8 +444,8 @@ html {
      page and not the accent. The default light/dark themes keep the role
      hues. Values from .probes/tone_solver.cjs. */
   html[data-theme="alliance"] {
-    --primary: 198.05 67.21% 64.12%;      /* #66bce1, rgb(102, 188, 225) */
-    --primary-foreground: 0 0% 9.4%;      /* its label, #181818, 8.33 on the fill */
+    --primary: 198.05 67.21% 38.7%;       /* #207da5, white label 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 198.05 67.21% 64.12%;  /* the same cyan; tints are washes of it */
     --primary-accessible: 198.05 37% 37.5%; /* links, >=5:1 on a card */
     --accent: 210 10% 94%;
@@ -454,8 +453,8 @@ html {
     --ring: 198.05 37% 43.5%;
   }
   html[data-theme="minimal"] {
-    --primary: 158 72% 55%;               /* #34e8bb nudged a touch golden-pastel */
-    --primary-foreground: 168 18.5% 5.3%; /* its label, #0b100f */
+    --primary: 158 72% 30.3%;             /* white label, 4.63:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 165 49.4% 34.25%;          /* tints only (/5../40) */
     --primary-accessible: 165 43.8% 27.5%;
     --accent: 43 24.1% 82.9%;                  /* Windsurf active nav #ded8c9 */
@@ -463,15 +462,15 @@ html {
     --ring: 165 43.8% 31.5%;
   }
   html[data-theme="apricot"] {
-    --primary: 28 76% 67.5%;              /* #f09f6d nudged golden-pastel, a touch deeper */
-    --primary-foreground: 20 30% 9%;
+    --primary: 28 76% 39.5%;              /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
     --primary-mid: 23 50.5% 44%;              /* tints only (/5../40) */
     --primary-accessible: 23 44.8% 36%;
     --accent: 30 22% 92.6%;
     --accent-foreground: 24 10% 12%;
     --ring: 23 44.8% 41.5%;
   }
-  /* Dark surfaces already fill with a pastel and a dark label; their tints
+  /* Dark surfaces fill with the same deepened accent and a white label; their tints
      come from that same tone. */
   html.dark,
   html[data-theme="cofounder"],

@@ -30,7 +30,7 @@ export const THEME_OPTIONS = [
     label: 'Light',
     description: 'Soft lilac on cool grey',
     icon: Sun,
-    swatch: ['#f6f6f7', '#bbaefb', '#6e659a'],
+    swatch: ['#f6f6f7', '#765fe7', '#6e659a'],
   },
   {
     name: 'system' as ThemeName,
@@ -44,7 +44,7 @@ export const THEME_OPTIONS = [
     label: 'Cyan',
     description: 'Soft sky blue, cool and clear',
     icon: Palette,
-    swatch: ['#f2f6f7', '#66bce1', '#3c6e83'],
+    swatch: ['#f2f6f7', '#207da5', '#3c6e83'],
   },
   {
     name: 'cofounder' as ThemeName,
@@ -58,14 +58,14 @@ export const THEME_OPTIONS = [
     label: 'Mint',
     description: 'Warm cream with a soft mint',
     icon: Minus,
-    swatch: ['#f7f5f0', '#7ac6aa', '#427864'],
+    swatch: ['#f7f5f0', '#16855c', '#427864'],
   },
   {
     name: 'apricot' as ThemeName,
     label: 'Apricot',
     description: 'Warm neutral with a soft apricot',
     icon: Sunrise,
-    swatch: ['#f7f6f5', '#ddaf90', '#876752'],
+    swatch: ['#f7f6f5', '#b16018', '#876752'],
   },
 ];
 
