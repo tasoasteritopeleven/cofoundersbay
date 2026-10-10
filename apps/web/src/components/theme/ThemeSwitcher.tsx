@@ -58,7 +58,7 @@ export const THEME_OPTIONS = [
     label: 'Mint',
     description: 'Warm cream with a soft mint',
     icon: Minus,
-    swatch: ['#f7f5f0', '#78bd8e', '#1e4029'],
+    swatch: ['#f7f5f0', '#75bb8b', '#1e4029'],
   },
   {
     name: 'apricot' as ThemeName,

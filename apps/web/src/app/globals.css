@@ -458,10 +458,12 @@ html {
        letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
        rgb(188, 227, 189) left white at 1.4:1. */
     --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
-    --mint-mark: 138.4 29.2% 53.7%;       /* #66ab7c rgb(102, 171, 124): #71b687, 5% darker in OKLab lightness. Bay, bars, outlines */
-    --mint-ring: 138.5 34.3% 60.7%;       /* #78bd8e rgb(120, 189, 142): #71b687, 3% lighter. Pastel rings and mint buttons */
-    --mint-button-ink: 138.5 36% 18.5%;   /* #1e4029, 5.20:1 on the button fill. White on it is 2.22:1 */
-    --mint-ring-hover: 138.5 34.3% 55.5%; /* same green, a step darker; the ink still clears 4.5:1 */
+    --mint-mark: 138.7 30.3% 56.2%;       /* #6db183 rgb(109, 177, 131): #71b687, 2% darker in OKLab lightness. Bay, outlines, profile circles */
+    --mint-ring: 138.2 33.9% 59.7%;       /* #75bb8b rgb(117, 187, 139): #71b687, 2% lighter. Pastel rings and mint buttons */
+    --mint-button-ink: 138.5 36% 18.5%;   /* #1e4029, 5.07:1 on the button fill. White on it is 2.27:1 */
+    --mint-ring-hover: 138.2 33.9% 55.5%; /* same green, a step darker; the ink still clears 4.5:1 */
+    --meter-apricot: 22.6 81.4% 68.5%;    /* #f09f6d, the Apricot theme's apricot */
+    --meter-lilac: 250 74% 63.9%;         /* #765fe7, the Light theme's lilac */
     --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4069,11 +4071,12 @@ textarea[class~="border-input"]:focus,
   scale: 0.97;
 }
 
-/* Mint only. "Bay", a green bar, and a green outline (the help book, a
-   profile circle) use --mint-mark, 5% darker than #71b687. A pastel ring
-   and a filled button use --mint-ring, 3% lighter. The button letters are
-   a dark green: white on that fill is 2.22:1. A circle at h-8 or under
-   takes a stronger edge. */
+/* Mint only. "Bay" and a green outline (the help book, a profile circle)
+   use --mint-mark, 2% darker than #71b687. A pastel ring and a filled
+   button use --mint-ring, 2% lighter. The button letters are a dark green:
+   white on that fill is 2.27:1. Progress fills use the Apricot theme's
+   apricot; the weighted score bars use the Light theme's lilac. A circle
+   at h-8 or under takes a stronger edge. */
 html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
   color: hsl(var(--mint-mark));
 }
@@ -4086,11 +4089,14 @@ html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([cl
 html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
   background-color: hsl(var(--mint-mark));
 }
-html[data-theme="minimal"] :not(button):not(a):is([class~='h-full'], [class~='h-0.5'], [class~='h-1'], [class~='h-1.5'], [class~='h-2']):is([class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80']) {
-  background-color: hsl(var(--mint-mark));
+html[data-theme="minimal"] :not(button):not(a)[class~='h-full']:is([class~='bg-primary'], [class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80'], [class*='bg-status-success-mark'], [class*='bg-status-warning-mark']) {
+  background-color: hsl(var(--meter-apricot));
 }
-html[data-theme="minimal"] #main-content [role='progressbar'] > :is([class~='bg-primary'], [class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80']) {
-  background-color: hsl(var(--mint-mark));
+html[data-theme="minimal"] #main-content [role='progressbar'] > * {
+  background-color: hsl(var(--meter-apricot));
+}
+html[data-theme="minimal"] #main-content [data-meter='lilac'][role='progressbar'] > * {
+  background-color: hsl(var(--meter-lilac));
 }
 html[data-theme="minimal"] .avatar-initials[class*='bg-primary/10'] {
   background-color: hsl(var(--mint-mark) / 0.38);

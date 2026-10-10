@@ -241,7 +241,7 @@ export function VentureReadinessCard({ data: prefetched, compact = false, classN
                     </span>
                     <span className={cn('shrink-0 font-semibold tabular-nums', color)}>{dim.score}%</span>
                   </div>
-                  <Progress value={dim.score} label={dim.label} className={cn('h-2 transition-all', bar)} />
+                  <Progress value={dim.score} label={dim.label} data-meter="lilac" className={cn('h-2 transition-all', bar)} />
                 </Link>
               </li>
             );
