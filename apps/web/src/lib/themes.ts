@@ -139,7 +139,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
     cardForeground: '30 8% 12%',
     popover: '0 0% 100%',
     popoverForeground: '30 8% 12%',
-    primary: '120 34.78% 81.96%',
+    primary: '121.54 41.05% 81.37%',
     primaryForeground: '120 30% 22%',
     secondary: '40 14% 94%',
     secondaryForeground: '30 8% 16%',

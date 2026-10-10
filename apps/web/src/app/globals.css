@@ -66,7 +66,7 @@ html {
                         rings, bars, avatars, badges, chart series. The fill
                         is deep enough for a white label (--primary-foreground,
                         >=4.6:1), except Mint, whose solid fill is the pastel
-                        #c1e1c1 and whose label is a dark green of that hue.
+                        #bce3bd and whose label is a dark green of that hue.
        --primary-mid    the deeper tone, only for faint tints (/5../40), which
                         a pastel cannot carry
        --primary-accessible  link and emphasis text, >=5:1 on a card
@@ -454,12 +454,12 @@ html {
     --ring: 198.05 37% 43.5%;
   }
   html[data-theme="minimal"] {
-    /* Pastel green rgb(193, 225, 193). White on it is 1.42:1, so the label
-       is a dark green of the same hue: 7.16:1 on the fill, 5.64:1 on the
-       hover (the fill mixed 14% toward black). */
-    --primary: 120 34.78% 81.96%;         /* #c1e1c1 */
+    /* Pastel green, 20% more chroma than rgb(193, 225, 193): rgb(188, 227, 189).
+       White on it is about 1.4:1, so the label stays a dark green of the same
+       hue (7.17:1 on the fill). */
+    --primary: 121.54 41.05% 81.37%;      /* #bce3bd */
     --primary-foreground: 120 30% 22%;    /* #274927 */
-    --primary-mid: 120 34.78% 58%;        /* tints only (/5../40); a wash of the same green */
+    --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
     --accent: 43 24.1% 82.9%;             /* Windsurf active nav #ded8c9 */
     --accent-foreground: 30 8% 11%;
