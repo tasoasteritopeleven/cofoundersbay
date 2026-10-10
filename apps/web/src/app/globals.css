@@ -457,7 +457,8 @@ html {
     /* Pastel green, 20% more chroma than rgb(193, 225, 193): rgb(188, 227, 189).
        White on it is about 1.4:1, so the label stays a dark green of the same
        hue (7.17:1 on the fill). */
-    --primary: 121.54 41.05% 81.37%;      /* #bce3bd */
+    --primary: 121.54 41.05% 81.37%;      /* #bce3bd, buttons */
+    --mint-mark: 120.1 46.6% 80.6%;       /* #b6e5b7, Bay and small green marks, +20% chroma */
     --primary-foreground: 120 30% 22%;    /* #274927 */
     --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
     --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
@@ -4063,6 +4064,41 @@ textarea[class~="border-input"]:focus,
    mark adds a rounded square and is not this circle. */
 #main-content [data-card] [class~='rounded-full']:not([class~='rounded-md']):not([class~='rounded-lg']):not([class~='rounded-xl']):not([class~='rounded-2xl']):has(> .avatar-initials) {
   scale: 0.97;
+}
+
+/* Mint only. The button fill stays the pastel. "Bay", the green ring on a
+   profile circle, a small count dot, and the initials circle itself use a
+   green 20% more intense. A circle at h-8 or under takes a stronger wash,
+   because the same pastel disappears at that size. */
+html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
+  color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
+  --tw-ring-color: hsl(var(--mint-mark) / 0.3);
+}
+html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary']:is([class~='h-6'], [class~='h-7'], [class~='h-8'], [class~='w-6'], [class~='w-7'], [class~='w-8']) {
+  --tw-ring-color: hsl(var(--mint-mark) / 0.36);
+}
+html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
+  background-color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/10'] {
+  background-color: hsl(var(--mint-mark) / 0.292);
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/15'] {
+  background-color: hsl(var(--mint-mark) / 0.406);
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/20'] {
+  background-color: hsl(var(--mint-mark) / 0.523);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/10'] {
+  background-color: hsl(var(--mint-mark) / 0.35);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/15'] {
+  background-color: hsl(var(--mint-mark) / 0.49);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/20'] {
+  background-color: hsl(var(--mint-mark) / 0.63);
 }
 
 /* A description inside a card (a muted sentence that clamps or reads
