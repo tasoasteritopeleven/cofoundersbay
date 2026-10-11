@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/user-management",
+  "sourceFile": "admin/user-management/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:47:05.240Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/user-management",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/user-management",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "User Management·Διαχείριση χρηστών"
+    ],
+    "wordCount": 200,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nUser Management·Διαχείριση χρηστών\n\nSearch, filter, verify, and moderate platform accounts. Bulk actions ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:10.295Z"
+}

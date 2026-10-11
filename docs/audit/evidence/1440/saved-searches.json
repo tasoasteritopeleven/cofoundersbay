@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/saved-searches",
+  "sourceFile": "saved-searches/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:54.495Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/saved-searches",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/saved-searches",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Saved Searches·Αποθηκευμένες αναζητήσεις"
+    ],
+    "wordCount": 96,
+    "textExcerpt": "Saved Searches·Αποθηκευμένες αναζητήσεις\n\nManage your saved search filters and get notified of new matches.\nΔιαχειριστείτε τα αποθηκευμένα φίλτρα και ειδοποιηθείτε για νέες αντιστοιχίσεις.\n\nNew Search\n·\nΝέα αναζήτηση\n\n0\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:59.195Z"
+}

@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/org/programs",
+  "sourceFile": "org/programs/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:56:54.251Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/org/programs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/programs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Programs·Προγράμματα"
+    ],
+    "wordCount": 143,
+    "textExcerpt": "Programs·Προγράμματα\n\nCreate, run, and review accelerator, bootcamp, and incubator programs.\nΔημιουργία, εκτέλεση και αξιολόγηση προγραμμάτων accelerator, bootcamp και incubator.\n\nNew Program\n·\nΝέο πρόγραμμα\n\nTotal Progr",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:56:58.480Z"
+}

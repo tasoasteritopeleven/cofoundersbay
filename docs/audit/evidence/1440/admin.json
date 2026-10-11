@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin",
+  "sourceFile": "admin/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:44:21.413Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Admin console·Κονσόλα διαχείρισης"
+    ],
+    "wordCount": 162,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nAdmin console·Κονσόλα διαχείρισης\n\nReports, people, content and the platform's tools.\nΑναφορές, άνθρωποι,",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:44:32.435Z"
+}

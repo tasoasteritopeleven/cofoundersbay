@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/feature-flags",
+  "sourceFile": "admin/feature-flags/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:45:50.149Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/feature-flags",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/feature-flags",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Feature Flags·Σημαίες λειτουργιών"
+    ],
+    "wordCount": 295,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nFeature Flags·Σημαίες λειτουργιών\n\nControl feature rollouts, experiments, and gradual deployments\nΕλέγξτε",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:45:56.231Z"
+}

@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/admin/automations",
+  "sourceFile": "admin/automations/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:19:58.530Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/automations",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/automations",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Automation rules"
+    ],
+    "wordCount": 37,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nAutomation rules\n\nTrigger-and-action rules that run without manual review.\n\nNew Rule\n\nTotal Rules\n\n0\n\nActive\n\n0\n\nExecutions (recent)\n\n0\n\nRules with Failures\n\n0\n\nRule",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:20:03.400Z"
+}

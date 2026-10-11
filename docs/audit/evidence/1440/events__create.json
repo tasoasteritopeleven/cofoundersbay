@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/events/create",
+  "sourceFile": "events/create/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:50:17.385Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/events/create",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/events/create",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Create event·Δημιουργία εκδήλωσης"
+    ],
+    "wordCount": 177,
+    "textExcerpt": "Create event·Δημιουργία εκδήλωσης\n\nHost a meetup, webinar or demo day for the community.\nΟργανώστε συνάντηση, webinar ή demo day για την κοινότητα.\n\nBack to events\n·\nΠίσω στις εκδηλώσεις\nBasic information·Βασικά στοιχεία",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:50:23.533Z"
+}

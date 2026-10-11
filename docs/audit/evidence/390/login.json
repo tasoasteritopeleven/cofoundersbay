@@ -1,0 +1,51 @@
+{
+  "requestedRoute": "/login",
+  "sourceFile": "(auth)/login/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:32:47.627Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/login",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "target-size",
+        "impact": "serious",
+        "description": "All touch targets must be 24px large, or leave sufficient space",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".right-3"
+            ],
+            "failureSummary": "Fix any of the following:\n  Target has insufficient size (34.6px by 20px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 20px instead of at least 24px."
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/login",
+  "measurement": {
+    "title": "Sign in | CoFounderBay",
+    "headings": [
+      "Welcome to Aegean Venture Lab"
+    ],
+    "wordCount": 36,
+    "textExcerpt": "CoFounderBay\nWelcome to Aegean Venture Lab\n\nSign in to continue building your network.\n\nEmail\nPassword\nForgot password?\nShow\nSign in\nOR CONTINUE WITH\nContinue with Google\nContinue with LinkedIn\n\nDon't have an account?\n \n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:32:50.483Z"
+}

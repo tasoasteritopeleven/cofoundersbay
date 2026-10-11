@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/tenant/members",
+  "sourceFile": "tenant/members/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:41:49.701Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/tenant/members",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/members",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Members"
+    ],
+    "wordCount": 55,
+    "textExcerpt": "Members\n\nManage and track your organization's member engagement\n\nInvite Member\n\n0\n\nTotal Members\n\n—\n\nOnline Now\n\n—\n\nAvg Engagement\n\n0\n\nPending Approval\n\nAll Status\nAll (0)\n\n0 members found\n\nNo members in this workspace y",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:41:54.969Z"
+}

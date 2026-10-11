@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/connections",
+  "sourceFile": "connections/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:04:51.733Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/connections",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/connections",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Connections"
+    ],
+    "wordCount": 42,
+    "textExcerpt": "Connections\n\nManage pending requests and active professional relationships.\n\nConnections\nFind people\nIntro Requests\n1\nReceived\nSent\nConnected\nEP\nElena Papadopoulos\nFounder\nIntro request\n\nFounder & CEO at Harbor\n\nWould lo",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:04:56.047Z"
+}

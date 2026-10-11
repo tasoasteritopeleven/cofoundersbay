@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/users",
+  "sourceFile": "admin/users/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:47:10.485Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/users",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/users",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Users·Χρήστες"
+    ],
+    "wordCount": 172,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nUsers·Χρήστες\n\nSearch and moderate platform accounts.\nΑναζήτηση και διαχείριση λογαριασμών πλατφόρμας.\n\n1",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:14.724Z"
+}

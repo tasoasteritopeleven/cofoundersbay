@@ -1,0 +1,53 @@
+{
+  "requestedRoute": "/reputation",
+  "sourceFile": "reputation/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:37.834Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/reputation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "definition-list",
+        "impact": "serious",
+        "description": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              "dl"
+            ],
+            "failureSummary": "Fix all of the following:\n  dl element has direct children that are not allowed: div > #text, div > time"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/reputation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Reputation Score·Βαθμολογία φήμης"
+    ],
+    "wordCount": 278,
+    "textExcerpt": "Reputation Score·Βαθμολογία φήμης\n\nYour trust and credibility on CoFounderBay.\nΗ αξιοπιστία σας στο CoFounderBay.\n\nMy profile\n·\nΤο προφίλ μου\nPublic view\n·\nΔημόσια προβολή\nSample data\n·\nΔείγμα δεδομένων\nLoading your repu",
+    "loadingElements": [
+      "Loading your reputation…"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:43.910Z"
+}

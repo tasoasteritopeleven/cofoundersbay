@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/settings",
+  "sourceFile": "tenant/settings/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:02:28.394Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/settings",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/settings",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Tenant Settings·Ρυθμίσεις tenant"
+    ],
+    "wordCount": 73,
+    "textExcerpt": "Tenant Settings·Ρυθμίσεις tenant\n\nGeneral workspace settings: membership policy, notifications, and email preferences.\nΓενικές ρυθμίσεις χώρου εργασίας: πολιτική συμμετοχής, ειδοποιήσεις και προτιμήσεις email.\n\nSave Chan",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:02:33.145Z"
+}

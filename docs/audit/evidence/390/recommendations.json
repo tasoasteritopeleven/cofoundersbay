@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/recommendations",
+  "sourceFile": "recommendations/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:39:10.482Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/recommendations",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/recommendations",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "For you"
+    ],
+    "wordCount": 53,
+    "textExcerpt": "For you\n\nPicks ranked from your profile, skills, and recent activity, recalculated at least hourly.\n\nRefresh\n\n0\n\nNew Matches\n\n0\n\nThis Week\n\n0\n\nConnections\n\n—\n\nAcceptance Rate\n\nFilter\n0 matches\nAll\nFounders\nMentors\nInvest",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:39:15.890Z"
+}

@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/groups/moderation",
+  "sourceFile": "groups/moderation/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:25:56.670Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/groups/moderation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups/moderation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Moderation queue"
+    ],
+    "wordCount": 111,
+    "textExcerpt": "Moderation queue\n\nReview and action community reports. High-priority items are flagged first so nothing urgent slips through.\n\nSample data\n\n2 high-priority reports need attention now\n\nPending\n\n2\n\nHigh Priority\n\n2\n\nResolv",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:26:09.017Z"
+}

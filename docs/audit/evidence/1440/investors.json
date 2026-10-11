@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/investors",
+  "sourceFile": "investors/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:25.449Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investors",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investors",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investor directory·Κατάλογος επενδυτών"
+    ],
+    "wordCount": 45,
+    "textExcerpt": "Investor directory·Κατάλογος επενδυτών\n\nDiscover angels, VCs, and syndicates on the platform.\nΑνακάλυψη angels, VCs και syndicates στην πλατφόρμα.\n\nSample data\n·\nΔείγμα δεδομένων\n\nLoading investors…\n·\nΦόρτωση επενδυτών…\n",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:30.786Z"
+}

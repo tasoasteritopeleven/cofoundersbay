@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/programs",
+  "sourceFile": "programs/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:57:55.525Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/programs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/programs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Programs·Προγράμματα"
+    ],
+    "wordCount": 69,
+    "textExcerpt": "Programs·Προγράμματα\n\nAccelerators, incubators, bootcamps, and competitions to grow your startup.\nΕπιταχυντές, θερμοκοιτίδες, bootcamps και διαγωνισμοί για να μεγαλώσετε το startup σας.\n\nHow programs work\n·\nΠώς δουλεύουν",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:58:01.890Z"
+}

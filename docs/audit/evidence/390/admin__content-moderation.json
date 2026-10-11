@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/content-moderation",
+  "sourceFile": "admin/content-moderation/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:20:56.759Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/content-moderation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/content-moderation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Content moderation"
+    ],
+    "wordCount": 77,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nContent moderation\n\nReview flagged posts, profiles, and messages. Resolve or dismiss with one action.\n\nModeration queue\nModeration queue\nOpen\nResolved\nDismissed\nAll\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:00.650Z"
+}

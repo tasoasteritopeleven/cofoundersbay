@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentoring",
+  "sourceFile": "mentoring/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:05:58.698Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentoring",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentoring",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Find mentors"
+    ],
+    "wordCount": 70,
+    "textExcerpt": "Find mentors\n\nDirectory of mentors — filter by expertise and availability.\n\nFind mentors\nMy sessions\nSK\nDr. Sarah Kim\nLondon, UK\n\nHelping first-time founders reach product-market fit.\n\nMentoring\nGo-to-market\nLeadership\nF",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:06:03.062Z"
+}

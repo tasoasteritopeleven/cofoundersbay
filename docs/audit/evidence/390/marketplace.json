@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/marketplace",
+  "sourceFile": "marketplace/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:32:50.677Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/marketplace",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/marketplace",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Services marketplace"
+    ],
+    "wordCount": 73,
+    "textExcerpt": "Services marketplace\n\nBrowse legal, design, growth, and ops providers.\n\nHow the marketplace works\nSample data\n\nAre you a service provider?\n\nList your services where founders on CoFounderBay look for help\n\nList Your Servi",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:32:57.085Z"
+}

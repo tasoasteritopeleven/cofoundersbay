@@ -1,0 +1,69 @@
+{
+  "requestedRoute": "/discover",
+  "sourceFile": "discover/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:50:01.785Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/discover",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 31,
+        "nodes": [
+          {
+            "target": [
+              ".ring-indigo-500\\/60 > .dark\\:text-indigo-300.h-full.bg-primary\\/10"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.03 (foreground color: #6d79aa, background color: #151b30, font size: 10.7pt (14.2814px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".rounded-2xl.bg-card\\/90.text-card-foreground:nth-child(1) > .card-comfortable.pt-5 > .items-start.gap-3 > .flex-1.min-w-0 > .justify-between > .ml-1.gap-1.shrink-0 > .dark\\:text-indigo-300.bg-primary\\/10.font-semibold"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.03 (foreground color: #6d79aa, background color: #151b30, font size: 9.9pt (13.2613px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".rounded-2xl.bg-card\\/90.text-card-foreground:nth-child(1) > .card-comfortable.pt-5 > .items-start.gap-3 > .flex-1.min-w-0 > .line-clamp-2.mt-1.dark\\:text-slate-400"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.46 (foreground color: #636e7f, background color: #121723, font size: 10.7pt (14.2814px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".rounded-2xl.bg-card\\/90.text-card-foreground:nth-child(1) > .card-comfortable.pt-5 > .items-start.gap-3 > .flex-1.min-w-0 > .mt-1\\.5.dark\\:text-slate-400.gap-1"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.46 (foreground color: #636e7f, background color: #121723, font size: 9.9pt (13.2613px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/discover",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Explore·Εξερεύνηση"
+    ],
+    "wordCount": 86,
+    "textExcerpt": "Explore·Εξερεύνηση\n\nDiscover founders, mentors, investors, and team members\nΑνακαλύψτε ιδρυτές, μέντορες, επενδυτές και μέλη ομάδας\n\nHow discovery works\n·\nΠώς λειτουργεί η εξερεύνηση\nView Matches\n·\nΠροβολή αντιστοιχίσεων",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:50:07.461Z"
+}

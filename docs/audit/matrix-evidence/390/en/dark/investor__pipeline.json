@@ -1,0 +1,50 @@
+{
+  "requestedRoute": "/investor/pipeline",
+  "sourceFile": "investor/pipeline/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:24:49.992Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/pipeline",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/pipeline",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investment Pipeline"
+    ],
+    "wordCount": 231,
+    "textExcerpt": "Investment Pipeline\n\nTrack deals through your investment process\n\nShow passed\nAdd Deal\n\n8\n\nTotal Deals\n\n€4.2M\n\nPipeline Value\n\n82%\n\nAvg Readiness\n\n1\n\nInvested\n\nStarred only\nDiscovered\n2\nN\nNeuralFlow AI\n\nAI/ML\n\nSeed\n85% r",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 112,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:24:55.030Z"
+}

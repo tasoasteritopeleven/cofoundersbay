@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/dashboard/mentor",
+  "sourceFile": "dashboard/mentor/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:24:00.269Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/dashboard/mentor",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/mentor",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentor dashboard"
+    ],
+    "wordCount": 211,
+    "textExcerpt": "Mentor dashboard\n\nSessions, mentee requests, reviews, and earnings at a glance.\n\nMentor\n\nGood evening, Alex Demo. Requests waiting on you, your next sessions and your mentees.\n\nActive mentees\n\n3\n\n1 completed before\n\nUpco",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:24:04.895Z"
+}

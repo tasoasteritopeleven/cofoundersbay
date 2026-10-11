@@ -1,0 +1,50 @@
+{
+  "requestedRoute": "/invite",
+  "sourceFile": "invite/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:25:17.104Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/invite",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/invite",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Invite People"
+    ],
+    "wordCount": 72,
+    "textExcerpt": "Invite People\n\nGrow your network by inviting co-founders, mentors, and investors.\n\nSENT\n\n5\n\nJOINED\n\n2\n\nAccepted your invite\n\nREMAINING\n\n45\n\nInvites left\n\nSend an Invitation\n\nInvite someone to join CoFounderBay and expand",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:25:21.414Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/mentorship-management",
+  "sourceFile": "admin/mentorship-management/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:45:56.467Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/mentorship-management",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/mentorship-management",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentorship management·Διαχείριση mentoring"
+    ],
+    "wordCount": 182,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nMentorship management·Διαχείριση mentoring\n\nThe mentor directory: who is available, who is booked, and ho",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:46:00.314Z"
+}

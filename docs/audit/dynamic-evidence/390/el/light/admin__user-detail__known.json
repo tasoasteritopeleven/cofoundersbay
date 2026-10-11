@@ -1,0 +1,35 @@
+{
+  "template": "/admin/user-detail/[id]",
+  "kind": "known",
+  "source": "admin/user-detail/[id]/page.tsx",
+  "evidence": "lib/preview-api.ts PREVIEW_ADMIN_USERS id user-elena",
+  "route": "/admin/user-detail/user-elena",
+  "width": 390,
+  "locale": "el",
+  "theme": "light",
+  "at": "2026-09-27T17:22:46.600Z",
+  "status": "rendered_sample",
+  "requestedRole": "existing_founder (synthetic preview)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "pageErrors": [],
+  "blockedMutations": [],
+  "httpStatus": 200,
+  "finalPath": "/admin/user-detail/user-elena",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Elena Papadopoulos"
+    ],
+    "textExcerpt": "Επισκόπηση\nΚονσόλα\nΟργανισμοί\nSSO\nΤομείς\nΑυτοματισμοί\nElena Papadopoulos\n\nΚατάσταση λογαριασμού, αναφορές και οι διαχειριστικές ενέργειες σε αυτόν.\n\nΠίσω στη λίστα χρηστών\nΣτοιχεία χρήστη\nEP\nElena Papadopoulos\n\nelena@harbor.example\n\nΕνεργός\nΡόλος\nFounder\nEmail\nΑναστολή\nΑποκλεισμός\nΕγγραφή\nπριν 1 έτ.\nΤελευταία παρουσία\nπριν 5 ώ.\nID\nuser-elena\n\nΑνοιχτές αναφορές γι' αυτόν\n\n0\n\n0 συνολικά\n\nΑναφορές που υπέβαλε\n\n0\n\nΔιαχειριστικές ενέργειες\n\n0\n\nΑναφορές για αυτόν τον λογαριασμό\nΌλες οι αναφορές\n\nΚανεί",
+    "wordCount": 86,
+    "visibleAlerts": [],
+    "lang": "el",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder light",
+    "overflowPx": 0,
+    "unnamedControls": []
+  }
+}

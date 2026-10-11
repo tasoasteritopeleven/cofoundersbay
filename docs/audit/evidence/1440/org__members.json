@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/members",
+  "sourceFile": "org/members/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:56:42.553Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/members",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/members",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Team Members·Μέλη ομάδας"
+    ],
+    "wordCount": 158,
+    "textExcerpt": "Team Members·Μέλη ομάδας\n\nInvite and manage who can run programs, review applications, and access workspace settings.\nΠροσκαλέστε και ορίστε ποιοι τρέχουν προγράμματα, αξιολογούν αιτήσεις και έχουν πρόσβαση στις ρυθμίσει",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:56:48.730Z"
+}

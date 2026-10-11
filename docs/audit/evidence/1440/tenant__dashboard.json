@@ -1,0 +1,39 @@
+{
+  "requestedRoute": "/tenant/dashboard",
+  "sourceFile": "tenant/dashboard/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:02:03.721Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/dashboard",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/dashboard",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Tenant Dashboard·Πίνακας οργανισμού"
+    ],
+    "wordCount": 130,
+    "textExcerpt": "Tenant Dashboard·Πίνακας οργανισμού\n\nManage your organization on CoFounderBay\nΔιαχειριστείτε τον οργανισμό σας στο CoFounderBay\n\nBranding\nSettings\n\nMembers\nΜέλη\n\n—\n\nEveryone with a seat\nΌσοι έχουν θέση\n\nRunning programs\n",
+    "loadingElements": [
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:02:10.048Z"
+}

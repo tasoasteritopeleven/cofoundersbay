@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/sso",
+  "sourceFile": "tenant/sso/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:42:40.980Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/sso",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/sso",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "SSO / Authentication"
+    ],
+    "wordCount": 27,
+    "textExcerpt": "SSO / Authentication\n\nConfigure SAML, OIDC, or Google Workspace SSO. Optional rules map IdP claims to roles.\n\nNo organisation is selected. Open this page from your organisation.",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:42:46.831Z"
+}

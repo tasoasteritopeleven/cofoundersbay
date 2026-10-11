@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/reports",
+  "sourceFile": "admin/reports/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:31.285Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/reports",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/reports",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Reports & moderation"
+    ],
+    "wordCount": 74,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nReports & moderation\n\nUser-submitted reports awaiting a moderation decision.\n\nPending (2)\nIn Review (0)\nResolved (1)\nDismissed (0)\nAll (3)\nSends the same \"guaranteed",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 2,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:35.720Z"
+}

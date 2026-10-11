@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/analytics",
+  "sourceFile": "analytics/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:47:26.988Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Analytics·Αναλυτικά"
+    ],
+    "wordCount": 51,
+    "textExcerpt": "Analytics·Αναλυτικά\n\nTrack your profile performance and network growth.\nΠαρακολούθηση απόδοσης προφίλ και ανάπτυξης δικτύου — προβολές, συνδέσεις και αφοσίωση.\n\nHow to read these metrics\n·\nΠώς διαβάζονται οι μετρήσεις\nOv",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:33.751Z"
+}

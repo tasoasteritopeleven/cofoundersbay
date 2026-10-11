@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/unauthorized",
+  "sourceFile": "unauthorized/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:43:03.904Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/unauthorized",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/unauthorized",
+  "measurement": {
+    "title": "No access to this page | CoFounderBay",
+    "headings": [
+      "You do not have access to this page\nΔεν έχετε πρόσβαση σε αυτή τη σελίδα"
+    ],
+    "wordCount": 75,
+    "textExcerpt": "CoFounderBay\nYou do not have access to this page\nΔεν έχετε πρόσβαση σε αυτή τη σελίδα\n\nIt needs a role your account does not have yet. Switch to a role that has it, or ask an administrator to add the role to your account",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:43:06.964Z"
+}

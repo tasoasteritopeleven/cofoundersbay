@@ -1,0 +1,63 @@
+{
+  "requestedRoute": "/profile/edit",
+  "sourceFile": "profile/edit/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:57:48.724Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/profile/edit",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 3,
+        "nodes": [
+          {
+            "target": [
+              ".mb-0\\.5:nth-child(1) > .nav-section-label.mx-3.mb-1 > .overflow-hidden.flex-col.min-w-0 > .uppercase.tracking-widest.font-semibold"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.42 (foreground color: #7d8490, background color: #f3f4f6, font size: 9.2pt (12.2412px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".mb-0\\.5:nth-child(2) > .nav-section-label.mx-3.mb-1 > .overflow-hidden.flex-col.min-w-0 > .uppercase.tracking-widest.font-semibold"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.42 (foreground color: #7d8490, background color: #f3f4f6, font size: 9.2pt (12.2412px), font weight: normal). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".mb-0\\.5:nth-child(3) > .nav-section-label.mx-3.mb-1 > .overflow-hidden.flex-col.min-w-0 > .uppercase.tracking-widest.font-semibold"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.42 (foreground color: #7d8490, background color: #f3f4f6, font size: 9.2pt (12.2412px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/profile/edit",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Edit Profile·Επεξεργασία προφίλ"
+    ],
+    "wordCount": 28,
+    "textExcerpt": "Edit Profile·Επεξεργασία προφίλ\n\nUpdate photo, bio, skills, and visibility settings. Changes save automatically as you type.\nΕνημέρωση φωτογραφίας, βιογραφικού, δεξιοτήτων και ρυθμίσεων ορατότητας. Αποθήκευση αυτόματα κα",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:57:54.977Z"
+}

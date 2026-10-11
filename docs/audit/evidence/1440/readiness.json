@@ -1,0 +1,39 @@
+{
+  "requestedRoute": "/readiness",
+  "sourceFile": "readiness/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:15.380Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/readiness",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/readiness",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Readiness Score·Βαθμολογία ετοιμότητας"
+    ],
+    "wordCount": 685,
+    "textExcerpt": "Readiness Score·Βαθμολογία ετοιμότητας\n\nAssess your startup’s readiness across 6 key dimensions and see what to fix next.\nΑξιολόγηση της ετοιμότητας του startup σε 6 βασικές διαστάσεις και προτεραιότητες βελτίωσης.\n\nHow ",
+    "loadingElements": [
+      "Demo showcase — tick criteria freely; scores recalculate and nothing i",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:24.104Z"
+}

@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/notifications",
+  "sourceFile": "notifications/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:28.902Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/notifications",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/notifications",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Notifications·Ειδοποιήσεις"
+    ],
+    "wordCount": 57,
+    "textExcerpt": "Notifications·Ειδοποιήσεις\n\nStay on top of connection requests, messages, and platform activity. Click a card to jump straight to context.\nΕνημερωθείτε για αιτήματα σύνδεσης, μηνύματα και δραστηριότητα πλατφόρμας. Πατήστ",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:33.527Z"
+}

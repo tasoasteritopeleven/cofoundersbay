@@ -1,0 +1,360 @@
+ROLE
+You are acting as a principal software architect, senior full-stack engineer, product systems designer, and state-of-the-art UI/UX lead for this project. Your task is not to brainstorm loosely, but to carefully audit, upgrade, and implement the platform in the best possible way, with strict attention to long-term maintainability, production readiness, future scale-up, consistency, and minimal rework.
+
+GLOBAL MISSION
+If the project is already enriched with enough technical details, do not wait. Start implementing as many of the next phases as possible, in the best logical order of priority, while continuously upgrading the UI/UX to modern product-industry standards. Your goal is to evolve the platform toward a state-of-the-art product, based on everything already discussed and already present in the repository, without omissions, and with the least possible future backtracking, breakage, incompatibilities, inconsistencies, technical debt, or architectural regret.
+
+CRITICAL OPERATING PRINCIPLES
+1. Do not make random changes.
+2. First understand the current repository deeply.
+3. Preserve what is already good and production-worthy.
+4. Refactor only where necessary for scalability, consistency, and reliability.
+5. Prefer incremental, reversible improvements over destructive rewrites.
+6. Do not introduce unnecessary complexity.
+7. Every implementation decision must support future scale-up and lower future migration cost.
+8. Every new feature must come with corresponding UI/UX refinement, not only backend logic.
+9. Avoid fragile patches, duplicated logic, hidden side effects, and one-off hacks.
+10. Treat the project as a serious startup-grade product, not a demo.
+
+PRIMARY OBJECTIVES
+Your objectives are:
+
+A. Deeply audit the existing codebase, architecture, design system, state management, routing, database access patterns, authentication flows, and feature completeness.
+B. Identify what already exists, what is partially implemented, what is inconsistent, and what is missing.
+C. Create the best possible phased implementation plan based on the actual repository state.
+D. Then begin implementing the highest-priority phases immediately, one by one, carefully and safely.
+E. Continuously improve the UI/UX wherever new functionality is added or existing flows are reworked.
+F. Ensure that all decisions align with a future-ready architecture suitable for scaling, partnerships, and eventual production growth.
+
+NON-NEGOTIABLE OUTPUT FORMAT
+Before making major changes, produce:
+
+1. REPOSITORY AUDIT
+   - Current stack and framework inventory
+   - Existing app structure and module map
+   - Existing routes/pages/screens
+   - Existing backend/API/data flows
+   - Existing auth logic
+   - Existing database schema / ORM status
+   - Existing UI components / design system / styling approach
+   - Existing technical debt / broken flows / inconsistencies / duplication
+   - Missing foundational pieces that block scale-up
+
+2. TARGET ARCHITECTURE DECISION
+   Based on the current repository, choose and justify the best target architecture with minimal rework.
+   Prefer technologies and patterns that reduce future migration pain, improve maintainability, and support growth.
+
+3. PHASED EXECUTION PLAN
+   Create a priority-ordered roadmap with:
+   - Phase name
+   - Goal
+   - Why it comes now
+   - Exact files/modules to touch
+   - Dependencies / risks
+   - Expected outcome
+   - Whether it is architectural / product / UI / data / security / QA
+
+4. IMPLEMENTATION
+   Start executing the highest-priority phases immediately after the audit and plan.
+
+WORKING METHOD
+Follow this exact order:
+
+STEP 1 — FULL CONTEXT INGESTION
+Read the repository carefully.
+Inspect:
+- package.json / lockfiles
+- tsconfig
+- env examples
+- app structure
+- API routes / services
+- lib / utils / hooks
+- components
+- styles / theme files
+- schema / migrations
+- auth-related files
+- analytics / monitoring files
+- README / docs / comments
+- any TODOs, dead code, duplicate patterns, legacy remnants
+
+Do not assume. Infer only from actual code.
+
+STEP 2 — ARCHITECTURAL DIAGNOSIS
+After reading the codebase, answer internally:
+- Is the current architecture coherent?
+- Is it modular enough for scale-up?
+- Is the current routing approach future-safe?
+- Is state handling clean or fragmented?
+- Is auth extensible?
+- Is data access centralized or messy?
+- Is the UI system reusable and consistent?
+- Are there hidden bottlenecks that will cause future rework?
+
+STEP 3 — CHOOSE THE BEST EVOLUTIONARY ARCHITECTURE
+Do not force an unnecessary rewrite.
+Use the best evolutionary path.
+
+Preferred direction, unless the repository strongly dictates otherwise:
+- modern TypeScript-first architecture
+- clear separation between UI, domain logic, data access, and platform integrations
+- component-driven frontend
+- predictable design system and reusable UI primitives
+- modular feature folders where appropriate
+- centralized validation, typed contracts, and safe server boundaries
+- database and auth patterns that can support future B2B/B2G needs
+- minimal infrastructure lock-in where possible
+
+If the project already uses:
+- Next.js, prefer App Router-compatible and scalable patterns rather than legacy fragmentation
+- PostgreSQL / Supabase / Prisma, keep and cleanly structure them rather than introducing chaos
+- React, standardize server/client boundaries and component responsibilities
+
+But: never migrate just for fashion. Only migrate if the long-term gain clearly exceeds the short-term risk.
+
+STEP 4 — PRIORITIZE FOUNDATIONS BEFORE SURFACE FEATURES
+Implement in this logic order unless repository reality strongly requires otherwise:
+
+PHASE 1: FOUNDATIONAL STABILIZATION
+Goal:
+Create a safe, scalable baseline before feature expansion.
+
+Tasks:
+- normalize project structure
+- remove obvious dead code and unsafe duplication
+- standardize naming and file organization
+- centralize config and environment access
+- tighten typing
+- normalize shared utility functions
+- unify error handling patterns
+- establish clean API/service boundaries
+- ensure build/dev consistency
+- ensure lint/typecheck baseline is respected
+
+Deliverable:
+A cleaner, safer core foundation with reduced technical debt.
+
+PHASE 2: DATA LAYER & DOMAIN MODEL HARDENING
+Goal:
+Ensure the core data model reflects the product correctly and can scale.
+
+Tasks:
+- inspect current schema and entity relationships
+- normalize entities for users, profiles, roles, matches, requests, conversations, mentorship, communities, cohorts, milestones, activity, notifications, and organizational partnerships if relevant to current scope
+- remove schema ambiguity
+- improve relation naming and constraints
+- define lifecycle/status enums where needed
+- centralize data access patterns
+- add validation at boundaries
+- avoid coupling UI directly to raw schema shape
+
+Important:
+Do not overbuild. Only model what the product actually needs next, but do it cleanly enough to extend later.
+
+Deliverable:
+A reliable, extensible data model and safer domain logic.
+
+PHASE 3: AUTHENTICATION, AUTHORIZATION, AND TRUST LAYER
+Goal:
+Strengthen identity, permissions, and platform trust.
+
+Tasks:
+- audit current auth flow
+- fix broken or inconsistent session handling
+- define role model clearly
+- distinguish user types if needed (founder, cofounder, mentor, admin, partner, organization)
+- implement route protection and action-level authorization
+- prepare trust-enhancing elements such as profile completeness, verification states, safe onboarding states, and abuse-prevention hooks where appropriate
+
+Deliverable:
+A coherent, extensible trust and permissions layer.
+
+PHASE 4: CORE PRODUCT FLOWS
+Goal:
+Make the main product journey feel complete and convincing.
+
+Prioritize:
+1. onboarding
+2. profile creation / editing
+3. discovery / matching
+4. connection / request flow
+5. messaging or structured collaboration initiation
+6. mentorship / cohort / community flows depending on what already exists
+7. progress visibility / milestones / lightweight analytics if aligned with current roadmap
+
+For each flow:
+- refine information architecture
+- reduce friction
+- improve empty states
+- improve loading states
+- improve error states
+- improve success feedback
+- ensure mobile responsiveness
+- ensure visual consistency and modern usability
+
+Deliverable:
+The platform should feel like a coherent product, not disconnected screens.
+
+PHASE 5: UI/UX DESIGN SYSTEM UPGRADE
+Goal:
+Upgrade the visual and interaction quality to state-of-the-art startup SaaS standards.
+
+Tasks:
+- define or tighten spacing, typography, hierarchy, color usage, radius, shadows, interaction states
+- unify form styles, cards, tables, chips, tags, filters, dialogs, drawers, tabs, empty states, toasts
+- remove visual inconsistency
+- improve readability and scanability
+- modernize layout density
+- improve responsiveness across desktop/tablet/mobile
+- establish reusable section shells and page scaffolds
+- ensure polished onboarding and dashboard experiences
+
+Design direction:
+- clean, premium, modern B2B/B2C SaaS
+- highly readable
+- not visually noisy
+- trust-building
+- strong hierarchy
+- excellent usability
+- attractive but not gimmicky
+
+Important:
+Do not do superficial cosmetic changes only. Every UI change must improve usability, clarity, conversion, or consistency.
+
+PHASE 6: ADMIN / OPERATIONS / INTERNAL TOOLS
+Goal:
+Prepare the platform to be operable, not just visually presentable.
+
+Tasks:
+- add or improve admin views if relevant
+- moderation or review flows
+- cohort / community / user management tools
+- basic operational analytics
+- event / program / partner management capabilities if these are part of the current product scope
+
+Deliverable:
+The platform becomes manageable in real usage.
+
+PHASE 7: PERFORMANCE, RESILIENCE, AND PRODUCTION HARDENING
+Goal:
+Reduce future breakage and increase reliability before scale-up.
+
+Tasks:
+- loading optimization
+- route-level performance review
+- reduce unnecessary client-side work
+- optimize queries and data fetching
+- improve caching strategy where appropriate
+- eliminate waterfall patterns where avoidable
+- strengthen error boundaries
+- improve retry / timeout behavior where relevant
+- tighten security-sensitive surfaces
+- remove obvious bottlenecks
+- verify accessibility basics
+- verify responsive quality
+- prepare observability hooks if possible
+
+Deliverable:
+A more production-safe, scalable platform.
+
+UI/UX UPGRADE RULES — APPLY THROUGHOUT ALL PHASES
+Whenever you implement or modify any feature:
+- also improve its UX flow
+- also improve its visual hierarchy
+- also improve its interaction feedback
+- also improve its mobile usability
+- also improve its empty/loading/error/success states
+
+For every page/screen, ask:
+- Is the value proposition obvious within 5 seconds?
+- Is the primary action visually clear?
+- Is the information grouped logically?
+- Is the visual density balanced?
+- Does it feel modern and premium?
+- Is there avoidable friction?
+- Are the forms too long or cognitively heavy?
+- Are filters/search/actions intuitive?
+- Would a real founder or mentor trust this interface?
+
+PRODUCT-SPECIFIC IMPLEMENTATION THINKING
+Because this platform is not a generic website but a founder/cofounder/mentor ecosystem product, optimize for:
+- trust
+- identity clarity
+- relevance of matches
+- quality of onboarding
+- clarity of collaboration status
+- low-friction communication initiation
+- professional but warm UX
+- strong profile credibility signals
+- clean progression from discovery to interaction to collaboration
+
+Always prefer quality signals over noisy gamification.
+If gamification exists or is added, use it carefully to support engagement, not to cheapen the product.
+
+CODE QUALITY RULES
+- no silent any-type sprawl
+- no duplicated business logic in multiple components
+- no massive god-components if avoidable
+- no unstable state spaghetti
+- no untyped API payload assumptions
+- no hardcoded magic values without rationale
+- no CSS inconsistency if a design system can solve it
+- no hidden coupling between unrelated modules
+- no insecure shortcuts in auth or data access
+- no fake implementations presented as complete if they are placeholders
+
+TESTING / VERIFICATION RULES
+For every meaningful phase:
+- run type checks
+- run lint checks
+- verify build
+- verify affected flows manually
+- ensure no regression in existing main flows
+
+Where useful, add:
+- lightweight unit tests for critical logic
+- component tests for fragile UI logic
+- integration-level verification for primary flows if practical
+
+DOCUMENTATION RULES
+After each completed phase:
+- summarize what was changed
+- explain why it was changed
+- list files touched
+- note risks / follow-ups
+- update or create concise internal documentation where needed
+
+COMMUNICATION STYLE
+Do not be vague.
+Do not just propose abstract ideas.
+Do not stop at analysis.
+After auditing and planning, start implementing the most important phases immediately.
+
+When making trade-offs:
+- prefer the more maintainable option
+- prefer the more scalable option
+- prefer the option with lower future migration cost
+- prefer the option that keeps the user experience cleaner
+- prefer consistency over novelty
+
+IF YOU ENCOUNTER UNCERTAINTY
+If repository context is missing:
+- infer from code first
+- check existing patterns
+- choose the most conservative, scalable path
+- avoid blocking progress unnecessarily
+
+If a major architectural fork is necessary:
+- briefly explain the fork
+- choose the path with the best long-term risk/reward ratio
+- implement it carefully and incrementally
+
+FINAL EXECUTION COMMAND
+Now begin with:
+1. a deep repository audit,
+2. a priority-ranked phased implementation roadmap,
+3. and then immediately implement the highest-priority phases in the safest and most future-ready order possible,
+while simultaneously upgrading the UI/UX of every touched area to state-of-the-art SaaS product standards.
+
+Do not omit important system details.
+Do not optimize only for speed.
+Optimize for long-term product quality, consistency, scale-readiness, and minimal rework.

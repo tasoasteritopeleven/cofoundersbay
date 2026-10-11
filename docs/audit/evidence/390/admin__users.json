@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/users",
+  "sourceFile": "admin/users/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:22:07.581Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/users",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/users",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Users"
+    ],
+    "wordCount": 122,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nUsers\n\nSearch and moderate platform accounts.\n\n13 of 13 users\n\nAD\nAlex Demo\n\nalex@harbor.example\n\nAdmin · Active\n\nactive\nEP\nElena Papadopoulos\n\nelena@harbor.example\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:22:12.374Z"
+}

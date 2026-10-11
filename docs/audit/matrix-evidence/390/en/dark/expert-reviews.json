@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/expert-reviews",
+  "sourceFile": "expert-reviews/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:23:21.763Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/expert-reviews",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/expert-reviews",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Expert Reviews"
+    ],
+    "wordCount": 46,
+    "textExcerpt": "Expert Reviews\n\nStructured feedback on your pitch, financials, and strategy from domain experts.\n\n0\n\nTotal reviews\n\n0\n\nIn progress\n\n0\n\nCompleted\n\n—\n\nAvg score\n\nMy Reviews\nFind Experts\nInsights\nRequest review\n\nNo reviews ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:23:26.578Z"
+}

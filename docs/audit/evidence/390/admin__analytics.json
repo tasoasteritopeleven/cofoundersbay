@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/analytics",
+  "sourceFile": "admin/analytics/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:18:08.708Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Global analytics"
+    ],
+    "wordCount": 52,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nGlobal analytics\n\nPlatform growth, engagement, and role distribution — export for board or investor updates.\n\nReading the analytics\nLast 30 days\nRefresh\nExport\nReadi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:18:21.578Z"
+}

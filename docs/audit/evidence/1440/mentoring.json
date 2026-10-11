@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/mentoring",
+  "sourceFile": "mentoring/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:02.430Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentoring",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentoring",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Find mentors·Εύρεση mentors"
+    ],
+    "wordCount": 55,
+    "textExcerpt": "Find mentors·Εύρεση mentors\n\nDirectory of mentors — filter by expertise and availability.\nΚατάλογος mentors — φιλτράρισμα κατά εξειδίκευση και διαθεσιμότητα.\n\nFind mentors\n·\nΕύρεση μεντόρων\nMy sessions\n·\nΟι συνεδρίες μου",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:10.317Z"
+}

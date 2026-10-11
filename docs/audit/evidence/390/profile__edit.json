@@ -1,0 +1,69 @@
+{
+  "requestedRoute": "/profile/edit",
+  "sourceFile": "profile/edit/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:37:42.579Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/profile/edit",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/profile/edit",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Edit Profile"
+    ],
+    "wordCount": 155,
+    "textExcerpt": "Edit Profile\n\nUpdate your personal details and how you appear to others\n\nSave changes\nBasic Info\nRole Details\nSocial Links\nPortfolio\nProfile Photo\n\nA friendly face helps others recognize you and builds trust\n\nA\nCrop & Up",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "input",
+        "html": "<input placeholder=\"Type a skill and press Enter… · Πληκτρολογήστε δεξιότητα και πατήστε Enter…\" class=\"flex-1 min-w-[120px] bg-transparent text-sm outline-none\" type=\"text\" value="
+      },
+      {
+        "tag": "input",
+        "html": "<input placeholder=\"e.g. Fintech, AI...\" class=\"flex-1 min-w-[120px] bg-transparent text-sm outline-none\" type=\"text\" value=\"\">"
+      },
+      {
+        "tag": "input",
+        "html": "<input placeholder=\"e.g. English, Greek...\" class=\"flex-1 min-w-[120px] bg-transparent text-sm outline-none\" type=\"text\" value=\"\">"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:37:47.121Z"
+}

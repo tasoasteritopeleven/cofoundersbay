@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/search",
+  "sourceFile": "search/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:40:10.369Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/search",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/search",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Search"
+    ],
+    "wordCount": 63,
+    "textExcerpt": "Search\n\nFind people, jobs, events, programs, and posts.\n\nAll\nPeople\nJobs\nEvents\nGroups\nMentors\nOpportunities\nSearch the network\n\nEnter a search term to find people, jobs, events, and more\n\nBrowse People\nBrowse Jobs\nBrows",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input type=\"text\" class=\"flex min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:40:14.567Z"
+}

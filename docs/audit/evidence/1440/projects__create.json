@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/projects/create",
+  "sourceFile": "projects/create/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:58:08.164Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/projects/create",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/projects/create",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Create project·Δημιουργία έργου"
+    ],
+    "wordCount": 108,
+    "textExcerpt": "Create project·Δημιουργία έργου\n\nName the idea, pick a stage, and list the roles you still need — then publish.\nΟνομάστε την ιδέα, επιλέξτε στάδιο και καταγράψτε τους ρόλους που λείπουν — μετά δημοσιεύστε.\n\nHow projects ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:58:12.632Z"
+}

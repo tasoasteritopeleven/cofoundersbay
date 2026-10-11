@@ -1,0 +1,51 @@
+{
+  "requestedRoute": "/matches",
+  "sourceFile": "matches/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:32:58.042Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/matches",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".bg-primary\\/20"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #3a45df, background color: #cccfef, font size: 9.9pt (13.2613px), font weight: bold). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/matches",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Matches"
+    ],
+    "wordCount": 35,
+    "textExcerpt": "Matches\n\nAI-ranked co-founder and team matches based on your profile compatibility\n\nHow matching works\nRefresh\nExplore\n\nSign in to see matches\n\nYour matches are personalized based on your profile and preferences.\n\nSign i",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:33:04.764Z"
+}

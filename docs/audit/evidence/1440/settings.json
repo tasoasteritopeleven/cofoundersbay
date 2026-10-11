@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings",
+  "sourceFile": "settings/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:33.336Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Settings·Ρυθμίσεις"
+    ],
+    "wordCount": 489,
+    "textExcerpt": "Settings·Ρυθμίσεις\n\nManage billing, notifications, and integrations.\nΔιαχειριστείτε χρεώσεις, ειδοποιήσεις και ενσωματώσεις.\n\nSettings overview\n·\nΕπισκόπηση ρυθμίσεων\nLanguage\n\nTap a language. Menus, buttons, page titles",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:00:39.190Z"
+}

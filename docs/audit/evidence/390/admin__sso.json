@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/sso",
+  "sourceFile": "admin/sso/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:40.557Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/sso",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/sso",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "SSO Configuration"
+    ],
+    "wordCount": 63,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nSSO Configuration\n\nConfigure Single Sign-On for organization tenants\n\nTotal Tenants\n1\nActive Providers\n0\nTotal Providers\n0\nEvents (24h)\n0\nOrganization Tenants\n\nClick",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:44.898Z"
+}

@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/builder",
+  "sourceFile": "builder/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:48:14.108Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/builder",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [
+    "WebSocket connection to 'ws://127.0.0.1:3001/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "pageErrors": [],
+  "finalPath": "/builder",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Startup Builder·Δόμηση νεοφυούς"
+    ],
+    "wordCount": 44,
+    "textExcerpt": "Startup Builder·Δόμηση νεοφυούς\n\nStructure idea, team, market, traction, and pitch — all in one workspace.\nΔομή ιδέας, ομάδας, αγοράς, traction και pitch — σε έναν ενοποιημένο χώρο εργασίας.\n\nUsing the Startup Builder\n·\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:48:22.335Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/pricing",
+  "sourceFile": "pricing/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:57:08.663Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/pricing",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/pricing",
+  "measurement": {
+    "title": "Pricing | CoFounderBay",
+    "headings": [
+      "Choose the plan that fits your journey·Επιλέξτε το πλάνο που ταιριάζει στη διαδρομή σας"
+    ],
+    "wordCount": 464,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\nHow it works\nFeatures\nWho it's for\nPricing\nDemo\nLog in\nJoin free\nSimple, transparent pricing\n·\nΑπλές, διαφανείς τιμές\nChoose the plan that fits your jour",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:57:13.448Z"
+}

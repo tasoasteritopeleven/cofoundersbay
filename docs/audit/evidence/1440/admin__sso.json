@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/sso",
+  "sourceFile": "admin/sso/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:46:14.934Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/sso",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/sso",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "SSO Configuration·Ρύθμιση SSO"
+    ],
+    "wordCount": 113,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nSSO Configuration·Ρύθμιση SSO\n\nConfigure Single Sign-On for organization tenants\nΡυθμίστε την ενιαία σύνδ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:46:18.998Z"
+}

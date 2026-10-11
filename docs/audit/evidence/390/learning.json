@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/learning",
+  "sourceFile": "learning/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:32:34.878Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/learning",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/learning",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Learning hub"
+    ],
+    "wordCount": 257,
+    "textExcerpt": "Learning hub\n\nCurated courses, founder guides, and templates aligned with your readiness gaps.\n\nHow the learning hub works\nLEARNING PATHS\n4 \npaths\nFounder fast track\n\nGo from idea to funded startup in structured steps\n\n8",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:32:47.128Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/mentees",
+  "sourceFile": "mentor/mentees/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:34:14.696Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/mentees",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/mentees",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentees"
+    ],
+    "wordCount": 102,
+    "textExcerpt": "Mentees\n\nThe founders you are mentoring, and where each one stands.\n\nRefresh\n\n3\n\nActive Mentees\n\n1\n\nCompleted\n\n15\n\nTotal Sessions\n\nActive (3)\nSA\nSofia Alexiou\n\nFounder at Meltemi\n\nactive\nPricing\nSales hiring\n4 sessions\nN",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:34:22.671Z"
+}

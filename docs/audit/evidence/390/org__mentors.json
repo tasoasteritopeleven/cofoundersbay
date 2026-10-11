@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/mentors",
+  "sourceFile": "org/mentors/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:36:37.510Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/mentors",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/mentors",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentor Pool"
+    ],
+    "wordCount": 93,
+    "textExcerpt": "Mentor Pool\n\nManage mentors available to your cohorts. Find them in the platform's mentor directory.\n\nFind a mentor to invite\n\nTotal Mentors\n\n4\n\nActive\n\n3\n\nCapacity\n\n9/15\n\nTotal Sessions\n\n150\n\nSC\nSarah Chen\n\nFormer Googl",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:36:43.280Z"
+}

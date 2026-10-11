@@ -1,0 +1,45 @@
+{
+  "requestedRoute": "/auth/sso-complete",
+  "sourceFile": "auth/sso-complete/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:21:49.572Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/auth/sso-complete",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/auth/sso-complete",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Sign in successful!"
+    ],
+    "wordCount": 17,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\nOK\nSign in successful!\n\nRedirecting you now...",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable dark role-founder",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 27,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-27T16:21:51.515Z"
+}

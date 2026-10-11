@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/messages",
+  "sourceFile": "messages/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:34:50.956Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/messages",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/messages",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Messages"
+    ],
+    "wordCount": 66,
+    "textExcerpt": "Messages\n\nPinned, unread, and recent threads.\n\nChats vs intro requests\nNew message\nAsk AI\nDraft a reply, summarise this thread, or suggest who to message next.\nChats\n1\nIntros\n1\n\nPINNED\n\nEP\nElena Papadopoulos\nYesterday\n\nW",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:34:57.142Z"
+}

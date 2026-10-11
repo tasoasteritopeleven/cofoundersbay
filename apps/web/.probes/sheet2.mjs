@@ -1,0 +1,12 @@
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(new URL('../package.json', import.meta.url))('@playwright/test');
+const browser = await chromium.launch();
+const ctx = await browser.newContext({ viewport: { width: 834, height: 900 } });
+await ctx.addCookies([{ name: 'cfb_session', value: 'probe', domain: 'localhost', path: '/' }, { name: 'cfb_primary_role', value: 'platform_admin', domain: 'localhost', path: '/' }]);
+await ctx.addInitScript(() => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', email: 'a@b.test', role: 'admin' })); localStorage.setItem('cfb_demo_data', '1'); localStorage.setItem('cfb_cookie_consent', 'true'); });
+const page = await ctx.newPage();
+await page.goto('http://localhost:3000/admin', { waitUntil: 'domcontentloaded', timeout: 90000 }); await page.waitForTimeout(6000);
+const info = await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find((x) => /Page tools|Εργαλεία σελίδας/.test(x.getAttribute('aria-label') || '')); if (!b) return { found: false, asides: document.querySelectorAll('aside').length, hasRailAttr: document.querySelector('[data-rail]')?.getAttribute('data-rail') }; const r = b.getBoundingClientRect(); const cs = getComputedStyle(b); return { found: true, rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)], display: cs.display, vis: cs.visibility, parentDisplay: getComputedStyle(b.parentElement).display, top: document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)?.tagName + '.' + (document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)?.className || '').toString().slice(0, 40) }; });
+console.log(JSON.stringify(info));
+await page.screenshot({ path: 'C:/Users/anast/IdeaProjects/CoFounderBay/apps/web/.probes/admin-834.png' });
+await browser.close();

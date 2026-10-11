@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-27T17:38:00.117Z",
+  "base": "http://localhost:80",
+  "error": "GET /login failed: This operation was aborted",
+  "browserNotStarted": true,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark"
+}

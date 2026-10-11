@@ -1,0 +1,58 @@
+name: Accessibility
+
+on:
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - '.github/workflows/a11y.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: a11y-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  axe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build
+        working-directory: apps/web
+        env:
+          # Interpolated into the CSP connect-src; an unset value would make the
+          # built app block its own API calls.
+          NEXT_PUBLIC_API_URL: http://localhost:3001
+        run: pnpm run build
+
+      - name: Run axe suite
+        working-directory: apps/web
+        run: pnpm run test:a11y
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: a11y-failures
+          path: apps/web/test-results/
+          retention-days: 7

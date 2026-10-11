@@ -1,0 +1,120 @@
+{
+  "at": "2026-09-26T23:09:41.640Z",
+  "scope": "Unauthenticated mobile login/register; Tab/Enter on visibility control only",
+  "rows": [
+    {
+      "requestedRoute": "/login",
+      "width": 390,
+      "at": "2026-09-26T23:09:37.576Z",
+      "tabStops": [
+        {
+          "tag": "a",
+          "type": null,
+          "text": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "a",
+          "type": null,
+          "text": "CoFounderBay",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "input",
+          "type": "email",
+          "text": "",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "a",
+          "type": null,
+          "text": "Forgot password?·Ξεχάσατε τον κωδικό;",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "input",
+          "type": "password",
+          "text": "",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "button",
+          "type": "button",
+          "text": "Show password. Εμφάνιση κωδικού",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        }
+      ],
+      "actualFinalUrl": "http://localhost/login",
+      "error": null,
+      "httpStatus": 200,
+      "showPasswordReachable": true,
+      "showPasswordFocusVisible": true,
+      "passwordVisibilityAfterEnter": "text"
+    },
+    {
+      "requestedRoute": "/register",
+      "width": 390,
+      "at": "2026-09-26T23:09:39.330Z",
+      "tabStops": [
+        {
+          "tag": "a",
+          "type": null,
+          "text": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "a",
+          "type": null,
+          "text": "CoFounderBay",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "input",
+          "type": "email",
+          "text": "",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "input",
+          "type": "password",
+          "text": "",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        },
+        {
+          "tag": "button",
+          "type": "button",
+          "text": "Show password. Εμφάνιση κωδικού",
+          "visible": true,
+          "outlineStyle": "solid",
+          "outlineWidth": "2px"
+        }
+      ],
+      "actualFinalUrl": "http://localhost/register",
+      "error": null,
+      "httpStatus": 200,
+      "showPasswordReachable": true,
+      "showPasswordFocusVisible": true,
+      "passwordVisibilityAfterEnter": "text"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/automations",
+  "sourceFile": "admin/automations/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:43:41.216Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/automations",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/automations",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Automation rules"
+    ],
+    "wordCount": 37,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nAutomation rules\n\nTrigger-and-action rules that run without manual review.\n\nNew Rule\n\nTotal Rules\n\n0\n\nActive\n\n0\n\nExecutions (recent)\n\n0\n\nRules with Failures\n\n0\n\nRule",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:43:48.910Z"
+}

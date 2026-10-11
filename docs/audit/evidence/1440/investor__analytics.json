@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/investor/analytics",
+  "sourceFile": "investor/analytics/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:51:27.470Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investor analytics·Αναλυτικά επενδυτή"
+    ],
+    "wordCount": 178,
+    "textExcerpt": "Investor analytics·Αναλυτικά επενδυτή\n\nDeal flow trends, sector exposure and response rates.\nΤάσεις ροής συμφωνιών, έκθεση ανά κλάδο και ποσοστά απόκρισης.\n\n3 months\n·\n3 μήνες\n6 months\n·\n6 μήνες\n1 year\n·\n1 έτος\n\nDeals re",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:51:32.545Z"
+}

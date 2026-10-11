@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/referrals",
+  "sourceFile": "referrals/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:39:16.172Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/referrals",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/referrals",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Referral Program"
+    ],
+    "wordCount": 45,
+    "textExcerpt": "Referral Program\n\nInvite friends and earn rewards when they join CoFounderBay.\n\nInvite people\n\nShare the sign-up link, or invite someone by email so the invitation is tracked below.\n\nCopy\nInvite by email\nEmail\nTwitter\nLi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:39:21.124Z"
+}

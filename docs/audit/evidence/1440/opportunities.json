@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/opportunities",
+  "sourceFile": "opportunities/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:38.677Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/opportunities",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/opportunities",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Opportunities·Ευκαιρίες"
+    ],
+    "wordCount": 74,
+    "textExcerpt": "Opportunities·Ευκαιρίες\n\nCo-founder calls, paid gigs, equity roles, and short-term collaborations in one feed.\nΚλήσεις συνιδρυτών, αμειβόμενες αναθέσεις, θέσεις equity και βραχυπρόθεσμες συνεργασίες σε ένα feed.\n\nHow opp",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:44.876Z"
+}

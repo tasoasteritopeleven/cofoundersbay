@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/groups/moderation",
+  "sourceFile": "groups/moderation/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:51:16.917Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/groups/moderation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups/moderation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Moderation queue·Ουρά εποπτείας"
+    ],
+    "wordCount": 213,
+    "textExcerpt": "Moderation queue·Ουρά εποπτείας\n\nReview and action community reports. High-priority items are flagged first so nothing urgent slips through.\nΕλέγξτε και χειριστείτε αναφορές κοινοτήτων. Τα επείγοντα εμφανίζονται πρώτα, ώ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:51:21.432Z"
+}

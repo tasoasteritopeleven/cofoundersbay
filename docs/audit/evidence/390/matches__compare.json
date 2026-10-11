@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/matches/compare",
+  "sourceFile": "matches/compare/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:05:43.145Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/matches/compare",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/matches/compare",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Compare matches"
+    ],
+    "wordCount": 186,
+    "textExcerpt": "Compare matches\n\nOpen two or more match profiles side by side to weigh fit.\n\nCompare up to 3 of your matches side by side.\n\nAdd a match · Προσθήκη αντιστοίχισης\nBack to matches\nYour matches compared, dimension by dimensi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:05:50.528Z"
+}

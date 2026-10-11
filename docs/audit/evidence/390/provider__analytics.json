@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/provider/analytics",
+  "sourceFile": "provider/analytics/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:38:02.909Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/provider/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Provider analytics"
+    ],
+    "wordCount": 88,
+    "textExcerpt": "Provider analytics\n\nViews, inquiry conversion and revenue over time.\n\nSample data\n\nLast 30 days · 316 profile views\n\nProfile Views\n\n342\n\n18% vs last period\n\nInquiries\n\n27\n\n35% vs last period\n\nActive Projects\n\n6\n\nvs last ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:38:07.268Z"
+}

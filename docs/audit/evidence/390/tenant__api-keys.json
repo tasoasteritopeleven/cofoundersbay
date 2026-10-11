@@ -1,0 +1,57 @@
+{
+  "requestedRoute": "/tenant/api-keys",
+  "sourceFile": "tenant/api-keys/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:41:18.132Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/tenant/api-keys",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "target-size",
+        "impact": "serious",
+        "description": "All touch targets must be 24px large, or leave sufficient space",
+        "count": 2,
+        "nodes": [
+          {
+            "target": [
+              ".hover\\:border-primary\\/20.p-4.border:nth-child(2) > .justify-between.items-start.gap-3 > .flex-1 > .mt-2.gap-2 > .w-11.h-11[aria-label=\"Show key. Εμφάνιση κλειδιού\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Target has insufficient size (16px by 43.5px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 21.4px instead of at least 24px."
+          },
+          {
+            "target": [
+              ".surface-inactive > .justify-between.items-start.gap-3 > .flex-1 > .mt-2.gap-2 > .w-11.h-11[aria-label=\"Show key. Εμφάνιση κλειδιού\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Target has insufficient size (16px by 43.5px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 21.4px instead of at least 24px."
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/api-keys",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "API Keys"
+    ],
+    "wordCount": 88,
+    "textExcerpt": "API Keys\n\nManage API keys for programmatic access to your tenant data\n\nCreate API key\nIssuing keys needs a key service the platform does not run yet.\nSample data\n\nAPI keys grant full access to your tenant's resources. St",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:41:24.075Z"
+}

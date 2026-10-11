@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/org/programs",
+  "sourceFile": "org/programs/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:36:43.489Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/org/programs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/programs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Programs"
+    ],
+    "wordCount": 91,
+    "textExcerpt": "Programs\n\nCreate, run, and review accelerator, bootcamp, and incubator programs.\n\nNew Program\n\nTotal Programs\n\n4\n\nActive\n\n2\n\nTotal Enrolled\n\n32\n\nCompleted\n\n1\n\nAI Accelerator 2025\nRunning\n\nAccelerator\n\nIntensive 12-week p",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:36:48.218Z"
+}

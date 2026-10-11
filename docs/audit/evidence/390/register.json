@@ -1,0 +1,53 @@
+{
+  "requestedRoute": "/register",
+  "sourceFile": "(auth)/register/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:39:21.369Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/register",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "target-size",
+        "impact": "serious",
+        "description": "All touch targets must be 24px large, or leave sufficient space",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".right-3"
+            ],
+            "failureSummary": "Fix any of the following:\n  Target has insufficient size (34.6px by 20px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 20px instead of at least 24px."
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/register",
+  "measurement": {
+    "title": "Create your account | CoFounderBay",
+    "headings": [
+      "Create your account"
+    ],
+    "wordCount": 72,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\nCreate your account\n\nJoin Aegean Venture Lab in under 2 minutes.\n\nEmail\nPassword\nShow\n\nI am a…\n\nF\n\nFounder\nΙδρυτής\n\nBuild and lead startups\n\nM\n\nMentor\nΜέ",
+    "loadingElements": [
+      "min-h-5"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:39:24.413Z"
+}

@@ -1,0 +1,40 @@
+{
+  "requestedRoute": "/dashboard/incubator",
+  "sourceFile": "dashboard/incubator/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:49:32.600Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/dashboard/incubator",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/incubator",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Incubator dashboard·Πίνακας θερμοκοιτίδας"
+    ],
+    "wordCount": 25,
+    "textExcerpt": "Incubator dashboard·Πίνακας θερμοκοιτίδας\n\nCohorts, applications and the milestones your startups are hitting.\nΚύκλοι, αιτήσεις και τα ορόσημα των startups σας.\n\nLoading\nLoading\nLoading\nLoading\nLoading",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T22:49:36.949Z"
+}

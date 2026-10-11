@@ -1,0 +1,63 @@
+{
+  "requestedRoute": "/tenant/branding",
+  "sourceFile": "tenant/branding/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:01:58.082Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/tenant/branding",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "label",
+        "impact": "critical",
+        "description": "Form elements must have labels",
+        "count": 3,
+        "nodes": [
+          {
+            "target": [
+              "#color-Primary\\ Color"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not "
+          },
+          {
+            "target": [
+              "#color-Secondary\\ Color"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not "
+          },
+          {
+            "target": [
+              "#color-Accent\\ Color"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not "
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/branding",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Branding"
+    ],
+    "wordCount": 64,
+    "textExcerpt": "Branding\n\nCustomize colors, logos, fonts, and landing page copy. Work in draft, then publish to apply across your tenant.\nΠροσαρμογή χρωμάτων, λογοτύπων, γραμματοσειρών και κειμένου landing. Εργασία σε draft, δημοσίευση ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:02:03.476Z"
+}

@@ -1,0 +1,34 @@
+{
+  "requestedRoute": "/auth/sso-complete",
+  "sourceFile": "auth/sso-complete/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:07:31.377Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/auth/sso-complete",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/auth/sso-complete",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Sign in successful!"
+    ],
+    "wordCount": 17,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\nOK\nSign in successful!\n\nRedirecting you now...",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T23:07:34.647Z"
+}

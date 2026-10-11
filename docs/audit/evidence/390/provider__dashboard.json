@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/provider/dashboard",
+  "sourceFile": "provider/dashboard/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:06:20.422Z",
+  "status": "redirect",
+  "actualFinalUrl": "http://localhost/dashboard/provider",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/provider",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Provider dashboard"
+    ],
+    "wordCount": 250,
+    "textExcerpt": "Provider dashboard\n\nInquiries, active projects, services and reviews - in one view.\n\nService Provider\nManage services\n\nGood evening, Alex Demo. Inquiries waiting on you, active projects and your services.\n\nOpen inquiries",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:06:27.850Z"
+}

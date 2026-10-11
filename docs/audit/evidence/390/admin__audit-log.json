@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/admin/audit-log",
+  "sourceFile": "admin/audit-log/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:04:39.920Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/audit-log",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/audit-log",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Audit log"
+    ],
+    "wordCount": 92,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nAudit log\n\nEvery administrative action on the platform: who changed what, and when.\n\nRefresh\nExport\nAll entities\nAll actions\nActivity log\n5 total entries\nalex@harbor",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:04:43.803Z"
+}

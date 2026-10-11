@@ -1,0 +1,39 @@
+{
+  "summary": "Frontend-only demo mode verification of FirstRunTour (matches/builder/research), contextual help pills (cohort/activity/pitch), and ConversationalOnboarding polish (6-step stepper, why-hint, progress). Ran 46 targeted Playwright checks across desktop (1440x900) and mobile (390x844) viewports. All 46 assertions passed. No source files modified.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_scenarios_verified": {
+    "demo_entry": "GET /demo redirects to /dashboard/founder and establishes preview-demo session (client-side).",
+    "matches_tour": "Appears within ~4s with 4 steps, indicator '1/4'→'2/4', Back appears from step 2, last button reads 'Got it·Κατάλαβα', closes on click, localStorage 'cfb.tour.matches.preview-demo-user'='done', not shown after reload.",
+    "builder_tour": "3 steps, Skip (X) button closes and persists 'cfb.tour.builder.preview-demo-user'='done'.",
+    "research_tour": "3 steps, ArrowRight advances (1/3→2/3), ArrowLeft goes back, Escape dismisses and persists 'cfb.tour.research.preview-demo-user'='done'.",
+    "mobile_tour": "On 390x844, tour card renders near bottom (y≈610, height≈222, within viewport), no horizontal overflow (scrollWidth==clientWidth==390), skip button visible/tappable.",
+    "contextual_help": "Help pill present on /org/cohorts/cohort-autumn-2026 (aria-label 'How to read this cohort'), /activity ('What each tab shows'), /pitch/demo-1 ('Reading this pitch'). Cohort help opens content referencing Participants/Mentoring.",
+    "onboarding_polish": "With cookie cfb_session=test-session (fresh context), /onboarding renders. onboarding-header present, counter shows 'Step 1 of 6·Βήμα 1 από 6' (bilingual), 6 stepper testids visible (name/role/headline/location/bio/skills), progressbar present, onboarding-why-hint present and text changes between steps.",
+    "onboarding_flow": "Name→Role(Founder)→Headline (Next disabled while empty, enabled after typing)→Location (Next enabled while empty)→Bio (bio-input/skip-bio/continue-button)→Skills (complete-button). Counter increments Step 1→6 correctly.",
+    "onboarding_mobile": "onboarding-current-step-label visible at 390px.",
+    "regression_smoke": "/dashboard/founder, /discover, /messages, /settings, /expert-reviews all return HTTP 200 in demo mode."
+  },
+  "observed_console_noise_not_bugs": [
+    "CSP warning for cloudflareinsights beacon.min.js (external analytics blocked, expected).",
+    "Next.js webpack-hmr WebSocket 502 (dev-server HMR through preview proxy, does not affect functionality).",
+    "One hydration attribute mismatch on /expert-reviews (server/client branch mismatch) — cosmetic, doesn't break page render.",
+    "One 403 resource load on /pitch/demo-1 (likely external avatar/opengraph, non-blocking)."
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Consider silencing/fixing the hydration attribute mismatch on /expert-reviews (SSR-only content in Client Component) to prevent flaky visual states; not blocking."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped by request)", "frontend": "100% (46/46)"},
+  "test_credentials": "None required. Demo mode via GET /demo (sets cfb_session=preview-demo). Onboarding tested with cookie cfb_session=test-session in a fresh context (no /demo visit).",
+  "seed_data_creation": "None. Used built-in preview demo mocks (apps/web/src/lib/preview-demo.ts).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All FirstRunTour, contextual help, and onboarding features work as specified. Tour storage keys confirmed: cfb.tour.{matches|builder|research}.preview-demo-user='done'. Escape/ArrowLeft/ArrowRight keyboard handlers work. For onboarding tests, MUST use a fresh browser context with only cookie cfb_session=test-session set (do NOT visit /demo first — the preview-demo user has onboarding_completed=true and gets redirected to /profile)."
+}

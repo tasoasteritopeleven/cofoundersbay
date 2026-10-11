@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/automation",
+  "sourceFile": "tenant/automation/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:01:17.418Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/automation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/automation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Automation·Αυτοματισμός"
+    ],
+    "wordCount": 66,
+    "textExcerpt": "Automation·Αυτοματισμός\n\nEvent-driven workflows: triggers, conditions, actions for your workspace.\nΡοές εργασίας βάσει εκδηλώσεων: triggers, conditions και actions για τον χώρο εργασίας.\n\nNo organization selected\n\nAutoma",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:01:21.189Z"
+}

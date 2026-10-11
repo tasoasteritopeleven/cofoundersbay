@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/help",
+  "sourceFile": "help/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:51:21.627Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/help",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/help",
+  "measurement": {
+    "title": "Help Centre | CoFounderBay",
+    "headings": [
+      "Help & Support·Βοήθεια & υποστήριξη"
+    ],
+    "wordCount": 838,
+    "textExcerpt": "Help & Support·Βοήθεια & υποστήριξη\n\nFind answers, guides, and get in touch with the CoFounderBay team\nΒρείτε απαντήσεις και οδηγούς ή επικοινωνήστε με την ομάδα του CoFounderBay\n\nContact Support\n·\nΕπικοινωνία με υποστήρ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:51:27.262Z"
+}

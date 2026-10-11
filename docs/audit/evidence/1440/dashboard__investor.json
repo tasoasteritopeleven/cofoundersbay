@@ -1,0 +1,40 @@
+{
+  "requestedRoute": "/dashboard/investor",
+  "sourceFile": "dashboard/investor/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:49:37.203Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/dashboard/investor",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/investor",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investor dashboard·Πίνακας ελέγχου επενδυτή"
+    ],
+    "wordCount": 183,
+    "textExcerpt": "Investor dashboard·Πίνακας ελέγχου επενδυτή\n\nPipeline health, deal flow, and portfolio performance — in one view.\nΚατάσταση της ροής επενδύσεων, νέες ευκαιρίες και απόδοση χαρτοφυλακίου — σε μία προβολή.\n\nInvestor\n\nGood ",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:49:43.020Z"
+}

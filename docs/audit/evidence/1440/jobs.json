@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/jobs",
+  "sourceFile": "jobs/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:36.076Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/jobs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/jobs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Jobs & roles·Θέσεις εργασίας"
+    ],
+    "wordCount": 66,
+    "textExcerpt": "Jobs & roles·Θέσεις εργασίας\n\nEquity, full-time, and contract roles posted by startups on the platform.\nΘέσεις equity, πλήρους απασχόλησης και συμβατικών που δημοσιεύουν startups στην πλατφόρμα.\n\nHow jobs work here\n·\nΠώς",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:40.556Z"
+}

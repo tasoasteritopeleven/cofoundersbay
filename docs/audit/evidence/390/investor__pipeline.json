@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/investor/pipeline",
+  "sourceFile": "investor/pipeline/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:27:00.331Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/pipeline",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/pipeline",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investment Pipeline"
+    ],
+    "wordCount": 231,
+    "textExcerpt": "Investment Pipeline\n\nTrack deals through your investment process\n\nShow passed\nAdd Deal\n\n8\n\nTotal Deals\n\n€4.2M\n\nPipeline Value\n\n82%\n\nAvg Readiness\n\n1\n\nInvested\n\nStarred only\nDiscovered\n2\nN\nNeuralFlow AI\n\nAI/ML\n\nSeed\n85% r",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:27:09.239Z"
+}

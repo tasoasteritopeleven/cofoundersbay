@@ -1,0 +1,49 @@
+{
+  "requestedRoute": "/onboarding",
+  "sourceFile": "onboarding/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:35:51.209Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/onboarding",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".items-end.animate-fade-in.gap-2:nth-child(2) > .max-w-\\[80\\%\\].rounded-2xl.rounded-bl-sm > .leading-relaxed"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.64 (foreground color: #6c7078, background color: #101621, font size: 10.7pt (14.2814px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/onboarding",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [],
+    "wordCount": 31,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\n\nProfile Setup\n\n👋 Welcome to CoFounderBay! I'm going to help you set up your profile in a few quick steps. Ready?",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:35:57.447Z"
+}

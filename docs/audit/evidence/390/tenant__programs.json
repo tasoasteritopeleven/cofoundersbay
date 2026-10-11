@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/tenant/programs",
+  "sourceFile": "tenant/programs/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:42:27.043Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/tenant/programs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/programs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Programs"
+    ],
+    "wordCount": 137,
+    "textExcerpt": "Programs\n\nWorkspaces with programs unlock applications, cohorts, and structured mentoring.\n\nCreate Program\nSample data\nSpring Accelerator 2025\nActive\n\nA 12-week intensive accelerator program for early-stage startups in t",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:42:34.359Z"
+}

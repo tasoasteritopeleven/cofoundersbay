@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings/notifications",
+  "sourceFile": "settings/notifications/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:56.057Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings/notifications",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings/notifications",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Notification preferences·Προτιμήσεις ειδοποιήσεων"
+    ],
+    "wordCount": 679,
+    "textExcerpt": "Notification preferences·Προτιμήσεις ειδοποιήσεων\n\nPick which events reach you by email and how often digests arrive.\nΕπιλέξτε ποια γεγονότα σας φτάνουν με email και πόσο συχνά.\n\nSettings\n·\nΡυθμίσεις\nSave digest\n·\nΑποθήκ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:01:03.329Z"
+}

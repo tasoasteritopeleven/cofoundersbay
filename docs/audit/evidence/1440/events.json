@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/events",
+  "sourceFile": "events/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:50:12.553Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/events",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/events",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Events·Εκδηλώσεις"
+    ],
+    "wordCount": 42,
+    "textExcerpt": "Events·Εκδηλώσεις\n\nWorkshops, demo days, meetups, and online sessions — RSVP and add to calendar.\nΕργαστήρια, demo days, meetups και διαδικτυακές συνεδρίες — RSVP και προσθήκη στο ημερολόγιο.\n\nCreate Event·Δημιουργία εκδ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:50:17.162Z"
+}

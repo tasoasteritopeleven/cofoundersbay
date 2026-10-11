@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/research/canvas",
+  "sourceFile": "research/canvas/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T17:40:21.650Z",
+  "status": "redirect",
+  "actualFinalUrl": "http://localhost/research",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 3
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/research",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Research boards"
+    ],
+    "wordCount": 111,
+    "textExcerpt": "Research boards\n\nVisual canvases for market, product, and competitive research. Templates seed a board; the canvas holds notes, files, and links.\n\nHow research boards work\nUse template\nNew board\nStart from a template\n\nSt",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T17:40:31.773Z"
+}

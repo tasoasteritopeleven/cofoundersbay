@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/dashboard/mentor",
+  "sourceFile": "dashboard/mentor/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:49:43.224Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/dashboard/mentor",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/mentor",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentor dashboard·Πίνακας ελέγχου mentor"
+    ],
+    "wordCount": 176,
+    "textExcerpt": "Mentor dashboard·Πίνακας ελέγχου mentor\n\nSessions, mentee requests, reviews, and earnings at a glance.\nΣυνεδρίες, αιτήματα καθοδηγούμενων, αξιολογήσεις και έσοδα με μια ματιά.\n\nMentor\n\nGood evening, Mentor. Requests wait",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:49:48.418Z"
+}

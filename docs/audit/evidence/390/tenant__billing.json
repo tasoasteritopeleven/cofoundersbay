@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/billing",
+  "sourceFile": "tenant/billing/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:41:28.918Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/billing",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/billing",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Organization Billing"
+    ],
+    "wordCount": 42,
+    "textExcerpt": "Organization Billing\n\nPlan, seats, invoices, and payment methods for your workspace.\n\nView plans\nCurrent Plan\n\nNo active subscription for this organization.\n\nSee organization plans\nBilling Contact\n\nUsed for invoices and ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:41:33.073Z"
+}

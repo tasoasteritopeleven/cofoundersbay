@@ -1,0 +1,71 @@
+{
+  "requestedRoute": "/admin/dashboard",
+  "sourceFile": "admin/dashboard/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:00.861Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/dashboard",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "definition-list",
+        "impact": "serious",
+        "description": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              "dl"
+            ],
+            "failureSummary": "Fix all of the following:\n  dl element has direct children that are not allowed: div > div, div > [role=progressbar]"
+          }
+        ]
+      },
+      {
+        "id": "dlitem",
+        "impact": "serious",
+        "description": "<dt> and <dd> elements must be contained by a <dl>",
+        "count": 2,
+        "nodes": [
+          {
+            "target": [
+              "div:nth-child(2) > .gap-3.items-center > dt"
+            ],
+            "failureSummary": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+          },
+          {
+            "target": [
+              "div:nth-child(2) > .gap-3.items-center > dd"
+            ],
+            "failureSummary": "Fix any of the following:\n  Description list item does not have a <dl> parent element"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/dashboard",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Platform overview"
+    ],
+    "wordCount": 169,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nPlatform overview\n\nWho uses the platform, what waits on an admin, and how the API is running.\n\nToday\n7 days\n30 days\nRefresh\n\nUsers\n\n13\n\n0 new · last 7 days\n\nActive u",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:05.483Z"
+}

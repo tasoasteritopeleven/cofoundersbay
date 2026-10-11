@@ -1,0 +1,40 @@
+{
+  "requestedRoute": "/opportunities",
+  "sourceFile": "opportunities/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:35:57.753Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/opportunities",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/opportunities",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Opportunities"
+    ],
+    "wordCount": 42,
+    "textExcerpt": "Opportunities\n\nCo-founder calls, paid gigs, equity roles, and short-term collaborations in one feed.\n\nHow opportunities work\nPost opportunity\nCo-founder & freelance\nJobs\nMy applications\nProposals\n2\nLoading\nLoading\nLoadin",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T22:36:01.571Z"
+}

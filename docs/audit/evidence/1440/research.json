@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/research",
+  "sourceFile": "research/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:44.121Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/research",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/research",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Research boards·Πίνακες έρευνας"
+    ],
+    "wordCount": 67,
+    "textExcerpt": "Research boards·Πίνακες έρευνας\n\nVisual canvases for market, product, and competitive research. Templates seed a board; the canvas holds notes, files, and links.\nΟπτικές επιφάνειες για έρευνα αγοράς, προϊόντος και ανταγω",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:49.639Z"
+}

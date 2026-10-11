@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/domains",
+  "sourceFile": "tenant/domains/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:02:10.293Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/domains",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/domains",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Domain Management·Διαχείριση domain"
+    ],
+    "wordCount": 51,
+    "textExcerpt": "Domain Management·Διαχείριση domain\n\nAdd a subdomain or connect a custom domain. SSL is provisioned automatically once DNS verifies.\nΠροσθήκη subdomain ή σύνδεση custom domain. Το SSL προμηθεύεται αυτόματα μετά την επαλή",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:02:15.605Z"
+}

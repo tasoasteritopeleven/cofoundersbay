@@ -1,0 +1,39 @@
+{
+  "requestedRoute": "/readiness",
+  "sourceFile": "readiness/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:39:02.693Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/readiness",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/readiness",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Readiness Score"
+    ],
+    "wordCount": 354,
+    "textExcerpt": "Readiness Score\n\nAssess your startup’s readiness across 6 key dimensions and see what to fix next.\n\nHow the readiness score works\nView live readiness\nReassess\nDemo showcase — tick criteria freely; scores recalculate and ",
+    "loadingElements": [
+      "Demo showcase — tick criteria freely; scores recalculate and nothing i",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:39:10.264Z"
+}

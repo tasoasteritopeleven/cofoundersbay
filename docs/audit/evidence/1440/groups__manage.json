@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/groups/manage",
+  "sourceFile": "groups/manage/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:51:12.806Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/groups/manage",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups/manage",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Manage communities·Διαχείριση κοινοτήτων"
+    ],
+    "wordCount": 83,
+    "textExcerpt": "Manage communities·Διαχείριση κοινοτήτων\n\nCommunities you own or administer — review members, pending requests, and activity at a glance.\nΚοινότητες που σας ανήκουν ή διαχειρίζεστε — μέλη, εκκρεμή αιτήματα και δραστηριότ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:51:16.720Z"
+}
