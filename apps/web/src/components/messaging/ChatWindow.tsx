@@ -166,8 +166,16 @@ function MessageBubble({
   return (
     <div
       className={cn('group flex gap-2', isOwn ? 'flex-row-reverse' : 'flex-row')}
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
+      onPointerEnter={(event) => {
+        if (event.pointerType !== 'mouse') return;
+        if (window.matchMedia('(hover: none)').matches) return;
+        setShowActions(true);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== 'mouse') return;
+        if (window.matchMedia('(hover: none)').matches) return;
+        setShowActions(false);
+      }}
     >
       <div className="w-8 flex-shrink-0">
         {showAvatar && !isOwn && (
@@ -176,7 +184,7 @@ function MessageBubble({
       </div>
 
       {/* Message content */}
-      <div className={cn('max-w-[70%] flex flex-col', isOwn ? 'items-end' : 'items-start')}>
+      <div className={cn('flex max-w-[85%] flex-col sm:max-w-[70%]', isOwn ? 'items-end' : 'items-start')}>
         {/* Reply preview */}
         {message.replyTo && (
           <div className={cn(
@@ -188,46 +196,12 @@ function MessageBubble({
         )}
 
         <div className="relative">
-          {/* Hover action bar */}
-          {showActions && (
-            <div className={cn(
-              'absolute -top-8 flex items-center gap-0.5 rounded-full border border-border bg-card shadow-md px-1 py-0.5 z-10',
-              isOwn ? 'right-0' : 'left-0',
-            )}>
-              {QUICK_EMOJIS.map((emoji) => (
-                <button
-                  key={emoji}
-                  type="button"
-                  className="rounded-full p-1 text-sm hover:bg-secondary/80 transition-colors"
-                  title={bilingualAria(messagesEn('add_reaction'), messagesEl('add_reaction'))}
-                  aria-label={bilingualAria(messagesEn('add_reaction'), messagesEl('add_reaction'))}
-                  onClick={() => onReact?.(message.id, emoji)}
-                >
-                  {emoji}
-                </button>
-              ))}
-              <div className="w-px h-4 bg-border/60 mx-0.5" />
-              <button
-                type="button"
-                className="rounded-full p-1 hover:bg-secondary/80 transition-colors"
-                title={bilingualAria(messagesEn('reply'), messagesEl('reply'))}
-                onClick={() => onReply?.(message)}
-              >
-                <Reply className="icon-sm text-muted-foreground" />
-              </button>
-              <button
-                type="button"
-                className="rounded-full p-1 hover:bg-secondary/80 transition-colors"
-                title={copied ? bilingualAria(messagesEn('copied'), messagesEl('copied')) : bilingualAria(messagesEn('copy'), messagesEl('copy'))}
-                onClick={handleCopy}
-              >
-                <Copy className="icon-sm text-muted-foreground" />
-              </button>
-            </div>
-          )}
-
           <div
             data-own-message={isOwn ? '' : undefined}
+            onClick={() => {
+              if (window.matchMedia('(hover: hover)').matches) return;
+              setShowActions((open) => !open);
+            }}
             className={cn(
               'px-4 py-2.5 text-xs leading-relaxed shadow-sm',
               isOwn
@@ -262,6 +236,57 @@ function MessageBubble({
               </div>
             ) : null}
           </div>
+
+          {showActions && (
+            <div
+              className={cn(
+                'z-10 mt-1 flex max-w-full flex-wrap items-center gap-0.5 rounded-xl border border-border bg-card px-1 py-0.5 shadow-md',
+                'sm:absolute sm:-top-8 sm:mt-0 sm:w-max sm:flex-nowrap sm:rounded-full',
+                isOwn ? 'sm:right-0' : 'sm:left-0',
+              )}
+              onClick={(event) => event.stopPropagation()}
+            >
+              {QUICK_EMOJIS.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full text-sm transition-colors hover:bg-secondary/80 sm:h-8 sm:w-8"
+                  title={bilingualAria(messagesEn('add_reaction'), messagesEl('add_reaction'))}
+                  aria-label={bilingualAria(messagesEn('add_reaction'), messagesEl('add_reaction'))}
+                  onClick={() => onReact?.(message.id, emoji)}
+                >
+                  {emoji}
+                </button>
+              ))}
+              <div className="mx-0.5 hidden h-4 w-px bg-border/60 sm:block" />
+              <button
+                type="button"
+                className="inline-flex h-11 items-center gap-1 rounded-full px-2 transition-colors hover:bg-secondary/80 sm:h-8 sm:px-1.5"
+                title={bilingualAria(messagesEn('reply'), messagesEl('reply'))}
+                onClick={() => onReply?.(message)}
+              >
+                <Reply className="icon-sm text-muted-foreground" />
+                <span className="text-xs font-medium text-foreground sm:sr-only">
+                  <BilingualText en={messagesEn('reply')} el={messagesEl('reply')} compact />
+                </span>
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-11 items-center gap-1 rounded-full px-2 transition-colors hover:bg-secondary/80 sm:h-8 sm:px-1.5"
+                title={copied ? bilingualAria(messagesEn('copied'), messagesEl('copied')) : bilingualAria(messagesEn('copy'), messagesEl('copy'))}
+                onClick={handleCopy}
+              >
+                <Copy className="icon-sm text-muted-foreground" />
+                <span className="text-xs font-medium text-foreground sm:sr-only">
+                  <BilingualText
+                    en={copied ? messagesEn('copied') : messagesEn('copy')}
+                    el={copied ? messagesEl('copied') : messagesEl('copy')}
+                    compact
+                  />
+                </span>
+              </button>
+            </div>
+          )}
 
           {/* Reactions */}
           {message.reactions?.length ? (
@@ -449,15 +474,15 @@ export function ChatWindow({
     <div className={cn('relative flex h-full min-h-0 flex-col bg-background', className)}>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_52%)]"
+        className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_52%)] sm:block"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(hsl(var(--foreground)/0.07)_1px,transparent_1px)] bg-[size:18px_18px] opacity-40"
+        className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(hsl(var(--foreground)/0.07)_1px,transparent_1px)] bg-[size:18px_18px] opacity-40 sm:block"
       />
       {/* Header */}
       <div className="relative z-10 flex flex-col border-b border-border bg-background/75 backdrop-blur-xl">
-        <div className="flex items-center justify-between gap-2 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
           <div className="flex min-w-0 items-center gap-3">
             {onBack && (
               <Button variant="ghost" size="icon" onClick={onBack} className="rounded-xl md:hidden" aria-label={bilingualAria(messagesEn('back_to_conversations'), messagesEl('back_to_conversations'))}>
@@ -500,6 +525,7 @@ export function ChatWindow({
                 otherUserName={conversation.recipientName}
                 validationState={validationState}
                 onModeChange={onValidationModeChange}
+                className="hidden sm:inline-flex"
               />
             )}
             {validationState && validationState.mode !== 'casual' && (
@@ -508,20 +534,20 @@ export function ChatWindow({
                 validationState={validationState}
               />
             )}
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl" title={bilingualAria(messagesEn('search_messages'), messagesEl('search_messages'))} aria-label={bilingualAria(messagesEn('search_messages'), messagesEl('search_messages'))} onClick={() => { setSearchOpen((v) => !v); setSearchQuery(''); }}>
+            <Button variant="ghost" size="icon" className="hidden h-9 w-9 rounded-xl sm:inline-flex" title={bilingualAria(messagesEn('search_messages'), messagesEl('search_messages'))} aria-label={bilingualAria(messagesEn('search_messages'), messagesEl('search_messages'))} onClick={() => { setSearchOpen((v) => !v); setSearchQuery(''); }}>
               <Search className="icon-sm" />
             </Button>
-            <Button asChild variant="ghost" size="icon" className="h-9 w-9 rounded-xl" title={bilingualAria(messagesEn('open_calendar'), messagesEl('open_calendar'))} aria-label={bilingualAria(messagesEn('open_calendar'), messagesEl('open_calendar'))}>
+            <Button asChild variant="ghost" size="icon" className="hidden h-9 w-9 rounded-xl sm:inline-flex" title={bilingualAria(messagesEn('open_calendar'), messagesEl('open_calendar'))} aria-label={bilingualAria(messagesEn('open_calendar'), messagesEl('open_calendar'))}>
               <Link href={`/calendar?with=${encodeURIComponent(conversation.recipientId)}`}>
                 <CfbGlyph name="calendar" className="icon-sm" />
               </Link>
             </Button>
             {onAskAi ? (
-              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl" title={bilingualAria(messagesEn('ask_ai_about'), messagesEl('ask_ai_about'))} aria-label={bilingualAria(messagesEn('ask_ai_about'), messagesEl('ask_ai_about'))} onClick={onAskAi}>
+              <Button variant="ghost" size="icon" className="hidden h-9 w-9 rounded-xl sm:inline-flex" title={bilingualAria(messagesEn('ask_ai_about'), messagesEl('ask_ai_about'))} aria-label={bilingualAria(messagesEn('ask_ai_about'), messagesEl('ask_ai_about'))} onClick={onAskAi}>
                 <CfbGlyph name="spark" className="icon-sm" />
               </Button>
             ) : (
-              <Button asChild variant="ghost" size="icon" className="h-9 w-9 rounded-xl" title={bilingualAria(messagesEn('open_ai_page'), messagesEl('open_ai_page'))} aria-label={bilingualAria(messagesEn('open_ai_page'), messagesEl('open_ai_page'))}>
+              <Button asChild variant="ghost" size="icon" className="hidden h-9 w-9 rounded-xl sm:inline-flex" title={bilingualAria(messagesEn('open_ai_page'), messagesEl('open_ai_page'))} aria-label={bilingualAria(messagesEn('open_ai_page'), messagesEl('open_ai_page'))}>
                 <Link href="/ai">
                   <CfbGlyph name="spark" className="icon-sm" />
                 </Link>
@@ -534,6 +560,10 @@ export function ChatWindow({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="rounded-xl">
+                <DropdownMenuItem onClick={() => { setSearchOpen(true); setSearchQuery(''); }}>
+                  <Search className="icon-sm mr-2" />
+                  <BilingualText en={messagesEn('search_messages')} el={messagesEl('search_messages')} compact />
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href={`/profiles/${conversation.recipientId}`}>
                     <Info className="icon-sm mr-2" />
@@ -564,25 +594,38 @@ export function ChatWindow({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+          {validationState && (
+            <div className="basis-full sm:hidden">
+              <ConversationValidationMenu
+                labeled
+                conversationId={conversation.id}
+                currentUserId={currentUserId}
+                otherUserId={conversation.recipientId}
+                otherUserName={conversation.recipientName}
+                validationState={validationState}
+                onModeChange={onValidationModeChange}
+              />
+            </div>
+          )}
         </div>
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-border px-4 py-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-border px-3 py-2 sm:px-4 sm:py-1.5">
           <Link
             href={`/profiles/${conversation.recipientId}`}
-            className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted"
+            className="hidden items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted sm:inline-flex"
           >
             <CfbGlyph name="people" className="h-3 w-3" />
             {t(messagesEn('view_profile'), messagesEl('view_profile'))}
           </Link>
           <Link
             href={`/matches/${conversation.recipientId}`}
-            className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted"
+            className="hidden items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted sm:inline-flex"
           >
             <CfbGlyph name="matches" className="h-3 w-3" />
             {t(messagesEn('view_match'), messagesEl('view_match'))}
           </Link>
           <Link
             href={`/calendar?with=${encodeURIComponent(conversation.recipientId)}`}
-            className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted"
+            className="hidden items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted sm:inline-flex"
           >
             <CfbGlyph name="calendar" className="h-3 w-3" />
             {t(messagesEn('schedule_meet'), messagesEl('schedule_meet'))}
@@ -591,7 +634,7 @@ export function ChatWindow({
             <button
               type="button"
               onClick={onAskAi}
-              className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-full bg-muted/60 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted sm:min-h-0 sm:w-auto sm:justify-start sm:px-2.5 sm:py-1 sm:text-2xs sm:text-foreground/80"
             >
               <CfbGlyph name="spark" className="h-3 w-3" />
               {t(messagesEn('draft_with_ai'), messagesEl('draft_with_ai'))}
@@ -599,7 +642,7 @@ export function ChatWindow({
           ) : (
             <Link
               href="/ai"
-              className="inline-flex items-center gap-1 rounded-full bg-muted/60 px-2.5 py-1 text-2xs font-medium text-foreground/80 transition-colors hover:bg-muted"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-full bg-muted/60 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted sm:min-h-0 sm:w-auto sm:justify-start sm:px-2.5 sm:py-1 sm:text-2xs sm:text-foreground/80"
             >
               <CfbGlyph name="spark" className="h-3 w-3" />
               {t(messagesEn('draft_with_ai'), messagesEl('draft_with_ai'))}
@@ -850,7 +893,10 @@ export function ChatWindow({
             <Send className="icon-md" />
           </Button>
         </div>
-        <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 px-3 text-2xs text-muted-foreground">
+        <p className="mt-1.5 px-1 text-xs leading-snug text-muted-foreground sm:hidden">
+          <BilingualText en={messagesEn('tap_message_hint')} el={messagesEl('tap_message_hint')} compact />
+        </p>
+        <p className="mt-1.5 hidden flex-wrap items-center gap-x-2 gap-y-1 px-3 text-2xs text-muted-foreground sm:flex">
           <span>{t(messagesEn('type_message_hint'), messagesEl('type_message_hint'))}</span>
           {onAskAi && (
             <button

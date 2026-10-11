@@ -57,6 +57,9 @@ type ConversationValidationProps = {
   otherUserName: string;
   validationState: ConversationValidationState;
   onModeChange?: (mode: ValidationMode) => void;
+  /** Full-width row that names the mode. The header keeps an icon on wider screens. */
+  labeled?: boolean;
+  className?: string;
 };
 
 const MODE_CONFIG: Record<ValidationMode, {
@@ -135,6 +138,8 @@ export function ConversationValidationMenu({
   otherUserName,
   validationState,
   onModeChange,
+  labeled = false,
+  className,
 }: ConversationValidationProps) {
   const { success, error: showError } = useToast();
   const queryClient = useQueryClient();
@@ -218,12 +223,27 @@ export function ConversationValidationMenu({
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            size="icon"
-            className="h-9 w-9 rounded-xl"
+            size={labeled ? 'sm' : 'icon'}
+            className={cn(
+              labeled
+                ? 'h-auto w-full justify-between gap-2 rounded-xl bg-muted/40 px-3 text-foreground hover:bg-muted'
+                : 'h-9 w-9 rounded-xl',
+              className,
+            )}
             title={bilingualAria(messagesEn(config.labelKey), messagesEl(config.labelKey))}
             aria-label={bilingualAria(messagesEn(config.labelKey), messagesEl(config.labelKey))}
           >
-            <Icon className={cn('icon-sm', config.color)} />
+            <Icon className={cn('icon-sm shrink-0', config.color)} />
+            {labeled && (
+              <>
+                <span className="min-w-0 flex-1 truncate text-left text-sm font-medium text-foreground">
+                  <BilingualText en={messagesEn(config.labelKey)} el={messagesEl(config.labelKey)} compact />
+                </span>
+                <span className="shrink-0 text-xs font-medium text-muted-foreground">
+                  <BilingualText en={messagesEn('val_change')} el={messagesEl('val_change')} compact />
+                </span>
+              </>
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
@@ -437,13 +457,13 @@ export function TranscriptExportButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" disabled={isExporting}>
+        <Button variant="outline" size="sm" className="hidden h-8 gap-1.5 text-xs sm:inline-flex" disabled={isExporting}>
           {isExporting ? (
             <Loader2 className="icon-sm animate-spin" />
           ) : (
             <Download className="icon-sm" />
           )}
-          Save Transcript
+          <BilingualText en={messagesEn('val_save_transcript')} el={messagesEl('val_save_transcript')} compact />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

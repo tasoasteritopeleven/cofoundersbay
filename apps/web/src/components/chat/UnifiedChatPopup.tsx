@@ -602,6 +602,7 @@ export function UnifiedChatPopup() {
     <div
       ref={popupRef}
       tabIndex={-1}
+      data-chat-popup=""
       className="fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-modal animate-in fade-in slide-in-from-bottom-4 duration-200 focus:outline-none bottom-6 right-6"
       role="dialog"
       aria-label={bilingualAria('Chat', 'Συνομιλία')}
@@ -616,7 +617,7 @@ export function UnifiedChatPopup() {
         {...dragHandleProps}
         className={cn(
           'flex shrink-0 items-center gap-1.5 border-b border-white/10 bg-primary px-2 py-2',
-          isDragging ? 'cursor-grabbing' : 'cursor-grab',
+          isDragging ? 'cursor-grabbing' : 'cursor-grab max-sm:cursor-default',
         )}
         tabIndex={0}
         style={dragHandleProps.style}
@@ -668,7 +669,7 @@ export function UnifiedChatPopup() {
           type="button"
           onClick={minimize}
           onMouseDown={(e) => e.stopPropagation()}
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/20 focus-ring sm:h-8 sm:w-8"
+          className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/20 focus-ring lg:inline-flex"
           aria-label={bilingualAria('Minimise chat', 'Ελαχιστοποίηση συνομιλίας')}
           title={bilingualAria('Minimise chat', 'Ελαχιστοποίηση συνομιλίας')}
         >

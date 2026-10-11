@@ -18,6 +18,14 @@ export const MESSAGES_STRINGS: Record<string, BilingualPair> = {
     en: 'Draft a reply, summarise this thread, or suggest who to message next.',
     el: 'Συντάξτε απάντηση, συνοψίστε το νήμα ή προτείνετε ποιον να γράψετε μετά.',
   },
+  ask_ai_short: {
+    en: 'Draft a reply for you',
+    el: 'Συντάσσει μια απάντηση',
+  },
+  new_message_short: {
+    en: 'Write to a connection',
+    el: 'Γράψτε σε μια σύνδεση',
+  },
 
   all: { en: 'All', el: 'Όλα' },
   unread: { en: 'Unread', el: 'Αδιάβαστα' },
@@ -37,6 +45,10 @@ export const MESSAGES_STRINGS: Record<string, BilingualPair> = {
   type_message_hint: {
     en: 'Enter to send, Shift+Enter for a new line',
     el: 'Enter για αποστολή, Shift+Enter για νέα γραμμή',
+  },
+  tap_message_hint: {
+    en: 'Tap a message to reply or react.',
+    el: 'Πατήστε ένα μήνυμα για απάντηση ή αντίδραση.',
   },
   send: { en: 'Send', el: 'Αποστολή' },
   pin: { en: 'Pin', el: 'Καρφίτσωμα' },
@@ -205,6 +217,8 @@ export const MESSAGES_STRINGS: Record<string, BilingualPair> = {
   cancel_reply: { en: 'Cancel reply', el: 'Ακύρωση απάντησης' },
   add_reaction: { en: 'Add reaction', el: 'Προσθήκη αντίδρασης' },
 
+  val_change: { en: 'Change', el: 'Αλλαγή' },
+  val_save_transcript: { en: 'Save transcript', el: 'Αποθήκευση αντιγράφου' },
   val_casual: { en: 'Casual chat', el: 'Απλή συνομιλία' },
   val_one: { en: 'One-party validation', el: 'Επικύρωση ενός μέρους' },
   val_two: { en: 'Two-party validation', el: 'Επικύρωση δύο μερών' },

@@ -95,7 +95,7 @@ function ConversationItem({
        because of a hand-written key handler. */
     <div
       className={cn(
-        'group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-all duration-150',
+        'group relative flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-150 sm:py-2.5',
         isSelected
           ? 'bg-muted/50'
           : 'hover:bg-muted/30',
@@ -122,7 +122,7 @@ function ConversationItem({
         online={conversation.isOnline}
       />
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 pr-10 sm:pr-0">
         <div className="flex items-baseline justify-between gap-2">
           <div className="flex min-w-0 items-center gap-1.5">
             {conversation.isPinned && (
@@ -130,7 +130,7 @@ function ConversationItem({
             )}
             <span
               className={cn(
-                'truncate text-xs leading-tight',
+                'truncate text-sm font-semibold leading-tight',
                 unread ? 'font-semibold text-foreground' : 'font-medium text-foreground',
               )}
             >
@@ -139,7 +139,7 @@ function ConversationItem({
           </div>
           <span
             className={cn(
-              'shrink-0 text-2xs tabular-nums',
+              'shrink-0 text-xs tabular-nums',
               unread ? 'font-medium text-primary-accessible' : 'text-muted-foreground',
             )}
           >
@@ -149,7 +149,7 @@ function ConversationItem({
         <div className="mt-0.5 flex items-center justify-between gap-2">
           <p
             className={cn(
-              'truncate text-2xs leading-snug',
+              'truncate text-xs leading-snug',
               unread ? 'font-medium text-foreground/80' : 'text-muted-foreground',
             )}
           >
@@ -176,7 +176,7 @@ function ConversationItem({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-1.5 top-1.5 z-10 h-8 w-8 rounded-xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+            className="absolute right-1.5 top-1.5 z-10 h-8 w-8 rounded-xl opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
             onClick={(e) => e.stopPropagation()}
             aria-label={bilingualAria(`Actions for ${conversation.recipientName}`, `Ενέργειες για ${conversation.recipientName}`)}
           >
@@ -218,7 +218,6 @@ export function ConversationList({
   conversations,
   selectedId,
   onSelect,
-  onNewMessage,
   onArchive,
   onPin,
 }: ConversationListProps) {
@@ -255,24 +254,13 @@ export function ConversationList({
               aria-label={bilingualAria(messagesEn('search_conversations'), messagesEl('search_conversations'))}
             />
           </div>
-          {onNewMessage && (
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-10 w-10 shrink-0 rounded-full md:hidden"
-              onClick={onNewMessage}
-              aria-label={bilingualAria(messagesEn('new_message'), messagesEl('new_message'))}
-            >
-              <CfbGlyph name="messages" className="icon-md" />
-            </Button>
-          )}
         </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
         {pinnedConversations.length > 0 && (
           <div className="mb-2">
-            <p className="mb-1 px-2 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="mb-1 px-2 pt-1 text-xs font-medium text-muted-foreground">
               <BilingualText en={messagesEn('pinned')} el={messagesEl('pinned')} compact />
             </p>
             {pinnedConversations.map((conv) => (
@@ -293,7 +281,7 @@ export function ConversationList({
         {regularConversations.length > 0 && (
           <div>
             {pinnedConversations.length > 0 && (
-              <p className="mb-1 px-2 pt-1 text-2xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mb-1 px-2 pt-1 text-xs font-medium text-muted-foreground">
                 <BilingualText en={messagesEn('all_messages')} el={messagesEl('all_messages')} compact />
               </p>
             )}

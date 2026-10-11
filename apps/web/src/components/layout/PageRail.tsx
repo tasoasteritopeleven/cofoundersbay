@@ -192,9 +192,12 @@ export function PageRail({ sections }: { sections: PageRailSection[] }) {
                 totalBadge ? `Page tools, ${totalBadge} active` : 'Page tools',
                 totalBadge ? `Εργαλεία σελίδας, ${totalBadge} ενεργά` : 'Εργαλεία σελίδας',
               )}
-              className="tap-target fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-lg sm:bottom-6"
+              className="tap-target fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex h-11 w-auto min-w-11 items-center justify-center gap-1.5 rounded-full border border-border bg-card px-3 text-foreground shadow-lg sm:bottom-6"
             >
               <SlidersHorizontal className="icon-md" aria-hidden="true" />
+              <span className="text-xs font-medium">
+                <BilingualText en="Tools" el="Εργαλεία" compact />
+              </span>
               {totalBadge > 0 && (
                 <span
                   className="absolute -right-0.5 -top-0.5 min-w-[1.1rem] rounded-full bg-primary px-1 text-center text-2xs font-semibold leading-[1.1rem] text-primary-foreground"

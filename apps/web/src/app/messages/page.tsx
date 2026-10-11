@@ -939,60 +939,63 @@ export default function MessagesPage() {
 
   return (
     <AppShell fullHeight contentClassName="min-h-0" rail={rail}>
-      <div className="flex h-full min-h-0 flex-col p-2 pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] sm:p-3 lg:p-4 lg:pb-4">
-        <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-border bg-card shadow-[0_24px_64px_-28px_hsl(var(--foreground)/0.35)]">
+      <div className="flex h-full min-h-0 flex-col p-0 sm:p-3 sm:pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:p-4 lg:pb-4">
+        <div className="flex min-h-0 flex-1 overflow-hidden bg-background sm:rounded-2xl sm:border sm:border-border sm:bg-card sm:shadow-[0_24px_64px_-28px_hsl(var(--foreground)/0.35)]">
           <div
             className={cn(
-              'grid h-full min-h-0 min-w-0 w-full shrink-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden border-r border-border bg-muted/40 md:w-[340px] md:max-w-[340px] lg:w-[392px] lg:max-w-[392px]',
+              'grid h-full min-h-0 min-w-0 w-full shrink-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden border-border bg-background max-sm:border-0 sm:border-r sm:bg-muted/40 md:w-[340px] md:max-w-[340px] lg:w-[392px] lg:max-w-[392px]',
               isMobileViewingChat && 'hidden md:grid',
             )}
           >
-            <div className="min-w-0 shrink-0 space-y-3 px-4 pb-3 pt-4">
-              {/* The compose button gets its own row. This pane is a fixed 392px
-                  at every desktop width, and with the button beside the title the
-                  heading block was left 138px of a 365px row -- the lead wrapped
-                  to five lines of about 23 characters, at every width, not just
-                  the wide ones. A full-width compose action at the top of a list
-                  pane is also what the reader expects it to be. */}
-              <div className="flex items-start gap-2">
+            <div className="min-w-0 shrink-0 space-y-2 px-3 pb-2 pt-3 sm:space-y-3 sm:px-4 sm:pb-3 sm:pt-4">
+              {/* The compose button gets its own row from sm up. This pane is a
+                  fixed 392px at every desktop width, and with the button beside
+                  the title the heading block was left 138px of a 365px row.
+                  On a phone the lead is the same fact the Pinned and All
+                  messages headings already state, so it stays off that screen
+                  and the two actions sit side by side, each saying what it does. */}
+              <div className="flex items-center gap-2">
                 <div className="min-w-0 flex-1">
                   <h1 className="text-lg font-semibold tracking-tight text-foreground">
                     <BilingualText en={messagesEn('page_title')} el={messagesEl('page_title')} />
                   </h1>
-                  <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
+                  <p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
                     <BilingualText en={messagesEn('inbox_lead')} el={messagesEl('inbox_lead')} compact wrap />
                   </p>
                 </div>
                 <PageContextualHelp defaultOpen={false} compact />
               </div>
-              <div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-1">
                 <Button
                   type="button"
                   size="sm"
-                  className="h-8 w-full gap-1.5 rounded-full px-3 text-xs text-primary-foreground shadow-none"
+                  className="h-auto min-h-11 w-full flex-col items-start gap-0 whitespace-normal rounded-xl px-3 py-2 text-left text-primary-foreground shadow-none sm:h-8 sm:flex-row sm:items-center sm:rounded-full sm:px-3 sm:py-0"
                   onClick={() => setComposeOpen(true)}
                   aria-label={bilingualAria(messagesEn('new_message'), messagesEl('new_message'))}
                 >
-                  {t(messagesEn('new_message'), messagesEl('new_message'))}
+                  <span className="text-sm font-medium">{t(messagesEn('new_message'), messagesEl('new_message'))}</span>
+                  <span className="text-xs font-normal leading-snug sm:hidden">
+                    <BilingualText en={messagesEn('new_message_short')} el={messagesEl('new_message_short')} compact />
+                  </span>
                 </Button>
-              </div>
-              <button
-                type="button"
-                onClick={openInboxAi}
-                className="flex min-w-0 w-full items-center gap-2.5 overflow-hidden rounded-xl border border-border px-3 py-2 text-left transition-colors hover:bg-muted/40"
-              >
-                <span className="min-w-0">
-                  <span className="block text-xs font-semibold text-foreground">
+                <button
+                  type="button"
+                  onClick={openInboxAi}
+                  className="flex min-h-11 min-w-0 w-full flex-col items-start justify-center gap-0 overflow-hidden rounded-xl border border-border px-3 py-2 text-left transition-colors hover:bg-muted/40 sm:min-h-0"
+                >
+                  <span className="block text-sm font-medium text-foreground">
                     {t(messagesEn('ask_ai'), messagesEl('ask_ai'))}
                   </span>
+                  <span className="block text-xs leading-snug text-muted-foreground sm:hidden">
+                    <BilingualText en={messagesEn('ask_ai_short')} el={messagesEl('ask_ai_short')} compact />
+                  </span>
                   {/* line-clamp, not truncate: this hint is a sentence, and one
-                      line cut it by a third ("Draft a reply, summarise this thread,
-                      or s…"). Two lines still bound the button's height. */}
-                  <span className="block line-clamp-2 text-2xs text-muted-foreground">
+                      line cut it by a third. Two lines still bound the height. */}
+                  <span className="hidden line-clamp-2 text-2xs text-muted-foreground sm:block">
                     <BilingualText en={messagesEn('ask_ai_hint')} el={messagesEl('ask_ai_hint')} compact wrap />
                   </span>
-                </span>
-              </button>
+                </button>
+              </div>
             </div>
             <Tabs value={sidebarTab} onValueChange={(v) => setSidebarTab(v as 'chats' | 'intros')} className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">
               <div className="shrink-0 px-3 pb-1">
@@ -1028,7 +1031,6 @@ export default function MessagesPage() {
                     markConversationRead(conv.id);
                     setIsMobileViewingChat(true);
                   }}
-                  onNewMessage={() => setComposeOpen(true)}
                   onPin={handlePin}
                   onArchive={handleArchive}
                 />

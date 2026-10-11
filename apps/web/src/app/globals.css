@@ -4289,6 +4289,21 @@ button[role='combobox'] {
    calc(2.75rem * --chrome-y). At the 82% desktop root that is 35.72px;
    at a 16px root it is 43.56px. h-8 and h-9 searches take the same box.
    Ask AI is a composer, not a search field. Buttons keep their own height. */
+/* On a phone the assistant opens as the screen, not as a card floating
+   over the tab bar. Drag still runs; the sheet stays put. */
+@media (max-width: 639.98px) {
+  [data-chat-popup] {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    bottom: 0 !important;
+    right: 0 !important;
+  }
+}
+
 input[type='search'],
 input:is(
   [placeholder*='Search'],

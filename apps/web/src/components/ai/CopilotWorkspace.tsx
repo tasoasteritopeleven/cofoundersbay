@@ -127,6 +127,7 @@ export function CopilotWorkspace({
   const isPage = variant === 'page';
   const pageContext = usePageContext();
   const [input, setInput] = useState(initialPrompt ?? '');
+  const [threadsOpen, setThreadsOpen] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -184,7 +185,40 @@ export function CopilotWorkspace({
   return (
     <div className={cn('flex min-h-0 flex-1 overflow-hidden', isPage ? 'flex-col lg:flex-row' : 'flex-col')}>
       {isPage && (
-        <aside className="flex w-full shrink-0 flex-col border-b border-border bg-card/80 lg:w-72 lg:border-b-0 lg:border-r">
+        <div className="flex shrink-0 items-center justify-between gap-2 border-b border-border bg-card px-3 py-1.5 lg:hidden">
+          <button
+            type="button"
+            className="type-ui min-h-11 rounded-md px-2 text-left font-medium"
+            aria-expanded={threadsOpen}
+            onClick={() => setThreadsOpen((open) => !open)}
+          >
+            <BilingualText
+              en={threadsOpen ? 'Hide threads' : 'Your threads'}
+              el={threadsOpen ? 'Απόκρυψη νημάτων' : 'Τα νήματά σας'}
+              compact
+            />
+          </button>
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            className="type-ui min-h-11 gap-1.5"
+            onClick={() => {
+              chat.clearMessages();
+              setThreadsOpen(false);
+              inputRef.current?.focus();
+            }}
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <BilingualText en="New question" el="Νέα ερώτηση" compact />
+          </Button>
+        </div>
+      )}
+      {isPage && (
+        <aside className={cn(
+          'w-full shrink-0 flex-col overflow-hidden border-b border-border bg-card/80 lg:flex lg:w-72 lg:max-h-none lg:border-b-0 lg:border-r',
+          threadsOpen ? 'flex max-h-[38vh]' : 'hidden',
+        )}>
           <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2.5">
             <p className="type-identity font-semibold">
               <BilingualText en="Threads" el="Νήματα" compact />
@@ -282,8 +316,11 @@ export function CopilotWorkspace({
       )}
 
       <section className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <div className="flex items-center justify-between gap-2 border-b border-border bg-muted/30 px-3 py-2">
-          <div className="flex min-w-0 items-center gap-2">
+        <div className={cn(
+          'flex items-center justify-between gap-2 border-b border-border bg-muted/30 px-3 py-2',
+          !isPage && 'max-sm:flex-wrap',
+        )}>
+          <div className="flex min-w-0 flex-1 items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
               <CfbGlyph name={getAgentGlyph(chat.currentAgent)} className="icon-sm" aria-hidden="true" />
             </span>
@@ -293,7 +330,7 @@ export function CopilotWorkspace({
                   {currentAgentConfig?.name || 'CoFounderBay Assistant'}
                 </h1>
               ) : (
-                <p className="type-identity max-w-[9.5rem] truncate font-medium">
+                <p className="type-identity font-medium leading-snug sm:max-w-[9.5rem] sm:truncate">
                   {currentAgentConfig?.name || 'CoFounderBay Assistant'}
                 </p>
               )}
@@ -306,7 +343,7 @@ export function CopilotWorkspace({
               )}
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className={cn('flex items-center gap-1', !isPage && 'max-sm:basis-full')}>
             {isPage && <PageContextualHelp defaultOpen={false} compact />}
             {agentList.length > 1 && (
               <Select value={chat.currentAgent} onValueChange={(v) => chat.setAgent(v)}>
@@ -341,8 +378,11 @@ export function CopilotWorkspace({
               </>
             )}
             {onExpand && (
-                <button type="button" onClick={onExpand} className={cn('tap-target flex items-center justify-center rounded-xl hover:bg-muted', isPage ? 'h-11 w-11' : 'h-8 w-8')} title={bilingualAria('Open full page', 'Άνοιγμα πλήρους σελίδας')} aria-label={bilingualAria('Open full page', 'Άνοιγμα πλήρους σελίδας')}>
+                <button type="button" onClick={onExpand} className={cn('tap-target inline-flex items-center justify-center gap-1 rounded-xl px-2 hover:bg-muted', isPage ? 'h-11 w-11' : 'h-11 sm:h-8 sm:w-8 sm:px-0')} title={bilingualAria('Open full page', 'Άνοιγμα πλήρους σελίδας')} aria-label={bilingualAria('Open full page', 'Άνοιγμα πλήρους σελίδας')}>
                 <Maximize2 className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="text-xs font-medium text-foreground sm:sr-only">
+                  <BilingualText en="Full page" el="Πλήρης σελίδα" compact />
+                </span>
               </button>
             )}
           </div>
