@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/calendar",
+  "sourceFile": "calendar/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:48:33.561Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/calendar",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/calendar",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Calendar·Ημερολόγιο"
+    ],
+    "wordCount": 101,
+    "textExcerpt": "Calendar·Ημερολόγιο\n\nSessions, calls, and events in one timeline.\nΣυνεδρίες, κλήσεις και εκδηλώσεις σε μία χρονολογική ακολουθία.\n\nWhat this calendar shows\n·\nΤι δείχνει αυτό το ημερολόγιο\nAdd Event\n·\nΠροσθήκη εκδήλωσης\nS",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:48:39.118Z"
+}

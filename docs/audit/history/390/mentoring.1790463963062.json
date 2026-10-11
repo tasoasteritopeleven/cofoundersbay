@@ -1,0 +1,40 @@
+{
+  "requestedRoute": "/mentoring",
+  "sourceFile": "mentoring/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:34:47.353Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/mentoring",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentoring",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Find mentors"
+    ],
+    "wordCount": 39,
+    "textExcerpt": "Find mentors\n\nDirectory of mentors — filter by expertise and availability.\n\nFind mentors\nMy sessions\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T22:34:50.544Z"
+}

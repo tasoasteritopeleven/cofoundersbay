@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/login",
+  "sourceFile": "(auth)/login/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:46.530Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/login",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/login",
+  "measurement": {
+    "title": "Sign in | CoFounderBay",
+    "headings": [
+      "Welcome to Aegean Venture Lab·Καλώς ήρθατε στο Aegean Venture Lab"
+    ],
+    "wordCount": 76,
+    "textExcerpt": "CoFounderBay\nWelcome to Aegean Venture Lab·Καλώς ήρθατε στο Aegean Venture Lab\n\nSign in to continue building your network.·Συνδεθείτε για να συνεχίσετε να χτίζετε το δίκτυό σας.\n\nEmail\nPassword\n·\nΚωδικός\nForgot password?",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:48.312Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/analytics",
+  "sourceFile": "tenant/analytics/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:01:08.103Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Analytics·Αναλυτικά"
+    ],
+    "wordCount": 181,
+    "textExcerpt": "Analytics·Αναλυτικά\n\nMember growth, engagement, and program activity. Filter by time range to compare periods.\nΑύξηση μελών, συμμετοχή και δραστηριότητα προγραμμάτων. Φιλτράρετε ανά χρονικό διάστημα για να συγκρίνετε περ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:01:13.450Z"
+}

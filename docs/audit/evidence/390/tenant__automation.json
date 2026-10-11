@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/automation",
+  "sourceFile": "tenant/automation/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:41:24.332Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/automation",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/automation",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Automation"
+    ],
+    "wordCount": 48,
+    "textExcerpt": "Automation\n\nEvent-driven workflows: triggers, conditions, actions for your workspace.\n\nNo organization selected\n\nAutomations run inside an organization — they react to events like a new member joining or an application b",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:41:28.680Z"
+}

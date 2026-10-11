@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/provider/analytics",
+  "sourceFile": "provider/analytics/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T17:34:02.894Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/provider/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Provider analytics"
+    ],
+    "wordCount": 88,
+    "textExcerpt": "Provider analytics\n\nViews, inquiry conversion and revenue over time.\n\nSample data\n\nLast 30 days · 316 profile views\n\nProfile Views\n\n342\n\n18% vs last period\n\nInquiries\n\n27\n\n35% vs last period\n\nActive Projects\n\n6\n\nvs last ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T17:34:15.354Z"
+}

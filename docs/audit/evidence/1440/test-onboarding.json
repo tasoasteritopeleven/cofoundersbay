@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/test-onboarding",
+  "sourceFile": "test-onboarding/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:03:09.308Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/test-onboarding",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/test-onboarding",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Production Readiness Tests\n·\nΈλεγχοι ετοιμότητας παραγωγής"
+    ],
+    "wordCount": 102,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nProduction Readiness Tests\n·\nΈλεγχοι ετοιμότητας παραγωγής\n\nTest all critical components before going to production·Ελέγξτε όλα τα κρίσιμα στοιχεία πριν από την παραγ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:03:13.085Z"
+}

@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/messages",
+  "sourceFile": "messages/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:10.552Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/messages",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/messages",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Messages·Μηνύματα"
+    ],
+    "wordCount": 191,
+    "textExcerpt": "Messages·Μηνύματα\n\nPinned, unread, and recent threads.\n·\nΚαρφιτσωμένα, αδιάβαστα και πρόσφατα νήματα.\n\nChats vs intro requests\n·\nΣυνομιλίες και αιτήματα γνωριμίας\nNew message\nAsk AI\nDraft a reply, summarise this thread, ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "textarea",
+        "html": "<textarea class=\"flex w-full rounded-xl border-input text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/70 hover:border-border focus-visible:o"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:16.974Z"
+}

@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/investor/scouting",
+  "sourceFile": "investor/scouting/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:27:23.914Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/investor/scouting",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".bg-primary\\/20.h-full.font-bold"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #3a45df, background color: #cccfef, font size: 9.9pt (13.2613px), font weight: bold). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/scouting",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Scout startups"
+    ],
+    "wordCount": 227,
+    "textExcerpt": "Scout startups\n\nSearch and filter startups by stage, sector, and traction.\n\nFeatured Startups\nN\n\nNeuralFlow AI\n\nAI-powered workflow automation for enterprises\n\n92% match\n\n$1.5M\n\nP\n\nPayStream\n\nNext-gen payment infrastruct",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:28:10.384Z"
+}

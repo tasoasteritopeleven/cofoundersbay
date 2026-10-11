@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/tenants",
+  "sourceFile": "admin/tenants/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:53.745Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/tenants",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/tenants",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Tenant Management"
+    ],
+    "wordCount": 33,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nTenant Management\n\nManage organizations and their white-label branding\n\nCreate Tenant\nOrganizations\n\nConfigure branding, SSO, and settings for each tenant\n\nSelect al",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:22:01.528Z"
+}

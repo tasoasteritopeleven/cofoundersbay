@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/builder/pitch-deck",
+  "sourceFile": "builder/pitch-deck/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:23:05.913Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/builder/pitch-deck",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [
+    "WebSocket connection to 'ws://127.0.0.1:3001/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "pageErrors": [],
+  "finalPath": "/builder/pitch-deck",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Pitch deck"
+    ],
+    "wordCount": 23,
+    "textExcerpt": "Pitch deck\n\nDraft slides tied to Builder data. Completion counts filled content, not empty outlines.\n\nHow this pitch deck works\n\nLoading pitch deck…",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:23:10.405Z"
+}

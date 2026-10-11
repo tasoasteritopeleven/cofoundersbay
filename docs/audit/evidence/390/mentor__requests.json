@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/requests",
+  "sourceFile": "mentor/requests/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:34:31.282Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/requests",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/requests",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentee requests"
+    ],
+    "wordCount": 87,
+    "textExcerpt": "Mentee requests\n\nAccept or decline new mentoring requests.\n\nRefresh\n\n2\n\nPending\n\n1\n\nAccepted\n\n0\n\nDeclined\n\nPending\n2\nAccepted\nDeclined\nKN\nKaterina Nikolaou\n\nFounder at Ledgerly\n\nPending\n\n\"We are pricing a climate-fintech",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:34:37.003Z"
+}

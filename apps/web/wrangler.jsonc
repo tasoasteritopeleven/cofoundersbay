@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cofounderbay-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-09-01",
+  // nodejs_compat is required by the Next.js server runtime;
+  // global_fetch_strictly_public makes same-origin fetches go back out through
+  // the edge, which is what Next's own data fetching expects.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  // Optional KV cache for the revalidating routes. Uncomment and fill in the
+  // namespace id after running the command below, and only together with the
+  // kv-incremental-cache import in open-next.config.ts (see the note there):
+  //   npx wrangler kv namespace create NEXT_INC_CACHE_KV
+  // "kv_namespaces": [
+  //   { "binding": "NEXT_INC_CACHE_KV", "id": "<namespace-id>" }
+  // ],
+
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://cofounderbay-web.workers.dev",
+    "NEXT_PUBLIC_APP_NAME": "CoFounderBay"
+  },
+
+  // Carried over from the retired wrangler.toml: a named preview environment
+  // so `wrangler deploy --env preview` stamps the app name distinctly.
+  "env": {
+    "preview": {
+      "vars": {
+        "NEXT_PUBLIC_APP_NAME": "CoFounderBay Preview"
+      }
+    }
+  }
+}

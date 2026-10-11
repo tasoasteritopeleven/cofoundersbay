@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/coaching",
+  "sourceFile": "coaching/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:23:16.597Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/coaching",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/coaching",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Coaching"
+    ],
+    "wordCount": 38,
+    "textExcerpt": "Coaching\n\nAccountability, clarity, and execution coaching for founders and teams\n\nMy Sessions\nFind a Coach\nAction Items\nInsights\nBook a session\n\nNo coaching sessions yet\n\nBook your first session with a coach to get start",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:23:21.751Z"
+}

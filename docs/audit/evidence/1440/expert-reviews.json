@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/expert-reviews",
+  "sourceFile": "expert-reviews/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:50:23.748Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/expert-reviews",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/expert-reviews",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Expert Reviews·Αξιολογήσεις ειδικών"
+    ],
+    "wordCount": 104,
+    "textExcerpt": "Expert Reviews·Αξιολογήσεις ειδικών\n\nStructured feedback on your pitch, financials, and strategy from domain experts.\nΔομημένη ανατροφοδότηση για το pitch, τα οικονομικά και τη στρατηγική σας από ειδικούς του κλάδου.\n\n0\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:50:28.720Z"
+}

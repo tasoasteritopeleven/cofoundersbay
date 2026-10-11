@@ -1,0 +1,53 @@
+{
+  "requestedRoute": "/themes/alliance",
+  "sourceFile": "themes/alliance/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:03:13.309Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/themes/alliance",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".md\\:h-9 > .max-w-full.items-baseline.gap-0\\.5 > .bilingual-secondary.bilingual-secondary--inline[lang=\"el\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.2pt (12.2412px), font weight: normal). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "finalPath": "/themes/alliance",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Connect. Collaborate. Succeed.\n·\nΣυνδεθείτε. Συνεργαστείτε. Πετύχετε."
+    ],
+    "wordCount": 294,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nAlliance theme preview · sample content·Προεπισκόπηση θέματος Alliance · δείγμα περιεχομένου\nConnect. Collaborate. Succeed.\n·\nΣυνδεθείτε. Συνεργαστείτε. Πετύχετε.\n\nJo",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:03:17.807Z"
+}

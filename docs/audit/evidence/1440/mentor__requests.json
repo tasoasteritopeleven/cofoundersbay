@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/requests",
+  "sourceFile": "mentor/requests/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:54:06.658Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/requests",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/requests",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentee requests·Αιτήματα mentees"
+    ],
+    "wordCount": 136,
+    "textExcerpt": "Mentee requests·Αιτήματα mentees\n\nAccept or decline new mentoring requests.\nΑποδοχή ή απόρριψη νέων αιτημάτων mentoring.\n\nRefresh\n·\nΑνανέωση\n\n2\n\nPending\n·\nΣε αναμονή\n\n1\n\nAccepted\n·\nΑποδεκτά\n\n0\n\nDeclined\n·\nΑπορριφθέντα\n\nP",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:54:11.689Z"
+}

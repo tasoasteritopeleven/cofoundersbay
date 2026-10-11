@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/demo",
+  "sourceFile": "demo/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:24:10.961Z",
+  "status": "redirect",
+  "actualFinalUrl": "http://localhost/dashboard/founder",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/founder",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Founder dashboard"
+    ],
+    "wordCount": 347,
+    "textExcerpt": "Founder dashboard\n\nYour startup command center — readiness, matches, and next actions.\n\nFounder dashboard\nFounder\nFounder progress: 52%\n\nGood evening, Alex Demo. Here is what needs attention, and what to do next.\n\nAsk AI",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:24:16.324Z"
+}

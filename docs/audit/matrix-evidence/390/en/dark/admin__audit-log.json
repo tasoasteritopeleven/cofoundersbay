@@ -1,0 +1,52 @@
+{
+  "requestedRoute": "/admin/audit-log",
+  "sourceFile": "admin/audit-log/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:19:53.237Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/audit-log",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/audit-log",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Audit log"
+    ],
+    "wordCount": 92,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nAudit log\n\nEvery administrative action on the platform: who changed what, and when.\n\nRefresh\nExport\nAll entities\nAll actions\nActivity log\n5 total entries\nalex@harbor",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:19:58.262Z"
+}

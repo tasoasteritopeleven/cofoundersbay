@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings/ai",
+  "sourceFile": "settings/ai/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:40:19.055Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings/ai",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings/ai",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "AI assistant"
+    ],
+    "wordCount": 296,
+    "textExcerpt": "AI assistant\n\nChoose the model and default agent that answer your questions across the platform.\n\nBack to Settings\nWhat it can do\nOpen assistant\nSaved\n\nAI Assistant is Offline\n\nThe language model is not reachable right n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:40:24.990Z"
+}

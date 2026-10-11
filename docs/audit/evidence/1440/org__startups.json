@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/org/startups",
+  "sourceFile": "org/startups/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:57:03.179Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/org/startups",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/startups",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Portfolio Startups·Startups χαρτοφυλακίου"
+    ],
+    "wordCount": 172,
+    "textExcerpt": "Portfolio Startups·Startups χαρτοφυλακίου\n\nStartups currently in your programs and graduates. Track readiness, milestones, and program assignment.\nΝεοφυείς που συμμετέχουν στα προγράμματά σας και απόφοιτοι. Παρακολουθήστ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:57:08.447Z"
+}

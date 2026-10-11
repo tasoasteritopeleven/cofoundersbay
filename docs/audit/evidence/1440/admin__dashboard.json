@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/dashboard",
+  "sourceFile": "admin/dashboard/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:45:40.997Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/dashboard",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/dashboard",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Platform overview·Επισκόπηση πλατφόρμας"
+    ],
+    "wordCount": 287,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nPlatform overview·Επισκόπηση πλατφόρμας\n\nWho uses the platform, what waits on an admin, and how the API i",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:45:45.866Z"
+}

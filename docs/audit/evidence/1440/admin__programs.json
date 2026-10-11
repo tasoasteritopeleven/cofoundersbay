@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/programs",
+  "sourceFile": "admin/programs/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:46:00.518Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/programs",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/programs",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Programs·Προγράμματα"
+    ],
+    "wordCount": 106,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nPrograms·Προγράμματα\n\nAccelerators and cohorts platform-wide — approve, pause, or audit.\nΕπιταχυντές και ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:46:05.194Z"
+}

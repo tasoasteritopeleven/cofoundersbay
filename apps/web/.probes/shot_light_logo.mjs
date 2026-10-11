@@ -1,0 +1,12 @@
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(new URL('../package.json', import.meta.url))('@playwright/test');
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
+await ctx.addCookies([{ name: 'cfb_session', value: 'probe', domain: 'localhost', path: '/' },{ name: 'cfb_primary_role', value: 'founder', domain: 'localhost', path: '/' }]);
+await ctx.addInitScript(() => { localStorage.setItem('user', JSON.stringify({ id: 'u_1', role: 'founder' })); localStorage.setItem('cfb_demo_data','1'); localStorage.setItem('cfb_cookie_consent','true'); localStorage.setItem('theme','light'); localStorage.setItem('cfb_tours_done','1'); });
+const p = await ctx.newPage();
+await p.goto('http://localhost:3000/readiness', { waitUntil: 'networkidle' });
+await p.waitForTimeout(1200);
+await p.screenshot({ path: '.probes/logo_light.png', clip: { x: 0, y: 0, width: 400, height: 100 } });
+await p.screenshot({ path: '.probes/logo_light_full.png' });
+await b.close();

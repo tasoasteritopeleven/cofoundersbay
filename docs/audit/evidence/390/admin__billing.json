@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/admin/billing",
+  "sourceFile": "admin/billing/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:43:51.587Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/billing",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/billing",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Billing administration"
+    ],
+    "wordCount": 24,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nBilling administration\n\nPlatform revenue, invoices, and subscription states across all accounts.\n\nSubscriptions\nInvoices\nPlans\nCoupons\nNo subscriptions found",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex min-h-11 rounded-xl border border-input bg-background px-3 py-2 sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/70 input-clean hov"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:43:57.133Z"
+}

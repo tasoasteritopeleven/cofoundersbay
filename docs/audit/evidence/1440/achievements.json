@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/achievements",
+  "sourceFile": "achievements/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:44:08.064Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/achievements",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/achievements",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Achievements & Badges·Επιτεύγματα & Εμβλήματα"
+    ],
+    "wordCount": 49,
+    "textExcerpt": "Achievements & Badges·Επιτεύγματα & Εμβλήματα\n\nTrack your progress, unlock badges, and climb the leaderboard\nΠαρακολουθήστε την πρόοδό σας, ξεκλειδώστε εμβλήματα και ανεβείτε στην κατάταξη\n\nLoading\nLoading\nLoading\nLoadin",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:44:14.437Z"
+}

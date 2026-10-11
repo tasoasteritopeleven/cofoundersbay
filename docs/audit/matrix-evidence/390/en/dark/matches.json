@@ -1,0 +1,48 @@
+{
+  "requestedRoute": "/matches",
+  "sourceFile": "matches/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:25:42.714Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/matches",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/matches",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Matches"
+    ],
+    "wordCount": 16,
+    "textExcerpt": "Matches\n\nAI-ranked co-founder and team matches based on your profile compatibility\n\nHow matching works\nRefresh\nExplore",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-27T16:25:47.697Z"
+}

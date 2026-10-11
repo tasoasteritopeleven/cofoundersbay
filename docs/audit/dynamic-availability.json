@@ -1,0 +1,5 @@
+{
+  "at": "2026-09-27T17:25:19.081Z",
+  "before": "/admin/user-detail/__audit_missing__",
+  "issue": "Preview unavailable after bounded retries; no navigation attempted"
+}

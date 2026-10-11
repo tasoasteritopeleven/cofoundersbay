@@ -1,0 +1,55 @@
+{
+  "requestedRoute": "/groups",
+  "sourceFile": "groups/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:34:18.992Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/groups",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Communities"
+    ],
+    "wordCount": 185,
+    "textExcerpt": "Communities\n\nIndustry, stage, and interest-based groups. Join to participate; create your own anytime.\n\nHow communities work\nCreate Community\nDiscover\nMy Communities\n\n7 found\n\nTOP COMMUNITIES\nTechnology\nAI Builders EU\nTe",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:34:26.232Z"
+}

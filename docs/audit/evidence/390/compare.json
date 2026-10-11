@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/compare",
+  "sourceFile": "compare/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:23:22.737Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/compare",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/compare",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Compare Profiles"
+    ],
+    "wordCount": 43,
+    "textExcerpt": "Compare Profiles\n\nSide-by-side comparison to find your best match. Tip: bookmark a /matches/compare URL with profile ids to share.\n\nShare\nAdd Profile\n\nNo profiles to compare\n\nAdd profiles from your matches or search to c",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:23:27.468Z"
+}

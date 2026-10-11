@@ -1,0 +1,98 @@
+{
+  "template": "/t/[slug]",
+  "kind": "known",
+  "source": "t/[slug]/page.tsx",
+  "evidence": "lib/demo/org-world.ts ORG_SLUG; lib/demo/org-api.ts previewOrgApi tenant",
+  "route": "/t/aegean-lab",
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "at": "2026-09-27T17:29:47.732Z",
+  "status": "issue",
+  "requestedRole": "existing_founder (synthetic preview)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "link-name",
+        "impact": "serious",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              "a[href$=\"aegeanlab.example\"]"
+            ],
+            "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attrib"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "pageErrors": [],
+  "blockedMutations": [],
+  "httpStatus": 200,
+  "finalPath": "/t/aegean-lab",
+  "measurement": {
+    "title": "Organization Not Found | CoFounderBay | CoFounderBay",
+    "headings": [
+      "Aegean Venture Lab"
+    ],
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nAegean Venture Lab\n\nA pre-seed and seed accelerator for founders in Greece and Cyprus\n\nGet Started\nSign In\nAbout Aegean Venture Lab\n\nHelp founders from the region build companies that sell beyond it.\n\nConnect\n\nFind co-founders, mentors, and collaborators\n\nAI Matching\n\nSmart compatibility scoring for better teams\n\nTrusted Network\n\nVerified profiles and moderated community\n\nReady to join Aegean Venture Lab?\n\nConnect with the right people and bu",
+    "wordCount": 84,
+    "visibleAlerts": [],
+    "lang": "en",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable dark role-founder",
+    "overflowPx": 0,
+    "unnamedControls": [
+      {
+        "tag": "a",
+        "html": "<a href=\"https://aegeanlab.example\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-muted-foreground hover:text-foreground transition-colors\"><svg xmlns=\"http://www.w3.org/20"
+      }
+    ]
+  },
+  "keyboard": [
+    {
+      "tag": "a",
+      "role": null,
+      "name": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "role": null,
+      "name": "Get Started",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "role": null,
+      "name": "Sign In",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "role": null,
+      "name": "Join Now",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "a",
+      "role": null,
+      "name": "",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "body",
+      "role": null,
+      "name": "Skip to main content · Μετάβαση στο κύριο περιεχόμενοrequestAnima",
+      "visible": true,
+      "outline": "none"
+    }
+  ]
+}

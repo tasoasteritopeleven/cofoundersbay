@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/register",
+  "sourceFile": "(auth)/register/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:34.368Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/register",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/register",
+  "measurement": {
+    "title": "Create your account | CoFounderBay",
+    "headings": [
+      "Create your account·Δημιουργήστε λογαριασμό"
+    ],
+    "wordCount": 181,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nJoin Aegean Venture Lab\nΓίνετε μέλος του Aegean Venture Lab\n\nCreate a detailed profile and get matched with the right founders, mentors, and investors.\nΦτιάξτε ένα αν",
+    "loadingElements": [
+      "min-h-5"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:37.619Z"
+}

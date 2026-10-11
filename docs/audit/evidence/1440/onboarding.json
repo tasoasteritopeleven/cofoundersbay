@@ -1,0 +1,34 @@
+{
+  "requestedRoute": "/onboarding",
+  "sourceFile": "onboarding/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:33.762Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/onboarding",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/onboarding",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [],
+    "wordCount": 31,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nCoFounderBay\n\nProfile Setup\n\n👋 Welcome to CoFounderBay! I'm going to help you set up your profile in a few quick steps. Ready?",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:37.927Z"
+}

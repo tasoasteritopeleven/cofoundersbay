@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/dashboard/incubator",
+  "sourceFile": "dashboard/incubator/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:23:48.767Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/dashboard/incubator",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/incubator",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Incubator dashboard"
+    ],
+    "wordCount": 357,
+    "textExcerpt": "Incubator dashboard\n\nCohorts, applications and the milestones your startups are hitting.\n\nAegean Venture Lab\nNew program\n\nGood evening, Alex Demo. Applications waiting on you, your programmes and how your startups are do",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:23:54.515Z"
+}

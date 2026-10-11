@@ -1,0 +1,50 @@
+{
+  "requestedRoute": "/matches/compare",
+  "sourceFile": "matches/compare/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:25:48.355Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/matches/compare",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/matches/compare",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Compare matches"
+    ],
+    "wordCount": 186,
+    "textExcerpt": "Compare matches\n\nOpen two or more match profiles side by side to weigh fit.\n\nCompare up to 3 of your matches side by side.\n\nAdd a match · Προσθήκη αντιστοίχισης\nBack to matches\nYour matches compared, dimension by dimensi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 21,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:25:52.604Z"
+}

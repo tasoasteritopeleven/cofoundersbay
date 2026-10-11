@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/mentees",
+  "sourceFile": "mentor/mentees/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:53:54.921Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/mentees",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/mentees",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentees·Μαθητευόμενοι"
+    ],
+    "wordCount": 43,
+    "textExcerpt": "Mentees·Μαθητευόμενοι\n\nThe founders you are mentoring, and where each one stands.\nΟι ιδρυτές που καθοδηγείτε και σε ποιο σημείο βρίσκεται ο καθένας.\n\nRefresh\n·\nΑνανέωση\n\n0\n\nActive Mentees\n·\nΕνεργοί μαθητευόμενοι\n\n0\n\nComp",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:54:01.175Z"
+}

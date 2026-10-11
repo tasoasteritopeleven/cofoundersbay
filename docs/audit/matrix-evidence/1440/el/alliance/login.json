@@ -1,0 +1,55 @@
+{
+  "requestedRoute": "/login",
+  "sourceFile": "(auth)/login/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 1440,
+  "locale": "el",
+  "theme": "alliance",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:32:33.689Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/login",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/login",
+  "measurement": {
+    "title": "Sign in | CoFounderBay",
+    "headings": [
+      "Καλώς ήρθατε στο Aegean Venture Lab"
+    ],
+    "wordCount": 37,
+    "textExcerpt": "CoFounderBay\nΚαλώς ήρθατε στο Aegean Venture Lab\n\nΣυνδεθείτε για να συνεχίσετε να χτίζετε το δίκτυό σας.\n\nEmail\nΚωδικός\nΞεχάσατε τον κωδικό;\nΕμφάνιση\nΣύνδεση\nΉ συνεχίστε με\nΣυνέχεια με Google\nΣυνέχεια με LinkedIn\n\nΔεν έχ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "el",
+    "activeTheme": "alliance",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable light role-founder",
+    "dataTheme": "alliance",
+    "activeLocale": "el",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 166,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:32:36.414Z"
+}

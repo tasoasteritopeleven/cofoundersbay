@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/provider/dashboard",
+  "sourceFile": "provider/dashboard/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:58:18.239Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/provider/dashboard",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/dashboard",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [],
+    "wordCount": 20,
+    "textExcerpt": "Loading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading",
+    "loadingElements": [
+      "Loading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoading\nLoadin",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T22:58:20.416Z"
+}

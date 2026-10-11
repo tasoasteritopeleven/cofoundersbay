@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/provider/reviews",
+  "sourceFile": "provider/reviews/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 1440,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T18:06:27.737Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/provider/reviews",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/reviews",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Reviews"
+    ],
+    "wordCount": 142,
+    "textExcerpt": "Reviews\n\nSee what clients are saying about your services\n\n4.7\n\n3 reviews\n\n5\n2\n4\n1\n3\n0\n2\n0\n1\n0\n\nTotal Reviews\n\n3\n\n5-star reviews\n\n2\n\nResponse Rate\n\n100%\n\nHelpful Votes\n\n0\n\nY\nYannis Petrou\n3w ago\nSeed-round financial model",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T18:06:35.068Z"
+}

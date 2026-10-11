@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/events",
+  "sourceFile": "org/events/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:56:36.218Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/events",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/events",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Organization Events·Εκδηλώσεις οργανισμού"
+    ],
+    "wordCount": 97,
+    "textExcerpt": "Organization Events·Εκδηλώσεις οργανισμού\n\nDemo days, office hours, workshops, and pitch nights for your cohorts.\nDemo days, ώρες γραφείου, εργαστήρια και βραδιές παρουσιάσεων για τις κοόρτες σας.\n\nCreate Event\n·\nΝέα εκδ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:56:42.332Z"
+}

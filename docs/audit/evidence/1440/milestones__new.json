@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/milestones/new",
+  "sourceFile": "milestones/new/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:23.525Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/milestones/new",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/milestones/new",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "New milestone·Νέο ορόσημο"
+    ],
+    "wordCount": 155,
+    "textExcerpt": "New milestone·Νέο ορόσημο\n\nDefine one milestone — what done looks like, who owns it, and when it is due.\nΟρίστε ένα ορόσημο — τι σημαίνει «ολοκληρώθηκε», ποιος το αναλαμβάνει και πότε λήγει.\n\nHow milestones work\n·\nΠώς δο",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:55:28.675Z"
+}

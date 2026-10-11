@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/fundraising",
+  "sourceFile": "fundraising/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:25:15.320Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/fundraising",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/fundraising",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Fundraising"
+    ],
+    "wordCount": 234,
+    "textExcerpt": "Fundraising\n\nTrack the round, move investors through the pipeline, and share a private data room. Completing diligence here sits next to Pitch deck and Readiness.\n\nRunning your fundraise here\nFind investors\nAdd contact\nS",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:25:32.521Z"
+}

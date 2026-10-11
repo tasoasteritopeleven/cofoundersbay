@@ -1,0 +1,4320 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Font fallbacks ──
+   The real values are injected on <html> by next/font (app/layout.tsx) via a
+   generated class. This rule uses the `html` type selector on purpose: at
+   specificity (0,0,1) it can never beat that class, so it only applies when the
+   layout is not mounted (isolated component rendering, tests). Without a
+   definition, `var(--font-inter)` would be invalid-at-computed-value-time and the
+   entire font-family declaration — including its system-ui fallback — would be
+   discarded. */
+html {
+  --font-inter: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display-brand: var(--font-inter);
+  --font-co-mark: var(--font-inter);
+  --banner-network: 0px;
+  --banner-demo: 0px;
+  /* The page rail's open width. One value, read by the panel and by the main
+     column's reserved margin, and stepped with the screen. 1024–1279 keeps
+     the earlier 18.5rem (~243px at the 82% desktop root): any wider and a
+     pinned rail starves the column beside it (the moderation cards on /admin
+     wrapped every line). From 1280 it is ~289px, from 1536 ~315px, room
+     for a bilingual label beside its control on one line. */
+  --page-rail-width: 18.5rem;
+  /* −1% component height. font-size / line-height never read this. */
+  --chrome-y: 0.99;
+  /* Product chrome cluster (AI-converged). Locked founder dash pages
+     keep the hold/kicker ladder and do not read these. */
+  --type-caption: 12.61px;
+  --type-support: 12.7361px;
+  --type-ui: 13.50px;
+  --type-identity: 14.28px;
+  --type-page: 15.42px;
+}
+
+@layer base {
+  /* Field text sizes live in "Fields read under their labels" at the end of
+     this sheet (the iOS focus zoom is handled by IosFieldZoom). */
+
+  :root {
+    /* ── Light theme ──
+       Surfaces step the way cursor.com's do: page, card and inset sit a few
+       points of lightness apart (card/page 1.07:1 here, 1.06 measured on
+       cursor.com), so a card reads as a place rather than as a box. Every
+       theme below holds the same three ratios:
+         card on page   1.05-1.09
+         --border       1.14-1.19 on its card (cursor.com 1.15-1.18)
+         --input        1.17-1.19 on its card — a field edge as quiet as a card's */
+    --background:       232 7% 96.6%;
+    --foreground:       232 10% 21%;
+    --card:             232 12% 99.4%;
+    --card-foreground:  232 10% 21%;
+    --popover:          0 0% 100%;
+    --popover-foreground: 232 10% 21%;
+
+    /* One tone recipe, four hues (lilac here; cyan, mint and apricot in the
+       named themes). Lilac, mint and apricot carry chroma 30 and the same
+       relative luminance as the reference buttons (0.49: Windsurf #34e8bb,
+       Windsurf #f09f6d). Cyan's tint is #66bce1; its solid fill is #207da5
+       so a white label clears 4.6:1.
+       Read from the reference pixels, then solved for contrast:
+       .probes/sample_pixels.mjs, .probes/tone_solver2.cjs.
+
+       --primary        the accent wherever it is solid: buttons, active pills,
+                        rings, bars, avatars, badges, chart series. The fill
+                        is deep enough for a white label (--primary-foreground,
+                        >=4.6:1), except Mint, whose solid fill is the pastel
+                        #bce3bd and whose label is a dark green of that hue.
+       --primary-mid    the deeper tone, only for faint tints (/5../40), which
+                        a pastel cannot carry
+       --primary-accessible  link and emphasis text, >=5:1 on a card
+       --ink            the label on any lively status mark */
+    --primary: 250 74% 63.9%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 250 45.9% 59%;             /* tints only (/5../40) */
+    /* 50%, not 55%: the accent's text tone also sits on the accent's own
+       tints (bg-primary/10..20 draw from --primary-mid), on 38 avatars,
+       badges and active chips. 55% measured 3.7-4.4:1 there under axe; 50%
+       holds >=4.67:1 up to /20 and 6.6:1 on cards, and reads as the same
+       lilac. A tint nested in a tint (a count inside an active chip) keeps
+       the inner one at /10. */
+    --primary-accessible: 250 40.7% 50%;
+    --ink:              232 20% 10%;
+
+    /* Secondary / muted sit a couple of points off the card, not a new colour. */
+    --secondary:        232 7% 95.4%;
+    --secondary-foreground: 232 8% 24%;
+
+    --muted:            232 7% 94.8%;
+    /* 42%, not 45%: helper text also sits on tinted surfaces (a highlighted
+       plan, a selected role card on bg-primary/10), where 45% measured
+       4.38-4.42:1 and 43% 4.49:1 under axe. ~5.8 on card, >=4.6 there. */
+    --muted-foreground: 232 6% 42%;
+
+    /* Accent is the hover surface (shadcn's meaning: every `hover:bg-accent`
+       row, menu item and toolbar button). It followed primary, so hovering a
+       list row painted it solid lilac — the loudest thing on the page for as
+       long as the pointer rested there. A quiet step off the card instead,
+       as on cursor.com and windsurf.com. */
+    --accent:           232 10% 94.2%;
+    --accent-foreground: 232 10% 21%;
+
+    --destructive:      4 32.5% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 4 33.5% 38.8%;
+
+    /* Borders: a hairline, spent sparingly.
+       cursor.com draws its card edge at 1.15:1 and its button edge at 1.18:1,
+       with no shadow behind either -- the surface step does most of the
+       separating and the line only confirms it. At 1.44:1 every card here
+       was outlined rather than placed, and that line was repeated on chips,
+       tiles and rows inside the card. `--border` now sits in cursor.com's
+       band, so `/60` and `/40` fade toward nothing, which is what an inner
+       divider should do. A control's own boundary is `--input`, kept firmer
+       than a card edge because it is the only thing that marks the field. */
+    --border:           232 5% 93.6%;  /* 1.14 on card — a hairline, not a frame */
+    /* Fields share the card's whisper (1.19, was 1.22-3.14 by theme). The
+       field is found by its fill, label and placeholder; focus is the strong
+       signal: a 2px --ring outline (globals "Shared keyboard indicator") and
+       the edge taking --ring while typing. */
+    --input:            232 5% 92%;
+    --ring:             250 40.7% 55%; /* the link tone: 4.9:1 on the page */
+
+    /* Score/progress rings — the brand-banner gold on its quiet brown
+       (#e89a3c on #483822). `ink` carries the ring's % and tier text; dark
+       themes lift track and ink so the ring stays legible. */
+    --ring-gold:        33 82% 55%;
+    --ring-gold-track:  31 37% 21%;
+    --ring-gold-ink:    31 37% 21%;
+    /* Base radius = the card corner. Tailwind steps (tailwind.config.ts):
+       sm/DEFAULT 6 · md/lg 10 · xl 12 · 2xl 14 · 3xl 18.
+       Softer than cursor.com (cards ~12, buttons ~8) by one notch, same
+       proportions: inner corners still step down from the container. */
+    --radius:           14px;
+
+    /* Typography scale — Cursor.com steps, then +2% on the UI/copy half
+       (2xs–base; two requested +1% passes). Display steps (lg+) stay. */
+    --font-size-2xs:    0.765075rem; /* 12.24px captions */
+    --font-size-xs:     0.82883125rem;/* 13.26px helpers */
+    --font-size-sm:     0.8925875rem; /* 14.28px nav / UI */
+    --font-size-base:   1.0201rem;    /* 16.32px body / titles */
+    --font-size-lg:     1.125rem;   /* 18px */
+    --font-size-xl:     1.25rem;    /* 20px */
+    --font-size-2xl:    1.5rem;     /* 24px  page titles */
+    --font-size-3xl:    1.625rem;   /* 26px  cursor.com h1 */
+    --font-size-4xl:    2.25rem;    /* 36px  heading-lg */
+
+    /* Gradients. The hero is one flat dark tone carrying white type; a
+       surface that shifts hue across its width pulls the eye off the words. */
+    --gradient-hero:    linear-gradient(hsl(222 26% 10%), hsl(222 26% 10%));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(252 34% 70%));
+    --gradient-card:    linear-gradient(hsl(var(--card)), hsl(var(--card)));
+
+    /* ── Shadows ──────────────────────────────────────────────────────────
+       Nothing in the page flow casts one: cursor.com's cards, tiles and
+       buttons carry none, and a shadow under a hairline is a second edge.
+       Only what floats over the page -- menus, popovers, dialogs, toasts --
+       gets a soft, wide, low-opacity spread (cursor.com's flyout is 2-5%
+       black), and it is tinted with the ground's hue so it reads as depth
+       rather than haze. `--shadow-strength` scales it for the dark themes,
+       where the same opacity would not register. Both are read by the
+       box-shadow ladder in tailwind.config.ts, so every theme declares them. */
+    --shadow-color:     232 28% 18%;
+    --shadow-strength:  1;
+
+    --shadow-glow:      none;
+    --shadow-card:      none;
+    --shadow-elevated:  0 4px 20px -4px hsl(var(--shadow-color) / calc(var(--shadow-strength) * 7%));
+    --shadow-modal:     0 12px 40px -8px hsl(var(--shadow-color) / calc(var(--shadow-strength) * 12%));
+
+    /* ── Standardized spacing scale ── */
+    --spacing-card-compact: 1rem;      /* 16px - p-4 */
+    --spacing-card-comfortable: 1.5rem; /* 24px - p-6 */
+    --spacing-section: 2rem;            /* 32px - space-y-8 */
+    --spacing-section-sm: 1.5rem;       /* 24px - space-y-6 */
+    --spacing-section-xs: 1rem;         /* 16px - space-y-4 */
+
+    /* ── Standardized icon sizes ── */
+    --icon-2xs: 12px; /* h-3 w-3 */
+    --icon-xs: 14px;  /* h-3.5 w-3.5 */
+    --icon-sm: 16px;  /* h-4 w-4 */
+    --icon-md: 20px;  /* h-5 w-5 */
+    --icon-lg: 24px;  /* h-6 w-6 */
+    --icon-xl: 32px;  /* h-8 w-8 */
+  }
+
+  .dark {
+    --gradient-hero: linear-gradient(hsl(222 22% 10.2%), hsl(222 22% 10.2%));
+    --shadow-color: 222 60% 2%;
+    --shadow-strength: 3;
+    /* card/page 1.06 (cursor.com dark 1.07); the popover sits one step above
+       the card so a menu over a card still separates without a heavy shadow. */
+    --background: 222 28% 7.4%;
+    --foreground: 220 10% 93%;
+    --card: 222 22% 10.2%;
+    --card-foreground: 220 10% 93%;
+    --popover: 222 20% 11.4%;
+    --popover-foreground: 220 10% 93%;
+    --primary: 248 47% 59.6%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-accessible: 248 50% 82%;
+    --secondary: 232 16% 13.8%;
+    --secondary-foreground: 232 10% 93%;
+    --muted: 232 16% 13%;
+    --muted-foreground: 232 8% 62%;
+    --accent: 232 14% 15.5%;           /* hover surface, not a lilac fill */
+    --accent-foreground: 220 10% 93%;
+    --destructive: 4 23.5% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 4 30% 70%;
+    --border: 232 12% 13.6%;           /* ~1.12 on card */
+    --input: 232 12% 15%;              /* ~1.16 on card */
+    --ring: 248 47% 76.6%;
+    --ring-gold-track:  30 22% 38%;   /* quiet on the dark card */
+    --ring-gold-ink:    36 55% 80%;   /* the banner's pale-gold text */
+    color-scheme: dark;
+  }
+
+  /* ── System theme: distinct slate-blue palette ── */
+  [data-theme="system"] {
+    --shadow-color: 215 50% 5%;
+    --shadow-strength: 3;
+    --background: 215 28% 17%;
+    --foreground: 210 20% 98%;
+    --card: 215 25% 19.4%;
+    --card-foreground: 210 20% 98%;
+    --popover: 215 24% 20.6%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 199 36% 40%;
+    --primary-foreground: 0 0% 100%;
+    --primary-accessible: 199 28% 64%;
+    --secondary: 215 20% 22.6%;
+    --secondary-foreground: 210 12% 94%;
+    --muted: 215 20% 22%;
+    --muted-foreground: 215 10% 68%;
+    --accent: 215 20% 23.6%;           /* hover surface */
+    --accent-foreground: 210 20% 98%;
+    --destructive: 2 23.5% 46.8%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 2 30% 70%;
+    --border: 215 16% 22.8%;           /* ~1.12 on card */
+    --input: 215 16% 24.4%;            /* ~1.16 on card */
+    --ring: 199 36% 40%;
+    --ring-gold-track:  30 22% 38%;
+    --ring-gold-ink:    36 55% 80%;
+    --gradient-hero: linear-gradient(hsl(215 26% 13%), hsl(215 26% 13%));
+    color-scheme: dark;
+  }
+
+  /* ── "Cyan" (id: alliance) — solid #207da5, tint #66bce1, on a cool page.
+     Neutral-cool surfaces; the accent lives in the accent-lock block below. ── */
+  [data-theme="alliance"] {
+    --shadow-color: 200 40% 18%;
+    --shadow-strength: 1;
+    --background: 210 8% 96.4%;
+    --foreground: 220 100% 3%;
+    --card: 210 12% 99.4%;
+    --card-foreground: 220 100% 3%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 100% 3%;
+    --secondary: 210 8% 94.6%;
+    --secondary-foreground: 220 100% 3%;
+    --muted: 210 8% 94.2%;
+    --muted-foreground: 210 5% 41%; /* 5.46 on card, 4.92 on muted */
+    --accent: 210 10% 94%;             /* hover surface */
+    --accent-foreground: 220 15% 10%;
+    --destructive: 2 30.5% 42.6%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 2 33.5% 38.8%;
+    --border: 210 8% 93.4%;            /* ~1.13 on card */
+    --input: 210 8% 91.8%;             /* ~1.18 on card */
+    --gradient-hero: linear-gradient(hsl(205 20% 13%), hsl(205 20% 13%));
+    color-scheme: light;
+  }
+
+  /* ── Cofounder theme: dark purple/cyan ── */
+  [data-theme="cofounder"] {
+    --shadow-color: 240 60% 2%;
+    --shadow-strength: 3;
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 7% 6.8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 7% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 258 28% 54%;
+    --primary-foreground: 0 0% 100%;
+    --primary-accessible: 258 22% 72%;
+    --secondary: 240 6% 10.4%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 6% 9.8%;
+    --muted-foreground: 240 5% 64%;
+    --accent: 240 6% 11.6%;            /* hover surface */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 2 23% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 2 25% 64%;
+    --border: 240 6% 10.8%;            /* ~1.12 on card */
+    --input: 240 6% 12.2%;             /* ~1.15 on card */
+    --ring: 258 28% 54%;
+    --ring-gold-track:  30 22% 38%;
+    --ring-gold-ink:    36 55% 80%;
+    --gradient-hero: linear-gradient(hsl(240 7% 6.8%), hsl(240 7% 6.8%));
+    color-scheme: dark;
+  }
+
+  /* ── "Mint" (id: minimal) ─────────────────────────────────────────────────
+     Windsurf's cream page and soft mint, on the same tone recipe as the
+     other accent themes. This block used to appear twice, verbatim; the
+     first copy was dead (the second always won) and is gone.
+     Light-first, near-monochrome on warm paper, one mint accent.
+     Scoped to [data-theme="minimal"] so alliance/cofounder/system are untouched.
+     Token names on this line: --primary-accessible / --destructive-accessible
+     (Claude 803ddb2 used --primary-emphasis / --destructive-emphasis). ──── */
+  [data-theme="minimal"] {
+    --background:        40 57.1% 91.8%; /* Windsurf page #f6eede */
+    --foreground:        30 8% 11%;
+    --card:              37 57.1% 94.5%; /* Windsurf card #f9f3e9 */
+    --card-foreground:   30 8% 12%;
+    --popover:           0 0% 100%;
+    --popover-foreground: 30 8% 12%;
+
+    --secondary:         40 38% 89.4%;
+    --secondary-foreground: 30 8% 16%;
+    --muted:             40 34% 88.8%;
+    --muted-foreground:  30 8% 33%;
+
+    --accent:            43 24.1% 82.9%;
+    --accent-foreground: 30 8% 12%;     /* 14.24 — a tint, not a brand fill */
+
+    --destructive:       6 33.5% 38.8%;  /* white on it: 7.03 */
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 6 33.5% 38.8%; /* 6.92 on card */
+
+    --border:            38 30% 87.6%;  /* ~1.15 on card */
+    --input:             38 28% 86.2%;  /* ~1.19 on card — was 3.14, a drawn box */
+
+    color-scheme: light;
+  }
+
+  /* ── "Apricot" (id: apricot) — a soft orange on a warm neutral page, same
+     tone recipe. Destructive leans rose (350) so a delete never reads as
+     the brand. ── */
+  [data-theme="apricot"] {
+    --shadow-color: 24 30% 18%;
+    --shadow-strength: 1;
+    --background: 30 25% 95.5%;
+    --foreground: 24 10% 12%;
+    --card: 30 30% 98.4%;
+    --card-foreground: 24 10% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 13%;
+    --secondary: 30 18% 93%;
+    --secondary-foreground: 24 10% 17%;
+    --muted: 30 18% 92.6%;
+    --muted-foreground: 26 8% 38%;
+    --accent: 30 22% 92.6%;            /* hover surface */
+    --accent-foreground: 24 10% 12%;
+    --destructive: 350 30% 42.6%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-accessible: 350 33% 38.8%;
+    --border: 30 16% 92.6%;            /* ~1.13 on card */
+    --input: 30 16% 91%;               /* ~1.18 on card */
+    --gradient-hero: linear-gradient(hsl(24 14% 13%), hsl(24 14% 13%));
+    color-scheme: light;
+  }
+
+  .role-founder {
+    --primary: 250 74% 63.9%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 250 45.9% 59%;             /* tints only (/5../40) */
+    --primary-accessible: 250 40.7% 50%;
+    --accent: 232 10% 94.2%;
+    --accent-foreground: 232 10% 21%;
+    --ring: 250 40.7% 55%;
+  }
+  html.dark.role-founder {
+    --primary: 248 47% 59.6%;
+    --primary-accessible: 248 50% 82%;
+    --accent: 232 14% 15.5%;
+    --ring: 248 47% 76.6%;
+    --primary-foreground: 0 0% 100%;
+    --accent-foreground: 220 10% 93%;
+  }
+
+  .role-mentor {
+    --primary: 190 74% 33.5%;             /* white label, 4.63:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 190 45.9% 38%;             /* tints only (/5../40) */
+    --primary-accessible: 190 40.7% 31.5%;
+    --accent: 232 10% 94.2%;
+    --accent-foreground: 232 10% 21%;
+    --ring: 190 40.7% 36.5%;
+  }
+  html.dark.role-mentor {
+    --primary: 190 28.5% 40.9%;
+    --primary-accessible: 190 37.5% 76%;
+    --accent: 232 14% 15.5%;
+    --ring: 190 28.5% 61.4%;
+    --primary-foreground: 0 0% 100%;
+    --accent-foreground: 220 10% 93%;
+  }
+
+  .role-investor {
+    --primary: 32 74% 37.8%;              /* white label, 4.63:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 32 45.9% 41%;              /* tints only (/5../40) */
+    --primary-accessible: 32 40.7% 34.25%;
+    --accent: 232 10% 94.2%;
+    --accent-foreground: 232 10% 21%;
+    --ring: 32 40.7% 39.25%;
+  }
+  html.dark.role-investor {
+    --primary: 32 28.5% 42.9%;
+    --primary-accessible: 32 30% 70%;
+    --accent: 232 14% 15.5%;
+    --ring: 32 28.5% 61.4%;
+    --primary-foreground: 0 0% 100%;
+    --accent-foreground: 220 10% 93%;
+  }
+
+  .role-org {
+    --primary: 262 74% 61.8%;             /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 262 45.9% 57.75%;          /* tints only (/5../40) */
+    --primary-accessible: 262 40.7% 49.5%;
+    --accent: 232 10% 94.2%;
+    --accent-foreground: 232 10% 21%;
+    --ring: 262 40.7% 54.5%;
+  }
+  html.dark.role-org {
+    --primary: 258 35.5% 56%;
+    --primary-accessible: 258 37.5% 76%;
+    --accent: 232 14% 15.5%;
+    --ring: 258 35.5% 69%;
+    --primary-foreground: 0 0% 100%;
+    --accent-foreground: 220 10% 93%;
+  }
+
+  /* ── Accent locks ──
+     A chosen accent theme outranks the role palette: `html[data-theme]`
+     (0,1,1) beats `.role-*` (0,1,0). Before this the role class quietly
+     replaced every named theme's primary, so picking a theme changed the
+     page and not the accent. The default light/dark themes keep the role
+     hues. Values from .probes/tone_solver.cjs. */
+  html[data-theme="alliance"] {
+    --primary: 198.05 67.21% 38.7%;       /* #207da5, white label 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 198.05 67.21% 64.12%;  /* the same cyan; tints are washes of it */
+    --primary-accessible: 198.05 37% 37.5%; /* links, >=5:1 on a card */
+    --accent: 210 10% 94%;
+    --accent-foreground: 220 15% 10%;
+    --ring: 198.05 37% 43.5%;
+  }
+  html[data-theme="minimal"] {
+    /* The button fill is the lightest this green can be while white
+       letters still clear 4.5:1 (rgb(56, 134, 58), 4.53:1). The pale
+       rgb(188, 227, 189) left white at 1.4:1. */
+    --primary: 121.54 41.05% 37.3%;       /* #38863a, buttons, white label */
+    --mint-mark: 138.7 30.3% 56.2%;       /* #6db183 rgb(109, 177, 131): #71b687, 2% darker in OKLab lightness. Bay and profile fills */
+    --mint-ring: 162.7 20.4% 43.3%;       /* #588578 rgb(88, 133, 120). Rings, chat icon, green outlines, sent-message fill */
+    --mint-button-ink: 138.5 36% 18.5%;   /* #1e4029, kept for the contrast record. Buttons no longer use it: white on the pastel is 2.27:1 */
+    --mint-ring-hover: 138.2 33.9% 55.5%; /* leftover hover of the pastel fill; buttons now darken --primary */
+    --meter-apricot: 22.6 81.4% 68.5%;    /* #f09f6d, the Apricot theme's apricot */
+    --meter-lilac: 250 74% 63.9%;         /* #765fe7, the Light theme's lilac */
+    --primary-foreground: 0 0% 100%;      /* white letters on mint buttons */
+    --primary-mid: 120 41.74% 58%;        /* tints only (/5../40); the same green, 20% more chroma */
+    --primary-accessible: 120 32% 30.5%;  /* #356735, links, >=5:1 on a card */
+    --accent: 43 24.1% 82.9%;             /* Windsurf active nav #ded8c9 */
+    --accent-foreground: 30 8% 11%;
+    --ring: 120 32% 36%;
+  }
+  html[data-theme="apricot"] {
+    --primary: 28 76% 39.5%;              /* white label, 4.62:1 */
+    --primary-foreground: 0 0% 100%;
+    --primary-mid: 23 50.5% 44%;              /* tints only (/5../40) */
+    --primary-accessible: 23 44.8% 36%;
+    --accent: 30 22% 92.6%;
+    --accent-foreground: 24 10% 12%;
+    --ring: 23 44.8% 41.5%;
+  }
+  /* Dark surfaces fill with the same deepened accent and a white label; their tints
+     come from that same tone. */
+  html.dark,
+  html[data-theme="cofounder"],
+  html[data-theme="system"] {
+    --primary-mid: var(--primary);
+  }
+
+  /* ── Semantic status colors (theme-aware — replaces hardcoded text-emerald-600 etc.)
+     Light surfaces: :root + alliance. Dark surfaces: .dark + cofounder + system. ── */
+  :root,
+  [data-theme="alliance"],
+  [data-theme="minimal"] {
+    /* Two bands, and the gap between them is the hierarchy: the brand
+       carries ~30 chroma, every status tone ~21, the page itself ~5. A
+       chip tells you what a thing is; it is not competing to be read
+       first, which is why cursor.com's deltas never shout either. */
+    --status-success-fg: 158 30.4% 34.5%;   /* 5.04 on tint, 5.44 on card */
+    --status-success-bg: 158 11.4% 95.6%;
+    --status-success-border: 158 6% 90.6%;
+    --status-success-mark: 158 46% 56.75%;   /* 2.07 on card, ink 8.44 */
+    --status-warning-fg: 36 27.8% 37.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 36 11.4% 95.6%;
+    --status-warning-border: 36 6% 90.6%;
+    --status-warning-mark: 36 46% 64.25%;   /* 2.07 on card, ink 8.44 */
+    --status-danger-fg:  4 23.5% 44.75%;   /* 5.04 on tint, 5.50 on card */
+    --status-danger-bg:  4 11.4% 95.6%;
+    --status-danger-border: 4 6% 90.6%;
+    --status-danger-mark: 4 46% 74.5%;   /* 2.06 on card, ink 8.48 */
+    --status-info-fg:    212 24.7% 42.5%;   /* 5.01 on tint, 5.46 on card */
+    --status-info-bg:    212 11.4% 95.6%;
+    --status-info-border: 212 6% 90.6%;
+    --status-info-mark:  212 46% 71.5%;   /* 2.07 on card, ink 8.43 */
+    --status-accent-fg:  250 21.6% 48.5%;   /* 5.02 on tint, 5.50 on card */
+    --status-accent-bg:  250 11.4% 95.6%;
+    --status-accent-border: 250 6% 90.6%;
+    --status-accent-mark: 250 46% 77.5%;   /* 2.06 on card, ink 8.48 */
+    --status-neutral-fg:     232 6% 40%;
+    --status-neutral-bg:     232 6% 95.0%;
+    --status-neutral-border: 232 4.5% 91.0%;
+    --status-neutral-mark:   232 8% 66%;
+
+    /* Categorical chart tones, slots 2-6 (slot 1 is --primary, resolved in
+       lib/chart-theme.ts). One hue each, >=35 deg from the accent so a series
+       never reads as "another accent", in the same pastel mark band (S~46,
+       Y~0.44 on the card) as the status marks, so a chart sits with the
+       page instead of shouting over it. */
+    --chart-2: 165 39% 55%;   /* teal-green */
+    --chart-3: 30 42% 60%;    /* clay */
+    --chart-4: 335 35% 72%;   /* rose */
+    --chart-5: 200 39% 65%;   /* steel blue */
+    --chart-6: 95 28% 55%;    /* olive */
+  }
+
+  /* Each accent theme moves the one status hue that would collide with its
+     own accent (mint pushes success to leaf green, apricot pushes warning
+     to ochre and danger to rose, cyan pushes info to blue) and tints
+     `status-accent` with its own hue. Same band: fg chroma 21, >=5:1 on
+     its tint and on the card (.probes/status_solver.cjs). */
+  html[data-theme="alliance"] {
+    --status-success-fg: 158 30.4% 34.5%;   /* 5.04 on tint, 5.45 on card */
+    --status-success-bg: 158 11.4% 95.6%;
+    --status-success-border: 158 6% 90.6%;
+    --status-success-mark: 158 46% 56.75%;   /* 2.07 on card, ink 8.44 */
+    --status-warning-fg: 36 27.8% 37.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 36 11.4% 95.6%;
+    --status-warning-border: 36 6% 90.6%;
+    --status-warning-mark: 36 46% 64.25%;   /* 2.07 on card, ink 8.44 */
+    --status-danger-fg:  4 23.5% 44.75%;   /* 5.04 on tint, 5.51 on card */
+    --status-danger-bg:  4 11.4% 95.6%;
+    --status-danger-border: 4 6% 90.6%;
+    --status-danger-mark: 4 46% 74.5%;   /* 2.06 on card, ink 8.48 */
+    --status-info-fg:    232 22.2% 47.25%;   /* 5.04 on tint, 5.52 on card */
+    --status-info-bg:    232 11.4% 95.6%;
+    --status-info-border: 232 6% 90.6%;
+    --status-info-mark:  232 46% 76.5%;   /* 2.06 on card, ink 8.46 */
+    --status-accent-fg:  198.05 24.7% 39%;   /* 5.04 on tint, 5.47 on card */
+    --status-accent-bg:  198.05 11.4% 95.6%;
+    --status-accent-border: 198.05 6% 90.6%;
+    --status-accent-mark: 198.05 46% 71.5%; /* ink on the mark stays clear */
+    --status-neutral-fg:     210 6% 40%;
+    --status-neutral-bg:     210 6% 95.0%;
+    --status-neutral-border: 210 4.5% 91.0%;
+    --status-neutral-mark:   210 8% 66%;
+
+    --chart-2: 165 35% 55%;   /* teal-green */
+    --chart-3: 30 42% 60%;    /* clay */
+    --chart-4: 335 35% 72%;   /* rose */
+    --chart-5: 255 39% 74%;   /* violet */
+    --chart-6: 95 28% 55%;    /* olive */
+  }
+  html[data-theme="minimal"] {
+    --status-success-fg: 135 32.6% 32.25%;   /* 5.03 on tint, 5.52 on card */
+    --status-success-bg: 135 17% 90.6%;
+    --status-success-border: 135 6% 85.6%;
+    --status-success-mark: 135 46% 58%;   /* 2.07 on card, ink 8.44 */
+    --status-warning-fg: 36 30.2% 34.75%;   /* 5.05 on tint, 5.58 on card */
+    --status-warning-bg: 36 17% 90.6%;
+    --status-warning-border: 36 6% 85.6%;
+    --status-warning-mark: 36 46% 64.25%;   /* 2.07 on card, ink 8.44 */
+    --status-danger-fg:  4 25.3% 41.5%;   /* 5.01 on tint, 5.71 on card */
+    --status-danger-bg:  4 17% 90.6%;
+    --status-danger-border: 4 6% 85.6%;
+    --status-danger-mark: 4 46% 74.5%;   /* 2.06 on card, ink 8.48 */
+    --status-info-fg:    212 26.8% 39.25%;   /* 5.04 on tint, 5.67 on card */
+    --status-info-bg:    212 17% 90.6%;
+    --status-info-border: 212 6% 85.6%;
+    --status-info-mark:  212 46% 71.5%;   /* 2.07 on card, ink 8.43 */
+    --status-accent-fg:  165 33.1% 31.75%;   /* 5.02 on tint, 5.50 on card */
+    --status-accent-bg:  165 17% 90.6%;
+    --status-accent-border: 165 6% 85.6%;
+    --status-accent-mark: 165 46% 56.25%;   /* 2.07 on card, ink 8.44 */
+    --status-neutral-fg:     38 6% 40%;
+    --status-neutral-bg:     38 6% 90.0%;
+    --status-neutral-border: 38 4.5% 86.0%;
+    --status-neutral-mark:   38 8% 66%;
+
+    --chart-2: 255 35% 74%;   /* violet */
+    --chart-3: 28 46% 65%;    /* apricot */
+    --chart-4: 335 35% 72%;   /* rose */
+    --chart-5: 205 39% 65%;   /* blue */
+    --chart-6: 55 31% 55%;    /* olive-gold */
+  }
+  html[data-theme="apricot"] {
+    --status-success-fg: 158 30.9% 34%;   /* 5.02 on tint, 5.44 on card */
+    --status-success-bg: 158 9.3% 94.6%;
+    --status-success-border: 158 6% 89.6%;
+    --status-success-mark: 158 46% 56.75%;   /* 2.07 on card, ink 8.44 */
+    --status-warning-fg: 46 30.2% 34.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 46 9.3% 94.6%;
+    --status-warning-border: 46 6% 89.6%;
+    --status-warning-mark: 46 46% 59%;   /* 2.07 on card, ink 8.45 */
+    --status-danger-fg:  350 23.5% 44.75%;   /* 5.04 on tint, 5.53 on card */
+    --status-danger-bg:  350 9.3% 94.6%;
+    --status-danger-border: 350 6% 89.6%;
+    --status-danger-mark: 350 46% 75%;   /* 2.07 on card, ink 8.44 */
+    --status-info-fg:    212 25.1% 41.75%;   /* 5.04 on tint, 5.51 on card */
+    --status-info-bg:    212 9.3% 94.6%;
+    --status-info-border: 212 6% 89.6%;
+    --status-info-mark:  212 46% 71.5%;   /* 2.07 on card, ink 8.43 */
+    --status-accent-fg:  23 26.3% 40%;   /* 5.04 on tint, 5.49 on card */
+    --status-accent-bg:  23 9.3% 94.6%;
+    --status-accent-border: 23 6% 89.6%;
+    --status-accent-mark: 23 46% 69.25%;   /* 2.07 on card, ink 8.44 */
+    --status-neutral-fg:     30 6% 40%;
+    --status-neutral-bg:     30 6% 94.0%;
+    --status-neutral-border: 30 4.5% 90.0%;
+    --status-neutral-mark:   30 8% 66%;
+
+    --chart-2: 165 35% 55%;   /* mint */
+    --chart-3: 255 35% 74%;   /* violet */
+    --chart-4: 335 35% 72%;   /* rose */
+    --chart-5: 205 39% 65%;   /* blue */
+    --chart-6: 120 28% 52%;   /* green */
+  }
+
+  .dark,
+  [data-theme="cofounder"],
+  [data-theme="system"] {
+    /* Dark text tones are already light pastels; they are the marks too. */
+    --status-success-mark: var(--status-success-fg);
+    --status-warning-mark: var(--status-warning-fg);
+    --status-danger-mark:  var(--status-danger-fg);
+    --status-info-mark:    var(--status-info-fg);
+    --status-accent-mark:  var(--status-accent-fg);
+    --status-neutral-mark: var(--status-neutral-fg);
+    --status-success-fg:     145 21.5% 62.8%;
+    --status-success-bg:     145 12.5% 12%;
+    --status-success-border: 145 5% 24%;
+    --status-warning-fg:     32 25% 68%;
+    --status-warning-bg:     32 12.5% 12%;
+    --status-warning-border: 32 5% 24%;
+    --status-danger-fg:      4 25% 68%;
+    --status-danger-bg:      4 12.5% 12%;
+    --status-danger-border:  4 5% 24%;
+    --status-info-fg:        217 25% 68%;
+    --status-info-bg:        217 12.5% 12%;
+    --status-info-border:    217 5% 24%;
+    --status-accent-fg:      248 32% 75%;
+    --status-accent-bg:      248 10% 15%;
+    --status-accent-border:  248 5.5% 21.8%;
+    --status-neutral-fg:     232 6% 64%;
+    --status-neutral-bg:     232 11% 13.2%;
+    --status-neutral-border: 232 6.5% 15.4%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  /* Corners stay plain circular arcs, as on cursor.com. No
+     `corner-shape: squircle`: at the same radius a superellipse pulls the
+     curve tight into the corner and leaves long straight runs either side,
+     which reads as abrupt rather than soft. */
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Desktop density from origin/claude 141552e: 82% of the phone/tablet
+     scale from `lg` up, as a percentage so a raised browser default still
+     applies. Body stays in rem so it participates. Two floors they measured
+     but did not hold: 12px type (cursor.com caption) and 24px controls
+     (WCAG 2.5.8 — 24px becomes 19.7px at 82%). */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 82%;
+    }
+    button,
+    [type='button'],
+    [type='submit'],
+    [type='reset'],
+    [role='button'],
+    [role='switch'],
+    [role='tab'],
+    [role='menuitem'],
+    [role='checkbox'],
+    [role='radio'] {
+      min-height: 24px;
+    }
+    [role='switch'] {
+      min-width: 24px;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-height: 100dvh;
+    font-feature-settings: 'cv11', 'ss01';
+    /* UI/copy half +2% (16.32px). Display titles stay on the Cursor steps. */
+    font-size: 1.0201rem;
+    line-height: 1.5;
+    letter-spacing: -0.011em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Same 16.32px body against the 82% desktop root (16.3216 / 13.12). */
+  @media (min-width: 1024px) {
+    body {
+      font-size: 1.24402439rem;
+    }
+  }
+
+  /* Custom scrollbar — thin & minimal */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  /* Text selection */
+  ::selection {
+    background: hsl(var(--primary-mid) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  /* Keyboard focus: a whisper outside the control, never a second inner frame. */
+  :focus-visible {
+    outline: 1px solid hsl(var(--foreground) / 0.22);
+    outline-offset: 2px;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-foreground;
+    line-height: 1.25;
+  }
+  
+  /* Wider layout containers for better aesthetics at 100% zoom */
+  .container {
+    max-width: 1560px !important;
+  }
+  
+  .container-wide {
+    max-width: 1800px !important;
+  }
+  
+  .container-narrow {
+    max-width: 800px !important;
+  }
+  
+  img, video {
+    content-visibility: auto;
+  }
+
+  /* View transition defaults — only applied when browser supports View Transitions API */
+  @supports (view-transition-name: none) {
+    ::view-transition-old(root) {
+      animation: cfb-page-out 0.18s ease-in both;
+    }
+    ::view-transition-new(root) {
+      animation: cfb-page-in 0.22s ease-out both;
+    }
+  }
+
+  /* Fields already carry a border. A second ring on focus draws a frame
+     inside a frame — it reads as kitsch and shrinks the field. The caret
+     (and a quieter existing-border, never `--ring`) is the indicator. */
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Smooth transitions on interactive elements — only on hover/focus to reduce idle layout cost */
+  button, a {
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+  }
+
+  /* Prevent transition flash on first load */
+  .no-transition * {
+    transition: none !important;
+  }
+}
+
+@layer utilities {
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glass {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.02)
+      )
+      border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+  }
+
+  .cfb-page-header {
+    @apply flex flex-col justify-between gap-3 sm:flex-row sm:items-end;
+  }
+
+  /* Staggered animation delays */
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.3s; }
+  .stagger-7 { animation-delay: 0.35s; }
+  .stagger-8 { animation-delay: 0.4s; }
+
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--secondary)) 0%,
+      hsl(var(--muted)) 50%,
+      hsl(var(--secondary)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Role-specific gradients */
+  .gradient-founder {
+    background: linear-gradient(135deg, hsl(248 66% 60%), hsl(252 52% 72%));
+  }
+
+  .gradient-mentor {
+    background: linear-gradient(135deg, hsl(200 84% 55%), hsl(180 72% 52%));
+  }
+
+  .gradient-investor {
+    background: linear-gradient(135deg, hsl(32 92% 60%), hsl(14 82% 54%));
+  }
+
+  .gradient-org {
+    background: linear-gradient(135deg, hsl(268 84% 68%), hsl(248 70% 60%));
+  }
+
+  /* Glow effects per role */
+  .role-founder .glow-role {
+    box-shadow: 0 0 20px rgba(103, 86, 220, 0.22), 0 0 40px rgba(103, 86, 220, 0.1);
+  }
+
+  .role-mentor .glow-role {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3), 0 0 40px rgba(45, 212, 191, 0.15);
+  }
+
+  .role-investor .glow-role {
+    box-shadow: 0 0 20px rgba(251, 146, 60, 0.3), 0 0 40px rgba(239, 68, 68, 0.15);
+  }
+
+  .role-org .glow-role {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 40px rgba(99, 102, 241, 0.15);
+  }
+
+  /* Hover answers with a firmer edge, never with motion or a shadow
+     (cursor.com: border at 10% foreground on hover). */
+  .hover-lift {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .hover-lift:hover {
+    border-color: hsl(var(--foreground) / 0.12);
+  }
+
+  /* Focus ring animation */
+  .focus-ring-animated:focus-visible {
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
+
+  /* Interactive card */
+  .card-interactive {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .card-interactive:hover {
+    border-color: hsl(var(--foreground) / 0.12);
+  }
+
+  /* Backdrop blur levels */
+  .blur-backdrop-sm { backdrop-filter: blur(8px); }
+  .blur-backdrop-md { backdrop-filter: blur(16px); }
+  .blur-backdrop-lg { backdrop-filter: blur(24px); }
+
+  /* Subtle shadow — replaces glow in light mode */
+  .shadow-glow-sm {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Card gradient background (used by reference repo) */
+  .bg-card-gradient {
+    background: var(--gradient-card);
+  }
+
+  /* Accent gradient text */
+  .text-gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* View transition name — scoped to supported browsers */
+  @supports (view-transition-name: none) {
+    main {
+      view-transition-name: main-content;
+    }
+  }
+
+  /* Fade-in animation used across pages */
+  .animate-fade-in {
+    animation: fade-in 0.18s ease-out both;
+  }
+
+  /* Dashboard card stagger */
+  .animate-fade-in-up {
+    animation: fade-in-up 0.22s ease-out both;
+  }
+
+  /* TopNav entrance */
+  .animate-fade-in-down {
+    animation: fade-in-down 0.2s ease-out both;
+  }
+
+  /* MobileNav slide-in links */
+  .animate-fade-in-left {
+    animation: fade-in-left 0.2s ease-out both;
+  }
+
+  /* QuickActions FAB items */
+  .animate-scale-in {
+    animation: scale-in 0.15s ease-out both;
+  }
+
+  /* FloatingActionButton subtle bounce */
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  /* Pulse glow — used by auth page hero icon */
+  .animate-pulse-glow {
+    animation: pulse-glow-ring 2.5s ease-in-out infinite;
+  }
+
+  /* Semi-transparent white overlay used on hero panels */
+  .bg-white\/8  { background-color: rgb(255 255 255 / 0.08); }
+  .bg-white\/12 { background-color: rgb(255 255 255 / 0.12); }
+  .bg-white\/15 { background-color: rgb(255 255 255 / 0.15); }
+
+  /* Skip-to-content — stays in the tab order, but has no paint until focused (WCAG 2.4.1) */
+  .skip-to-content {
+    font-size: 13.50px;
+  }
+  .skip-to-content:not(:focus) {
+    position: absolute;
+    /* Off-screen in both axes. `left` alone leaves the box at y=0 with a 1px
+       height, which is inside the viewport: enough for a sliver of paint if any
+       theme ever gives it a background, and enough to fail a bounding-box
+       assertion that the link is not on screen. */
+    left: -10000px;
+    top: -10000px;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .skip-to-content:focus {
+    position: fixed;
+    top: 0.75rem;
+    left: 50%;
+    z-index: 9999;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip: auto;
+    clip-path: none;
+    overflow: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius);
+    /* The foreground token is theme-aware (dark on the orange themes, white
+       elsewhere), so this pair clears 4.5:1 in every theme. */
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-size: 13.36px;
+    font-weight: 600;
+    white-space: nowrap;
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* KPI strips run two-up on a phone (one tile per row pushed the page's
+     content a screen down). An odd last tile takes the whole row until the
+     breakpoint where the strip gains columns. One utility per breakpoint,
+     written out so Tailwind keeps them. */
+  @media (max-width: 639.98px) {
+    .kpi-odd-span-sm > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
+  @media (max-width: 767.98px) {
+    .kpi-odd-span-md > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
+  @media (max-width: 1023.98px) {
+    .kpi-odd-span-lg > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
+
+  /* A tab strip that continues past its edge fades on that edge
+     (TabsList sets data-fade while it overflows). */
+  .tab-strip[data-fade='end'] {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  }
+  .tab-strip[data-fade='start'] {
+    -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to left, #000 calc(100% - 2rem), transparent);
+  }
+  .tab-strip[data-fade='both'] {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 2rem, #000 calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 2rem, #000 calc(100% - 2rem), transparent);
+  }
+
+  /* Screen-reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary-mid) / 0.4); }
+  50%       { box-shadow: 0 0 0 6px hsl(var(--primary-mid) / 0); }
+}
+
+@keyframes pulse-glow-ring {
+  0%, 100% { box-shadow: 0 0 12px 2px hsl(var(--primary-mid) / 0.25); }
+  50%       { box-shadow: 0 0 28px 8px hsl(var(--primary-mid) / 0.45); }
+}
+
+@keyframes cfb-page-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes cfb-page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .shimmer {
+    animation: none !important;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Reduced motion (WCAG 2.3.3 Animation from Interactions)
+   Honors the OS "Reduce motion" setting. Decorative entrance/loop animations
+   are removed so the UI is calm and stable, while functional loading spinners
+   (.animate-spin) keep rotating so progress is still communicated. This also
+   eliminates the idle GPU cost of infinite loops (shimmer/pulse/bounce).
+   ────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.scroll-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  /* Decorative entrance + infinite loop animations → render final state instantly */
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-fade-in-down,
+  .animate-fade-in-left,
+  .animate-scale-in,
+  .animate-bounce-subtle,
+  .animate-pulse-glow,
+  .shimmer,
+  .focus-ring-animated:focus-visible {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Hover lifts / interactive card translation → no movement */
+  .hover-lift,
+  .hover-lift-sm,
+  .card-interactive,
+  .card-hover {
+    transition: none !important;
+  }
+  .hover-lift:hover,
+  .hover-lift-sm:hover,
+  .card-interactive:hover,
+  .card-hover:hover {
+    transform: none !important;
+  }
+
+  /* Collapse generic transitions to near-instant (keeps state changes legible) */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+
+  /* Keep functional spinners animating — progress feedback must survive */
+  .animate-spin {
+    animation: spin 0.8s linear infinite !important;
+  }
+
+  /* Disable View Transition page animations */
+  @supports (view-transition-name: none) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
+  }
+}
+
+/* ── Enhanced component utilities ── */
+@layer utilities {
+  /* Keyboard focus: a whisper outside the control, never a second inner frame. */
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: 1px solid hsl(var(--foreground) / 0.22);
+    outline-offset: 2px;
+  }
+  
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-150 ease-out;
+  }
+  
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-colors duration-150 hover:border-foreground/[0.12];
+  }
+  
+  /* Button variants */
+  .btn-ghost-subtle {
+    @apply text-foreground/70 hover:text-foreground hover:bg-secondary/50;
+  }
+  
+  /* A field's edge is `--input`, the one boundary firmer than a card's. */
+  .input-clean {
+    @apply border-input hover:border-foreground/15;
+  }
+  
+  /* Text improvements */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* ── Standardized icon sizes ── */
+  /* ── One stroke weight across both icon families ──
+     The product draws from two sets: its own `CfbGlyph`, deliberately drawn at
+     1.75, and lucide, which ships every glyph at 2. They sit side by side in
+     the same row — on /readiness it was 40 icons at 2 against 27 at 1.75 — and
+     two weights at one size is what makes a set look unruly rather than drawn.
+     CSS wins over the presentation attribute, so this needs no change at any
+     call site, and charts are untouched: their widths are on `path`, not on a
+     `svg.lucide`. */
+  svg.lucide {
+    stroke-width: 1.75;
+  }
+
+  .icon-sm { @apply h-4 w-4; }  /* 16px - inline icons, badges */
+  .icon-md { @apply h-5 w-5; }  /* 20px - default button/card icons */
+  .icon-lg { @apply h-6 w-6; }  /* 24px - section headers, emphasis */
+  .icon-xl { @apply h-8 w-8; }  /* 32px - hero sections, large CTAs */
+
+  /* Collapsed sidebar rail: every chrome glyph shares the larger 20px size. */
+  aside[data-rail] .icon-sm,
+  aside[data-rail] .icon-md,
+  aside[data-rail] svg.h-4,
+  aside[data-rail] svg.w-4,
+  aside[data-rail] svg.lucide {
+    height: 20px;
+    width: 20px;
+  }
+
+  aside[data-rail] [data-sidebar-edge-toggle] svg.lucide {
+    height: 14px;
+    width: 14px;
+  }
+
+  /* Quiet wells for original glyphs — identity without decoration. */
+  .icon-well {
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/6 text-muted-foreground;
+  }
+  .icon-well-sm {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/6 text-muted-foreground;
+  }
+
+  /* ── Bilingual secondary text ──
+     The secondary language must read as subordinate to the primary without
+     becoming illegible. Sizing is relative (0.85em) so the ratio holds in an
+     h1, in body copy and in a badge alike, with a 12px floor via max() so it
+     never drops below cursor.com's caption size in already-small containers.
+     Replaces the previous hardcoded text-[9px] / text-[10px].
+     Colour is deliberately NOT set here: it stays a Tailwind class on the
+     element so tailwind-merge can resolve a caller-supplied override
+     (e.g. secondaryClassName="text-primary-foreground" on an active chip). */
+  .bilingual-secondary {
+    font-size: max(12.2412px, 0.765075rem, 0.85em);
+    line-height: 1.45;                 /* room for Greek diacritics; 1.35 crowded a wrapped Greek line */
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  /* Greek set in capitals with open tracking drops its accents and loses its
+     word shapes: "ΔΡΑΣΤΗΡΙΟΤΗΤΑ & ΦΗΜΗ" under "ACTIVITY & REPUTATION" read as
+     a second shout rather than a translation. A bare uppercase label (a
+     provider-type badge, a month tile, the OAuth divider) keeps its capitals
+     in English and reads Greek in sentence case. */
+  .uppercase [lang='el'],
+  .uppercase[lang='el'] {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  /* Section kickers pair `uppercase` with open tracking, so a source string
+     that already says "Dashboard" was painted DASHBOARD. Title case is the
+     string itself; the tracking only existed to space those capitals, so it
+     collapses with them. Every viewport, every page. A code that is already
+     capitals in the source (SSO, OK, TXT) is unchanged. */
+  .uppercase.tracking-wide,
+  .uppercase.tracking-wider,
+  .uppercase.tracking-widest,
+  .uppercase[class*='tracking-['] {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  /* Separator between primary and secondary in inline mode. */
+  .bilingual-separator {
+    @apply select-none text-muted-foreground/40;
+    font-size: max(12.2412px, 0.765075rem, 0.85em);
+  }
+
+  /* Phone/tablet (16px root): same computed pixels as cursor.com. Desktop
+     overrides below restate each step against the 82% root so the px hold. */
+  .text-2xs {
+    font-size: max(0.765075rem, 12.2412px);
+    line-height: 1rem;
+  }
+
+  .text-xs {
+    font-size: 0.82883125rem;
+    line-height: 1.25rem;
+  }
+
+  .text-sm  { font-size: 0.8925875rem; line-height: 1.3125rem; }
+  .text-base { font-size: 1.0201rem; line-height: 1.5rem; }
+  .text-lg  { font-size: 1.125rem; line-height: 1.625rem; }
+  .text-xl  { font-size: 1.25rem; line-height: 1.75rem; }
+  .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+  .text-3xl { font-size: 1.625rem; line-height: 2.03125rem; }
+  .text-4xl { font-size: 2.25rem; line-height: 2.7rem; }
+  .text-5xl { font-size: 3rem; }
+  .text-6xl { font-size: 3.75rem; }
+  .text-7xl { font-size: 4.5rem; }
+
+  @media (max-width: 1023.98px) {
+    .sm\:text-xs  { font-size: 0.82883125rem; line-height: 1.25rem; }
+    .sm\:text-sm  { font-size: 0.8925875rem; line-height: 1.3125rem; }
+    .sm\:text-lg  { font-size: 1.125rem; line-height: 1.625rem; }
+    .sm\:text-xl  { font-size: 1.25rem; line-height: 1.75rem; }
+    .sm\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .sm\:text-3xl { font-size: 1.625rem; line-height: 2.03125rem; }
+    .lg\:text-5xl { font-size: 3rem; }
+    .xl\:text-3xl { font-size: 1.625rem; line-height: 2.03125rem; }
+    .sm\:text-4xl { font-size: 2.25rem; line-height: 2.7rem; }
+    .sm\:text-5xl { font-size: 3rem; }
+    .sm\:text-6xl { font-size: 3.75rem; }
+    .md\:text-lg  { font-size: 1.125rem; line-height: 1.625rem; }
+    .md\:text-xl  { font-size: 1.25rem; line-height: 1.75rem; }
+    .md\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .md\:text-6xl { font-size: 3.75rem; }
+  }
+
+  /* ── Web view type scale ────────────────────────────────────────────────
+     Cursor.com steps, then +2% on 2xs–base (two Overview +1% passes).
+       Display half unchanged:
+       12.24 caption · 13.26 helper · 14.28 nav/UI · 16.32 body
+       18 · 20 · 24 page title · 26 h1 · 36 · 48 · 60 · 72 display
+     Rem values are those pixels against the 82% desktop root (13.12px),
+     so a raised browser default still scales the ladder. The phone rules
+     above use the same pixels at a 16px root. typeScaleOrder.test.ts
+     requires this block to stay ascending and to list every responsive
+     variant the product uses. */
+  @media (min-width: 1024px) {
+    .text-2xs {
+      font-size: max(0.93301829rem, 12.2412px);
+      line-height: max(1.24402439rem, 16.3216px);
+    }
+
+    .text-xs {
+      font-size: 1.01076982rem;
+      line-height: 1.52439024rem;
+    }
+
+    .text-sm {
+      font-size: 1.08852134rem;
+      line-height: 1.60060976rem;
+    }
+
+    .text-base {
+      font-size: 1.24402439rem;
+      line-height: 1.82926829rem;
+    }
+
+    .text-lg {
+      font-size: 1.37195122rem;
+      line-height: 1.98170732rem;
+    }
+
+    .text-xl {
+      font-size: 1.52439024rem;
+      line-height: 2.13414634rem;
+    }
+
+    .text-2xl {
+      font-size: 1.82926829rem;
+      line-height: 2.43902439rem;
+    }
+
+    .text-3xl {
+      font-size: 1.98170732rem;
+      line-height: 2.47713415rem;
+    }
+
+    .text-4xl {
+      font-size: 2.74390244rem;
+      line-height: 3.29268293rem;
+    }
+
+    .text-5xl {
+      font-size: 3.65853659rem;
+    }
+
+    .text-6xl {
+      font-size: 4.57317073rem;
+    }
+
+    .text-7xl {
+      font-size: 5.48780488rem;
+    }
+
+    .sm\:text-xs {
+      font-size: 1.01076982rem;
+      line-height: 1.52439024rem;
+    }
+
+    .sm\:text-sm {
+      font-size: 1.08852134rem;
+      line-height: 1.60060976rem;
+    }
+
+    .sm\:text-lg {
+      font-size: 1.37195122rem;
+      line-height: 1.98170732rem;
+    }
+
+    .sm\:text-xl {
+      font-size: 1.52439024rem;
+      line-height: 2.13414634rem;
+    }
+
+    .sm\:text-2xl {
+      font-size: 1.82926829rem;
+      line-height: 2.43902439rem;
+    }
+
+    .sm\:text-3xl {
+      font-size: 1.98170732rem;
+      line-height: 2.47713415rem;
+    }
+
+    .xl\:text-3xl {
+      font-size: 1.98170732rem;
+      line-height: 2.47713415rem;
+    }
+
+    .lg\:text-5xl {
+      font-size: 3.65853659rem;
+    }
+
+    .sm\:text-4xl {
+      font-size: 2.74390244rem;
+      line-height: 3.29268293rem;
+    }
+
+    .sm\:text-5xl {
+      font-size: 3.65853659rem;
+    }
+
+    .sm\:text-6xl {
+      font-size: 4.57317073rem;
+    }
+
+    .md\:text-lg {
+      font-size: 1.37195122rem;
+      line-height: 1.98170732rem;
+    }
+
+    .md\:text-xl {
+      font-size: 1.52439024rem;
+      line-height: 2.13414634rem;
+    }
+
+    .md\:text-2xl {
+      font-size: 1.82926829rem;
+      line-height: 2.43902439rem;
+    }
+
+    .md\:text-6xl {
+      font-size: 4.57317073rem;
+    }
+
+    .lg\:text-xs {
+      font-size: 1.01076982rem;
+      line-height: 1.52439024rem;
+    }
+
+    .lg\:text-6xl {
+      font-size: 4.57317073rem;
+    }
+
+    .lg\:text-7xl {
+      font-size: 5.48780488rem;
+    }
+
+    aside .text-2xs {
+      /* 12.2412px floor; painted caption is 12.61px */
+      font-size: max(0.93301829rem, 12.61px);
+      line-height: max(1.24402439rem, 16.3216px);
+    }
+
+    aside .text-xs {
+      font-size: 13.50px;
+      line-height: 1.35;
+    }
+
+    aside .text-sm {
+      font-size: 13.50px;
+      line-height: 1.4;
+    }
+
+    aside .text-base {
+      font-size: 1.24402439rem;
+      line-height: 1.82926829rem;
+    }
+
+    aside .text-lg {
+      font-size: 1.37195122rem;
+      line-height: 1.98170732rem;
+    }
+
+    aside .text-xl {
+      font-size: 1.52439024rem;
+      line-height: 2.13414634rem;
+    }
+
+    aside .icon-sm,
+    header .icon-sm,
+    aside svg.h-4,
+    header svg.h-4 {
+      height: 1.0506rem;
+      width: 1.0506rem;
+    }
+
+    aside .icon-md,
+    header .icon-md {
+      height: 1.31325rem;
+      width: 1.31325rem;
+    }
+
+    aside .icon-lg,
+    header .icon-lg {
+      height: 1.5759rem;
+      width: 1.5759rem;
+    }
+
+    aside .nav-section-label {
+      /* 12.2412px floor; painted caption is 12.61px */
+      font-size: max(0.93301829rem, 12.61px);
+      line-height: max(1.24402439rem, 16.3216px);
+    }
+  }
+
+  /* ── Desktop spatial scale, anchored in pixels ──────────────────────────
+     The 82% desktop root shrinks every rem, and the type scale has been
+     retuned nine times to compensate. The *spatial* scales never were, so
+     they had all quietly drifted about a fifth smaller than the values their
+     own comments state, while the text beside them stayed put:
+
+       .icon-sm says 16px, rendered 13.12px
+       .card-comfortable says p-6 = 24px, rendered 19.68px
+       Button size="sm" says h-8 = 32px, rendered 26.24px
+       Button size="xs" says h-7 = 28px, rendered 22.96px -- under the 24px
+         floor of WCAG 2.5.8, which is a pixel floor and not a rem one
+
+     That is the whole of the "cramped" feeling: glyphs too small for their
+     labels, controls too short for their text, and cards whose padding lost
+     a fifth of its breathing room. Restoring the declared sizes is not a
+     redesign -- it is making the rendered value equal the documented one.
+
+     Type is deliberately untouched here. It is the one scale that was tuned
+     on purpose, and it stays exactly where it was set. */
+  @media (min-width: 1024px) {
+    .icon-sm  { height: 16px; width: 16px; }
+    .icon-md  { height: 20px; width: 20px; }
+    .icon-lg  { height: 24px; width: 24px; }
+    .icon-xl  { height: 32px; width: 32px; }
+
+    /* Tailwind's bare h-3/h-4/h-5/h-6 on an svg is the same intent written a
+       different way, and roughly half the product's glyphs are written that
+       way. Left to drift they would now be visibly smaller than the icon-*
+       beside them, which is a worse inconsistency than the one being fixed. */
+    svg.h-3 { height: 12px; }
+    svg.w-3 { width: 12px; }
+    svg.h-4 { height: 16px; }
+    svg.w-4 { width: 16px; }
+    svg.h-5 { height: 20px; }
+    svg.w-5 { width: 20px; }
+    svg.h-6 { height: 24px; }
+    svg.w-6 { width: 24px; }
+
+    /* The chrome no longer needs its own, larger icon scale: it existed only
+       because the page's glyphs were stuck at 13.12px, and the rail's were
+       lifted to 13.78px to compensate. Both are 16px now, which is what the
+       rail asked for and what puts the two surfaces back in agreement. */
+    aside .icon-sm,
+    header .icon-sm,
+    aside svg.h-4,
+    header svg.h-4 { height: 16px; width: 16px; }
+
+    aside .icon-md,
+    header .icon-md { height: 20px; width: 20px; }
+
+    aside .icon-lg,
+    header .icon-lg { height: 24px; width: 24px; }
+
+    /* Collapsed 68px rail: one glyph size, matching the larger bottom chrome
+       (bell / language / theme sit on `icon-md`). Higher specificity than
+       `aside .icon-sm` so the 16px page restore does not shrink the stack. */
+    aside[data-rail] .icon-sm,
+    aside[data-rail] .icon-md,
+    aside[data-rail] svg.h-4,
+    aside[data-rail] svg.w-4,
+    aside[data-rail] svg.lucide {
+      height: 20px;
+      width: 20px;
+    }
+
+    aside[data-rail] [data-sidebar-edge-toggle] svg.lucide {
+      height: 14px;
+      width: 14px;
+    }
+
+    /* Restate after the 16px icon restore so section glyphs stay 1.08 × title. */
+    h3.page-section > svg,
+    h3.page-section svg.icon-sm,
+    h3.page-section svg.lucide,
+    h3.page-section svg.h-4,
+    h3.founder-dash-section > svg,
+    h3.founder-dash-section svg.icon-sm,
+    h3.founder-dash-section svg.lucide {
+      height: 1.08em;
+      width: 1.08em;
+    }
+
+    /* Startup Builder titles and overview type follow the same Cursor ladder. */
+    .builder-type :is(h2, h3, .builder-title).text-base {
+      font-size: 1.24402439rem;
+      line-height: 1.82926829rem;
+    }
+    .builder-type :is(h2, h3, .builder-title).text-lg,
+    .builder-type :is(h2, h3).sm\:text-lg {
+      font-size: 1.37195122rem;
+      line-height: 1.98170732rem;
+    }
+    .builder-type :is(h2, h3, .builder-title).text-xl,
+    .builder-type :is(h2, h3).sm\:text-xl {
+      font-size: 1.52439024rem;
+      line-height: 2.13414634rem;
+    }
+    .builder-type :is(h2, h3, .builder-title).text-2xl,
+    .builder-type :is(h2, h3).sm\:text-2xl {
+      font-size: 1.82926829rem;
+      line-height: 2.43902439rem;
+    }
+    .builder-type :is(h2, h3, .builder-title).text-3xl,
+    .builder-type :is(h2, h3).sm\:text-3xl {
+      font-size: 1.98170732rem;
+      line-height: 2.47713415rem;
+    }
+    .builder-type [role='tab'][data-state='active'] {
+      box-shadow: none;
+      border-width: 0;
+    }
+
+  }
+
+  /* WCAG 2.5.8 is a CSS-pixel floor, not a rem one, so a `h-6`/`min-h-6` target
+     is 19.67px once the desktop root is 82% -- and because these are utilities
+     they also beat the `min-height: 24px` base rule that was meant to hold the
+     line. Use these instead on anything a pointer has to hit.
+     `tap-target` for an icon-only control, `tap-target-y` where only the height
+     is short (a text button or a name link in a row). */
+  .tap-target {
+    min-height: max(1.5rem, 24px);
+    min-width: max(1.5rem, 24px);
+  }
+
+  .tap-target-y {
+    min-height: max(1.5rem, 24px);
+  }
+
+  /* ── Phones: one language on the inline variants ──
+     Both languages on a single line makes every string roughly twice as long.
+     Measured on a 360px viewport, that was the single biggest source of broken
+     layout on this product: 35 clipped text nodes and 48 elements past the
+     viewport edge on the founder dashboard alone. Milestone titles were losing
+     ~94% of their width — "Complete MVP v1" rendered as "C…" — and
+     "Open tracker · Άνοιγμα παρακολούθησης" ran to x=539 in a 360px window.
+     Hiding the secondary here takes those to 4 and 10.
+
+     Only the inline variants are affected. `stacked` puts the second language on
+     its own line, which fits and is what the mobile bottom nav uses, so it keeps
+     both. No information is lost either way: the primary line is already the
+     reader's chosen language, and the top-bar switcher changes which one that is.
+
+     !important because a call site may pass a display utility through
+     secondaryClassName; the intent here is not overridable per-site. */
+  @media (max-width: 639.98px) {
+    .bilingual-secondary--inline,
+    .bilingual-separator--inline {
+      display: none !important;
+    }
+
+    /* The canvas inspector is a 220px column from `sm` up. On a phone that
+       column covers the notes, so it stays closed until the layers button
+       opens it. The attribute is present at every width; this query is the
+       only place it takes effect. */
+    [data-phone-inspector='closed'] {
+      display: none;
+    }
+
+    /* One language in the bottom nav. 13px fit «Εξερεύνηση» on a 360px tab;
+       12.74px was that size minus 2%, and 12.485px is another 2% under that,
+       with the same one-line fit. */
+    [data-mobile-tabs],
+    [data-mobile-tabs] .text-2xs,
+    [data-mobile-tabs] .bilingual-secondary {
+      font-size: 12.485px;
+      line-height: 1.25;
+    }
+
+    /* Call sites pin h-7 / h-8 / h-9 / h-10 (28 / 32 / 36 / 40px) for the
+       desktop ladder, and older buttons still carry h-11 (44px). Those
+       utilities are not breakpoint-scoped, so a phone inherited them.
+       The phone height is 2% under the Help topic pill (All topics,
+       Getting started): 31.08 × 0.98 = 30.458px. h-11 and h-12 join the
+       list because that is the height the eye meets on a phone. From 640px
+       the same cut is 32.997px (the rule after the height restatement). Square controls
+       shrink on both axes; a full-width button only shrinks in height.
+       Fields stay 44px. The Ask AI bar is only as tall as the button
+       inside it, so it shortens with this height. */
+    :is(button, a, [role='tab'], [role='button']):is(.h-7, .h-8, .h-9, .h-10, .h-11, .h-12, .min-h-7, .min-h-8, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .min-h-\[44px\]) {
+      height: auto;
+      min-height: 30.458px;
+    }
+    :is(button, a, [role='button']):is(.w-7, .w-8, .w-9, .w-10, .w-11, .min-w-\[44px\]),
+    :is(button, a, [role='button']).h-10.w-10,
+    :is(button, a, [role='button']).h-11.w-11,
+    :is(button, a, [role='button']).h-12.w-12 {
+      width: 30.458px;
+      min-width: 30.458px;
+    }
+
+    /* Purple primary and transparent outline/ghost buttons are 5% under
+       the topic pill on a phone, then 2% under that: 29.53 × 0.98 = 28.939.
+       From 640px they stay with the other buttons. A stacked label still
+       grows. Attribute selectors, so the utility names are not folded
+       into Tailwind. */
+    :is(button, a):is([class~='bg-primary'], [class~='bg-transparent']):not(.min-h-14):not(.min-h-16) {
+      height: auto;
+      min-height: 28.939px;
+    }
+    :is(button, a)[class~='h-[30.458px]'][class~='w-[30.458px]']:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-10.w-10:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-11.w-11:is([class~='bg-primary'], [class~='bg-transparent']),
+    :is(button, a).h-12.w-12:is([class~='bg-primary'], [class~='bg-transparent']) {
+      width: 28.939px;
+      min-width: 28.939px;
+      height: 28.939px;
+      min-height: 28.939px;
+    }
+
+    /* What a fingertip still missed at 390px (measured on 15 pages, 60
+       targets): text buttons and links in rows that declare themselves
+       targets (`tap-target-y`, 24px), native selects (32px), and switches
+       (26px). A switch keeps its slim track; the area around it answers. */
+    .tap-target-y,
+    select {
+      min-height: 44px;
+    }
+    .tap-target-phone {
+      min-height: 30.458px;
+      min-width: 30.458px;
+    }
+    /* py-1.5 pills measure 31.08px from 6px of padding. 0.311px off each
+       side is the 2% cut. Attribute selector, so it is not folded into
+       the py-1.5 utility. */
+    :is(button, a, [role='button'], [role='tab'])[class~='py-1.5'] {
+      padding-top: 5.689px;
+      padding-bottom: 5.689px;
+    }
+    /* The Ask AI bar follows the button inside it (the topic-pill height). */
+    [data-ask-ai] {
+      padding-top: 5.65px;
+      padding-bottom: 5.65px;
+    }
+    [role='switch'] {
+      position: relative;
+    }
+    [role='switch']::before {
+      content: '';
+      position: absolute;
+      inset: -10px -2px;
+    }
+  }
+
+  /* Reading measure. A line of description reads best at 45-80 characters;
+     on a 1440px screen the descriptions under headings and in cards ran to
+     113-156 (measured on seven pages), so the eye lost its place on the way
+     back. Muted paragraphs stop at 75ch; a single truncated line is a label,
+     not reading, and keeps its width. `:where` keeps this below any utility,
+     so a page that sets its own measure (max-w-prose) still wins. A centred
+     layout re-centres the shortened block.
+     Attribute selectors, not `.text-muted-foreground`: Tailwind folds a rule
+     that names one of its utilities into that utility and rebuilds it for
+     every variant (`placeholder:`, `hover:`...), which broke the stylesheet. */
+  :where(main p[class~='text-muted-foreground']:not([class~='truncate']):not([class~='line-clamp-1']), main p[class~='page-lead']) {
+    max-width: 75ch;
+  }
+  :where(main [class~='text-center']:not([class*='sm:text-left']):not([class*='md:text-left']):not([class*='lg:text-left']) p[class~='text-muted-foreground'], main p[class~='text-muted-foreground'][class~='text-center']) {
+    margin-inline: auto;
+  }
+
+  /* A control paints its own foreground; the page's muted token is not readable
+     on it. Measured on the primary fill: #94a3b8 on #6756dc is 2.07:1, and axe
+     flagged it on /discover, /profile, /connections, /projects, /milestones,
+     /fundraising and /readiness -- every filled button with a bilingual label
+     had an unreadable second line. Inheriting keeps whatever the control chose
+     (5.32:1 on the primary fill); the size difference still carries the
+     hierarchy, which is what the smaller line was for. */
+  button .bilingual-secondary,
+  button .bilingual-separator,
+  [role='button'] .bilingual-secondary,
+  [role='button'] .bilingual-separator,
+  [role='tab'] .bilingual-secondary,
+  [role='tab'] .bilingual-separator,
+  /* Any element that declares its own foreground has taken responsibility for
+     the contrast on it -- a filled Button rendered `asChild` is an <a>, not a
+     <button>, so the element selectors above miss it. Keying on the foreground
+     class is both broader and more precise than tagging the component: it says
+     "wherever the surface sets its own text colour, the second language uses
+     that colour too". */
+  .text-primary-foreground .bilingual-secondary,
+  .text-primary-foreground .bilingual-separator,
+  .text-secondary-foreground .bilingual-secondary,
+  .text-secondary-foreground .bilingual-separator,
+  .text-destructive-foreground .bilingual-secondary,
+  .text-destructive-foreground .bilingual-separator,
+  .text-accent-foreground .bilingual-secondary,
+  .text-accent-foreground .bilingual-separator {
+    color: inherit;
+  }
+
+  /* White text on a coloured or photographic hero (tenant landing, Alliance
+     theme): the muted grey second language measured ~1.6:1 on the blue and
+     disappeared. It follows the white at reduced opacity - still quieter
+     than the first language, still legible. */
+  .text-white .bilingual-secondary,
+  .text-white .bilingual-separator {
+    color: inherit;
+    opacity: 0.8;
+  }
+
+  /* The same argument, one level up: a call site may put the muted token on a
+     wrapper *around* a bilingual label, which colours both languages and not
+     just the second. The Readiness CTA "Άνοιγμα Builder" does exactly that for
+     its subtitle, measuring the same 2.07:1 on the primary fill — it went
+     unseen only because the text was escaping the button's box entirely and
+     axe was comparing it against the page.
+
+     Scoped to surfaces that declare their own foreground, deliberately: an
+     `outline` or `ghost` button sits on the page background, where the muted
+     token is both readable and the right choice, and those variants carry
+     `text-foreground` rather than a `*-foreground` pair. Size still carries
+     the hierarchy the muted colour was providing. */
+  .text-primary-foreground .text-muted-foreground,
+  .text-secondary-foreground .text-muted-foreground,
+  .text-destructive-foreground .text-muted-foreground,
+  .text-accent-foreground .text-muted-foreground {
+    color: inherit;
+  }
+
+  /* Top-bar chips hold their second language only where the bar has room.
+     Measured at 834px: the header's right-hand cluster is `shrink-0` and the
+     two demo chips rendered both languages in full, taking it to 794px and the
+     header to 988px inside an 834px viewport -- the whole page scrolled
+     sideways. The bar is already at capacity on a tablet, so these chips join
+     the one-language rule up to `lg` instead of `sm`. Nothing is lost: each
+     chip carries a Tooltip with the full bilingual text. */
+  @media (max-width: 1279.98px) {
+    .bilingual-secondary--chrome,
+    .bilingual-separator--chrome {
+      display: none !important;
+    }
+  }
+
+  /* ── Card padding standards ──
+     Responsive on purpose. CardContent/CardFooter apply .card-comfortable
+     unconditionally, and because these are declared in @layer utilities *after*
+     Tailwind emits .p-3/.p-4, they also beat a per-card `p-3` passed at the call
+     site — so this rule alone decided the padding of every card in the product.
+     At 24px a side on a 360px phone, a stat card in a two-column grid spent 48 of
+     its 160px on padding and left the label 72px, which truncated
+     "Κορυφαίες αντιστοιχίσεις" by 47%. Stepping down to 16px on phones returns
+     that space and keeps the roomier desktop rhythm above sm. */
+  .card-compact { @apply p-3 sm:p-4; }      /* Compact cards - lists, dense info */
+  .card-comfortable { @apply p-4 sm:p-6; }  /* Comfortable cards - default */
+
+  /* ── An item that is switched off ──
+     Paused webhooks, disabled flags, inactive API keys, unlisted services were
+     all drawn at `opacity-60`. Opacity fades the text with the card, and at 60%
+     the muted secondary line lands near 2.5:1 on the card in every theme -
+     axe failed /admin/feature-flags (8 nodes), /provider/services (7) and
+     /tenant/webhooks (4) on exactly that. "Off" is a state, and the state is
+     already said by the switch and the badge beside it; the card only has to
+     look quieter, which a recessed fill and a dashed edge do without taking
+     any contrast from the words. */
+  .surface-inactive {
+    background-color: hsl(var(--muted) / 0.45);
+    border-style: dashed;
+    box-shadow: none;
+  }
+
+  /* ── The seam under a card heading ──
+     `CardContent` carries `pt-0`, so the whole distance from a card's title to
+     its first line of body is this one value: the header's bottom padding. It
+     was the card's full padding — 24px above the title and 24px below it — and
+     equal space on both sides is what makes a heading read as floating between
+     two blocks instead of belonging to the one under it. Proximity is the only
+     thing marking that ownership, so the space below has to be the smaller of
+     the two.
+
+     Two thirds: 16px under 24px of padding, 12px under 16px. Call sites cannot
+     express this — the 23 headers on the founder pages ask for `pb-2`, `pb-3`
+     or nothing and every one of them rendered 24px, because `.card-comfortable`
+     above is declared after Tailwind's `pb-*` in the same layer and wins on
+     source order. Stated here, once, it is the same distance on every card in
+     the product.
+
+     Two classes, not one: `p-6`/`sm:p-6` at a call site carries (0,1,0) and a
+     `sm:` variant lands late enough in the sheet to beat a single-class rule.
+     (0,2,0) settles it for good. A card that genuinely needs a different seam
+     asks with `!pb-…`, which is the honest way to say "this one is special". */
+  .card-comfortable.card-header { padding-bottom: calc(12px * var(--chrome-y)); }
+  @media (min-width: 640px) {
+    .card-comfortable.card-header { padding-bottom: calc(16px * var(--chrome-y)); }
+  }
+
+  /* (The header→body seam and the explicit-zero overrides live unlayered at
+     the bottom of this file — unlayered rules always beat layered ones, and
+     the [data-theme="minimal"] block below is unlayered too.) */
+
+  /* ── The same padding, in the pixels it claims ──
+     `p-6` is 24px everywhere but the desktop app, where the 82% root renders
+     it 19.68px — so the roomier desktop rhythm this comment describes was the
+     one place that never got it. Stated after the definitions above because
+     these carry the same specificity and source order decides between them.
+
+     Vertical rhythm goes with it: a card whose padding grows while the space
+     around it stays put reads as more crowded, not less. */
+  @media (min-width: 1024px) {
+    .card-comfortable { padding: calc(24px * var(--chrome-y)) 24px; }
+    .card-compact { padding: calc(16px * var(--chrome-y)) 16px; }
+    .card-comfortable.card-header { padding-bottom: calc(16px * var(--chrome-y)); }
+
+    .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 16px; }
+    .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 20px; }
+    .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 24px; }
+    .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 32px; }
+
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+    .gap-5 { gap: 20px; }
+    .gap-6 { gap: 24px; }
+
+    /* The raw padding utilities, for the same reason. A card written `p-4` was
+       getting 13.12px of breathing room where it asked for 16, and `p-3` was
+       down to 9.84px — which is where the crowding that survived the
+       card-level fix above was coming from. Only the steps the product
+       actually uses are restated; anything else keeps its rem. */
+    .p-2   { padding: calc(8px * var(--chrome-y)) 8px; }
+    .p-2\.5 { padding: calc(10px * var(--chrome-y)) 10px; }
+    .p-3   { padding: calc(12px * var(--chrome-y)) 12px; }
+    .p-3\.5 { padding: calc(14px * var(--chrome-y)) 14px; }
+    .p-4   { padding: calc(16px * var(--chrome-y)) 16px; }
+    .p-5   { padding: calc(20px * var(--chrome-y)) 20px; }
+    .p-6   { padding: calc(24px * var(--chrome-y)) 24px; }
+
+    .px-2   { padding-left: 8px; padding-right: 8px; }
+    .px-2\.5 { padding-left: 10px; padding-right: 10px; }
+    .px-3   { padding-left: 12px; padding-right: 12px; }
+    .px-3\.5 { padding-left: 14px; padding-right: 14px; }
+    .px-4   { padding-left: 16px; padding-right: 16px; }
+    .px-5   { padding-left: 20px; padding-right: 20px; }
+    .px-6   { padding-left: 24px; padding-right: 24px; }
+
+    .py-1   { padding-top: calc(4px * var(--chrome-y)); padding-bottom: calc(4px * var(--chrome-y)); }
+    .py-1\.5 { padding-top: calc(6px * var(--chrome-y)); padding-bottom: calc(6px * var(--chrome-y)); }
+    .py-2   { padding-top: calc(8px * var(--chrome-y)); padding-bottom: calc(8px * var(--chrome-y)); }
+    .py-2\.5 { padding-top: calc(10px * var(--chrome-y)); padding-bottom: calc(10px * var(--chrome-y)); }
+    .py-3   { padding-top: calc(12px * var(--chrome-y)); padding-bottom: calc(12px * var(--chrome-y)); }
+    .py-3\.5 { padding-top: calc(14px * var(--chrome-y)); padding-bottom: calc(14px * var(--chrome-y)); }
+    .py-4   { padding-top: calc(16px * var(--chrome-y)); padding-bottom: calc(16px * var(--chrome-y)); }
+    .py-5   { padding-top: calc(20px * var(--chrome-y)); padding-bottom: calc(20px * var(--chrome-y)); }
+    .py-6   { padding-top: calc(24px * var(--chrome-y)); padding-bottom: calc(24px * var(--chrome-y)); }
+
+    /* The side utilities, restated after the shorthands above — and why that
+       order is the whole fix. Tailwind emits `p-*`, then `px-*`/`py-*`, then
+       `pt-*`/`pr-*`/`pb-*`/`pl-*`, so a side class beats the shorthand it
+       refines: `px-3 pl-9` means 12px on the right and 36px on the left. The
+       px anchors above restated only the shorthands, and they sit later in the
+       sheet than Tailwind's side classes, so on desktop the shorthand won
+       instead. Measured: 13 search fields across /events, /jobs, /groups,
+       /members, /mentoring, /marketplace, /opportunities, /messages, /shortlist,
+       /investors, /learning, /research — each an `Input` carrying `px-3` with a
+       call-site `pl-9` or `pl-10` — started their placeholder 12.8px *under*
+       the magnifier icon. The same inversion undid every `p-4 pt-0` and
+       `p-4 pb-2` written on a desktop card. Restating the side steps the
+       product uses, here, after the shorthands, puts the precedence back where
+       Tailwind has it. */
+    .pt-0 { padding-top: 0; }
+    .pt-0\.5 { padding-top: calc(2px * var(--chrome-y)); }
+    .pt-1 { padding-top: calc(4px * var(--chrome-y)); }
+    .pt-1\.5 { padding-top: calc(6px * var(--chrome-y)); }
+    .pt-2 { padding-top: calc(8px * var(--chrome-y)); }
+    .pt-2\.5 { padding-top: calc(10px * var(--chrome-y)); }
+    .pt-3 { padding-top: calc(12px * var(--chrome-y)); }
+    .pt-4 { padding-top: calc(16px * var(--chrome-y)); }
+    .pt-5 { padding-top: calc(20px * var(--chrome-y)); }
+    .pt-6 { padding-top: calc(24px * var(--chrome-y)); }
+    .pt-8 { padding-top: calc(32px * var(--chrome-y)); }
+
+    .pr-0 { padding-right: 0; }
+    .pr-0\.5 { padding-right: 2px; }
+    .pr-1 { padding-right: 4px; }
+    .pr-1\.5 { padding-right: 6px; }
+    .pr-2 { padding-right: 8px; }
+    .pr-3 { padding-right: 12px; }
+    .pr-4 { padding-right: 16px; }
+    .pr-6 { padding-right: 24px; }
+    .pr-7 { padding-right: 28px; }
+    .pr-8 { padding-right: 32px; }
+    .pr-10 { padding-right: 40px; }
+    .pr-12 { padding-right: 48px; }
+    .pr-14 { padding-right: 56px; }
+    .pr-16 { padding-right: 64px; }
+    .pr-20 { padding-right: 80px; }
+    .pr-24 { padding-right: 96px; }
+    .pr-40 { padding-right: 160px; }
+    .pr-44 { padding-right: 176px; }
+
+    .pb-0 { padding-bottom: 0; }
+    .pb-0\.5 { padding-bottom: calc(2px * var(--chrome-y)); }
+    .pb-1 { padding-bottom: calc(4px * var(--chrome-y)); }
+    .pb-1\.5 { padding-bottom: calc(6px * var(--chrome-y)); }
+    .pb-2 { padding-bottom: calc(8px * var(--chrome-y)); }
+    .pb-2\.5 { padding-bottom: calc(10px * var(--chrome-y)); }
+    .pb-3 { padding-bottom: calc(12px * var(--chrome-y)); }
+    .pb-4 { padding-bottom: calc(16px * var(--chrome-y)); }
+    .pb-5 { padding-bottom: calc(20px * var(--chrome-y)); }
+    .pb-6 { padding-bottom: calc(24px * var(--chrome-y)); }
+    .pb-8 { padding-bottom: calc(32px * var(--chrome-y)); }
+    .pb-10 { padding-bottom: calc(40px * var(--chrome-y)); }
+    .pb-16 { padding-bottom: calc(64px * var(--chrome-y)); }
+    .pb-20 { padding-bottom: 80px; }
+    .pb-24 { padding-bottom: 96px; }
+    .pb-28 { padding-bottom: 112px; }
+
+    .pl-0 { padding-left: 0; }
+    .pl-0\.5 { padding-left: 2px; }
+    .pl-1 { padding-left: 4px; }
+    .pl-1\.5 { padding-left: 6px; }
+    .pl-2 { padding-left: 8px; }
+    .pl-3 { padding-left: 12px; }
+    .pl-4 { padding-left: 16px; }
+    .pl-5 { padding-left: 20px; }
+    .pl-6 { padding-left: 24px; }
+    .pl-7 { padding-left: 28px; }
+    .pl-8 { padding-left: 32px; }
+    .pl-9 { padding-left: 36px; }
+    .pl-10 { padding-left: 40px; }
+  }
+
+  /* ── The same anchors under the variant prefixes ──
+     Tailwind emits `sm:px-6` in rem like the rest, so on the 82% desktop root
+     the card-inset ladder `px-4 sm:px-6` rendered 16px→19.68px — a row padded
+     to match its title landed a gutter inside it. Restating only the steps in
+     use, and only from `lg` up: below 1024px the root is 16px and the rem is
+     already the pixel the class names. */
+  @media (min-width: 1024px) {
+    .sm\:gap-3 { gap: 12px; }
+    .sm\:gap-4 { gap: 16px; }
+    .sm\:gap-6 { gap: 24px; }
+
+    .sm\:p-3   { padding: calc(12px * var(--chrome-y)) 12px; }
+    .sm\:p-3\.5 { padding: calc(14px * var(--chrome-y)) 14px; }
+    .sm\:p-4   { padding: calc(16px * var(--chrome-y)) 16px; }
+    .sm\:p-5   { padding: calc(20px * var(--chrome-y)) 20px; }
+    .sm\:p-6   { padding: calc(24px * var(--chrome-y)) 24px; }
+
+    .sm\:px-2   { padding-left: 8px; padding-right: 8px; }
+    .sm\:px-2\.5 { padding-left: 10px; padding-right: 10px; }
+    .sm\:px-3   { padding-left: 12px; padding-right: 12px; }
+    .sm\:px-4   { padding-left: 16px; padding-right: 16px; }
+    .sm\:px-6   { padding-left: 24px; padding-right: 24px; }
+
+    .sm\:py-1\.5 { padding-top: calc(6px * var(--chrome-y)); padding-bottom: calc(6px * var(--chrome-y)); }
+
+    .sm\:pt-0 { padding-top: 0; }
+    .sm\:pt-6 { padding-top: calc(24px * var(--chrome-y)); }
+    .sm\:pr-4 { padding-right: 16px; }
+    .sm\:pr-10 { padding-right: 40px; }
+    .sm\:pb-0 { padding-bottom: 0; }
+    .sm\:pb-28 { padding-bottom: 112px; }
+
+    .md\:p-6 { padding: calc(24px * var(--chrome-y)) 24px; }
+    .md\:py-2 { padding-top: calc(8px * var(--chrome-y)); padding-bottom: calc(8px * var(--chrome-y)); }
+    .md\:pt-0 { padding-top: 0; }
+    .md\:pr-6 { padding-right: 24px; }
+    .md\:pr-8 { padding-right: 32px; }
+    .md\:pb-8 { padding-bottom: calc(32px * var(--chrome-y)); }
+    .md\:pl-6 { padding-left: 24px; }
+    .md\:pl-8 { padding-left: 32px; }
+
+    .lg\:gap-6 { gap: 24px; }
+    .lg\:p-4 { padding: calc(16px * var(--chrome-y)) 16px; }
+    .lg\:px-2 { padding-left: 8px; padding-right: 8px; }
+    .lg\:px-6 { padding-left: 24px; padding-right: 24px; }
+    .lg\:py-5 { padding-top: calc(20px * var(--chrome-y)); padding-bottom: calc(20px * var(--chrome-y)); }
+    .lg\:pr-10 { padding-right: 40px; }
+    .lg\:pb-4 { padding-bottom: calc(16px * var(--chrome-y)); }
+    .lg\:pb-10 { padding-bottom: calc(40px * var(--chrome-y)); }
+    .lg\:pb-16 { padding-bottom: calc(64px * var(--chrome-y)); }
+    .lg\:pl-10 { padding-left: 40px; }
+
+    .group\/shell[data-rail='pinned'] .group-data-\[rail\=pinned\]\/shell\:lg\:gap-3 { gap: 12px; }
+  }
+
+  /* ── Spacing rhythm ── */
+  .section-spacing { @apply space-y-8; }    /* Major sections */
+  .section-spacing-sm { @apply space-y-6; } /* Sub-sections */
+  .section-spacing-xs { @apply space-y-4; } /* Tight groupings */
+
+  /* ── Consistent hover lift ── */
+  .hover-lift-sm {
+    @apply transition-transform duration-150;
+  }
+  .hover-lift-sm:hover {
+    @apply -translate-y-0.5; /* 2px lift - subtle, professional */
+  }
+
+  /* ── Safe areas + mobile ergonomics ── */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+  .safe-x {
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 1024px) {
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  }
+  .tap-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .overflow-touch {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   "minimal" — component layer (Claude 803ddb2)
+
+   Everything here is scoped to [data-theme="minimal"]. No other theme sees a
+   single one of these rules, and nothing is removed. Token name on this line
+   is --primary-accessible (not Claude's --primary-emphasis).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="minimal"] {
+  /* ── 1. One elevation ────────────────────────────────────────────────── */
+  .shadow-sm,
+  .shadow,
+  .shadow-md,
+  .shadow-lg,
+  .hover\:shadow-md:hover,
+  .hover\:shadow-lg:hover {
+    box-shadow: none;
+  }
+
+  /* …except the things that genuinely float. */
+  [role='dialog'],
+  [data-radix-popper-content-wrapper] > * {
+    box-shadow: 0 1px 2px hsl(30 8% 12% / 0.04), 0 12px 32px -8px hsl(30 8% 12% / 0.12);
+  }
+
+  /* ── 2. The page title is not a box ──────────────────────────────────── */
+  #main-content > div > section:first-child,
+  #main-content > section:first-child {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid hsl(var(--border));
+    border-radius: 0;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 1rem;
+  }
+
+  /* ── 3. Focus you cannot miss ────────────────────────────────────────── */
+  :focus-visible {
+    outline: 1px solid hsl(var(--foreground) / 0.22);
+    outline-offset: 2px;
+  }
+
+  /* …except fields that already have a border: a second stroke sits inside
+     the first (Ask AI, selects, every search bar) and looks smaller/kitsch. */
+  input:focus,
+  input:focus-visible,
+  textarea:focus,
+  textarea:focus-visible,
+  select:focus,
+  select:focus-visible,
+  [role='combobox']:focus,
+  [role='combobox']:focus-visible,
+  [data-radix-select-trigger]:focus,
+  [data-radix-select-trigger]:focus-visible {
+    outline: none;
+    outline-offset: 0;
+    box-shadow: none;
+  }
+
+  /* ── 6. Fewer weights ────────────────────────────────────────────────── */
+  .font-bold,
+  .font-extrabold,
+  .font-black {
+    font-weight: 600;
+  }
+
+  /* ── 7. Calm by default ──────────────────────────────────────────────── */
+  .bg-gradient-to-r,
+  .bg-gradient-to-l,
+  .bg-gradient-to-b,
+  .bg-gradient-to-t,
+  .bg-gradient-to-br,
+  .bg-gradient-to-bl,
+  .bg-gradient-to-tr,
+  .bg-gradient-to-tl {
+    background-image: none;
+  }
+
+  .hover-lift:hover,
+  .card-interactive:hover {
+    transform: none;
+  }
+
+  .animate-bounce-subtle,
+  .animate-pulse-slow,
+  .animate-spin-slow,
+  .animate-scale-in,
+  .animate-fade-in-up {
+    animation: none;
+  }
+
+  /* ── Chrome recedes ──────────────────────────────────────────────────── */
+  aside[aria-label='Main navigation'],
+  header.sticky {
+    background: hsl(var(--background));
+    backdrop-filter: none;
+  }
+
+  /* ── Room to breathe ───────────────────────────────────────────────────
+     Was a flat 28px on every card at every width: on a 360px phone a
+     two-column stat card spent 56 of its ~160px on padding, which is what
+     squeezed the labels. 20px below sm, the intended 28px from sm up. */
+  .card-comfortable {
+    padding: calc(1.25rem * var(--chrome-y)) 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .card-comfortable {
+      padding: calc(1.75rem * var(--chrome-y)) 1.75rem;
+    }
+  }
+  /* Stated in pixels from `lg`, where the 82% root turns the 28px intended
+     just above into 22.96px — narrower than the 24px every other theme gets,
+     which inverts what this theme is for. This rule is unlayered and carries
+     (0,2,0), so it also has to restate the anchor the utilities layer applies
+     to the other themes; it cannot simply fall through to it. */
+  @media (min-width: 1024px) {
+    .card-comfortable {
+      padding: calc(28px * var(--chrome-y)) 28px;
+    }
+  }
+  /* The seam, restated for this theme for the same reason the padding is: these
+     rules are unlayered and carry (0,2,0), so the `.card-header` rule in the
+     utilities layer cannot reach a card inside it. Two thirds again. */
+  .card-comfortable.card-header {
+    padding-bottom: calc(14px * var(--chrome-y));
+  }
+  @media (min-width: 640px) {
+    .card-comfortable.card-header {
+      padding-bottom: calc(18px * var(--chrome-y));
+    }
+  }
+
+  #main-content {
+    padding-top: 1.5rem;
+  }
+}
+
+/* CardContent/CardFooter carry `pt-0` so a card's body and footer sit under
+   the header's own bottom padding — but `.card-comfortable` is declared after
+   Tailwind's utilities in the same layer (and again, unlayered, inside the
+   minimal theme), so `pt-0` never won and every header↔body seam paid the
+   padding twice. Restoring the intent for every theme: a second
+   card-comfortable block drops only its top padding. A headerless
+   CardContent is a first child, so it keeps its full padding. */
+.card-comfortable ~ .card-comfortable {
+  padding-top: 0;
+}
+
+/* A header that draws a rule under itself (`border-b`, 41 headers in 15
+   files: profile sections, Settings, Billing, Help, Invite…) is a different
+   seam. The body cannot borrow the header's padding across a hairline, so
+   with the rule above it the first line sat on the line. The body steps off
+   the rule by the same distance the title keeps above it. */
+.card-comfortable.card-header.border-b ~ .card-comfortable {
+  padding-top: calc(12px * var(--chrome-y));
+}
+@media (min-width: 640px) {
+  .card-comfortable.card-header.border-b ~ .card-comfortable {
+    padding-top: calc(16px * var(--chrome-y));
+  }
+}
+
+/* ── −1% component height ───────────────────────────────────────────────
+   Boxes only: min-height, height, and (above) padding-block. font-size and
+   line-height are not listed. `lg:h-auto` is restated after so stacked CTAs
+   are not clipped. The 24px WCAG 2.5.8 floor is not scaled. */
+.h-7 { height: calc(1.75rem * var(--chrome-y)); }
+.h-8 { height: calc(2rem * var(--chrome-y)); }
+.h-9 { height: calc(2.25rem * var(--chrome-y)); }
+.h-10 { height: calc(2.5rem * var(--chrome-y)); }
+.h-11 { height: calc(2.75rem * var(--chrome-y)); }
+.h-12 { height: calc(3rem * var(--chrome-y)); }
+.h-14 { height: calc(3.5rem * var(--chrome-y)); }
+.h-16 { height: calc(4rem * var(--chrome-y)); }
+
+.min-h-7 { min-height: calc(1.75rem * var(--chrome-y)); }
+.min-h-8 { min-height: calc(2rem * var(--chrome-y)); }
+.min-h-9 { min-height: calc(2.25rem * var(--chrome-y)); }
+.min-h-10 { min-height: calc(2.5rem * var(--chrome-y)); }
+.min-h-11 { min-height: calc(2.75rem * var(--chrome-y)); }
+.min-h-12 { min-height: calc(3rem * var(--chrome-y)); }
+.min-h-14 { min-height: calc(3.5rem * var(--chrome-y)); }
+.min-h-16 { min-height: calc(4rem * var(--chrome-y)); }
+
+@media (min-width: 768px) {
+  .md\:h-8 { height: calc(2rem * var(--chrome-y)); }
+  .md\:h-9 { height: calc(2.25rem * var(--chrome-y)); }
+  .md\:h-10 { height: calc(2.5rem * var(--chrome-y)); }
+  .md\:min-h-8 { min-height: calc(2rem * var(--chrome-y)); }
+  .md\:min-h-9 { min-height: calc(2.25rem * var(--chrome-y)); }
+  .md\:min-h-10 { min-height: calc(2.5rem * var(--chrome-y)); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:h-auto { height: auto; }
+}
+
+/* Topic pills and the same py-1.5 chips size themselves from padding, so
+   the min-height floor does not shorten them. 0.337px off each side is 2%
+   of the 33.67px pill. On a phone the pill's padding is 6px and the same
+   cut is 0.311px, in the phone block above. */
+@media (min-width: 1024px) {
+  :is(button, a, [role='button'], [role='tab'])[class~='py-1.5'] {
+    padding-top: calc(6px * var(--chrome-y) - 0.337px);
+    padding-bottom: calc(6px * var(--chrome-y) - 0.337px);
+  }
+}
+
+/* Buttons are 2% under the Help topic pill's 33.67px from 640px, so
+   32.997px. A single-line h-9…h-12 control comes down to that. One that
+   carries h-auto, or an explicit min-h-14 / min-h-16, keeps the height
+   its own label needs. */
+@media (min-width: 640px) {
+  :is(button, a, [role='button']):is(.h-9, .h-10, .h-11, .h-12, .min-h-9, .min-h-10, .min-h-11, .min-h-12, .md\:h-9, .md\:h-10, .md\:min-h-9, .md\:min-h-10):not(.h-auto):not(.min-h-14):not(.min-h-16) {
+    height: auto;
+    min-height: 32.997px;
+  }
+  :is(button, a, [role='button']).h-10.w-10,
+  :is(button, a, [role='button']).h-11.w-11,
+  :is(button, a, [role='button']).h-12.w-12 {
+    width: 32.997px;
+    min-width: 32.997px;
+    height: 32.997px;
+    min-height: 32.997px;
+  }
+}
+
+[data-radix-select-trigger],
+[role='combobox'] {
+  min-height: calc(2.5rem * var(--chrome-y));
+}
+[role='tablist'],
+[role='tab'] {
+  min-height: calc(2.75rem * var(--chrome-y));
+}
+
+
+
+
+
+
+@media (min-width: 1280px) {
+  :root { --page-rail-width: 22rem; }
+}
+@media (min-width: 1536px) {
+  :root { --page-rail-width: 24rem; }
+}
+
+/* ── Page rail surface ─────────────────────────────────────────────────────
+   The rail is chrome, the same kind as the left sidebar, so it wears the
+   same surface: the sidebar's translucent card, and while either side floats
+   over the page (a peek, not a pin) a glass that lets the page show through
+   blurred. Inside, a section is a group on that surface - a small heading
+   and its controls - not a card on a card: a default card in the rail drops
+   its fill, frame and corners, and neighbouring cards are told apart by one
+   hairline. A card that chose its own fill (a status tint, a callout) keeps
+   it, because the selector only matches the default `bg-card`. */
+[data-page-rail] [data-rail-surface] {
+  background-color: hsl(var(--card) / 0.98);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+[data-page-rail][data-peek] [data-rail-surface],
+aside[data-peek]:not([data-page-rail]) {
+  /* 0.9 + 24px: the page reads as a presence behind the panel, never as
+     text competing with the panel's own labels (0.86 + 18px let a button
+     label behind a dense section stay legible). */
+  background-color: hsl(var(--card) / 0.9);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+}
+[data-rail-content] [data-surface="card"].bg-card {
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-rail-content] [data-surface="card"].bg-card ~ [data-surface="card"].bg-card {
+  border-top-color: hsl(var(--border) / 0.7);
+}
+[data-rail-content] [data-surface="card"].bg-card > .card-comfortable,
+[data-rail-content] [data-surface="card"].bg-card > [class*="p-3"],
+[data-rail-content] [data-surface="card"].bg-card > [class*="p-4"] {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+/* ── Page rail content ──────────────────────────────────────────────────────
+   Tailwind's `sm:` and `lg:` are viewport queries, not container queries. A
+   block authored for a ~1200px column keeps its `lg:grid-cols-4` when it is
+   moved into a 320px rail, because the viewport is still wide - so four
+   ~60px columns get made and the labels overlap into noise. That is exactly
+   what happened to the "where to go next" and "next steps" sections.
+
+   Tailwind 3.4 has no container queries and the plugin would be a dependency
+   for this one rule, so the panel states the constraint its width implies:
+   inside it, a grid is one column. Specificity does the work (0,2,0 beats a
+   utility's 0,1,0), so no `!important` is needed and nothing else is touched.
+
+   Content that genuinely reads better in columns at 320px opts out with
+   `data-rail-keep-layout`. The expand dialog does not carry the attribute at
+   all, so the same content renders there at its designed layout. */
+[data-rail-content] .grid:not([data-rail-keep-layout]) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Widths chosen for a page column overflow a rail. Cap them rather than let
+   the panel scroll sideways. */
+[data-rail-content] .max-w-md,
+[data-rail-content] .max-w-lg,
+[data-rail-content] .max-w-xl,
+[data-rail-content] .max-w-2xl {
+  max-width: 100%;
+}
+
+/* Page cards keep 24–28px padding. In the 262–315px rail that leaves too
+   little for copy, so Greek labels (streak, recent activity) walk off the
+   card. Tighten padding only inside the rail. */
+[data-rail-content] .card-comfortable {
+  padding: 14px;
+}
+[data-rail-content] .card-comfortable.card-header {
+  padding-bottom: 10px;
+}
+[data-rail-content] .card-comfortable ~ .card-comfortable {
+  padding-top: 0;
+}
+
+/* ── App chrome type (1.08 from the caption floor) ───────────────────────
+   Claude `b05b51b8` last push is 22.12 / 21.13 / 19.21 / 12.35 (phone
+   labels 10.24). Tight title≈section is good; the set is too large and
+   the 12.35→22.12 span is 9.77px. No smaller system exists on that
+   branch, so chrome is a geometric 1.08 from the same 12.2412px floor
+   as `aside .text-2xs` (between a minor and a major second):
+
+     n=0 label   = 12.2412px          (floor)
+     n=2 compact = 12.2412 × 1.08²    → 14.28px = ladder sm / rail
+     n=3 figure  = 12.2412 × 1.08³    → 15.42px
+     n=4 section = 12.2412 × 1.08⁴    → 16.65px
+     n=5 title   = ladder lg          → 18px   (1.08⁵ ≈ 17.99)
+
+   Adjacent chrome steps stay ~1.08. Title→section ≈ 1.35px.
+   Title→label span = 5.76px (Claude 9.77). Same px every breakpoint —
+   Claude phone inverted section above title. Roles stay; `.text-*` does
+   not change. Element+class so these beat later `sm:text-*`. */
+h1.page-title,
+h1.founder-dash-h1,
+p.page-stat,
+h3.page-stat,
+span.page-stat,
+div.page-stat,
+dd.page-stat,
+p.founder-dash-stat {
+  font-size: max(12.2412px, 1.091475rem);
+  line-height: 1.60875rem;
+}
+p.page-stat-label,
+p.page-stat-meta,
+span.page-stat-label,
+div.page-stat-label,
+div.page-stat-meta,
+p.founder-dash-stat-label,
+p.founder-dash-stat-meta {
+  font-size: max(12.2412px, 0.765075rem);
+  line-height: max(16.3216px, 1rem);
+}
+h3.page-section,
+h3.founder-dash-section {
+  font-size: max(12.2412px, 1.03046733rem);
+  line-height: 1.485rem;
+}
+/* Glyph in the title row = 1.08 × that title, not a fixed 16px next to 16.65. */
+h3.page-section > svg,
+h3.page-section svg.icon-sm,
+h3.page-section svg.lucide,
+h3.founder-dash-section > svg,
+h3.founder-dash-section svg.icon-sm,
+h3.founder-dash-section svg.lucide {
+  height: 1.08em;
+  width: 1.08em;
+}
+p.page-figure,
+p.founder-dash-figure {
+  font-size: max(12.2412px, 0.95413642rem);
+  line-height: 1.423125rem;
+}
+@media (min-width: 640px) {
+  h1.page-title,
+  h1.founder-dash-h1,
+  p.page-stat,
+  h3.page-stat,
+  span.page-stat,
+  div.page-stat,
+  dd.page-stat,
+  p.founder-dash-stat {
+    font-size: max(12.2412px, 1.091475rem);
+    line-height: 1.60875rem;
+  }
+  p.page-stat-label,
+  p.page-stat-meta,
+  span.page-stat-label,
+  div.page-stat-label,
+  div.page-stat-meta,
+  p.founder-dash-stat-label,
+  p.founder-dash-stat-meta {
+    font-size: max(12.2412px, 0.765075rem);
+    line-height: max(16.3216px, 1rem);
+  }
+  h3.page-section,
+  h3.founder-dash-section {
+    font-size: max(12.2412px, 1.03046733rem);
+    line-height: 1.485rem;
+  }
+}
+@media (min-width: 1024px) {
+  h1.page-title,
+  h1.founder-dash-h1,
+  p.page-stat,
+  h3.page-stat,
+  span.page-stat,
+  div.page-stat,
+  dd.page-stat,
+  p.founder-dash-stat {
+    font-size: max(12.2412px, 1.33106708rem);
+    line-height: 1.96189025rem;
+  }
+  p.page-stat-label,
+  p.page-stat-meta,
+  span.page-stat-label,
+  div.page-stat-label,
+  div.page-stat-meta,
+  p.founder-dash-stat-label,
+  p.founder-dash-stat-meta {
+    font-size: max(12.2412px, 0.765075rem);
+    line-height: max(16.3216px, 1.24402439rem);
+  }
+  h3.page-section,
+  h3.founder-dash-section {
+    font-size: max(12.2412px, 1.25666748rem);
+    line-height: 1.81097561rem;
+  }
+  p.page-figure,
+  p.founder-dash-figure {
+    font-size: max(12.2412px, 1.16358100rem);
+    line-height: 1.73551823rem;
+  }
+}
+
+/* Dense cards + the ~240px rail stay on ladder `sm`. Do not key this off
+   leftover `text-sm` on canvas titles — that split 14.28 vs 18 on the
+   same page. */
+h3.page-section.page-section--compact,
+[data-rail-content] h3.page-section,
+[data-rail-content] h3.founder-dash-section {
+  font-size: 0.86598840rem;
+  line-height: 1.299375rem;
+}
+
+@media (min-width: 640px) {
+  h3.page-section.page-section--compact,
+  [data-rail-content] h3.page-section,
+  [data-rail-content] h3.founder-dash-section {
+    font-size: 0.86598840rem;
+    line-height: 1.299375rem;
+  }
+}
+@media (min-width: 1024px) {
+  h3.page-section.page-section--compact,
+  [data-rail-content] h3.page-section,
+  [data-rail-content] h3.founder-dash-section {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+}
+
+/* Row titles on a wide column step down to the `lg` rung so a list reads
+   as a list, not as page headings. Class-only so the fundraising round
+   name (an h2) and milestone row titles (h3) match alike. */
+@media (min-width: 1024px) {
+  .page-section.page-section--row {
+    font-size: 1.125rem;
+    line-height: 1.6rem;
+  }
+}
+
+/* ── Product type standard ───────────────────────────────────────────────
+   One ladder for every page in the shell and its page-tools rail: the
+   sizes tuned on Overview, Readiness and Analytics. Each step is ~1.08 ×
+   the one below it, and every Tailwind step lands on one of them:
+
+     caption 12.24   2xs, stat labels, the bilingual floor
+     meta    12.87   xs, tabs, small buttons, chips
+     body    13.86   sm, copy, rail card titles
+     figure  15.27   in-card figures ($375K)
+     section 16.49   card and section titles, base, lg
+     title   17.46   h1, stat figures, xl and above (ceiling below)
+
+   The readiness gauge (32px) is the one display figure. Same pixels on
+   phone and desktop. The left SideNav keeps its own chrome ladder.
+   Declared before the ceiling so `text-lg sm:text-xl` still reaches the
+   title step from `sm` up. */
+#main-content .text-2xs {
+  font-size: max(0.765075rem, 12.2412px);
+  line-height: 1rem;
+}
+#main-content .text-xs {
+  font-size: 0.80413208rem;
+  line-height: 1.2375rem;
+}
+#main-content .text-sm {
+  font-size: 0.86598840rem;
+  line-height: 1.299375rem;
+}
+/* Tailwind's base (16.32) and lg (18) sat 0.2px either side of the section
+   and title steps; lg outranked the page title. Both are headings here. */
+#main-content .text-base,
+#main-content .text-lg,
+#main-content p.page-section,
+#main-content h2.page-section {
+  font-size: 1.03046733rem;
+  line-height: 1.485rem;
+}
+/* Responsive variants after the plain steps, so `text-base sm:text-sm`
+   (inputs, selects) still resolves to its sm step. */
+@media (min-width: 640px) {
+  #main-content .sm\:text-xs {
+    font-size: 0.80413208rem;
+    line-height: 1.2375rem;
+  }
+  #main-content .sm\:text-sm {
+    font-size: 0.86598840rem;
+    line-height: 1.299375rem;
+  }
+  #main-content .sm\:text-lg {
+    font-size: 1.03046733rem;
+    line-height: 1.485rem;
+  }
+}
+@media (min-width: 768px) {
+  #main-content .md\:text-lg {
+    font-size: 1.03046733rem;
+    line-height: 1.485rem;
+  }
+}
+/* Tabs switch the copy under them, so they sit a step below it. After
+   `.text-sm`: the trigger carries that class. */
+#main-content [role='tab'] {
+  font-size: 0.80413208rem;
+  line-height: 1.2375rem;
+}
+/* The rail is ~240px wide: every heading step stays on its title size. */
+#main-content [data-rail-content] .text-base,
+#main-content [data-rail-content] .text-lg,
+#main-content [data-rail-content] .sm\:text-lg {
+  font-size: 0.86598840rem;
+  line-height: 1.299375rem;
+}
+
+@media (min-width: 1024px) {
+  #main-content .text-2xs {
+    font-size: max(0.93301829rem, 12.2412px);
+    line-height: max(1.24402439rem, 16.3216px);
+  }
+  #main-content .text-xs {
+    font-size: 0.98064888rem;
+    line-height: 1.50914634rem;
+  }
+  #main-content .text-sm {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+  #main-content .text-base,
+  #main-content .text-lg,
+  #main-content p.page-section,
+  #main-content h2.page-section {
+    font-size: 1.25666748rem;
+    line-height: 1.81097561rem;
+  }
+  #main-content .sm\:text-xs,
+  #main-content .lg\:text-xs {
+    font-size: 0.98064888rem;
+    line-height: 1.50914634rem;
+  }
+  #main-content .sm\:text-sm {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+  #main-content .sm\:text-lg,
+  #main-content .md\:text-lg {
+    font-size: 1.25666748rem;
+    line-height: 1.81097561rem;
+  }
+  #main-content [role='tab'] {
+    font-size: 0.98064888rem;
+    line-height: 1.50914634rem;
+  }
+  #main-content [data-rail-content] .text-base,
+  #main-content [data-rail-content] .text-lg,
+  #main-content [data-rail-content] .sm\:text-lg {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+}
+
+/* ── App type ceiling + floor (all #main-content components) ─────────────
+   The 1.08 chrome cluster tops at lg = 18px. Reusable and page-local
+   leftovers still used xl/2xl/3xl (20/24/26) and text-[11px] (below the
+   12.2412 floor). That is a larger set and a wider span than the
+   preference. Cap those steps inside the shell only — landing, auth
+   marketing and legal stay outside #main-content. The ladder `.text-*`
+   rules are unchanged (typeScaleOrder). Rail stays on sm. Canvas rulers
+   at 9px are not listed. No :is() — Lightning CSS has merged that into
+   invalid selectors here before. */
+#main-content .text-xl,
+#main-content .sm\:text-xl,
+#main-content .md\:text-xl,
+#main-content .lg\:text-xl,
+#main-content .text-2xl,
+#main-content .sm\:text-2xl,
+#main-content .md\:text-2xl,
+#main-content .text-3xl,
+#main-content .sm\:text-3xl,
+#main-content .xl\:text-3xl,
+#main-content .text-4xl,
+#main-content .sm\:text-4xl,
+#main-content .text-5xl,
+#main-content .text-6xl,
+#main-content .text-7xl,
+#main-content .text-\[2\.75rem\] {
+  font-size: max(12.2412px, 1.091475rem);
+  line-height: 1.60875rem;
+}
+#main-content .text-\[11px\],
+#main-content .text-\[10px\],
+#main-content .text-\[11\.76px\],
+#main-content .text-\[12\.74px\] {
+  font-size: 12.2412px;
+  line-height: 1rem;
+}
+#main-content [data-rail-content] .text-xl,
+#main-content [data-rail-content] .sm\:text-xl,
+#main-content [data-rail-content] .text-2xl,
+#main-content [data-rail-content] .sm\:text-2xl,
+#main-content [data-rail-content] .text-3xl {
+  font-size: 0.86598840rem;
+  line-height: 1.299375rem;
+}
+@media (min-width: 1024px) {
+  #main-content .text-xl,
+  #main-content .sm\:text-xl,
+  #main-content .md\:text-xl,
+  #main-content .lg\:text-xl,
+  #main-content .text-2xl,
+  #main-content .sm\:text-2xl,
+  #main-content .md\:text-2xl,
+  #main-content .text-3xl,
+  #main-content .sm\:text-3xl,
+  #main-content .xl\:text-3xl,
+  #main-content .text-4xl,
+  #main-content .sm\:text-4xl,
+  #main-content .text-5xl,
+  #main-content .text-6xl,
+  #main-content .text-7xl,
+  #main-content .text-\[2\.75rem\] {
+    font-size: max(12.2412px, 1.33106708rem);
+    line-height: 1.96189025rem;
+  }
+  #main-content [data-rail-content] .text-xl,
+  #main-content [data-rail-content] .sm\:text-xl,
+  #main-content [data-rail-content] .text-2xl,
+  #main-content [data-rail-content] .sm\:text-2xl,
+  #main-content [data-rail-content] .text-3xl {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+}
+
+/* Chrome roles beat the ceiling (`#main-content .text-xl` is 1,1,0;
+   `#main-content p.page-figure` is 1,1,1). Without this, $375K and
+   leftover `text-xl` on figures snapped to the 18px cap. */
+#main-content h1.page-title,
+#main-content h1.founder-dash-h1,
+#main-content p.page-stat,
+#main-content h3.page-stat,
+#main-content span.page-stat,
+#main-content div.page-stat,
+#main-content dd.page-stat,
+#main-content p.founder-dash-stat {
+  font-size: max(12.2412px, 1.091475rem);
+  line-height: 1.60875rem;
+}
+#main-content p.page-stat-label,
+#main-content p.page-stat-meta,
+#main-content span.page-stat-label,
+#main-content div.page-stat-label,
+#main-content div.page-stat-meta,
+#main-content p.founder-dash-stat-label,
+#main-content p.founder-dash-stat-meta {
+  font-size: max(12.2412px, 0.765075rem);
+  line-height: max(16.3216px, 1rem);
+}
+#main-content h3.page-section,
+#main-content h3.founder-dash-section {
+  font-size: max(12.2412px, 1.03046733rem);
+  line-height: 1.485rem;
+}
+#main-content p.page-figure,
+#main-content p.founder-dash-figure {
+  font-size: max(12.2412px, 0.95413642rem);
+  line-height: 1.423125rem;
+}
+#main-content h3.page-section.page-section--compact,
+#main-content [data-rail-content] h3.page-section,
+#main-content [data-rail-content] h3.founder-dash-section {
+  font-size: 0.86598840rem;
+  line-height: 1.299375rem;
+}
+@media (min-width: 1024px) {
+  #main-content h1.page-title,
+  #main-content h1.founder-dash-h1,
+  #main-content p.page-stat,
+  #main-content h3.page-stat,
+  #main-content span.page-stat,
+  #main-content div.page-stat,
+  #main-content dd.page-stat,
+  #main-content p.founder-dash-stat {
+    font-size: max(12.2412px, 1.33106708rem);
+    line-height: 1.96189025rem;
+  }
+  #main-content p.page-stat-label,
+  #main-content p.page-stat-meta,
+  #main-content span.page-stat-label,
+  #main-content div.page-stat-label,
+  #main-content div.page-stat-meta,
+  #main-content p.founder-dash-stat-label,
+  #main-content p.founder-dash-stat-meta {
+    font-size: max(12.2412px, 0.765075rem);
+    line-height: max(16.3216px, 1.24402439rem);
+  }
+  #main-content h3.page-section,
+  #main-content h3.founder-dash-section {
+    font-size: max(12.2412px, 1.25666748rem);
+    line-height: 1.81097561rem;
+  }
+  #main-content p.page-figure,
+  #main-content p.founder-dash-figure {
+    font-size: max(12.2412px, 1.16358100rem);
+    line-height: 1.73551823rem;
+  }
+  #main-content h3.page-section.page-section--compact,
+  #main-content [data-rail-content] h3.page-section,
+  #main-content [data-rail-content] h3.founder-dash-section {
+    font-size: 1.05608341rem;
+    line-height: 1.58460366rem;
+  }
+}
+
+/* Named type roles. Outside the page (the SideNav mode switcher) they keep
+   the chrome sizes below; inside #main-content they are the standard's
+   steps, so the AI workspace reads on the same ladder as every page. */
+.type-caption {
+  font-size: 12.61px;
+  line-height: 1.35;
+}
+.type-support {
+  font-size: 12.7361px;
+  line-height: 1.35;
+}
+.type-ui {
+  font-size: 13.50px;
+  line-height: 1.35;
+}
+.type-identity {
+  font-size: 14.28px;
+  line-height: 1.3;
+}
+.type-page {
+  font-size: 15.42px;
+  line-height: 1.3;
+}
+#main-content .type-caption,
+#main-content .type-caption.text-2xs,
+#main-content .type-caption.text-xs,
+#main-content .type-caption.text-sm,
+#main-content .type-caption.text-\[11px\] {
+  font-size: max(0.765075rem, 12.2412px);
+  line-height: 1.35;
+}
+#main-content .type-support,
+#main-content .type-support.type-caption,
+#main-content .type-support.text-xs,
+#main-content .type-support.text-sm,
+#main-content .type-ui,
+#main-content .type-ui.text-2xs,
+#main-content .type-ui.text-xs,
+#main-content .type-ui.text-sm,
+#main-content .type-ui.text-base,
+#main-content .type-ui.sm\:text-sm,
+#main-content input.type-ui {
+  font-size: 0.80413208rem;
+  line-height: 1.35;
+}
+#main-content .type-identity,
+#main-content .type-identity.text-sm,
+#main-content .type-identity.text-xs {
+  font-size: 0.86598840rem;
+  line-height: 1.3;
+}
+#main-content .type-page,
+#main-content .type-page.text-xl,
+#main-content .type-page.text-2xl,
+#main-content h1.type-page {
+  font-size: 1.091475rem;
+  line-height: 1.3;
+}
+@media (min-width: 1024px) {
+  #main-content .type-caption,
+  #main-content .type-caption.text-2xs,
+  #main-content .type-caption.text-xs,
+  #main-content .type-caption.text-sm,
+  #main-content .type-caption.text-\[11px\] {
+    font-size: max(0.93301829rem, 12.2412px);
+  }
+  #main-content .type-support,
+  #main-content .type-support.type-caption,
+  #main-content .type-support.text-xs,
+  #main-content .type-support.text-sm,
+  #main-content .type-ui,
+  #main-content .type-ui.text-2xs,
+  #main-content .type-ui.text-xs,
+  #main-content .type-ui.text-sm,
+  #main-content .type-ui.text-base,
+  #main-content .type-ui.sm\:text-sm,
+  #main-content input.type-ui {
+    font-size: 0.98064888rem;
+  }
+  #main-content .type-identity,
+  #main-content .type-identity.text-sm,
+  #main-content .type-identity.text-xs {
+    font-size: 1.05608341rem;
+  }
+  #main-content .type-page,
+  #main-content .type-page.text-xl,
+  #main-content .type-page.text-2xl,
+  #main-content h1.type-page {
+    font-size: 1.33106708rem;
+  }
+}
+
+/* The readiness gauge is the page's one figure. The #main-content ceiling
+   had flattened leftover `text-[2.75rem]` to 18px inside a 184px ring. */
+#main-content .score-emblem-figure {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+@media (min-width: 1024px) {
+  #main-content .score-emblem-figure {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+}
+
+/* Shared keyboard indicator: the previous 1px/22%-opacity stroke vanished on
+   light cards and form fields explicitly suppressed it. Keep a consistent
+   external indicator, including select triggers and toast actions. */
+:where(a, button, input, textarea, select, [role='combobox'], [role='button'], [tabindex]):focus-visible,
+.focus-ring:focus-visible {
+  outline: 2px solid hsl(var(--ring)) !important;
+  outline-offset: 2px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cursor.com rule — every theme, every page, every surface.
+
+   One hairline per floating or in-flow surface, spent sparingly. Nested
+   frames inside a card fade toward nothing. Outlined buttons share the
+   card's edge (never a field's --input, never a second shadow). Decorative
+   glyphs beside copy disappear; chrome (nav, dialogs, icon-only controls)
+   keeps its icons. Corners stay the 14px / 10px ladder from --radius.
+
+   Selectors use [class~="border"] rather than .border: Tailwind's CSS
+   pipeline treats the `.border` utility as the `*` preflight and the
+   sheet fails to parse.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* In-flow boxes: a 1px hairline, no shadow, no 2px frame. */
+#main-content div[class~="border"],
+#main-content section[class~="border"],
+#main-content article[class~="border"],
+#main-content aside[class~="border"],
+#main-content li[class~="border"],
+#main-content form[class~="border"],
+#main-content [data-surface="card"],
+#main-content [data-surface="card"]:hover {
+  box-shadow: none;
+}
+#main-content div[class~="border-2"],
+#main-content section[class~="border-2"],
+#main-content article[class~="border-2"],
+#main-content form[class~="border-2"] {
+  border-width: 1px;
+}
+
+/* Nested rounded boxes inside a card: the inner line is half as present. */
+#main-content [data-surface="card"] div[class~="border"],
+#main-content [data-surface="card"] section[class~="border"],
+#main-content [data-surface="card"] article[class~="border"],
+#main-content [data-surface="card"] li[class~="border"],
+#main-content [data-surface="card"] form[class~="border"] {
+  border-color: hsl(var(--border) / 0.45);
+  box-shadow: none;
+}
+
+/* A lightly tinted accent card (cursor.com "Upgrade available") keeps a
+   matching whisper of the same hue, not a grey then a blue. */
+#main-content .bg-primary\/5,
+#main-content .bg-primary\/10 {
+  border-color: hsl(var(--primary-mid) / 0.16);
+}
+
+[data-surface="overlay"],
+.fixed[class~="shadow-2xl"],
+[class~="shadow-modal"],
+[class~="shadow-flyout"] {
+  box-shadow: none;
+}
+[data-surface="overlay"] {
+  border-color: hsl(var(--border));
+}
+/* Decorative glyphs go; the icon of an icon-only control stays (it is the
+   control). "Icon-only" = no child other than the icon and a
+   screen-reader-only name. Inside [data-keep-icon] the icon is the way
+   through a list: the phone's navigation sheet lost all of its link glyphs
+   to this rule while the same links on desktop kept theirs. */
+[data-surface="overlay"] svg.cfb-glyph:not(:is(button, a, [role="button"], [role="menuitem"]):not(:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"]))) svg):not([data-keep-icon] svg) {
+  display: none;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────
+   cursor.com "Adjust Plan": 1px hairline, transparent fill, 8px corner.
+   cursor.com "Upgrade": fill, no extra edge.
+   Applies on every page and every overlay, including asChild <a> buttons.
+   Fields (combobox / checkbox / switch) keep --input, not this hairline. */
+button[class~="border-2"]:not([role="combobox"]):not([role="checkbox"]):not([role="switch"]),
+[data-slot="button"][class~="border-2"],
+[role="button"][class~="border-2"]:not([data-surface="card"]),
+a[class~="inline-flex"][class~="border-2"] {
+  border-width: 1px;
+}
+button[class~="border"]:not([role="combobox"]):not([role="checkbox"]):not([role="switch"]),
+button[class~="border-input"]:not([role="combobox"]):not([role="checkbox"]):not([role="switch"]),
+button[class~="border-border"]:not([role="combobox"]):not([role="checkbox"]):not([role="switch"]),
+[data-slot="button"][class~="border"],
+[data-slot="button"][class~="border-input"],
+[data-slot="button"][class~="border-border"],
+[role="button"][class~="border"]:not([data-surface="card"]),
+[role="button"][class~="border-input"]:not([data-surface="card"]),
+[role="button"][class~="border-border"]:not([data-surface="card"]),
+a[class~="inline-flex"][class~="border"],
+a[class~="inline-flex"][class~="border-input"],
+a[class~="inline-flex"][class~="border-border"] {
+  border-color: hsl(var(--border));
+  box-shadow: none;
+}
+button[class~="border"]:not([role="combobox"]):hover,
+button[class~="border-input"]:not([role="combobox"]):hover,
+button[class~="border-border"]:not([role="combobox"]):hover,
+[data-slot="button"][class~="border"]:hover,
+[data-slot="button"][class~="border-input"]:hover,
+[data-slot="button"][class~="border-border"]:hover,
+[role="button"][class~="border"]:not([data-surface="card"]):hover,
+[role="button"][class~="border-input"]:not([data-surface="card"]):hover,
+[role="button"][class~="border-border"]:not([data-surface="card"]):hover,
+a[class~="inline-flex"][class~="border"]:hover,
+a[class~="inline-flex"][class~="border-input"]:hover,
+a[class~="inline-flex"][class~="border-border"]:hover {
+  border-color: hsl(var(--foreground) / 0.12);
+}
+button.bg-primary,
+button.bg-destructive,
+[data-slot="button"].bg-primary,
+[data-slot="button"].bg-destructive,
+a[class~="inline-flex"].bg-primary,
+a[class~="inline-flex"].bg-destructive {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* ── Decorative icons ─────────────────────────────────────────────────────
+   Glyphs beside copy on labeled buttons and inside cards go away.
+   Icons that *are* the control stay: nav/chrome, close (X), chevrons
+   inside a control, checkbox, spinner - and every icon-only control. So do
+   glyphs that carry state rather than decoration (check, empty circle,
+   lock) and any icon inside [data-keep-icon], where the icon is content.
+   "Labeled" means an element child other than the icon, its sr-only name,
+   or a responsive label (`hidden sm:inline`): below its breakpoint that
+   label is display:none, so it cannot stand in for the icon there, and the
+   control keeps its icon at every width, as its author drew it. Reading any
+   non-svg child as a label blanked 364 icon-only buttons
+   (copy, delete, more options, help) whose only other child was their
+   screen-reader name. :has() cannot nest: one inside another invalidates
+   the whole selector list and every rule here silently stops applying.
+   An absolutely placed child is a count badge or a status dot laid over
+   the icon, not a label: counting it as one blanked the sidebar's bell,
+   leaving its unread count floating over an empty button. A button
+   marked data-keep-icon (the sidebar's mode switch, whose glyphs line up
+   with the nav links') keeps its icon beside its label. */
+#main-content [data-page-header] > svg.cfb-glyph,
+#main-content [data-surface="card"] [data-glyph-well],
+#main-content [data-surface="card"] .icon-well,
+#main-content [data-surface="card"] .icon-well-sm {
+  display: none;
+}
+#main-content [data-surface="card"] :not(button):not(a):not([role="button"]):not([data-slot="button"]):not([role="checkbox"]):not([role="combobox"]):not([role="menuitem"]):not([role="switch"]):not([role="tab"]) > svg.cfb-glyph:not([data-keep-icon] > *):not([data-card-mark] > *),
+#main-content [data-surface="card"] :not(button):not(a):not([role="button"]):not([data-slot="button"]):not([role="checkbox"]):not([role="combobox"]):not([role="menuitem"]):not([role="switch"]):not([role="tab"]) > svg.lucide:not(.lucide-check):not(.lucide-circle-check):not(.lucide-circle-check-big):not(.lucide-circle):not(.lucide-lock):not(.lucide-loader-2):not(.lucide-loader-circle):not([data-keep-icon] > *):not([data-card-mark] > *),
+#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content [data-surface="card"] a:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x),
+#main-content [data-surface="card"] button:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content [data-surface="card"] [data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content [role="tab"] svg.cfb-glyph,
+#main-content [role="tab"] svg.lucide {
+  display: none;
+}
+/* The well an icon sat in goes with it: a tinted box with nothing inside
+   reads as a missing image (181 of them on 37 routes). Same reach as the
+   rule above - a non-control element whose only children are icons that
+   rule hides. A well holding a state glyph (check, empty circle, lock,
+   spinner) or marked data-keep-icon (an achievement's badge) keeps both.
+   A card's mark ([data-card-mark]: a programme's or a group's icon
+   standing in for its logo, beside the title in CardHead) is the card's
+   avatar, not decoration, and keeps its icon: hidden, it left an empty
+   column that pushed the title 12px in (/groups, 2026-10-10).
+   Only a fixed-size box counts as a well: see the size guard below. */
+#main-content [data-surface="card"] :is(div, span):is(:is([class^="h-"], [class*=" h-"]):is([class^="w-"], [class*=" w-"]), [class^="size-"], [class*=" size-"], [class~="p-0.5"], [class~="p-1"], [class~="p-1.5"], [class~="p-2"], [class~="p-2.5"]):not([data-keep-icon]):not([data-card-mark]):not(:is(button, a, [role="button"], [role="checkbox"]) > *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle))) {
+  display: none;
+}
+
+/* The same reach outside cards (2026-10-09): every decorative glyph in the
+   page body goes, so a badge, a meta line ("12 Nov", "Athens"), a section
+   heading or an empty state reads by its words alone. What stays: any icon
+   inside a control (at any depth, so an icon-only button never goes blank),
+   state glyphs (check, empty circle, lock, spinner, x), data (rating stars,
+   trend arrows), warnings and notes (alert, info), an icon placed inside a
+   field (`absolute`: the search magnifier), the rail, and [data-keep-icon]. */
+#main-content svg.lucide:not(.absolute):not(.lucide-check):not(.lucide-circle-check):not(.lucide-circle-check-big):not(.lucide-check-circle):not(.lucide-check-circle-2):not(.lucide-circle):not(.lucide-lock):not(.lucide-loader-2):not(.lucide-loader-circle):not(.lucide-x):not(.lucide-star):not(.lucide-star-half):not(.lucide-trending-up):not(.lucide-trending-down):not(.lucide-triangle-alert):not(.lucide-alert-triangle):not(.lucide-circle-alert):not(.lucide-alert-circle):not(.lucide-info):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-left):not(.lucide-chevron-up):not([data-keep-icon]):not([data-keep-icon] *):not([data-card-mark] *):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="combobox"], [role="option"], [role="status"], [role="alert"], [role="img"], [data-slot="button"], [data-rail-surface]) *),
+#main-content svg.cfb-glyph:not(.absolute):not([data-keep-icon]):not([data-keep-icon] *):not([data-card-mark] *):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="combobox"], [role="option"], [role="status"], [role="alert"], [role="img"], [data-slot="button"], [data-rail-surface]) *) {
+  display: none;
+}
+/* The data glyphs the rule above keeps (a trend arrow, a star) are only data
+   beside a figure or a rating. Beside a section heading ("Featured
+   Providers") they are decoration like any other. Warnings and notes stay. */
+#main-content svg:is(.lucide-trending-up, .lucide-trending-down, .lucide-star):has(+ :is(h1, h2, h3, h4)),
+#main-content :is(h1, h2, h3, h4) + svg:is(.lucide-trending-up, .lucide-trending-down, .lucide-star) {
+  display: none;
+}
+
+/* ...and the well each one sat in, as inside cards: a box whose only
+   children are glyphs that rule hides.
+
+   A well is a fixed-size box (height and width classes, or size-*) or a
+   box held open by a small padding (p-0.5 to p-2.5, as tokens). The
+   `:has(> :not(svg))` test sees element children only, never a text node,
+   so without the size guard `<span><Clock/>45 min</span>` counted as "icons
+   only" and its text went with the glyph: durations, places, event dates
+   and attendance on 2026-10-09 (`.probes/hidden_text.mjs`). A text row has
+   no fixed size; it keeps its words and loses only the glyph. */
+#main-content :is(div, span):is(:is([class^="h-"], [class*=" h-"]):is([class^="w-"], [class*=" w-"]), [class^="size-"], [class*=" size-"], [class~="p-0.5"], [class~="p-1"], [class~="p-1.5"], [class~="p-2"], [class~="p-2.5"]):not([data-keep-icon]):not([data-card-mark]):not([data-keep-icon] *):not([role="img"]):not(:is(button, a, label, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="status"], [role="alert"], [data-slot="button"], [data-rail-surface]) *):has(> svg.lucide, > svg.cfb-glyph):not(:has(> :not(svg.lucide):not(svg.cfb-glyph))):not(:has(> svg:is(.absolute, .lucide-check, .lucide-circle-check, .lucide-circle-check-big, .lucide-check-circle, .lucide-check-circle-2, .lucide-circle, .lucide-lock, .lucide-loader-2, .lucide-loader-circle, .lucide-x, .lucide-star, .lucide-star-half, .lucide-trending-up, .lucide-trending-down, .lucide-triangle-alert, .lucide-alert-triangle, .lucide-circle-alert, .lucide-alert-circle, .lucide-info, .lucide-chevron-down, .lucide-chevron-right, .lucide-chevron-left, .lucide-chevron-up))) {
+  display: none;
+}
+
+/* Labeled action buttons on every page (header Invite / New Document, asChild
+   links, dialogs). Icon-only controls have only an svg child and are skipped. */
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) .cfb-glyph,
+button:not([data-keep-icon]):has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
+button:not([data-keep-icon]):has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > .cfb-glyph,
+a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.cfb-glyph,
+a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+button[data-slot="button"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+a[class~="inline-flex"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) > svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x):not(.lucide-loader-2):not(.lucide-loader-circle),
+#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.cfb-glyph:not([data-keep-icon] *),
+#main-content a[class~="border"]:has(> :not(svg):not(.sr-only):not(.hidden):not([class~="absolute"])) svg.lucide:not([data-keep-icon] *):not(.lucide-chevron-down):not(.lucide-chevron-right):not(.lucide-chevron-up):not(.lucide-chevron-left):not(.lucide-x) {
+  display: none;
+}
+
+/* A chip in a horizontal scroll strip keeps its width: the strip scrolls,
+   the chip does not shrink. Flex shrank /projects' stage filters at 390px
+   to "All…", "Ide…" inside a strip that could simply have scrolled. */
+.flex.overflow-x-auto > :is(button, a, [role='tab'], [role='radio']) {
+  flex-shrink: 0;
+}
+
+/* Progress tracks: a thin grey rail, a quiet fill. */
+#main-content [role="progressbar"] {
+  background-color: hsl(var(--foreground) / 0.06);
+}
+#main-content [role="progressbar"] > * {
+  background-color: hsl(var(--foreground) / 0.22);
+}
+
+/* ── Fields: a whisper at rest, the accent while typing ──────────────────
+   --input sits at the card's own hairline (~1.18), so a field at rest is
+   found by its fill, label and placeholder, as on windsurf.com. While it has
+   focus the edge takes the theme's link tone (>=4.6:1 on the page), on top
+   of the 2px keyboard outline, so the field being typed into is never in
+   doubt. Pointer focus gets the edge alone: no frame inside a frame. */
+input[class~="border-input"]:focus,
+textarea[class~="border-input"]:focus,
+[role="combobox"][class~="border-input"]:focus,
+[role="combobox"][class~="border-input"][data-state="open"] {
+  border-color: hsl(var(--ring));
+}
+
+/* ── Explicit zeros win ─────────────────────────────────────────────────
+   `p-0`/`px-0`/`pt-0` on a card part used to lose twice: `.card-comfortable`
+   is emitted after Tailwind's utilities in the same layer, and the
+   [data-theme="minimal"] block above is unlayered, so ~30 call sites that
+   asked for a flush table or a full-bleed video got 24–28px of padding on
+   every side anyway. A zero is an explicit decision — "this content reaches
+   the edge" — not a density preference, so unlike the `pb-*` seam it must
+   beat the standard in every theme. Unlayered, at the end of the sheet, at
+   (0,2,0) so it also settles against the rail's tighter padding. */
+.card-comfortable.p-0, .card-compact.p-0 { padding: 0; }
+.card-comfortable.px-0, .card-compact.px-0 { padding-left: 0; padding-right: 0; }
+.card-comfortable.py-0, .card-compact.py-0 { padding-top: 0; padding-bottom: 0; }
+.card-comfortable.pt-0, .card-compact.pt-0 { padding-top: 0; }
+.card-comfortable.pb-0, .card-compact.pb-0 { padding-bottom: 0; }
+
+/* ── Phone reading scale ─────────────────────────────────────────────────
+   The product ladder above is the same pixels on a phone as on a desktop
+   (caption 12.24, body 13.86, title 17.46). That is a desk density. Below
+   640px the steps move up to sizes a hand-held screen can read, and the
+   line-height opens for Greek accents:
+
+     caption 13.044 · support 12.663 · body 14.170 · lead 12.921 · figure 15.520 · section 13.816 · title 14.148
+
+   Captions, the line under a page title, and the body subtitle stay put.
+   The support step (chips, dimension rows, in-card actions, labels, facts
+   and the muted sentence under a title) is 12.663, a little under that
+   subtitle. Every larger phone step is another 2% under the previous phone
+   size: body 14.459 × 0.98, the root and figures 15.837 × 0.98, stat
+   numbers 14.883 × 0.98, the page title 14.437 × 0.98, section headings
+   14.098 × 0.98. The same steps apply on every page. Search bars, Ask AI
+   and other text fields are 12.410, one step under the field subtitle
+   (12.663) and under the field title (14.170). Card copy and stat figures
+   are not fields and stay on their own steps. A title with no size utility
+   that inherited the body step (15.520), the same size as Discover People,
+   sits on the text-base step (14.243).
+
+   The dashboard is the phone standard for the same role on every page.
+   text-xl through text-7xl, including pages and dialogs outside
+   #main-content, sit on the title step (14.148). text-lg sits on the
+   section step (13.816). The readiness gauge sits on the figure step
+   (15.520).
+
+   Tablet (640–1023) and desktop (1024+, 82% root) do not match this query,
+   so their ladders stay. Dialogs portal outside #main-content, so the plain
+   .text-* steps are raised too; the #main-content rules repeat them because
+   those selectors outrank a plain class. */
+@media (max-width: 639.98px) {
+  body {
+    font-size: 15.520px;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .text-2xs { font-size: 13.044px; line-height: 1.35; }
+  .text-xs { font-size: 12.663px; line-height: 1.4; }
+  .text-sm { font-size: 14.170px; line-height: 1.45; }
+  .text-base { font-size: 15.520px; line-height: 1.5; }
+  .text-lg { font-size: 13.816px; line-height: 1.4; }
+
+  .bilingual-secondary,
+  .bilingual-separator {
+    font-size: 13.044px;
+    line-height: 1.45;
+  }
+
+  #main-content .text-2xs,
+  #main-content .type-caption,
+  #main-content .type-caption.text-2xs,
+  #main-content .type-caption.text-xs,
+  #main-content .type-caption.text-sm,
+  #main-content .type-caption.text-\[11px\],
+  #main-content .text-\[11px\],
+  #main-content .text-\[10px\],
+  #main-content .text-\[11\.76px\],
+  #main-content .text-\[12\.74px\],
+  #main-content p.page-stat-label,
+  #main-content p.page-stat-meta,
+  #main-content span.page-stat-label,
+  #main-content div.page-stat-label,
+  #main-content div.page-stat-meta,
+  #main-content p.founder-dash-stat-label,
+  #main-content p.founder-dash-stat-meta,
+  p.page-stat-label,
+  p.page-stat-meta,
+  span.page-stat-label,
+  div.page-stat-label,
+  div.page-stat-meta,
+  p.founder-dash-stat-label,
+  p.founder-dash-stat-meta {
+    font-size: 13.044px;
+    line-height: 1.35;
+  }
+
+  #main-content .text-xs,
+  #main-content .type-support,
+  #main-content .type-support.type-caption,
+  #main-content .type-support.text-xs,
+  #main-content .type-support.text-sm {
+    font-size: 12.663px;
+    line-height: 1.4;
+  }
+
+  /* A button or tab set in text-xs stays on the support step, under the
+     title. A text field is pinned under that step, at 12.410, above. */
+  .text-xs[data-slot='button'],
+  button.text-xs,
+  [role='button'].text-xs,
+  [role='tab'].text-xs,
+  input.text-xs,
+  select.text-xs,
+  textarea.text-xs,
+  #main-content .text-xs[data-slot='button'],
+  #main-content button.text-xs,
+  #main-content [role='button'].text-xs,
+  #main-content [role='tab'].text-xs,
+  #main-content input.text-xs,
+  #main-content select.text-xs,
+  #main-content textarea.text-xs,
+  #main-content .type-ui,
+  #main-content .type-ui.text-2xs,
+  #main-content .type-ui.text-xs,
+  #main-content .type-ui.text-sm,
+  #main-content .type-ui.text-base,
+  #main-content .type-ui.sm\:text-sm {
+    font-size: 12.663px;
+    line-height: 1.4;
+  }
+
+  #main-content [role='tab'],
+  #main-content .text-sm,
+  #main-content .type-identity,
+  #main-content .type-identity.text-sm,
+  #main-content .type-identity.text-xs,
+  #main-content [data-rail-content] .text-base {
+    font-size: 14.170px;
+    line-height: 1.45;
+  }
+
+  /* In-card actions such as Startup readiness and Open Builder use the body
+     step and sat level with the title. On a phone they join the support
+     step, under the subtitle. A text-sm paragraph (the greeting and the
+     score tier) is the subtitle and stays on the body step. */
+  #main-content button.text-sm,
+  #main-content a.text-sm,
+  #main-content [role='button'].text-sm,
+  #main-content button.text-xs,
+  #main-content [role='button'].text-xs,
+  [role='dialog'] button.text-sm,
+  [role='dialog'] a.text-sm,
+  [role='dialog'] [role='button'].text-sm,
+  [role='dialog'] button.text-xs,
+  [role='dialog'] [role='button'].text-xs,
+  [role='alertdialog'] button.text-sm,
+  [role='alertdialog'] a.text-sm,
+  [role='alertdialog'] [role='button'].text-sm,
+  [role='alertdialog'] button.text-xs,
+  [role='alertdialog'] [role='button'].text-xs {
+    font-size: 12.663px;
+    line-height: 1.35;
+  }
+
+  #main-content p.page-figure,
+  #main-content p.founder-dash-figure,
+  p.page-figure,
+  p.founder-dash-figure {
+    font-size: 15.520px;
+    line-height: 1.35;
+  }
+
+  #main-content .score-emblem-figure {
+    font-size: 15.520px;
+    line-height: 1;
+  }
+
+  /* Body copy that uses the text-base utility. Section headings used to
+     share this rule; they are 3% smaller than this step now. */
+  #main-content .text-base {
+    font-size: 14.243px;
+    line-height: 1.35;
+  }
+
+  .text-lg,
+  #main-content .text-lg {
+    font-size: 13.816px;
+    line-height: 1.35;
+  }
+
+  /* A section label on the member directory is the support step.
+     Every page section heading including text-lg sections uses it. */
+  #main-content p.page-section,
+  #main-content h2.page-section,
+  #main-content h3.page-section,
+  #main-content h3.founder-dash-section,
+  #main-content h2.uppercase,
+  h3.page-section,
+  h3.founder-dash-section,
+  #main-content h2.text-lg,
+  #main-content h3.text-lg {
+    font-size: 12.663px;
+    line-height: 1.4;
+  }
+
+  /* Compact and rail headings stay under the section label. The rail's
+     own display type is unchanged. */
+  #main-content [data-rail-content] .text-lg,
+  #main-content [data-rail-content] .text-xl,
+  #main-content [data-rail-content] .text-2xl,
+  #main-content [data-rail-content] .text-3xl {
+    font-size: 13.745px;
+    line-height: 1.45;
+  }
+  #main-content h3.page-section.page-section--compact,
+  #main-content [data-rail-content] h3.page-section,
+  #main-content [data-rail-content] h3.founder-dash-section,
+  h3.page-section.page-section--compact {
+    font-size: 12.410px;
+    line-height: 1.4;
+  }
+
+  /* A card's own title sits on the member-name step (14.148), the same
+     step as the page title, over the rows and sentences it holds. The
+     rail's card title sits on the member-subtitle step so a side card
+     never outranks the page. */
+  #main-content [data-card] h2.page-section,
+  #main-content [data-card] h3.page-section:not(.page-section--compact) {
+    font-size: 14.148px;
+    line-height: 1.35;
+  }
+  #main-content [data-rail-content] [data-card] h2.page-section,
+  #main-content [data-rail-content] [data-card] h3.page-section {
+    font-size: 13.044px;
+    line-height: 1.45;
+  }
+
+  /* The line under the page title, on every page. */
+  #main-content p.page-lead,
+  p.page-lead {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+
+  /* The explanatory sentence under a title or a subtitle ("Weighted across
+     6 dimensions…", "Investor and accelerator readiness…", and the same
+     muted line on every page). It was on the meta step, 14.406, level with
+     the page title (14.148) and above the subtitle (12.921). On a phone it
+     sits a little under that subtitle: 12.921 × 0.98. A one-line label
+     (truncate, line-clamp-1), a flex meta row, the subtitle itself, stat
+     labels, and every larger step stay where they are. */
+  #main-content :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead):not(.page-stat-label):not(.page-stat-meta):not(.founder-dash-stat-label):not(.founder-dash-stat-meta):not(.person-subtitle),
+  #main-content div.text-xs.text-muted-foreground:is(.leading-snug, .leading-relaxed):not(.flex):not(.inline-flex):not(.font-semibold):not(.font-medium),
+  #main-content :is(div, ol, ul).text-xs.text-muted-foreground li,
+  #main-content :is(p, li).text-xs :is(span, a).text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.bilingual-secondary):not(.font-semibold):not(.font-medium),
+  #main-content :is(p, li, span).type-ui.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.flex):not(.inline-flex),
+  #main-content :is(p, li, span).type-support.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.flex):not(.inline-flex),
+  [role='dialog'] :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead),
+  [role='dialog'] div.text-xs.text-muted-foreground:is(.leading-snug, .leading-relaxed):not(.flex):not(.inline-flex):not(.font-semibold):not(.font-medium),
+  [role='dialog'] :is(div, ol, ul).text-xs.text-muted-foreground li,
+  [role='dialog'] :is(p, li, span).type-ui.text-muted-foreground:not(.truncate):not(.line-clamp-1),
+  [role='dialog'] :is(p, li, span).type-support.text-muted-foreground:not(.truncate):not(.line-clamp-1),
+  [role='alertdialog'] :is(p, li, span, a).text-xs.text-muted-foreground:not(.truncate):not(.line-clamp-1):not(.page-lead),
+  [role='alertdialog'] :is(div, ol, ul).text-xs.text-muted-foreground li {
+    font-size: 12.663px;
+    line-height: 1.45;
+  }
+
+  #main-content .person-subtitle {
+    /* The line under a featured member's name ("Founder & CEO at Harbor")
+       is the caption step. A person subtitle on every page uses it. */
+    font-size: 13.044px;
+    line-height: 1.4;
+  }
+
+  .text-xl,
+  .text-2xl,
+  .text-3xl,
+  .text-4xl,
+  .text-5xl,
+  .text-6xl,
+  .text-7xl,
+  .text-\[2\.75rem\],
+  #main-content .text-xl,
+  #main-content .text-2xl,
+  #main-content .text-3xl,
+  #main-content .text-4xl,
+  #main-content .text-5xl,
+  #main-content .text-6xl,
+  #main-content .text-7xl,
+  #main-content .text-\[2\.75rem\],
+  #main-content h1.page-title,
+  #main-content h1.founder-dash-h1,
+  #main-content .type-page,
+  #main-content .type-page.text-xl,
+  #main-content .type-page.text-2xl,
+  #main-content h1.type-page,
+  h1.page-title,
+  h1.founder-dash-h1 {
+    font-size: 14.148px;
+    line-height: 1.3;
+  }
+
+  /* Stat numbers are 2% under 14.883. The page title is 14.148. */
+  #main-content p.page-stat,
+  #main-content h3.page-stat,
+  #main-content span.page-stat,
+  #main-content div.page-stat,
+  #main-content dd.page-stat,
+  #main-content p.founder-dash-stat,
+  p.page-stat,
+  h3.page-stat,
+  span.page-stat,
+  div.page-stat,
+  dd.page-stat,
+  p.founder-dash-stat {
+    font-size: 14.585px;
+    line-height: 1.3;
+  }
+
+  #main-content .person-name {
+    /* Inherited the body step and sat above the page title.
+       On a phone it uses the title step. A wrapped name needs 1.35,
+       the same leading as a card title. From 640px the inherited size
+       stays, and that size is already under the title. */
+    font-size: 14.148px;
+    line-height: 1.35;
+  }
+
+  input[data-filter-field]:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+  select[data-filter-field] {
+    /* The discover query and its sort control sit on the field step
+       (12.410): under the field title (text-sm, 14.170) and under the
+       field subtitle (text-xs, 12.663). */
+    font-size: 12.410px !important;
+  }
+
+  /* A paragraph or a card title a card cuts with an ellipsis wraps on a
+     phone instead: "Pre-seed Bootcamp · Spring 2027 · 1d" lost its age and
+     a saved search was left as "Commerci…". Names and labels inside a flex
+     row (spans) keep their single line; from 640px the cut returns where
+     the row is wide enough to need it. */
+  #main-content [data-card] p.truncate,
+  #main-content [data-card] h3.truncate {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  /* The connection subtitle stays one line. Joined facts use this class
+     so a long line ellipsizes instead of stacking into a second card. */
+  #main-content [data-card] p.row-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Titles that inherit the body step (15.520) are the same size as
+     "Discover People". On a phone they sit on the text-base step (14.243)
+     so they stay under that body size and above a text-sm subtitle.
+     A sized utility a stat a lead or a person name does not match.
+     :where keeps this under the need-card title rule. */
+  #main-content p.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
+  #main-content h3.font-medium:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-lead):not(.card-copy):not(.person-name):not(.page-stat-label)),
+  #main-content p.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-stat-label):not(.person-name):not(.page-title):not(.card-title):not(.card-subtitle):not(.card-body)),
+  #main-content h3.font-semibold:where(:not([class*="text-xs"]):not([class*="text-sm"]):not([class*="text-base"]):not([class*="text-lg"]):not([class*="text-xl"]):not([class*="text-2xl"]):not([class*="text-2xs"]):not(.page-stat):not(.page-stat-label):not(.person-name):not(.page-title):not(.card-title):not(.card-subtitle):not(.card-body)) {
+    font-size: 14.243px;
+    line-height: 1.45;
+  }
+
+  /* Wrapped lines inside a card and a snug or tight line outside one use
+     the endorsement subtitle and the connection headline (1.45). A score
+     that asks for leading-none stays tight. */
+  #main-content p.leading-snug,
+  #main-content h3.leading-snug,
+  #main-content li.leading-snug,
+  #main-content p.leading-tight,
+  #main-content h3.leading-tight,
+  #main-content [data-card] p:not(.page-stat):not(.leading-none),
+  #main-content [data-card] h3:not(.page-stat):not(.leading-none),
+  #main-content [data-card] li:not(.page-stat):not(.leading-none) {
+    line-height: 1.45;
+  }
+
+  /* Long tokens and pictures stay inside the viewport. A wide table scrolls
+     inside itself instead of dragging the page sideways. */
+  #main-content {
+    overflow-wrap: break-word;
+  }
+  #main-content img,
+  #main-content video {
+    max-width: 100%;
+    height: auto;
+  }
+  #main-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  [role='dialog'],
+  [role='alertdialog'] {
+    font-size: 15.520px;
+    line-height: 1.5;
+  }
+
+  /* A need card's title and its sentences were a tenth of a pixel apart,
+     so the title, the ask, the offer and the facts all shouted at once.
+     The title takes the page-title step. The sentences sit on the subtitle
+     step, under it. Labels stay on the support step. */
+  #main-content [data-need-card] :is(h1, h2, h3) {
+    font-size: 14.148px;
+    line-height: 1.3;
+  }
+  /* A count line (evidence) keeps the caption step. Naming text-xs as a
+     class would fold this rule into that utility. */
+  #main-content [data-need-card] dd:not([class~='text-xs']),
+  #main-content [data-need-card] [data-need-offer] p.text-sm {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+
+  /* A card's sentence ("Invests in Mediterranean…") sits on the lead step
+     (12.921) so it is under the card title and under the subtitle above it.
+     The subtitle itself is not this class. From 640px the sentence keeps
+     text-sm. */
+  #main-content [data-card] .card-copy,
+  #main-content [data-card] p.card-copy {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+
+  /* A sentence under a card title used to shift back by the mark's width,
+     so it started a tab left of the title. It now stays on the title's
+     left edge, beside the circle, and cannot cover the circle or leave
+     the card. From 640px the class is unused. */
+  #main-content [data-card] .card-axis,
+  #main-content .card-axis {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* A round name and a milestone title used the section label (12.663)
+     while the money line and the description used text-sm (14.170).
+     The row title takes the member-name step. Section headings that are
+     not a row title stay on the section label. */
+  #main-content :is(h2, h3).page-section.page-section--row {
+    font-size: 14.148px;
+    line-height: 1.3;
+  }
+
+  /* In-card sentences and figures sit under that title, on the lead step.
+     A pure stat (page-stat), a member name, a card-copy line, a control
+     and the rail keep their own steps. An italic quote is one step under
+     that sentence. */
+  #main-content [data-card] :is(p, div, span, li, dd, dt, ul, ol, label).text-sm:not(:is(.page-stat, .person-name, .card-copy, .page-stat-label, .page-stat-meta, button, a, [role='button'], [role='tab'], input, textarea, select)),
+  #main-content [data-card] :is(p, div, dd, li).text-base:not(:is(.page-stat, .page-figure, .person-name, .font-display, .card-title)),
+  #main-content [data-card] :is(p, dd, li).text-lg:not(.page-section) {
+    font-size: 12.921px;
+    line-height: 1.45;
+  }
+  /* An italic quote sits under the subtitle. The rail keeps the body step. */
+  #main-content [data-card] p.text-sm.italic {
+    font-size: 12.663px;
+    line-height: 1.45;
+  }
+  #main-content [data-rail-content] [data-card] :is(p, div, span, li, dd, dt).text-sm {
+    font-size: 14.170px;
+    line-height: 1.45;
+  }
+
+  /* A sentence that opens in lowercase ("invests in…") reads as a label
+     that lost its capital. The first letter takes a capital; a stat figure
+     is not a sentence. */
+  #main-content [data-card] p:not(:is(.page-stat, .page-stat-label, .page-stat-meta))::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+/* Landing intro. On a phone the headline and the line under it use the
+   phone title and subtitle (14.148 and 12.921). The live counts use the
+   stat step (14.585). From 640px they keep the poster sizes. Pixels,
+   not rem: the desktop root is 82% and would shrink a rem a second time.
+   The wash started at blur-3xl (64px), then 10% less (57.6px), then
+   another 5% (54.72px), so the lilac stays a shape. On a phone the
+   poster column is 2% narrower than the full width; from 640px it is
+   full width again. */
+.landing-wash {
+  filter: blur(54.72px);
+}
+@media (max-width: 639.98px) {
+  .landing-intro {
+    width: 98%;
+  }
+}
+#main-content h1.landing-display {
+  font-size: 14.148px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+#main-content p.landing-lead {
+  font-size: 12.921px;
+  line-height: 1.5;
+}
+#main-content p.landing-stat {
+  font-size: 14.585px;
+  line-height: 1.2;
+}
+/* The hero headline's second language: a subtitle under the display line,
+   not a second display line (0.85em of 60px read as two headlines). */
+#main-content h1.landing-display .landing-display-secondary {
+  margin-top: 0.4em;
+  font-size: 0.5em;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) {
+  #main-content h1.landing-display {
+    font-size: 48px;
+    line-height: 1.08;
+  }
+  #main-content p.landing-lead {
+    font-size: 18px;
+  }
+  #main-content p.landing-stat {
+    font-size: 24px;
+  }
+}
+@media (min-width: 1024px) {
+  #main-content h1.landing-display {
+    font-size: 60px;
+    line-height: 1.05;
+  }
+  #main-content p.landing-lead {
+    font-size: 20px;
+  }
+}
+
+/* ── One left axis per card ───────────────────────────────────────────────
+   Text inside a card starts where the card's title starts. A row that needs
+   a hover surface (a link in a list) keeps its text on that axis and lets the
+   surface reach outward instead: equal negative margin and padding, in px at
+   every width, because the desktop root is 82% and a rem `-mx-3` beside the
+   px-restated `px-3` drifts 2px off the axis. Unlayered so a stray `px-*`
+   on the same element cannot undo it. `.clarity.mjs` measures the axis. */
+.axis-row {
+  margin-left: -12px;
+  margin-right: -12px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* A list of rows inside a card: a hairline between rows, vertical padding
+   only, every row's text on the card's axis. It replaces a box per row (a
+   border, a fill and 12px of padding each), which framed every item twice and
+   moved its text off the title. Margins from a `space-y-*` on the same
+   container are cancelled, so the hairline sits midway between two rows. */
+.card-rows > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: calc(12px * var(--chrome-y, 1));
+  padding-bottom: calc(12px * var(--chrome-y, 1));
+}
+.card-rows > * + * {
+  border-top: 1px solid hsl(var(--border));
+}
+.card-rows > :first-child { padding-top: 0; }
+.card-rows > :last-child { padding-bottom: 0; }
+/* A clickable row keeps a hover surface around its text, first and last included. */
+.card-rows > .axis-row,
+.card-rows > .axis-row:first-child,
+.card-rows > .axis-row:last-child {
+  padding-top: calc(10px * var(--chrome-y, 1));
+  padding-bottom: calc(10px * var(--chrome-y, 1));
+}
+
+/* Facts on one wrapping line (a profile's place, time zone, languages,
+   joined) read apart by a middle dot now that their decorative glyphs are
+   gone; the dot is drawn, not spoken. */
+/* The dot rides at the end of the item before it, so a wrapped line ends
+   on "Idea ·" and the next one starts on a word, never on a dot (a Greek
+   facts line wrapped onto "· Μερική απασχόληση", 2026-10-09). The flex gap
+   is the space after the dot. */
+.facts-dotted > li:not(:last-child)::after {
+  content: "·";
+  margin-left: 0.5rem;
+  color: hsl(var(--muted-foreground));
+}
+/* Inside a fact line the dot means "next fact", so a bilingual pair there
+   joins its two languages with a thin slash instead of BilingualText's own
+   dot: "Guide / Οδηγός · Intermediate / Μέσο", not four dotted words. */
+.facts-dotted .bilingual-separator {
+  font-size: 0;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+.facts-dotted .bilingual-separator::before {
+  content: "/";
+  font-size: 0.75rem;
+}
+
+/* A fact is a value, and a value that starts a line starts with a capital
+   ("Cofounder", not "cofounder"): tags arrive as typed. */
+.facts-dotted > li::first-letter {
+  text-transform: uppercase;
+}
+
+/* ── Card text ladder ────────────────────────────────────────────────────
+   Every card reads like the Endorsements and Connections cards, at the
+   Members page's sizes (2026-10-10). One title, the line under it, the
+   sentences, the facts:
+
+     step            role                          phone     tablet/desktop
+     .card-title     name or title, semibold       14.148    16.00
+     .card-subtitle  the line under it, muted      13.044    14.00
+     .card-body      sentences, values, figures    12.921    13.49
+     meta            facts, dates, kinds (text-xs) 12.663    12.87
+
+   The body sits a notch under the subtitle and the title, so a thesis never
+   reads as loud as the byline and a figure inside a round card ("$375K
+   raised", "Athens Tech Angels") never outranks the round's name. A stat
+   card whose only content is a figure and its label keeps its figure step.
+   Rem against the 16px root, restated against the 82% desktop root, and px
+   on a phone like the reading scale; `.probes/card_audit.mjs` measures it. */
+.card-title {
+  font-size: 0.999698rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.card-subtitle {
+  font-size: 0.87473575rem;
+  line-height: 1.45;
+  color: hsl(var(--muted-foreground));
+}
+/* The person under a card title (a need card's author). Same size as the
+   subtitle step, in the foreground and medium, so the name sits between the
+   title and the sentences without a new size. */
+.card-subtitle.card-byline {
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+.card-body {
+  font-size: 0.843388rem;
+  line-height: 1.55;
+}
+@media (min-width: 1024px) {
+  .card-title { font-size: 1.21914390rem; }
+  .card-subtitle { font-size: 1.06675091rem; }
+  .card-body { font-size: 1.02855183rem; }
+}
+@media (max-width: 639.98px) {
+  /* Members page on a phone: the name is the page-title step, the line
+     under it is the member subtitle, and a sentence ("Who you are looking
+     for…", "Invests in Mediterranean…") sits on the lead step, under both.
+     A stat figure keeps .page-stat and is not these classes. */
+  .card-title,
+  #main-content .card-title {
+    font-size: 14.148px;
+    line-height: 1.35;
+  }
+  .card-subtitle,
+  #main-content .card-subtitle {
+    font-size: 13.044px;
+    line-height: 1.45;
+  }
+  .card-body,
+  #main-content .card-body {
+    font-size: 12.921px;
+    line-height: 1.5;
+  }
+
+  /* A muted sentence ("Search our knowledge base or browse topics below",
+     and the same line under a heading on every page) was text-sm at
+     14.170, level with or above a title that sits at 14.148. It takes the
+     lead step, under that title. A subtitle, a stat, a one-line label and
+     a semibold value stay on their own steps. */
+  #main-content p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='page-stat-label']):not([class~='page-stat-meta']):not([class~='founder-dash-stat']):not([class~='founder-dash-stat-label']):not([class~='founder-dash-stat-meta']):not([class~='person-subtitle']):not([class~='card-subtitle']):not([class~='card-title']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='row-ellipsis']):not([class~='font-semibold']):not([class~='font-medium']),
+  #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']):not([class~='page-stat']),
+  [role='dialog'] p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='card-subtitle']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='font-semibold']):not([class~='font-medium']),
+  [role='alertdialog'] p[class~='text-sm'][class~='text-muted-foreground']:not([class~='page-stat']):not([class~='card-subtitle']):not([class~='truncate']):not([class~='line-clamp-1']):not([class~='font-semibold']):not([class~='font-medium']) {
+    font-size: 12.921px;
+    line-height: 1.5;
+  }
+}
+
+/* The sentence under a heading, on tablet and desktop. The phone reading
+   scale puts the same paragraphs on the lead step. Attribute selectors,
+   so the rule is not folded into Tailwind's text-sm utility. At 1024 the
+   82% root would shrink a rem under the caption floor, so the size is
+   restated in the same rem the card body uses. */
+#main-content :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='card-subtitle']):not([class~='person-subtitle']):not([class~='font-semibold']):not([class~='font-medium']),
+#main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+[role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+[role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
+  font-size: 0.843388rem;
+  line-height: 1.55;
+}
+@media (min-width: 1024px) {
+  #main-content :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='card-subtitle']):not([class~='person-subtitle']):not([class~='font-semibold']):not([class~='font-medium']),
+  #main-content :is(h1, h2, h3) + p[class~='text-base'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+  [role='dialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']),
+  [role='alertdialog'] :is(h1, h2, h3) + p[class~='text-sm'][class~='text-muted-foreground']:not([class~='font-semibold']):not([class~='font-medium']) {
+    font-size: 1.02855183rem;
+  }
+}
+
+/* A profile circle that is showing initials, inside a card, is 3% under
+   the size the card set. A loaded photo keeps that size. An organisation
+   mark adds a rounded square and is not this circle. */
+#main-content [data-card] [class~='rounded-full']:not([class~='rounded-md']):not([class~='rounded-lg']):not([class~='rounded-xl']):not([class~='rounded-2xl']):has(> .avatar-initials) {
+  scale: 0.97;
+}
+
+/* Mint only. Bay stays the deep green. Filled green buttons, the chat
+   launcher, a green outline, a pastel ring and a sent message use
+   #588578 (rgb(88, 133, 120)). White letters on that fill are 4.17:1. */
+html[data-theme="minimal"] [data-logotype] [class~='text-primary'] {
+  color: hsl(var(--primary));
+}
+html[data-theme="minimal"] [class~='rounded-full'][class*='ring-primary'] {
+  --tw-ring-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] :not(button):not(a)[class~='rounded-full'][class~='bg-primary'] {
+  background-color: hsl(var(--mint-mark));
+}
+html[data-theme="minimal"] :not(button):not(a)[class~='h-full']:is([class~='bg-primary'], [class~='bg-primary/50'], [class~='bg-primary/60'], [class~='bg-primary/70'], [class~='bg-primary/80'], [class*='bg-status-success-mark'], [class*='bg-status-warning-mark']) {
+  background-color: hsl(var(--meter-apricot));
+}
+html[data-theme="minimal"] #main-content [role='progressbar'] > * {
+  background-color: hsl(var(--meter-apricot));
+}
+html[data-theme="minimal"] #main-content [data-meter='lilac'][role='progressbar'] > * {
+  background-color: hsl(var(--meter-lilac));
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/10'] {
+  background-color: hsl(var(--mint-mark) / 0.38);
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/15'] {
+  background-color: hsl(var(--mint-mark) / 0.53);
+}
+html[data-theme="minimal"] .avatar-initials[class*='bg-primary/20'] {
+  background-color: hsl(var(--mint-mark) / 0.68);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/10'] {
+  background-color: hsl(var(--mint-mark) / 0.55);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/15'] {
+  background-color: hsl(var(--mint-mark) / 0.77);
+}
+html[data-theme="minimal"] :is([class~='h-6'], [class~='h-7'], [class~='h-8']) > .avatar-initials[class*='bg-primary/20'] {
+  background-color: hsl(var(--mint-mark) / 0.99);
+}
+/* A circle whose edge is the green, not a filled button: the help book,
+   and the same border on a profile-sized mark. The edge is #588578.
+   Filled buttons use the same green with white letters, set below. */
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']),
+html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) {
+  border-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']),
+html[data-theme="minimal"] #main-content [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']):is([class~='h-7'], [class~='h-8'], [class~='h-9'], [class~='h-11'], [class~='w-7'], [class~='w-8'], [class~='w-9'], [class~='w-11']) {
+  border-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] circle.stroke-primary {
+  stroke: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] [class~='rounded-full']:is([class~='border-primary'], [class~='border-primary/15'], [class~='border-primary/20'], [class~='border-primary/30']):not([class~='bg-primary']) [class~='text-primary'] {
+  color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] [data-card-mark] circle[stroke='hsl(var(--primary))'] {
+  stroke: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] [data-card-mark] circle[stroke*='0.45'] {
+  stroke: hsl(var(--mint-ring));
+}
+/* Every filled green button, including the chat launcher, uses #588578
+   with white letters. White on that fill is 4.17:1. Hover darkens it. */
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary'] {
+  background-color: hsl(var(--mint-ring));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--mint-ring));
+}
+html[data-theme="minimal"] :is(button, a, [role='button'], [data-slot='button'])[class~='bg-primary']:hover {
+  background-color: color-mix(in hsl, hsl(var(--mint-ring)) 86%, black);
+  color: hsl(var(--primary-foreground));
+  border-color: color-mix(in hsl, hsl(var(--mint-ring)) 86%, black);
+}
+html[data-theme="minimal"] [data-own-message] {
+  background-color: hsl(var(--mint-ring));
+  color: hsl(var(--primary-foreground));
+}
+
+/* A chip whose words already say the thing does not need a wash behind
+   them. On the cream card those fills read as a stain. The words stay.
+   Avatar marks, pressed controls and block callouts keep their surface. */
+#main-content :is(span, a):is(
+  [class*='bg-status-success-bg'],
+  [class*='bg-status-warning-bg'],
+  [class*='bg-status-danger-bg'],
+  [class*='bg-status-info-bg'],
+  [class*='bg-status-accent-bg'],
+  [class*='bg-status-neutral-bg'],
+  [class~='bg-secondary'],
+  [class~='bg-muted'],
+  [class*='bg-muted/']
+):not(.avatar-initials):not([aria-pressed='true']):not([data-state='active']),
+#main-content button[class*='rounded-full']:is([class~='bg-secondary'], [class~='bg-secondary/30'], [class~='bg-muted'], [class~='bg-muted/30'], [class~='bg-muted/40'], [class~='bg-primary/5'], [class~='bg-primary/10'], [class~='bg-primary/15'], [class~='bg-primary/20']) {
+  background-color: transparent;
+}
+
+/* A description inside a card (a muted sentence that clamps or reads
+   relaxed) sits on the body step, a notch under the card's title and the
+   line under it: a thesis or a bio read as loud as the byline. Attribute
+   selectors, as in the reading-measure rule: naming a Tailwind utility in a
+   selector folds the rule into that utility. */
+[data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+[data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
+#main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+#main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+  font-size: 0.843388rem;
+  line-height: 1.55;
+}
+/* #main-content restates .text-sm from 1024px up at (1,1,0); the id keeps
+   this rule above it. */
+@media (min-width: 1024px) {
+  [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+    font-size: 1.02855183rem;
+  }
+}
+@media (max-width: 639.98px) {
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class*='line-clamp-'],
+  #main-content [data-card] p[class~='text-sm'][class~='text-muted-foreground'][class~='leading-relaxed'] {
+    font-size: 12.921px;
+    line-height: 1.5;
+  }
+}
+
+/* A row label inside a card written as a bare `font-medium` paragraph
+   inherited the body size (16.33px) and stood over the card's own title.
+   It takes the subtitle step, the size of a field label. */
+[data-card] p[class='font-medium'],
+[data-card] span[class='font-medium'],
+#main-content [data-card] p[class='font-medium'],
+#main-content [data-card] span[class='font-medium'] {
+  font-size: 0.87473575rem;
+  line-height: 1.45;
+}
+@media (min-width: 1024px) {
+  [data-card] p[class='font-medium'],
+  [data-card] span[class='font-medium'],
+  #main-content [data-card] p[class='font-medium'],
+  #main-content [data-card] span[class='font-medium'] {
+    font-size: 1.06675091rem;
+  }
+}
+@media (max-width: 639.98px) {
+  #main-content [data-card] p[class='font-medium'],
+  #main-content [data-card] span[class='font-medium'] {
+    font-size: 13.044px;
+  }
+}
+
+/* A card heading set in text-base or text-lg sits at the section step on a
+   phone (14.984), within 0.08px of the sentences under it; it takes the
+   card's title step. Every heading in a card wraps at 1.35, room for Greek
+   accents: at 1.25 a two-line title read as one block. */
+@media (max-width: 639.98px) {
+  #main-content [data-card] h2.text-base,
+  #main-content [data-card] h3.text-base,
+  #main-content [data-card] h4.text-base,
+  #main-content [data-card] h2.text-lg,
+  #main-content [data-card] h3.text-lg {
+    font-size: 14.148px;
+    line-height: 1.35;
+  }
+}
+#main-content [data-card] h2,
+#main-content [data-card] h3,
+#main-content [data-card] h4 {
+  line-height: 1.35;
+}
+
+/* A transparent badge that opens its row starts on the card's axis: its
+   letters, not its padding box, line up with the title (Endorsements'
+   "Go-to-market" sat 10px in). The padding after it stays, so the next
+   item keeps its distance. */
+.badge.bg-transparent:first-child {
+  padding-left: 0;
+}
+
+/* ── Fields read under their labels ──────────────────────────────────────
+   Typed text and placeholders sit a notch under the field's label (text-sm,
+   medium): the body step on tablet and desktop, the control step on a
+   phone. A search bar or Ask AI used to set its placeholder at the 16.16px
+   iOS floor, above the section heading beside it.
+   iOS zooms the page into any focused field under 16px; IosFieldZoom adds
+   maximum-scale=1 to the viewport on iOS only, which stops that zoom while
+   pinch zoom stays free (iOS has ignored the cap for pinch since iOS 10).
+   Other platforms never get the cap, so WCAG 1.4.4 holds everywhere. */
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+select,
+textarea,
+button[role='combobox'] {
+  font-size: 0.843388rem !important;
+}
+@media (min-width: 1024px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select,
+  textarea,
+  button[role='combobox'] {
+    font-size: 1.02855183rem !important;
+  }
+}
+@media (max-width: 639.98px) {
+  /* Under the field title (text-sm, 14.170) and under a field subtitle
+     (text-xs, 12.663). iOS focus-zoom is stopped by IosFieldZoom. */
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']):not([type='file']),
+  select,
+  textarea,
+  button[role='combobox'] {
+    font-size: 12.410px !important;
+  }
+}
+
+/* Search fields share the Member Directory search: Input h-11,
+   calc(2.75rem * --chrome-y). At the 82% desktop root that is 35.72px;
+   at a 16px root it is 43.56px. h-8 and h-9 searches take the same box.
+   Ask AI is a composer, not a search field. Buttons keep their own height. */
+/* On a phone the assistant opens as the screen, not as a card floating
+   over the tab bar. Drag still runs; the sheet stays put. */
+@media (max-width: 639.98px) {
+  [data-chat-popup] {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    bottom: 0 !important;
+    right: 0 !important;
+  }
+}
+
+input[type='search'],
+input:is(
+  [placeholder*='Search'],
+  [placeholder*='search'],
+  [placeholder*='Αναζήτηση'],
+  [placeholder*='αναζήτηση'],
+  [aria-label*='Search'],
+  [aria-label*='search'],
+  [aria-label*='Αναζήτηση'],
+  [aria-label*='αναζήτηση']
+):not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='file']) {
+  height: calc(2.75rem * var(--chrome-y));
+  min-height: calc(2.75rem * var(--chrome-y));
+}

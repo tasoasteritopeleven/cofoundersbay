@@ -1,0 +1,83 @@
+{
+  "requestedRoute": "/org/analytics",
+  "sourceFile": "org/analytics/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T17:21:13.522Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/org/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "svg-img-alt",
+        "impact": "serious",
+        "description": "<svg> elements with an img role must have an alternative text",
+        "count": 3,
+        "nodes": [
+          {
+            "target": [
+              "path[name=\"Founders\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has no child that is a title\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has n"
+          },
+          {
+            "target": [
+              "path[name=\"Mentors\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has no child that is a title\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has n"
+          },
+          {
+            "target": [
+              "path[name=\"Investors\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has no child that is a title\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has n"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Org Analytics"
+    ],
+    "wordCount": 207,
+    "textExcerpt": "Org Analytics\n\nCohort health, program impact, application funnel, and member growth in one dashboard.\n\nLast 30 days\nExport\n\nStartups in programs\n\n7\n\n3 graduated\n\nApplications\n\n5\n\nlast 30 days\n\nMentor sessions held\n\n17\n\n7",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T17:21:24.452Z"
+}

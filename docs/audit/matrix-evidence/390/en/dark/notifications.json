@@ -1,0 +1,25 @@
+{
+  "requestedRoute": "/notifications",
+  "sourceFile": "notifications/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:28:09.172Z",
+  "status": "navigation_or_measurement_failure",
+  "actualFinalUrl": "about:blank",
+  "httpStatus": null,
+  "renderedRole": null,
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "error": "TimeoutError: page.goto: Timeout 35000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost/notifications\", waiting until \"domcontentloaded\"\u001b[22m\n",
+  "finishedAt": "2026-09-27T16:28:53.914Z"
+}

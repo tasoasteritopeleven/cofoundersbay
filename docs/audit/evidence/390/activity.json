@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/activity",
+  "sourceFile": "activity/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:04:35.168Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/activity",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/activity",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Activity Feed"
+    ],
+    "wordCount": 33,
+    "textExcerpt": "Activity Feed\n\nTrack your network activity, notifications, and events.\n\nNetwork\n2\nNotifications\nEvents\nEARLIER\n\nElena Papadopoulos wants to connect\n\nby Elena Papadopoulos\n\n2h\nConnections\n\nNew match: Marcus Chen\n\nby Marcu",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:04:39.711Z"
+}

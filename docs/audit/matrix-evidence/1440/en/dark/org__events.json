@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/org/events",
+  "sourceFile": "org/events/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 1440,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T18:03:00.915Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/events",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/events",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Organization Events"
+    ],
+    "wordCount": 169,
+    "textExcerpt": "Organization Events\n\nDemo days, office hours, workshops, and pitch nights for your cohorts.\n\nCreate Event\n\nUpcoming Events\n\n3\n\nTotal Attendees (all)\n\n341\n\nEvents not cancelled\n\n4\n\nAll (4)\nActive (3)\nCompleted (1)\nPitch C",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T18:03:10.481Z"
+}

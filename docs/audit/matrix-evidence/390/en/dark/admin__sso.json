@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/admin/sso",
+  "sourceFile": "admin/sso/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:20:53.615Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/sso",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/sso",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "SSO Configuration"
+    ],
+    "wordCount": 63,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nSSO Configuration\n\nConfigure Single Sign-On for organization tenants\n\nTotal Tenants\n1\nActive Providers\n0\nTotal Providers\n0\nEvents (24h)\n0\nOrganization Tenants\n\nClick",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:20:57.310Z"
+}

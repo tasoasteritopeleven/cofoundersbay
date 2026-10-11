@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings/ai",
+  "sourceFile": "settings/ai/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:39.419Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings/ai",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings/ai",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "AI assistant·Βοηθός AI"
+    ],
+    "wordCount": 445,
+    "textExcerpt": "AI assistant·Βοηθός AI\n\nChoose the model and default agent that answer your questions across the platform.\nΕπιλέξτε το μοντέλο και τον προεπιλεγμένο πράκτορα που απαντούν στις ερωτήσεις σας.\n\nBack to Settings\nWhat it can",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:00:45.651Z"
+}

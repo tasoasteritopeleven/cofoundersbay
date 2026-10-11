@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/tenant/settings",
+  "sourceFile": "tenant/settings/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:42:34.661Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/tenant/settings",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/settings",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Tenant Settings"
+    ],
+    "wordCount": 34,
+    "textExcerpt": "Tenant Settings\n\nGeneral workspace settings: membership policy, notifications, and email preferences.\n\nSave Changes\nGeneral\nAccess Control\nNotifications\nIntegrations\nBilling\nOrganization Settings\n\nBasic configuration for",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:42:40.608Z"
+}

@@ -1,0 +1,51 @@
+{
+  "requestedRoute": "/groups",
+  "sourceFile": "groups/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:25:35.906Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/groups",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".bg-primary\\/20"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #3a45df, background color: #cccfef, font size: 9.9pt (13.2613px), font weight: bold). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Communities"
+    ],
+    "wordCount": 21,
+    "textExcerpt": "Communities\n\nIndustry, stage, and interest-based groups. Join to participate; create your own anytime.\n\nHow communities work\nCreate Community\nDiscover\nMy Communities",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:25:47.610Z"
+}

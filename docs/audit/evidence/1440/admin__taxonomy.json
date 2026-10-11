@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/taxonomy",
+  "sourceFile": "admin/taxonomy/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:46:51.904Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/taxonomy",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/taxonomy",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Taxonomy management·Διαχείριση ταξινομίας"
+    ],
+    "wordCount": 172,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nTaxonomy management·Διαχείριση ταξινομίας\n\nSkills, industries, and stage vocabularies that matching and s",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:46:58.609Z"
+}

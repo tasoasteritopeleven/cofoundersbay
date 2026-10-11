@@ -1,0 +1,35 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!--
+    CoFounderBay — surfer on the board at sunset, cofounder under the board.
+    Same scene as public/icons/logo-surf.png and components/brand/Logo.tsx.
+  -->
+  <defs>
+    <linearGradient id="sky" x1="24" y1="0" x2="24" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6D28D9"/>
+      <stop offset="38%" stop-color="#EA580C"/>
+      <stop offset="62%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="56%" cy="40%" r="42%">
+      <stop offset="0%" stop-color="#FEF9C3"/>
+      <stop offset="40%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </radialGradient>
+  </defs>
+  <rect width="48" height="48" rx="13" fill="url(#sky)"/>
+  <circle cx="27" cy="19" r="13" fill="url(#sun)"/>
+  <path fill="#1E1B4B" d="M0 29.5C8 26.5 16 29 24 28c8-1 16-3.5 24-1v21H0Z"/>
+  <path fill="#312E81" opacity=".55" d="M0 33c9-2 18 1 28-1 8-1.5 14 1 20 0v16H0Z"/>
+  <g transform="rotate(-14 22 27.4)">
+    <ellipse cx="22" cy="27.4" rx="16" ry="2.55" fill="#FFF7ED"/>
+  </g>
+  <!-- Surfer -->
+  <circle cx="18.2" cy="18.4" r="2.4" fill="#1E1B4B"/>
+  <path d="M17.1 20.6c.5 2.5 2.4 4.4 5.6 5.8" stroke="#1E1B4B" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M18.5 22.1c-2.7-1.1-4.8-2.5-6.5-4.2" stroke="#1E1B4B" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20.2 24.8 18.6 27.4" stroke="#1E1B4B" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Cofounder under the board -->
+  <circle cx="25.4" cy="35.6" r="2.2" fill="#0F172A"/>
+  <path d="M24 33.9 21.6 28.6M26.9 33.9 29.6 29" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24.4 37.2c.5 2.6 2.3 4.4 1.1 5.8" stroke="#0F172A" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,104 @@
+
+/* root */
+    --status-success-fg: 158 30.4% 34.5%;   /* 5.04 on tint, 5.44 on card */
+    --status-success-bg: 158 11.4% 95.6%;
+    --status-success-border: 158 6% 90.6%;
+    --status-success-mark: 158 62% 44.5%;   /* 2.50 on card, ink 7.12 */
+    --status-warning-fg: 36 27.8% 37.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 36 11.4% 95.6%;
+    --status-warning-border: 36 6% 90.6%;
+    --status-warning-mark: 36 62% 53.5%;   /* 2.51 on card, ink 7.09 */
+    --status-danger-fg:  4 23.5% 44.75%;   /* 5.04 on tint, 5.50 on card */
+    --status-danger-bg:  4 11.4% 95.6%;
+    --status-danger-border: 4 6% 90.6%;
+    --status-danger-mark: 4 62% 70.25%;   /* 2.52 on card, ink 7.08 */
+    --status-info-fg:    212 24.7% 42.5%;   /* 5.01 on tint, 5.46 on card */
+    --status-info-bg:    212 11.4% 95.6%;
+    --status-info-border: 212 6% 90.6%;
+    --status-info-mark:  212 62% 66.25%;   /* 2.52 on card, ink 7.06 */
+    --status-accent-fg:  250 21.6% 48.5%;   /* 5.02 on tint, 5.50 on card */
+    --status-accent-bg:  250 11.4% 95.6%;
+    --status-accent-border: 250 6% 90.6%;
+    --status-accent-mark: 250 62% 75%;   /* 2.52 on card, ink 7.07 */
+    --status-neutral-fg:     232 6% 40%;
+    --status-neutral-bg:     232 6% 95.0%;
+    --status-neutral-border: 232 4.5% 91.0%;
+    --status-neutral-mark:   232 8% 66%;
+
+/* alliance */
+    --status-success-fg: 158 30.4% 34.5%;   /* 5.04 on tint, 5.45 on card */
+    --status-success-bg: 158 11.4% 95.6%;
+    --status-success-border: 158 6% 90.6%;
+    --status-success-mark: 158 62% 44.5%;   /* 2.50 on card, ink 7.12 */
+    --status-warning-fg: 36 27.8% 37.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 36 11.4% 95.6%;
+    --status-warning-border: 36 6% 90.6%;
+    --status-warning-mark: 36 62% 53.5%;   /* 2.51 on card, ink 7.09 */
+    --status-danger-fg:  4 23.5% 44.75%;   /* 5.04 on tint, 5.51 on card */
+    --status-danger-bg:  4 11.4% 95.6%;
+    --status-danger-border: 4 6% 90.6%;
+    --status-danger-mark: 4 62% 70.25%;   /* 2.52 on card, ink 7.08 */
+    --status-info-fg:    232 22.2% 47.25%;   /* 5.04 on tint, 5.52 on card */
+    --status-info-bg:    232 11.4% 95.6%;
+    --status-info-border: 232 6% 90.6%;
+    --status-info-mark:  232 62% 73.75%;   /* 2.52 on card, ink 7.08 */
+    --status-accent-fg:  212 24.7% 42.5%;   /* 5.01 on tint, 5.47 on card */
+    --status-accent-bg:  212 11.4% 95.6%;
+    --status-accent-border: 212 6% 90.6%;
+    --status-accent-mark: 212 62% 66.25%;   /* 2.53 on card, ink 7.06 */
+    --status-neutral-fg:     210 6% 40%;
+    --status-neutral-bg:     210 6% 95.0%;
+    --status-neutral-border: 210 4.5% 91.0%;
+    --status-neutral-mark:   210 8% 66%;
+
+/* minimal */
+    --status-success-fg: 135 32.6% 32.25%;   /* 5.03 on tint, 5.52 on card */
+    --status-success-bg: 135 17% 90.6%;
+    --status-success-border: 135 6% 85.6%;
+    --status-success-mark: 135 62% 45%;   /* 2.31 on card, ink 7.08 */
+    --status-warning-fg: 36 30.2% 34.75%;   /* 5.05 on tint, 5.58 on card */
+    --status-warning-bg: 36 17% 90.6%;
+    --status-warning-border: 36 6% 85.6%;
+    --status-warning-mark: 36 62% 53.5%;   /* 2.31 on card, ink 7.09 */
+    --status-danger-fg:  4 25.3% 41.5%;   /* 5.01 on tint, 5.71 on card */
+    --status-danger-bg:  4 17% 90.6%;
+    --status-danger-border: 4 6% 85.6%;
+    --status-danger-mark: 4 62% 70.25%;   /* 2.31 on card, ink 7.08 */
+    --status-info-fg:    212 26.8% 39.25%;   /* 5.04 on tint, 5.67 on card */
+    --status-info-bg:    212 17% 90.6%;
+    --status-info-border: 212 6% 85.6%;
+    --status-info-mark:  212 62% 66.25%;   /* 2.32 on card, ink 7.06 */
+    --status-accent-fg:  165 33.1% 31.75%;   /* 5.02 on tint, 5.50 on card */
+    --status-accent-bg:  165 17% 90.6%;
+    --status-accent-border: 165 6% 85.6%;
+    --status-accent-mark: 165 62% 44.25%;   /* 2.29 on card, ink 7.12 */
+    --status-neutral-fg:     38 6% 40%;
+    --status-neutral-bg:     38 6% 90.0%;
+    --status-neutral-border: 38 4.5% 86.0%;
+    --status-neutral-mark:   38 8% 66%;
+
+/* apricot */
+    --status-success-fg: 158 30.9% 34%;   /* 5.02 on tint, 5.44 on card */
+    --status-success-bg: 158 9.3% 94.6%;
+    --status-success-border: 158 6% 89.6%;
+    --status-success-mark: 158 62% 44.5%;   /* 2.45 on card, ink 7.12 */
+    --status-warning-fg: 46 30.2% 34.75%;   /* 5.01 on tint, 5.43 on card */
+    --status-warning-bg: 46 9.3% 94.6%;
+    --status-warning-border: 46 6% 89.6%;
+    --status-warning-mark: 46 62% 46.75%;   /* 2.46 on card, ink 7.09 */
+    --status-danger-fg:  350 23.5% 44.75%;   /* 5.04 on tint, 5.53 on card */
+    --status-danger-bg:  350 9.3% 94.6%;
+    --status-danger-border: 350 6% 89.6%;
+    --status-danger-mark: 350 62% 71.25%;   /* 2.46 on card, ink 7.10 */
+    --status-info-fg:    212 25.1% 41.75%;   /* 5.04 on tint, 5.51 on card */
+    --status-info-bg:    212 9.3% 94.6%;
+    --status-info-border: 212 6% 89.6%;
+    --status-info-mark:  212 62% 66.25%;   /* 2.48 on card, ink 7.06 */
+    --status-accent-fg:  23 26.3% 40%;   /* 5.04 on tint, 5.49 on card */
+    --status-accent-bg:  23 9.3% 94.6%;
+    --status-accent-border: 23 6% 89.6%;
+    --status-accent-mark: 23 62% 62.25%;   /* 2.47 on card, ink 7.06 */
+    --status-neutral-fg:     30 6% 40%;
+    --status-neutral-bg:     30 6% 94.0%;
+    --status-neutral-border: 30 4.5% 90.0%;
+    --status-neutral-mark:   30 8% 66%;

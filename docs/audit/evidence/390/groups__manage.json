@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/groups/manage",
+  "sourceFile": "groups/manage/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:25:48.428Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/groups/manage",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/groups/manage",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Manage communities"
+    ],
+    "wordCount": 51,
+    "textExcerpt": "Manage communities\n\nCommunities you own or administer — review members, pending requests, and activity at a glance.\n\nCreate community\n\nGroups Managed\n\n0\n\nTotal Members\n\n0\n\nPending Requests\n\n0\n\nYou don't manage any commun",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:25:56.161Z"
+}

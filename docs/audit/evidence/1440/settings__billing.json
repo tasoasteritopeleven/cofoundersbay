@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings/billing",
+  "sourceFile": "settings/billing/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:45.890Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings/billing",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings/billing",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Plan & billing·Πλάνο & χρεώσεις"
+    ],
+    "wordCount": 106,
+    "textExcerpt": "Plan & billing·Πλάνο & χρεώσεις\n\nYour current plan, what it includes, and where invoices are sent.\nΤο τρέχον πλάνο σας, τι περιλαμβάνει και πού αποστέλλονται τα τιμολόγια.\n\nSettings·Ρυθμίσεις\n\nCURRENT PLAN·Τρέχον πλάνο\n\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:00:50.410Z"
+}

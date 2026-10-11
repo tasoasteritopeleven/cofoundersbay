@@ -1,0 +1,51 @@
+{
+  "requestedRoute": "/events",
+  "sourceFile": "events/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:24:33.355Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/events",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must meet minimum color contrast ratio thresholds",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              ".bg-primary\\/20"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #3a45df, background color: #cccfef, font size: 9.9pt (13.2613px), font weight: bold). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/events",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Events"
+    ],
+    "wordCount": 20,
+    "textExcerpt": "Events\n\nWorkshops, demo days, meetups, and online sessions — RSVP and add to calendar.\n\nCreate Event\nUpcoming\nMy Events\nPast",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:24:41.013Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/members",
+  "sourceFile": "org/members/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:36:31.653Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/members",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/members",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Team Members"
+    ],
+    "wordCount": 69,
+    "textExcerpt": "Team Members\n\nInvite and manage who can run programs, review applications, and access workspace settings.\n\nInvite member\nInvitations are sent on behalf of an organisation; join or create one first.\n\nTotal Members\n\n0\n\nAdm",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:36:37.287Z"
+}

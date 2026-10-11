@@ -1,0 +1,43 @@
+{
+  "requestedRoute": "/api-status",
+  "sourceFile": "api-status/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:47:33.942Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/api-status",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "pageErrors": [],
+  "finalPath": "/api-status",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "API Status Check\n·\nΈλεγχος κατάστασης API"
+    ],
+    "wordCount": 187,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nAPI Status Check\n·\nΈλεγχος κατάστασης API\n\nCheck the status of all API endpoints to diagnose 404 errors·Ελέγξτε όλα τα endpoints του API για διάγνωση σφαλμάτων 404\n\nC",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:36.576Z"
+}

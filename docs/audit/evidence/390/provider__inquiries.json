@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/provider/inquiries",
+  "sourceFile": "provider/inquiries/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:38:36.801Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/provider/inquiries",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/inquiries",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Inquiries"
+    ],
+    "wordCount": 31,
+    "textExcerpt": "Inquiries\n\nManage incoming service inquiries\n\n0\n\nTotal Inquiries\n\n0\n\nNew\n\n0%\n\nResponse Rate\n\n0%\n\nConversion\n\nAll\n0\nNew\n0\nReplied\n0\nConverted\n0\nNo inquiries found\n\nYou have no inquiries yet",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:38:42.431Z"
+}

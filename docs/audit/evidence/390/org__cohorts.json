@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/cohorts",
+  "sourceFile": "org/cohorts/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:36:17.363Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/cohorts",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/cohorts",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Cohorts"
+    ],
+    "wordCount": 155,
+    "textExcerpt": "Cohorts\n\nManage program cohorts and participants\n\nCreate Cohort\nAll Status\n\n4\n\nTotal Cohorts\n\n2\n\nActive\n\n17\n\nCohort memberships\n\n—\n\nTotal Mentors\n\nAutumn 2026 cohort\nactive\n\nTwelve weeks for pre-seed and seed B2B teams: ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:36:23.368Z"
+}

@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/provider/inquiries",
+  "sourceFile": "provider/inquiries/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:58:20.667Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/provider/inquiries",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/inquiries",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Inquiries·Αιτήματα"
+    ],
+    "wordCount": 64,
+    "textExcerpt": "Inquiries·Αιτήματα\n\nManage incoming service inquiries\nΔιαχειριστείτε τα εισερχόμενα αιτήματα για τις υπηρεσίες σας\n\n0\n\nTotal Inquiries\n·\nΣύνολο αιτημάτων\n\n0\n\nNew\n·\nΝέα\n\n0%\n\nResponse Rate\n·\nΠοσοστό απαντήσεων\n\n0%\n\nConvers",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:58:25.518Z"
+}

@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/connections",
+  "sourceFile": "connections/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:48:49.790Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/connections",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/connections",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Connections·Συνδέσεις"
+    ],
+    "wordCount": 47,
+    "textExcerpt": "Connections·Συνδέσεις\n\nManage pending requests and active professional relationships.\nΔιαχείριση εκκρεμών αιτημάτων και ενεργών επαγγελματικών σχέσεων.\n\nConnections\n·\nΣυνδέσεις\nFind people·Εύρεση ατόμων\nIntro Requests\n·\n",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:48:54.349Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/earnings",
+  "sourceFile": "mentor/earnings/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:53:48.978Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/earnings",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/earnings",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Earnings·Έσοδα"
+    ],
+    "wordCount": 112,
+    "textExcerpt": "Earnings·Έσοδα\n\nPayouts, pending balance and session history.\nΠληρωμές, εκκρεμές υπόλοιπο και ιστορικό συνεδριών.\n\nSample data\n·\nΔείγμα δεδομένων\n\nThis month · 4 sessions · $270.00 earned\n·\nΑυτός ο μήνας · 4 συνεδρίες · ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:53:54.700Z"
+}

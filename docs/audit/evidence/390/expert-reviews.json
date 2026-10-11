@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/expert-reviews",
+  "sourceFile": "expert-reviews/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:24:55.939Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/expert-reviews",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/expert-reviews",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Expert Reviews"
+    ],
+    "wordCount": 46,
+    "textExcerpt": "Expert Reviews\n\nStructured feedback on your pitch, financials, and strategy from domain experts.\n\n0\n\nTotal reviews\n\n0\n\nIn progress\n\n0\n\nCompleted\n\n—\n\nAvg score\n\nMy Reviews\nFind Experts\nInsights\nRequest review\n\nNo reviews ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:25:03.695Z"
+}

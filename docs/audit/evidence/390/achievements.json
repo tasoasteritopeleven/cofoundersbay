@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/achievements",
+  "sourceFile": "achievements/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:04:28.908Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/achievements",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/achievements",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Achievements & Badges"
+    ],
+    "wordCount": 179,
+    "textExcerpt": "Achievements & Badges\n\nTrack your progress, unlock badges, and climb the leaderboard\n\nEarly Adopter\n\nJoined CoFounderBay in the first month\n\n500 pts\nspecial\ngold\n5% \nhave this\nUnlocked 15/01/2024\nNetworker\n\nConnect with ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:04:34.952Z"
+}

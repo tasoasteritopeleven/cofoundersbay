@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/tenants",
+  "sourceFile": "admin/tenants/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:46:58.855Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/tenants",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/tenants",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Tenant Management·Διαχείριση tenants"
+    ],
+    "wordCount": 70,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nTenant Management·Διαχείριση tenants\n\nManage organizations and their white-label branding\nΔιαχείριση οργα",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:05.035Z"
+}

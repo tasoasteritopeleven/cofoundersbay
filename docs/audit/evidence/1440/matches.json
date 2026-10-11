@@ -1,0 +1,40 @@
+{
+  "requestedRoute": "/matches",
+  "sourceFile": "matches/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:08:48.566Z",
+  "status": "loading",
+  "actualFinalUrl": "http://localhost/matches",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "not_run"
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/matches",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Matches·Αντιστοιχίσεις"
+    ],
+    "wordCount": 43,
+    "textExcerpt": "Matches·Αντιστοιχίσεις\n\nAI-ranked co-founder and team matches based on your profile compatibility\nΑντιστοιχίσεις συνιδρυτών και ομάδων με βάση τη συμβατότητα του προφίλ σας, κατάταξη AI\n\nHow matching works\n·\nΠώς γίνεται ",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": true,
+  "finishedAt": "2026-09-26T23:08:54.644Z"
+}

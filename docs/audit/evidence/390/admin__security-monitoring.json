@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/security-monitoring",
+  "sourceFile": "admin/security-monitoring/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:35.937Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/security-monitoring",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/security-monitoring",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Security monitoring"
+    ],
+    "wordCount": 82,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nSecurity monitoring\n\nAuthentication anomalies, API abuse signals, and SSO events in real time.\n\nSecurity monitoring\nSecurity events\n\nFlags\n\n3\n\nPending\n\n2\n\nActioned\n\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:40.350Z"
+}

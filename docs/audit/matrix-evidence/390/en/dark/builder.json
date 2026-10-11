@@ -1,0 +1,49 @@
+{
+  "requestedRoute": "/builder",
+  "sourceFile": "builder/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:21:54.629Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/builder",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [
+    "WebSocket connection to 'ws://127.0.0.1:3001/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "pageErrors": [],
+  "finalPath": "/builder",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Startup Builder"
+    ],
+    "wordCount": 20,
+    "textExcerpt": "Startup Builder\n\nStructure idea, team, market, traction, and pitch — all in one workspace.\n\nUsing the Startup Builder\n\nLoading workspace…",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:22:00.124Z"
+}

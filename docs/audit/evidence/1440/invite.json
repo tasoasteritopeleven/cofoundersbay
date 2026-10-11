@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/invite",
+  "sourceFile": "invite/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:31.000Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/invite",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/invite",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Invite People·Προσκλήσεις"
+    ],
+    "wordCount": 83,
+    "textExcerpt": "Invite People·Προσκλήσεις\n\nGrow your network by inviting co-founders, mentors, and investors.\nΜεγαλώστε το δίκτυό σας προσκαλώντας συνιδρυτές, μέντορες και επενδυτές.\n\nLoading\nLoading\nLoading\nSend an Invitation\n·\nΣτείλτε",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:35.871Z"
+}

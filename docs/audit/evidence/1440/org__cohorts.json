@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/org/cohorts",
+  "sourceFile": "org/cohorts/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:56:02.236Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/cohorts",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/cohorts",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Cohorts"
+    ],
+    "wordCount": 212,
+    "textExcerpt": "Cohorts\n\nManage program cohorts and participants\nΔιαχειριστείτε τις κοόρτες και τους συμμετέχοντες των προγραμμάτων\n\nCreate Cohort\n·\nΝέα κοόρτη\nAll Status\n·\nΌλες οι καταστάσεις\n\n4\n\nTotal Cohorts\n·\nΣύνολο κοορτών\n\n2\n\nActi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:56:06.949Z"
+}

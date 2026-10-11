@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/investor/portfolio",
+  "sourceFile": "investor/portfolio/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:05.104Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/portfolio",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/portfolio",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Portfolio·Χαρτοφυλάκιο"
+    ],
+    "wordCount": 181,
+    "textExcerpt": "Portfolio·Χαρτοφυλάκιο\n\nTrack your investments and returns\nΠαρακολουθήστε τις επενδύσεις και τις αποδόσεις σας\n\nExport Report\n·\nΕξαγωγή αναφοράς\n\n$275K\n\nTotal Invested\n\n$535K\n\nCurrent Value\n\n+95%\n\nTotal Return\n\n4\n\nCompan",
+    "loadingElements": [
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:14.208Z"
+}

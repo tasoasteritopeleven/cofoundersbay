@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/terms",
+  "sourceFile": "terms/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:42:52.405Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/terms",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/terms",
+  "measurement": {
+    "title": "Terms of Service | CoFounderBay",
+    "headings": [
+      "Terms of Service"
+    ],
+    "wordCount": 706,
+    "textExcerpt": "1. Acceptance of Terms\n\nBy accessing or using CoFounderBay (\"the Platform\"), you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree to these Terms, you may not access or use the Platform.\n\nThese T",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:42:55.856Z"
+}

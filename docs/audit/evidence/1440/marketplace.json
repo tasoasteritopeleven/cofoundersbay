@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/marketplace",
+  "sourceFile": "marketplace/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:48.535Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/marketplace",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/marketplace",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Services marketplace·Marketplace υπηρεσιών"
+    ],
+    "wordCount": 128,
+    "textExcerpt": "Services marketplace·Marketplace υπηρεσιών\n\nBrowse legal, design, growth, and ops providers.\nΠεριήγηση σε παρόχους νομικών, σχεδιασμού, growth και operations.\n\nHow the marketplace works\n·\nΠώς δουλεύει η αγορά υπηρεσιών\nS",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:55.097Z"
+}

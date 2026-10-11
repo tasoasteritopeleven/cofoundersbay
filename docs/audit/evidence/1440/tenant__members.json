@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/tenant/members",
+  "sourceFile": "tenant/members/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:02:15.848Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/tenant/members",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/tenant/members",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Members·Μέλη"
+    ],
+    "wordCount": 114,
+    "textExcerpt": "Members·Μέλη\n\nManage and track your organization's member engagement\nΔιαχειριστείτε και παρακολουθήστε τη συμμετοχή των μελών του οργανισμού σας\n\nInvite Member\n·\nΠρόσκληση μέλους\n\n0\n\nTotal Members\n·\nΣύνολο μελών\n\n—\n\nOnli",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:02:22.450Z"
+}

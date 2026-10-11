@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/provider/services",
+  "sourceFile": "provider/services/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:38:56.338Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/provider/services",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/provider/services",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "My Services"
+    ],
+    "wordCount": 28,
+    "textExcerpt": "My Services\n\nManage your service offerings\n\nAdd Service\n\nTotal Services\n\n0\n\nActive\n\n0\n\nTotal Bookings\n\n0\n\nNo services found\n\nTry adjusting your search or add a new service",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:39:02.490Z"
+}

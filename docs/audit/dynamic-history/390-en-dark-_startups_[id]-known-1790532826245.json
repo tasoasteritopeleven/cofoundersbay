@@ -1,0 +1,79 @@
+{
+  "template": "/startups/[id]",
+  "kind": "known",
+  "source": "startups/[id]/page.tsx",
+  "evidence": "lib/preview-api.ts PREVIEW_DEALS id deal-harbor; /api/investor/deals/{id}",
+  "route": "/startups/deal-harbor",
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "at": "2026-09-27T17:28:16.412Z",
+  "status": "rendered_sample",
+  "requestedRole": "existing_founder (synthetic preview)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "pageErrors": [],
+  "blockedMutations": [],
+  "httpStatus": 200,
+  "finalPath": "/startups/deal-harbor",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Harbor"
+    ],
+    "textExcerpt": "Harbor\n\nThe operating system for early-stage founders.\n\nMove to Invested\nStarred\nMessage founder\nPass\nStage\nDiscovered\nReviewing\nMeeting\nDue diligence\nNegotiating\nInvested\nPassed\nAdd a note\nSave note\nHistory\n\nMoved to negotiating\n\n3d ago\n\nSent an updated deck\n\n1w ago\n\nSaaS\n\nStage: seed\n\nAthens, Greece\n\nTeam: 4\n\nRaising: €750,000\n\nTerm sheet out. Waiting on the traction slide.\n\nFounder\n\nElena Papadopoulos\n\nFounder & CEO at Harbor",
+    "wordCount": 65,
+    "visibleAlerts": [],
+    "lang": "en",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "overflowPx": 0,
+    "unnamedControls": []
+  },
+  "keyboard": [
+    {
+      "tag": "a",
+      "role": null,
+      "name": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "name": "Open navigation",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "name": "Search",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "name": "More tools",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "name": "Language: English",
+      "visible": true,
+      "outline": "solid"
+    },
+    {
+      "tag": "button",
+      "role": null,
+      "name": "Theme",
+      "visible": true,
+      "outline": "solid"
+    }
+  ]
+}

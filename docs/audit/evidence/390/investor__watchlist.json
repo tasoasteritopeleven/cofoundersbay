@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/investor/watchlist",
+  "sourceFile": "investor/watchlist/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:28:13.972Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/investor/watchlist",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/watchlist",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Watchlist"
+    ],
+    "wordCount": 169,
+    "textExcerpt": "Watchlist\n\nFounders and startups you are following before committing.\n\n3 alerts active\nScout More\n\nWatching\n\n4\n\nAlerts On\n\n3\n\nNew Activity\n\n5\n\nAvg Match\n\n86%\n\nMy Watchlist (4)\nRecent Activity (5)\nAlerts on only\nN\nNeuralF",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:28:44.365Z"
+}

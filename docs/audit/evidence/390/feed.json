@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/feed",
+  "sourceFile": "feed/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:25:04.588Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/feed",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/feed",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Feed"
+    ],
+    "wordCount": 51,
+    "textExcerpt": "Feed\n\nUpdates from your network, communities, and people you follow. Sample posts appear only when the live feed is empty.\n\nWhat the feed is\nAll\nFollowing\nTrending\nSample data\nME\nLoading\nLoading\nLoading\nLoading\nLoading\nL",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "textarea",
+        "html": "<textarea class=\"flex w-full rounded-xl border-input text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/70 hover:border-border focus-visible:o"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:25:11.169Z"
+}

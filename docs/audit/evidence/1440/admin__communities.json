@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/communities",
+  "sourceFile": "admin/communities/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:44:50.339Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/communities",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/communities",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Communities·Κοινότητες"
+    ],
+    "wordCount": 298,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nCommunities·Κοινότητες\n\nEvery community on the platform, with membership and activity levels.\nΌλες οι κοι",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:44:55.243Z"
+}

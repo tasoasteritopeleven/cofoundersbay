@@ -1,0 +1,57 @@
+{
+  "requestedRoute": "/events/__audit_missing__",
+  "sourceFile": "events/[id]/page.tsx",
+  "fixtureRevision": 2,
+  "routeType": "dynamic",
+  "fixture": "missing_fixture",
+  "width": 390,
+  "locale": "el",
+  "theme": "light",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:39:14.487Z",
+  "status": "missing_fixture_rendered",
+  "actualFinalUrl": "http://localhost/events/__audit_missing__",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/events/__audit_missing__",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Η εκδήλωση δεν βρέθηκε"
+    ],
+    "wordCount": 31,
+    "textExcerpt": "Η εκδήλωση δεν βρέθηκε\n\nΕργαστήρια, demo days, meetups και διαδικτυακές συνεδρίες — RSVP και προσθήκη στο ημερολόγιο.\n\nΗ εκδήλωση δεν υπάρχει, αφαιρέθηκε ή δεν είναι ορατή σε εσάς.\n\nΌλες οι εκδηλώσεις",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "el",
+    "activeTheme": "light",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder light",
+    "dataTheme": null,
+    "activeLocale": "el",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 142,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "sameContentAsKnownFixture": false,
+  "finishedAt": "2026-09-27T16:39:22.066Z"
+}

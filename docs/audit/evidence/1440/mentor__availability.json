@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/mentor/availability",
+  "sourceFile": "mentor/availability/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:53:37.271Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/mentor/availability",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/availability",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Availability·Διαθεσιμότητα"
+    ],
+    "wordCount": 171,
+    "textExcerpt": "Availability·Διαθεσιμότητα\n\nThe hours you can be booked for sessions.\nΟι ώρες που μπορείτε να κλείσετε συνεδρίες.\n\nSave Changes\n·\nΑποθήκευση\nAccepting Requests\n·\nΔέχεται αιτήματα\n\nKept on this page only for now - it does",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:53:42.236Z"
+}

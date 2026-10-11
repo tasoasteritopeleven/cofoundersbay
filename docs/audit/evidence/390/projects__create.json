@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/projects/create",
+  "sourceFile": "projects/create/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:37:57.970Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/projects/create",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/projects/create",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Create project"
+    ],
+    "wordCount": 54,
+    "textExcerpt": "Create project\n\nName the idea, pick a stage, and list the roles you still need — then publish.\n\nHow projects work\nAsk AI to draft this project\n\nBasics\n\nBasic information\n\nName the idea and say what done looks like.\n\nProj",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:38:02.705Z"
+}

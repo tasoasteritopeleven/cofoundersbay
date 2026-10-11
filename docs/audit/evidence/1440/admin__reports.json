@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/reports",
+  "sourceFile": "admin/reports/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:46:05.429Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/reports",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/reports",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Reports & moderation·Αναφορές & εποπτεία"
+    ],
+    "wordCount": 92,
+    "textExcerpt": "Overview\n·\nΕπισκόπηση\nConsole\n·\nΚονσόλα\nOrganisations\n·\nΟργανισμοί\nSSO\nDomains\n·\nΤομείς\nAutomations\n·\nΑυτοματισμοί\nReports & moderation·Αναφορές & εποπτεία\n\nUser-submitted reports awaiting a moderation decision.\nΑναφορές",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:46:10.203Z"
+}

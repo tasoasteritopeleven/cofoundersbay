@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/search",
+  "sourceFile": "search/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:25.184Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/search",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/search",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Search·Αναζήτηση"
+    ],
+    "wordCount": 142,
+    "textExcerpt": "Search·Αναζήτηση\n\nFind people, jobs, events, programs, and posts.\nΕύρεση ατόμων, θέσεων εργασίας, εκδηλώσεων, προγραμμάτων και δημοσιεύσεων.\n\n/\nAll\n·\nΌλα\nPeople\n·\nΆτομα\nJobs\n·\nΘέσεις εργασίας\nEvents\n·\nΕκδηλώσεις\nGroups\n·",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input type=\"text\" class=\"flex min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:00:33.146Z"
+}

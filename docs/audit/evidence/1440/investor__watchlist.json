@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/investor/watchlist",
+  "sourceFile": "investor/watchlist/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:52:21.097Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/watchlist",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/watchlist",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Watchlist·Λίστα παρακολούθησης"
+    ],
+    "wordCount": 212,
+    "textExcerpt": "Watchlist·Λίστα παρακολούθησης\n\nFounders and startups you are following before committing.\nΙδρυτές και startups που παρακολουθείτε πριν δεσμευτείτε.\n\n3 alerts active\nScout More\n·\nΑναζήτηση περισσότερων\n\nWatching\n\n4\n\nAler",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:52:25.262Z"
+}

@@ -1,0 +1,39 @@
+{
+  "requestedRoute": "/org/analytics",
+  "sourceFile": "org/analytics/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:36:01.846Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/org/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Org Analytics"
+    ],
+    "wordCount": 144,
+    "textExcerpt": "Org Analytics\n\nCohort health, program impact, application funnel, and member growth in one dashboard.\n\nLast 30 days\nExport\n\nStartups in programs\n\n0\n\n0 graduated\n\nApplications\n\n0\n\nlast 30 days\n\nMentor sessions held\n\n—\n\n0 ",
+    "loadingElements": [
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:36:10.793Z"
+}

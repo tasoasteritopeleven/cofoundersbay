@@ -1,0 +1,58 @@
+{
+  "requestedRoute": "/themes/alliance",
+  "sourceFile": "themes/alliance/page.tsx",
+  "fixtureRevision": null,
+  "routeType": "static",
+  "fixture": null,
+  "width": 1440,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T18:11:45.999Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/themes/alliance",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pageErrors": [],
+  "finalPath": "/themes/alliance",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Connect. Collaborate. Succeed."
+    ],
+    "wordCount": 212,
+    "textExcerpt": "Skip to main content · Μετάβαση στο κύριο περιεχόμενο\nAlliance theme preview · sample content\nConnect. Collaborate. Succeed.\n\nJoin the premier network for startup founders, investors, and innovators\n\nGet Started\nLearn Mo",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable dark role-founder",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 27,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "preferenceApplied": {
+    "locale": true,
+    "theme": true,
+    "reducedMotion": true
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T18:11:53.374Z"
+}

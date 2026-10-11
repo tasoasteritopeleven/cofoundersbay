@@ -1,0 +1,42 @@
+{
+  "requestedRoute": "/recommendations",
+  "sourceFile": "recommendations/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:59:24.322Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/recommendations",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/recommendations",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "For you·Για εσάς"
+    ],
+    "wordCount": 95,
+    "textExcerpt": "For you·Για εσάς\n\nPicks ranked from your profile, skills, and recent activity, recalculated at least hourly.\nΕπιλογές ταξινομημένες βάσει του προφίλ, των δεξιοτήτων και της πρόσφατης δραστηριότητάς σας, με επανυπολογισμό",
+    "loadingElements": [
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading",
+      "Loading"
+    ],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:59:29.294Z"
+}

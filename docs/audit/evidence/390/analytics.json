@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/analytics",
+  "sourceFile": "analytics/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:04:44.003Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Analytics"
+    ],
+    "wordCount": 174,
+    "textExcerpt": "Analytics\n\nTrack your profile performance and network growth.\n\nHow to read these metrics\nOverview\nEngagement\nGrowth\n\nDemo showcase — sample metrics, not account activity.\n\nDown this window\n\nMessages Sent 8%\n\nOpen message",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:04:49.063Z"
+}

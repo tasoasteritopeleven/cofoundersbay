@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/ai",
+  "sourceFile": "ai/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:47:14.923Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/ai",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/ai",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "AI Assistant\n·\nΒοηθός AI"
+    ],
+    "wordCount": 228,
+    "textExcerpt": "AI Assistant\n·\nΒοηθός AI\n\nSame tools as the popup — writes wait for your confirm\n·\nΊδια εργαλεία με το αναδυόμενο — οι εγγραφές περιμένουν την επιβεβαίωσή σας\n\nThreads\n·\nΝήματα\n\nNew\n·\nΝέα\n\nNew conversations appear here a",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex w-full border-input py-2 sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/70 input-clean hover:border-border disabled:cursor-not-al"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:47:19.187Z"
+}

@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/admin/user-management",
+  "sourceFile": "admin/user-management/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:22:01.798Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/admin/user-management",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/user-management",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "User Management"
+    ],
+    "wordCount": 97,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nUser Management\n\nSearch, filter, verify, and moderate platform accounts. Bulk actions apply to selected rows.\n\nUser management\nHow this page works\n0 selected · 13 ma",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:22:07.347Z"
+}

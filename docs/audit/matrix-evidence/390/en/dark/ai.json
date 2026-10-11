@@ -1,0 +1,52 @@
+{
+  "requestedRoute": "/ai",
+  "sourceFile": "ai/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:21:23.447Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/ai",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/ai",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "AI Assistant"
+    ],
+    "wordCount": 142,
+    "textExcerpt": "AI Assistant\n\nSame tools as the popup — writes wait for your confirm\n\nThreads\n\nNew\n\nNew conversations appear here after you send a message.\n\nWhat I can do\nAI preferences\n\nCoFounderBay Assistant\n\nPlatform copilot · tools ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex w-full border-input py-2 sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/70 input-clean hover:border-border disabled:cursor-not-al"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:21:27.479Z"
+}

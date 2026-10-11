@@ -1,0 +1,41 @@
+{
+  "requestedRoute": "/org/applications",
+  "sourceFile": "org/applications/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:55:54.926Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/org/applications",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/org/applications",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Applications·Αιτήσεις"
+    ],
+    "wordCount": 106,
+    "textExcerpt": "Applications·Αιτήσεις\n\nReview and score startup applications across all your open programs.\nΑξιολόγηση και βαθμολόγηση αιτήσεων startups σε όλα τα ανοιχτά προγράμματα.\n\nTotal\n·\nΣύνολο\n\n0\n\nPending\n·\nΣε αναμονή\n\n0\n\nAccepte",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:56:01.988Z"
+}

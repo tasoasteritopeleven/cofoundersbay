@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/settings/data-export",
+  "sourceFile": "settings/data-export/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T23:00:50.647Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/settings/data-export",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/settings/data-export",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Data export·Εξαγωγή δεδομένων"
+    ],
+    "wordCount": 289,
+    "textExcerpt": "Data export·Εξαγωγή δεδομένων\n\nDownload a copy of your data\nΚατεβάστε ένα αντίγραφο των δεδομένων σας\n\nBack to Settings\n·\nΕπιστροφή στις ρυθμίσεις\n\nYour Data Rights\n·\nΤα δικαιώματά σας στα δεδομένα\n\nUnder GDPR you can re",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T23:00:55.812Z"
+}

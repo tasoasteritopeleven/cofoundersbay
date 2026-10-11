@@ -1,0 +1,38 @@
+{
+  "requestedRoute": "/builder",
+  "sourceFile": "builder/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:22:54.220Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/builder",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 2
+  },
+  "consoleErrors": [
+    "WebSocket connection to 'ws://127.0.0.1:3001/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "pageErrors": [],
+  "finalPath": "/builder",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Startup Builder"
+    ],
+    "wordCount": 83,
+    "textExcerpt": "Startup Builder\n\nStructure idea, team, market, traction, and pitch — all in one workspace.\n\nUsing the Startup Builder\n\nTransform your idea into a validated startup plan with AI assistance.\n\nAsk AI\nOverview\nIdea Core\nBusi",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:23:00.465Z"
+}

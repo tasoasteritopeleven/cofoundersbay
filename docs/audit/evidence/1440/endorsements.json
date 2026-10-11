@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/endorsements",
+  "sourceFile": "endorsements/page.tsx",
+  "width": 1440,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:50:07.709Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/endorsements",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/endorsements",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Endorsements·Συστάσεις"
+    ],
+    "wordCount": 244,
+    "textExcerpt": "Endorsements·Συστάσεις\n\nVouches you have given and received, and who is waiting on one.\nΣυστάσεις που δώσατε και λάβατε, και ποιος περιμένει μία.\n\nSample data\n·\nΔείγμα δεδομένων\nReceived\n·\nΛηφθείσες\n2\nGiven\n·\nΔοσμένες\n2\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:50:12.330Z"
+}

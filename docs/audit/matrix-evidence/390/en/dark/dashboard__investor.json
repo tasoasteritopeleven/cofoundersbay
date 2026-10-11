@@ -1,0 +1,47 @@
+{
+  "requestedRoute": "/dashboard/investor",
+  "sourceFile": "dashboard/investor/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:22:43.630Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/dashboard/investor",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/dashboard/investor",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investor dashboard"
+    ],
+    "wordCount": 219,
+    "textExcerpt": "Investor dashboard\n\nPipeline health, deal flow, and portfolio performance — in one view.\n\nInvestor\n\nGood afternoon, Alex Demo. Deal flow, the deals in motion and your portfolio, in one view.\n\nDeal flow\n\n7\n\nDeals on your ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:22:47.655Z"
+}

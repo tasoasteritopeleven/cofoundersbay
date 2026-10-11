@@ -1,0 +1,56 @@
+{
+  "requestedRoute": "/admin/taxonomy",
+  "sourceFile": "admin/taxonomy/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:21:49.415Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/admin/taxonomy",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [
+      {
+        "id": "select-name",
+        "impact": "critical",
+        "description": "Select element must have an accessible name",
+        "count": 1,
+        "nodes": [
+          {
+            "target": [
+              "select"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not "
+          }
+        ]
+      }
+    ],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/admin/taxonomy",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Taxonomy management"
+    ],
+    "wordCount": 99,
+    "textExcerpt": "Overview\nConsole\nOrganisations\nSSO\nDomains\nAutomations\nTaxonomy management\n\nSkills, industries, and stage vocabularies that matching and search read from.\n\nAdd Skill\n\nTotal Skills\n\n12\n\nCategories\n\n7\n\nTechnical Skills\n\n3\n",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foreground/7"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:21:53.556Z"
+}

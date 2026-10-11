@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/investor/analytics",
+  "sourceFile": "investor/analytics/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:26:32.856Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/investor/analytics",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/investor/analytics",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Investor analytics"
+    ],
+    "wordCount": 109,
+    "textExcerpt": "Investor analytics\n\nDeal flow trends, sector exposure and response rates.\n\n3 months\n6 months\n1 year\n\nDeals reviewed\n\n—\n\nInvested\n\n—\n\nConversion rate\n\n—\n\nInvested ÷ reviewed\n\nAvg time to close\n\n—\n\nNo investment closed yet",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:26:53.378Z"
+}

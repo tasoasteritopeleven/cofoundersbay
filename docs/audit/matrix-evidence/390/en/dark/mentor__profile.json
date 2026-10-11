@@ -1,0 +1,59 @@
+{
+  "requestedRoute": "/mentor/profile",
+  "sourceFile": "mentor/profile/page.tsx",
+  "routeType": "static",
+  "fixture": null,
+  "width": 390,
+  "locale": "en",
+  "theme": "dark",
+  "motion": "no-preference",
+  "viewportType": "baseline",
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-27T16:26:27.635Z",
+  "status": "issue",
+  "actualFinalUrl": "http://localhost/mentor/profile",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 1
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/mentor/profile",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "Mentor profile"
+    ],
+    "wordCount": 60,
+    "textExcerpt": "Mentor profile\n\nYour expertise, rates and the founders you want to reach.\n\nSave Profile\nA\nAlex Demo\nMentor\n\nAdd your headline below...\n\n4.8 (4 reviews)\n30 min sessions\n5h/week\nFree\nBasics\nExpertise\nPricing & Formats\nAbou",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "htmlLang": "en",
+    "activeTheme": "dark",
+    "themeClass": "scroll-smooth inter_a2b4a97d-module__yIjsia__variable commissioner_e36c47b0-module__f2uf1G__variable jetbrains_mono_ae75af70-module__nN5KOq__variable manrope_48ac7470-module__pLOQUq__variable role-founder dark",
+    "dataTheme": null,
+    "activeLocale": "en",
+    "languageDisplay": "primary-only",
+    "reducedMotionRequested": false,
+    "greekCharacters": 0,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [
+      {
+        "tag": "input",
+        "html": "<input class=\"flex h-11 min-h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeholder:text-muted-foregro"
+      },
+      {
+        "tag": "textarea",
+        "html": "<textarea class=\"flex min-h-[calc(96px*var(--chrome-y))] w-full rounded-xl border border-input bg-background px-3 py-2 text-base sm:text-sm text-foreground transition-colors placeh"
+      }
+    ],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-27T16:26:35.752Z"
+}

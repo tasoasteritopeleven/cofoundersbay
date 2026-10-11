@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/privacy",
+  "sourceFile": "privacy/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:37:31.986Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/privacy",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/privacy",
+  "measurement": {
+    "title": "Privacy Policy | CoFounderBay",
+    "headings": [
+      "Privacy Policy"
+    ],
+    "wordCount": 866,
+    "textExcerpt": "1. Introduction\n\nCoFounderBay (\"we,\" \"our,\" or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.\n\nPlease ",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:37:36.503Z"
+}

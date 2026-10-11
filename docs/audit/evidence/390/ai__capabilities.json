@@ -1,0 +1,36 @@
+{
+  "requestedRoute": "/ai/capabilities",
+  "sourceFile": "ai/capabilities/page.tsx",
+  "width": 390,
+  "requestedRole": "existing_founder",
+  "mode": "synthetic preview demo (read-only navigation; no form submission)",
+  "startedAt": "2026-09-26T22:22:17.421Z",
+  "status": "pass",
+  "actualFinalUrl": "http://localhost/ai/capabilities",
+  "httpStatus": 200,
+  "renderedRole": "existing_founder (preview-demo fixed role, not authorization proof)",
+  "axe": {
+    "status": "completed",
+    "violations": [],
+    "incompleteCount": 0
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "finalPath": "/ai/capabilities",
+  "measurement": {
+    "title": "CoFounderBay",
+    "headings": [
+      "What the assistant can do"
+    ],
+    "wordCount": 2927,
+    "textExcerpt": "What the assistant can do\n\nEvery read and write the copilot can perform, generated from the shared capability contract.\n\nBack to the assistant\n\nEvery capability below is declared once, offered to the model, and confirmed",
+    "loadingElements": [],
+    "bodyBusy": null,
+    "horizontalOverflowPx": 0,
+    "unnamedVisibleControls": [],
+    "renderedRoleCookie": "existing_founder",
+    "roleSignals": []
+  },
+  "loadingState": false,
+  "finishedAt": "2026-09-26T22:22:22.978Z"
+}
