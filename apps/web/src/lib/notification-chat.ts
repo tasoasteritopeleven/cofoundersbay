@@ -33,11 +33,21 @@ export function waitsOnReader(notification: { type: string }): boolean {
   return WAITING_TYPES.has(type) || WAITING_WORDS.some((word) => type.includes(word));
 }
 
-export function notificationNextAction(notification: { type: string; link: string | null }) {
+const LEGACY_INTRO_OUTCOMES = new Set([
+  'Your introduction was forwarded', 'An introduction was not forwarded',
+  'Your introduction was accepted', 'Not now, for an introduction',
+]);
+
+export function notificationNextAction(notification: { type: string; link: string | null; title?: string; meta?: unknown }) {
   if (!waitsOnReader(notification)) return null;
   const href = safeInternalPath(notification.link);
   if (!href) return null;
   const type = notification.type.toLowerCase();
+  if (type === 'intro_request') {
+    const { meta, title } = notification;
+    const requiresResponse = meta && typeof meta === 'object' && 'requiresResponse' in meta ? meta.requiresResponse : undefined;
+    if (requiresResponse === false || (requiresResponse !== true && title && LEGACY_INTRO_OUTCOMES.has(title))) return null;
+  }
   if (type === 'message' || type === 'direct' || type === 'messages') {
     return { href, en: 'Open conversation', el: 'Άνοιγμα συνομιλίας' };
   }
