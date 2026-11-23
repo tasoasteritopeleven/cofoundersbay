@@ -5,7 +5,7 @@ import { RailStats } from '@/components/layout/RailParts';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { groupAgenda } from './calendar-agenda';
+import { groupAgenda, useAgendaClock } from './calendar-agenda';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -507,6 +507,7 @@ export default function CalendarPage() {
   // sample dates all disagreed with the browser and React #418 fired on every
   // visit. Nothing dated renders until the client has its own clock.
   const hydrated = useHydrated();
+  const agendaNow = useAgendaClock();
   const [currentMonth, setCurrentMonth] = useState(now.getUTCMonth());
   const [currentYear, setCurrentYear] = useState(now.getUTCFullYear());
   const [selectedDate, setSelectedDate] = useState(now);
@@ -577,12 +578,12 @@ export default function CalendarPage() {
   }, [filteredEvents, selectedDate]);
 
   const upcomingEvents = useMemo(() => {
-    const n = new Date();
-    const todayStart = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()));
+    if (!agendaNow) return [];
+    const todayStart = new Date(Date.UTC(agendaNow.getUTCFullYear(), agendaNow.getUTCMonth(), agendaNow.getUTCDate()));
     // A follow-up stays on the list once its day has passed: that is when it matters most.
     return filteredEvents.filter((e) => new Date(e.date) >= todayStart || e.id.startsWith('followup-')).slice(0, 8);
-  }, [filteredEvents]);
-  const agenda = groupAgenda(upcomingEvents, now);
+  }, [filteredEvents, agendaNow]);
+  const agenda = agendaNow ? groupAgenda(upcomingEvents, agendaNow) : { overdue: [], today: [], later: [] };
   const agendaGroups = [
     { id: 'overdue', en: 'Overdue follow-ups', el: 'Εκκρεμείς επανεπικοινωνίες', events: agenda.overdue },
     { id: 'today', en: 'Today', el: 'Σήμερα', events: agenda.today },
@@ -625,7 +626,7 @@ export default function CalendarPage() {
       id,
       labelEn: en,
       labelEl: el,
-      rows: !hydrated || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title}`),
+      rows: !agendaNow || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title}`),
       sample: isSample,
     })),
   ]);
@@ -861,7 +862,7 @@ export default function CalendarPage() {
                 </CardHeader>
                 <CardContent>
                   {/* An empty Upcoming card had a title and nothing under it. */}
-                  {upcomingEvents.length === 0 && !loading ? (
+                  {agendaNow && upcomingEvents.length === 0 && !loading ? (
                     <p className="text-sm text-muted-foreground">
                       {failedParts.length && !isSample ? (
                         <BilingualText en="Nothing ahead in what could be read." el="Τίποτα στη συνέχεια σε όσα διαβάστηκαν." />
