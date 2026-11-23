@@ -26,6 +26,21 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('useAIChat streaming safety', () => {
+  it('keeps a page-list answer with no tools or actions when the provider fails', async () => {
+    const question = 'Which deals are in due diligence?';
+    const pageContext = { pathname: '/fundraising', lists: [{ id: 'due_diligence', label: 'Due diligence', shown: 1, rows: ['Aegean Ventures'] }] };
+    const local = await copilot.runCopilotTurn(question, pageContext);
+    expect(local).toMatchObject({ usedTools: [], actions: [] });
+    expect(local.message).toContain('Aegean Ventures');
+    stream.mockImplementation(async function* () { throw new ApiError(503, 'AI unavailable'); });
+    const { result } = renderHook(() => useAIChat({ enableCopilot: true, pageContext }));
+    await act(() => result.current.sendMessage(question));
+    expect(result.current.messages[1]).toMatchObject({ content: local.message, localFallback: true });
+    expect(result.current.error).toBeNull();
+    expect(stream).toHaveBeenCalledOnce();
+    expect(send).not.toHaveBeenCalled();
+  });
+
   it.each([503, 401, 403, 429])('uses an existing local answer only for provider failure (%i)', async (status) => {
     vi.spyOn(copilot, 'runCopilotTurn').mockResolvedValue({ message: 'Local calendar result', actions: [], citations: [], usedTools: ['get_events'] });
     stream.mockImplementation(async function* () { throw new ApiError(status, 'AI unavailable'); });

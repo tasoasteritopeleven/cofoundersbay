@@ -507,7 +507,7 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
         const providerUnavailable = requestError instanceof TypeError ||
           requestError?.name === 'TimeoutError' ||
           (requestError instanceof ApiError && requestError.status >= 500);
-        if (!receivedEvent && providerUnavailable && turn && (turn.usedTools?.length || turn.actions?.length)) {
+        if (!receivedEvent && providerUnavailable && turn && (turn.hasPageListAnswer || turn.usedTools?.length || turn.actions?.length)) {
           const local = turn;
           setMessages((prev) => prev.map((message) => message.id === assistantMessageId
             ? {

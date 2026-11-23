@@ -103,6 +103,7 @@ export type CopilotGraph = {
 
 export type CopilotTurnResult = {
   message: string;
+  hasPageListAnswer?: boolean;
   actions: CopilotAction[];
   citations: CopilotCitation[];
   usedTools: CopilotToolName[];
