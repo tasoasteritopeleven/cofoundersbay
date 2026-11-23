@@ -12,7 +12,7 @@ export type IcsEntry = {
   title: string;
   /** An ISO date-time; for an all-day entry only its UTC date is used. */
   start: string;
-  /** An ISO date-time; an hour after the start when missing. */
+  /** An ISO date-time; defaults to an hour after the start if no later end is supplied. */
   end?: string | null;
   allDay?: boolean;
   description?: string | null;
@@ -71,7 +71,9 @@ function eventLines(entry: IcsEntry, now: Date): string[] {
     const next = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate() + 1));
     lines.push(`DTSTART;VALUE=DATE:${icsDate(start)}`, `DTEND;VALUE=DATE:${icsDate(next)}`);
   } else {
-    const end = entry.end ?? new Date(Date.parse(entry.start) + 60 * 60_000).toISOString();
+    const startMs = Date.parse(entry.start);
+    const endMs = entry.end ? Date.parse(entry.end) : NaN;
+    const end = new Date(Math.floor(endMs / 1_000) > Math.floor(startMs / 1_000) ? endMs : startMs + 60 * 60_000);
     lines.push(`DTSTART:${icsStamp(entry.start)}`, `DTEND:${icsStamp(end)}`);
   }
   lines.push(`SUMMARY:${icsText(entry.title)}`);

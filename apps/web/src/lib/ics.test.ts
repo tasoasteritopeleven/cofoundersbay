@@ -33,6 +33,14 @@ describe('calendar files', () => {
     expect(ics).toContain('DTEND:20261022T103000Z');
   });
 
+  it.each(['2026-10-22T09:30:00.000Z', '2026-10-22T09:29:00.000Z', '2026-10-22T09:30:00.500Z'])(
+    'uses the default duration when %s would not produce a later DTEND',
+    (end) => {
+      const ics = buildIcs([{ uid: 'e', title: 'Call', start: '2026-10-22T09:30:00.000Z', end }], { now });
+      expect(ics).toContain('DTSTART:20261022T093000Z\r\nDTEND:20261022T103000Z');
+    },
+  );
+
   it('folds a long line at 75 octets without splitting a Greek letter', () => {
     const title = 'Εργαστήριο παρουσίασης για ιδρυτές και επενδυτές στην Αθήνα, με σημειώσεις';
     const ics = buildIcs([{ uid: 'w', title, start: '2026-10-22T09:30:00.000Z' }], { now });
