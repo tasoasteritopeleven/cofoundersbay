@@ -22,3 +22,10 @@ export function mergeReopenedMessages<T extends { id: string; timestamp: Date }>
     ? current
     : [...current, ...missing].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 }
+
+export function confirmSentMessage<T extends { id: string }>(current: T[], temporaryId: string, saved: Partial<T> & { id: string }): T[] {
+  if (!current.some((message) => message.id === temporaryId)) return current;
+  return current.flatMap((message) =>
+    message.id === temporaryId ? [{ ...message, ...saved }] : message.id === saved.id ? [] : [message],
+  );
+}

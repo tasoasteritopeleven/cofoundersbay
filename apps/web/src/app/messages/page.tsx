@@ -56,7 +56,7 @@ import { choiceControl, rowOptions, usePageControls, usePageList, type PageContr
 import { useQueryClient } from '@tanstack/react-query';
 import type { ConversationValidationState } from '@/components/messaging/ConversationValidation';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
-import { conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
+import { confirmSentMessage, conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
 
 function mapConversation(s: ConversationSummary): Conversation {
   const lastAt = s.lastMessage?.createdAt ?? s.updatedAt;
@@ -436,19 +436,12 @@ export default function MessagesPage() {
     };
     const onAck: ServerToClientEvents['message:ack'] = ({ tempId, message }) => {
       if (!tempId) return;
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === tempId
-            ? {
-                ...m,
-                id: message.id,
-                timestamp: new Date(message.createdAt),
-                status: 'sent',
-                attachments: mapMessage(message, currentUserIdRef.current).attachments,
-              }
-            : m,
-        ),
-      );
+      setMessages((prev) => confirmSentMessage(prev, tempId, {
+        id: message.id,
+        timestamp: new Date(message.createdAt),
+        status: 'sent',
+        attachments: mapMessage(message, currentUserIdRef.current).attachments,
+      }));
 
       setConversations((prev) =>
         prev.map((c) =>
@@ -842,9 +835,13 @@ export default function MessagesPage() {
     if (preview && (!s || !s.connected)) {
       // The demo keeps what the visitor writes for the session, so the
       // thread is still there after a reload (demo/messages-world).
-      void apiRequest(`/api/messages/conversations/${encodeURIComponent(selectedConversation.id)}/messages`, {
+      void apiRequest<{ message: MessageItem | null }>(`/api/messages/conversations/${encodeURIComponent(selectedConversation.id)}/messages`, {
         method: 'POST',
         body: JSON.stringify({ body: content }),
+      }).then((result) => {
+        const message = result?.message;
+        if (!message?.id) return;
+        setMessages((prev) => confirmSentMessage(prev, tempId, { id: message.id, timestamp: new Date(message.createdAt) }));
       }).catch(() => {});
       setConversations((prev) =>
         prev.map((c) =>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { conversationDraft, mergeReopenedMessages, pendingConversation } from './message-selection';
+import { confirmSentMessage, conversationDraft, mergeReopenedMessages, pendingConversation } from './message-selection';
 
 describe('conversation deep-link selection', () => {
   const conversations = [{ id: 'one' }, { id: 'two' }];
@@ -30,4 +30,14 @@ it('keeps live messages past the first 200 and does not replace current rows wit
   const merged = mergeReopenedMessages([...firstPage.slice(0, 198), edited, recent], firstPage);
   expect(merged).toHaveLength(201);
   expect(merged.slice(-3)).toEqual([firstPage[198], edited, recent]);
+});
+
+it('replaces the temporary ID without losing local attachments, even when history arrives before the acknowledgment', () => {
+  const optimistic = { id: 'temp', timestamp: new Date(10), attachments: ['local audio'] };
+  const fetched = { id: 'saved', timestamp: new Date(11), attachments: [] as string[] };
+  const saved = { id: fetched.id, timestamp: fetched.timestamp };
+  const confirmed = [{ ...optimistic, ...saved }];
+  expect(mergeReopenedMessages(confirmSentMessage([optimistic], 'temp', saved), [fetched])).toEqual(confirmed);
+  expect(confirmSentMessage(mergeReopenedMessages([optimistic], [fetched]), 'temp', saved)).toEqual(confirmed);
+  expect(confirmSentMessage<typeof optimistic>([], 'temp', saved)).toEqual([]);
 });
