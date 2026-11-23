@@ -24,9 +24,28 @@ function argsFor(message: string, name: string) {
 
 it('routes reconnect samples to the specific read, not upcoming events', () => {
   const sample = CAPABILITY_SAMPLES.get_event_reconnect;
-  expect(plan(sample.en)).toEqual(['get_event_reconnect']);
-  expect(plan(sample.el)).toEqual(['get_event_reconnect']);
+  for (const question of [sample.en, sample.el]) {
+    expect(planCopilotTools(question, '/events/open-event')).toEqual([
+      { name: 'get_event_reconnect', args: { eventId: 'open-event' } },
+    ]);
+    expect(planCopilotTools(question, '/events')).toEqual([
+      { name: 'navigate', args: { href: '/events', label: 'Events' } },
+    ]);
+  }
   expect(argsFor(`${sample.en} /events/event-42`, 'get_event_reconnect')).toEqual({ eventId: 'event-42' });
+});
+
+it('keeps an event draft when its title mentions reconnecting, even on an event page', () => {
+  const tools = planCopilotTools("draft an event titled 'Reconnect with alumni'", '/events/open-event');
+  expect(tools).toContainEqual({ name: 'draft_event', args: { title: 'Reconnect with alumni' } });
+  expect(tools.map((tool) => tool.name)).not.toContain('get_event_reconnect');
+});
+
+it.each([
+  "Create an event titled 'Reconnect with alumni'",
+  "Show me the event titled 'Reconnect with alumni'",
+])('does not treat an event title as a reconnect lookup: %s', (prompt) => {
+  expect(planCopilotTools(prompt, '/events/open-event').map((tool) => tool.name)).not.toContain('get_event_reconnect');
 });
 
 describe('planning the analytics window', () => {

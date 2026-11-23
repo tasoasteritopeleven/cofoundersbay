@@ -17,7 +17,7 @@ import type { AIToolCallProposal } from '@/lib/ai-api';
 import { isAppLocale, translate, type TranslateVars } from '@/lib/i18n/translate';
 import type { AppLocale } from '@/lib/locale';
 import { isPreviewDemo } from '@/lib/preview-demo';
-import { planCopilotTools, detectPersonName, asksAboutThisPage, asksAboutSamples, railSectionFor, pageControlFor, pageListFor } from '@/lib/copilot-planner';
+import { planCopilotTools, eventIdFromRoute, detectPersonName, asksAboutThisPage, asksAboutSamples, railSectionFor, pageControlFor, pageListFor } from '@/lib/copilot-planner';
 import { AREA_READERS, isAreaRead } from '@/lib/copilot-reads';
 import { pageKey, pageLabel } from '@/lib/usage-profile';
 import { BUILDER_FIELDS } from '@/lib/builder-fields';
@@ -402,7 +402,7 @@ export async function runCopilotTurn(
     const week = await planWeek(replyLocale ?? 'en', newId);
     return { message: week.message, actions: week.actions, citations: [], usedTools: ['get_milestones', 'get_events', 'get_notifications'] };
   }
-  let planned = options?.tools ? [...options.tools] : planCopilotTools(userMessage);
+  let planned = options?.tools ? [...options.tools] : planCopilotTools(userMessage, pageContext?.route);
   const citations: CopilotCitation[] = [];
   const actions: CopilotAction[] = [];
   const sections: string[] = [];
@@ -674,7 +674,7 @@ export async function runCopilotTurn(
       try {
         const args = tool.args ?? {};
         const contextualEvent = tool.name === 'get_event_reconnect' && !args.eventId
-          ? pageContext?.route.match(/^\/events\/([\w-]+)\/?$/)?.[1]
+          ? eventIdFromRoute(pageContext?.route)
           : undefined;
         const read = await AREA_READERS[tool.name](contextualEvent ? { ...args, eventId: contextualEvent } : args, { t, locale: replyLocale });
         sections.push(read.section);

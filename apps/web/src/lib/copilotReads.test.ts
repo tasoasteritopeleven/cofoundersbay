@@ -77,7 +77,8 @@ it('reads the event from page context and does not fall back to upcoming events'
   vi.mocked(getEventReconnect).mockClear();
   vi.mocked(getEventReconnect).mockResolvedValue({ state: 'open', closesAt: '', rows: [] });
   const offPage = await runCopilotTurn(question);
-  expect(offPage.message).toContain('I need the event ID.');
+  expect(offPage.usedTools).toEqual(['navigate']);
+  expect(offPage.actions).toContainEqual(expect.objectContaining({ tool: 'navigate', href: '/events' }));
   expect(getEventReconnect).not.toHaveBeenCalled();
   const onPage = await runCopilotTurn(question, { route: '/events/selected-event' });
   expect(onPage.usedTools).toEqual(['get_event_reconnect']);
