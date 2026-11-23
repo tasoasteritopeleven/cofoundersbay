@@ -28,7 +28,7 @@ afterEach(cleanup);
 describe('useAIChat streaming safety', () => {
   it('keeps a page-list answer with no tools or actions when the provider fails', async () => {
     const question = 'Which deals are in due diligence?';
-    const pageContext = { pathname: '/fundraising', lists: [{ id: 'due_diligence', label: 'Due diligence', shown: 1, rows: ['Aegean Ventures'] }] };
+    const pageContext = { route: '/fundraising', lists: [{ id: 'due_diligence', label: 'Due diligence', shown: 1, rows: ['Aegean Ventures'] }] };
     const local = await copilot.runCopilotTurn(question, pageContext);
     expect(local).toMatchObject({ usedTools: [], actions: [] });
     expect(local.message).toContain('Aegean Ventures');
