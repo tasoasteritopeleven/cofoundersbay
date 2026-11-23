@@ -107,9 +107,9 @@ function SectionTitle({ en, el }: { en: string; el: string }) {
   );
 }
 
-function IconAction({ label, onClick, disabled, children }: { label: { en: string; el: string }; onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
+function IconAction({ label, onClick, disabled, keepFocus, children }: { label: { en: string; el: string }; onClick: () => void; disabled?: boolean; keepFocus?: boolean; children: React.ReactNode }) {
   return (
-    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={onClick} disabled={disabled} aria-label={bilingualAria(label.en, label.el)}>
+    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => { if (!disabled) onClick(); }} disabled={!keepFocus && disabled} aria-disabled={keepFocus && disabled ? true : undefined} aria-label={bilingualAria(label.en, label.el)}>
       {children}
     </Button>
   );
@@ -126,6 +126,7 @@ export function YourPagesManager({ onNavigate }: { onNavigate?: () => void }) {
   const { ask: askAssistant } = useAskAssistant();
   const { ready, store, pages, suggestions } = useUsageProfile();
   const [term, setTerm] = useState('');
+  const [orderNotice, setOrderNotice] = useState<{ en: string; el: string } | null>(null);
   const pinned = pages.filter((p) => p.pinned);
   const frequent = pages.filter((p) => !p.pinned);
   const full = store.pins.length >= MAX_SHORTCUTS;
@@ -142,6 +143,13 @@ export function YourPagesManager({ onNavigate }: { onNavigate?: () => void }) {
     onNavigate?.();
   }
 
+  function reorder(page: (typeof pinned)[number], step: -1 | 1) {
+    const position = movePin(page.key, step);
+    if (position !== undefined) {
+      setOrderNotice({ en: `${page.label.en} moved to position ${position}.`, el: `${page.label.el}: μετακινήθηκε στη θέση ${position}.` });
+    }
+  }
+
   return (
     <div className="space-y-5">
       <section className="space-y-1.5" aria-label={bilingualAria('Pinned', 'Καρφιτσωμένες')}>
@@ -151,17 +159,17 @@ export function YourPagesManager({ onNavigate }: { onNavigate?: () => void }) {
             <BilingualText en="None yet. Pin a page below and it stays first, in your order." el="Καμία ακόμη. Καρφιτσώστε μια σελίδα παρακάτω και μένει πρώτη, στη σειρά σας." wrap />
           </p>
         ) : (
-          <ul className="divide-y divide-border/60">
+          <ol className="divide-y divide-border/60">
             {pinned.map((page, index) => (
               <li key={page.key} className="flex items-center gap-1 py-1">
                 <Link href={page.key} onClick={onNavigate} className="min-w-0 flex-1 truncate rounded-sm py-1.5 text-sm text-foreground hover:text-primary-accessible">
                   <BilingualText en={page.label.en} el={page.label.el} compact />
                 </Link>
                 <span className="hidden shrink-0 font-mono text-2xs text-muted-foreground sm:inline" aria-hidden="true">G {index + 1}</span>
-                <IconAction label={{ en: `Move ${page.label.en} up`, el: `Μετακίνηση πάνω: ${page.label.el}` }} onClick={() => movePin(page.key, -1)} disabled={index === 0}>
+                <IconAction label={{ en: `Move ${page.label.en} up`, el: `Μετακίνηση πάνω: ${page.label.el}` }} onClick={() => reorder(page, -1)} disabled={index === 0} keepFocus>
                   <ArrowUp className="icon-sm" aria-hidden="true" />
                 </IconAction>
-                <IconAction label={{ en: `Move ${page.label.en} down`, el: `Μετακίνηση κάτω: ${page.label.el}` }} onClick={() => movePin(page.key, 1)} disabled={index === pinned.length - 1}>
+                <IconAction label={{ en: `Move ${page.label.en} down`, el: `Μετακίνηση κάτω: ${page.label.el}` }} onClick={() => reorder(page, 1)} disabled={index === pinned.length - 1} keepFocus>
                   <ArrowDown className="icon-sm" aria-hidden="true" />
                 </IconAction>
                 <IconAction label={{ en: `Unpin ${page.label.en}`, el: `Ξεκαρφίτσωμα: ${page.label.el}` }} onClick={() => unpinPage(page.key)}>
@@ -169,8 +177,9 @@ export function YourPagesManager({ onNavigate }: { onNavigate?: () => void }) {
                 </IconAction>
               </li>
             ))}
-          </ul>
+          </ol>
         )}
+        <p role="status" className="sr-only">{orderNotice ? <BilingualText {...orderNotice} compact /> : null}</p>
       </section>
 
       {frequent.length > 0 ? (

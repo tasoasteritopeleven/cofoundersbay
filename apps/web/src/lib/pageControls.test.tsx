@@ -404,6 +404,10 @@ describe('what a page’s lists show', () => {
     expect(pageListFor('ποιοι είναι εδώ;', lists)?.id).toBe('users');
     expect(pageListFor('suspend Mike Chen', lists)).toBeUndefined();
     expect(pageListFor('what does suspended mean?', lists)).toBeUndefined();
+    const changes = { id: 'since_last_visit', label: 'Changes since your last visit' };
+    expect(pageListFor('What changed since my last visit?', [...lists, changes])).toBe(changes);
+    expect(pageListFor('Τι άλλαξε από την τελευταία επίσκεψη;', [...lists, changes])).toBe(changes);
+    expect(pageListFor('What changed since my last visit?', lists)).toBeUndefined();
   });
 
   it('answers from the rows on screen, with the count and what lies beyond them', async () => {

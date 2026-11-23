@@ -56,6 +56,7 @@ import { choiceControl, rowOptions, usePageControls, usePageList, type PageContr
 import { useQueryClient } from '@tanstack/react-query';
 import type { ConversationValidationState } from '@/components/messaging/ConversationValidation';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
+import { canForwardMessage, confirmSentMessage, conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
 
 function mapConversation(s: ConversationSummary): Conversation {
   const lastAt = s.lastMessage?.createdAt ?? s.updatedAt;
@@ -314,15 +315,57 @@ export default function MessagesPage() {
   const [connectionsFailed, setConnectionsFailed] = useState(false);
   const [threadState, setThreadState] = useState<InboxReadState>('loading');
   const [threadReload, setThreadReload] = useState(0);
+  const loadedThread = useRef<{ id: string; userId: string } | null>(null);
   const [introResponding, setIntroResponding] = useState<Record<string, boolean>>({});
   const [selectedIntroId, setSelectedIntroId] = useState<string | null>(null);
-  const [composerDraft, setComposerDraft] = useState<string | undefined>();
+  const [composerDraft, setComposerDraft] = useState<{ id: string; text: string }>();
   const [reportBlockModal, setReportBlockModal] = useState<{ open: boolean; mode: 'report' | 'block' | 'both' }>({ open: false, mode: 'both' });
   const [validationStates, setValidationStates] = useState<Record<string, ConversationValidationState>>({});
   const { setActiveConversationId, markConversationRead } = useMessaging();
   // Every list this page fetches is published to the shared conversation
   // cache, which the unread badges derive from (MessagingContext).
   const queryClient = useQueryClient();
+  const inboxTitleRef = useRef<HTMLHeadingElement>(null);
+  const threadPaneRef = useRef<HTMLDivElement>(null);
+  const mobileOpenerRef = useRef<HTMLElement | null>(null);
+  const restoreInboxFocus = useRef(false);
+  const collapsedChatId = useRef<string | null>(null);
+  const openedLinkRef = useRef<string | null>(null);
+  const rememberOpener = useCallback(() => {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      const focused = document.activeElement;
+      mobileOpenerRef.current = focused instanceof HTMLElement && focused !== document.body ? focused : null;
+    }
+  }, []);
+  const openConversation = useCallback((conv: Conversation, options?: { draft?: string; markRead?: boolean }) => {
+    rememberOpener();
+    if (collapsedChatId.current === conv.id) setThreadReload((n) => n + 1);
+    collapsedChatId.current = null;
+    setSidebarTab('chats');
+    setSelectedConversation((current) => current?.id === conv.id ? current : conv);
+    setComposerDraft((current) => conversationDraft(current, conv.id, options?.draft));
+    setActiveConversationId(conv.id);
+    if (options?.markRead) markConversationRead(conv.id);
+    setIsMobileViewingChat(true);
+  }, [markConversationRead, rememberOpener, setActiveConversationId]);
+  const returnToInbox = useCallback(() => {
+    if (sidebarTab === 'chats') collapsedChatId.current = selectedConversation?.id ?? null;
+    restoreInboxFocus.current = true;
+    setIsMobileViewingChat(false);
+    setActiveConversationId(null);
+  }, [selectedConversation?.id, setActiveConversationId, sidebarTab]);
+
+  useEffect(() => {
+    if (!window.matchMedia('(max-width: 767px)').matches) return;
+    if (isMobileViewingChat) {
+      threadPaneRef.current?.focus({ preventScroll: true });
+    } else if (restoreInboxFocus.current) {
+      restoreInboxFocus.current = false;
+      const opener = mobileOpenerRef.current;
+      mobileOpenerRef.current = null;
+      (opener?.isConnected && opener.getClientRects().length ? opener : inboxTitleRef.current)?.focus({ preventScroll: true });
+    }
+  }, [isMobileViewingChat]);
 
   useEffect(() => {
     return () => { setActiveConversationId(null); };
@@ -393,19 +436,12 @@ export default function MessagesPage() {
     };
     const onAck: ServerToClientEvents['message:ack'] = ({ tempId, message }) => {
       if (!tempId) return;
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === tempId
-            ? {
-                ...m,
-                id: message.id,
-                timestamp: new Date(message.createdAt),
-                status: 'sent',
-                attachments: mapMessage(message, currentUserIdRef.current).attachments,
-              }
-            : m,
-        ),
-      );
+      setMessages((prev) => confirmSentMessage(prev, tempId, {
+        id: message.id,
+        timestamp: new Date(message.createdAt),
+        status: 'sent',
+        attachments: mapMessage(message, currentUserIdRef.current).attachments,
+      }));
 
       setConversations((prev) =>
         prev.map((c) =>
@@ -582,9 +618,7 @@ export default function MessagesPage() {
           setConversations(mapped);
           const conv = mapped.find((c) => c.id === conversationId);
           if (conv) {
-            setSidebarTab('chats');
-            setSelectedConversation(conv);
-            setIsMobileViewingChat(true);
+            openConversation(conv);
           }
         } catch (e) {
           showError(
@@ -614,10 +648,7 @@ export default function MessagesPage() {
       setConversations(mapped);
       const conv = mapped.find((c) => c.id === conversationId);
       if (conv) {
-        setSidebarTab('chats');
-        setSelectedConversation(conv);
-        setActiveConversationId(conv.id);
-        setIsMobileViewingChat(true);
+        openConversation(conv);
       }
     } catch (e) {
       showError(
@@ -630,6 +661,7 @@ export default function MessagesPage() {
   // Handle URL param for direct messaging
   const toUserId = searchParams?.get('to');
   const openConversationId = searchParams?.get('c');
+  const draftParam = searchParams?.get('text');
   // From the assistant's message search: the thread opens with the words
   // already searched, so the hit is marked where it sits.
   const findParam = searchParams?.get('find') ?? undefined;
@@ -649,12 +681,9 @@ export default function MessagesPage() {
         setConversations(mapped);
         const conv = mapped.find((c) => c.id === conversationId);
         if (conv) {
-          setSelectedConversation(conv);
-          setIsMobileViewingChat(true);
           // "Request" on a marketplace card opens the thread with the
           // message already started; the reader edits it before sending.
-          const text = searchParams?.get('text');
-          if (text) setComposerDraft(text.slice(0, 2000));
+          openConversation(conv, { draft: draftParam?.slice(0, 2000) });
         }
       } catch (e) {
         if (cancelled) return;
@@ -669,17 +698,18 @@ export default function MessagesPage() {
     return () => {
       cancelled = true;
     };
-  }, [canUseMessaging, toUserId, showError, openConversationId]);
+  }, [canUseMessaging, toUserId, showError, openConversationId, openConversation, draftParam]);
 
   // Handle URL param for opening an existing conversation
   useEffect(() => {
-    if (!canUseMessaging || !openConversationId) return;
-    const conv = conversations.find((c) => c.id === openConversationId);
+    if (!openConversationId) openedLinkRef.current = null;
+    if (!canUseMessaging) return;
+    const conv = pendingConversation(openConversationId, openedLinkRef.current, conversations);
     if (!conv) return;
-    setSelectedConversation(conv);
-    setIsMobileViewingChat(true);
+    openedLinkRef.current = conv.id;
+    openConversation(conv);
     socketRef.current?.emit('conversation:join', { conversationId: conv.id });
-  }, [canUseMessaging, openConversationId, conversations]);
+  }, [canUseMessaging, openConversationId, conversations, openConversation]);
 
   // Reset typing indicator when conversation changes
   useEffect(() => {
@@ -689,26 +719,33 @@ export default function MessagesPage() {
   // Load messages when conversation is selected
   useEffect(() => {
     if (!canUseMessaging || !selectedConversation) {
+      loadedThread.current = null;
       return;
     }
 
     let cancelled = false;
+    const retainMessages = loadedThread.current?.id === selectedConversation.id && loadedThread.current.userId === currentUserId;
     // The last thread's messages do not stay under the next one's name
     // while it loads, or after its read fails (docs §73).
-    setMessages([]);
-    setThreadState('loading');
+    if (!retainMessages) {
+      loadedThread.current = null;
+      setMessages([]);
+      setThreadState('loading');
+    }
     const run = async () => {
       try {
         const { messages: list } = await listConversationMessages(selectedConversation.id, 200);
         if (cancelled) return;
-        setMessages(list.map((m) => mapMessage(m, currentUserId)));
+        const fetched = list.map((m) => mapMessage(m, currentUserId));
+        setMessages((current) => retainMessages ? mergeReopenedMessages(current, fetched) : fetched);
+        loadedThread.current = { id: selectedConversation.id, userId: currentUserId };
         setThreadState('ready');
         setConversations((prev) =>
           prev.map((c) => (c.id === selectedConversation.id ? { ...c, unreadCount: 0 } : c)),
         );
         socketRef.current?.emit('conversation:join', { conversationId: selectedConversation.id });
       } catch {
-        if (cancelled) return;
+        if (cancelled || retainMessages) return;
         setThreadState('failed');
       }
     };
@@ -750,7 +787,7 @@ export default function MessagesPage() {
     if (searchParams?.get('action') !== 'schedule' || !selectedConversation) {
       return;
     }
-    setComposerDraft(t(messagesEn('schedule_draft'), messagesEl('schedule_draft')));
+    setComposerDraft({ id: selectedConversation.id, text: t(messagesEn('schedule_draft'), messagesEl('schedule_draft')) });
   }, [searchParams, selectedConversation?.id, t]);
 
   // Typing indicator emit
@@ -798,9 +835,13 @@ export default function MessagesPage() {
     if (preview && (!s || !s.connected)) {
       // The demo keeps what the visitor writes for the session, so the
       // thread is still there after a reload (demo/messages-world).
-      void apiRequest(`/api/messages/conversations/${encodeURIComponent(selectedConversation.id)}/messages`, {
+      void apiRequest<{ message: MessageItem | null }>(`/api/messages/conversations/${encodeURIComponent(selectedConversation.id)}/messages`, {
         method: 'POST',
         body: JSON.stringify({ body: content }),
+      }).then((result) => {
+        const message = result?.message;
+        if (!message?.id) return;
+        setMessages((prev) => confirmSentMessage(prev, tempId, { id: message.id, timestamp: new Date(message.createdAt) }));
       }).catch(() => {});
       setConversations((prev) =>
         prev.map((c) =>
@@ -917,7 +958,9 @@ export default function MessagesPage() {
     const message = forwarding;
     setForwarding(null);
     if (!message) return;
-    if (isPreviewDemo()) {
+    const preview = isPreviewDemo();
+    if (!canForwardMessage(message, preview)) return;
+    if (preview) {
       await apiRequest(`/api/messages/conversations/${encodeURIComponent(conversationId)}/messages`, {
         method: 'POST',
         body: JSON.stringify({ body: message.content }),
@@ -1029,10 +1072,7 @@ export default function MessagesPage() {
       run: (v) => {
         const conv = inbox.find((c) => c.id === v);
         if (!conv) return;
-        setSelectedConversation(conv);
-        setActiveConversationId(conv.id);
-        markConversationRead(conv.id);
-        setIsMobileViewingChat(true);
+        openConversation(conv, { markRead: true });
       },
     },
     // updateConversationFlags sends one flag; pinning and unpinning are each
@@ -1139,7 +1179,7 @@ export default function MessagesPage() {
                   {/* The page-title step every page header uses: at text-lg
                       the inbox title sat 0.17px over the card title step on a
                       desktop, level with a thread's or a request's name. */}
-                  <h1 className="page-title font-semibold tracking-tight text-foreground">
+                  <h1 ref={inboxTitleRef} tabIndex={-1} className="page-title font-semibold tracking-tight text-foreground">
                     <BilingualText en={messagesEn('page_title')} el={messagesEl('page_title')} />
                   </h1>
                   <p className="mt-0.5 hidden text-xs leading-snug text-muted-foreground sm:block">
@@ -1212,12 +1252,7 @@ export default function MessagesPage() {
                   state={inboxState}
                   onRetry={retryInbox}
                   selectedId={selectedConversation?.id}
-                  onSelect={(conv) => {
-                    setSelectedConversation(conv);
-                    setActiveConversationId(conv.id);
-                    markConversationRead(conv.id);
-                    setIsMobileViewingChat(true);
-                  }}
+                  onSelect={(conv) => openConversation(conv, { markRead: true })}
                   onPin={handlePin}
                   onArchive={handleArchive}
                 />
@@ -1308,6 +1343,7 @@ export default function MessagesPage() {
                           aria-current={selectedIntro?.id === req.id ? 'true' : undefined}
                           aria-label={bilingualAria(`Open the request from ${req.requester.displayName}`, `Άνοιγμα του αιτήματος από ${req.requester.displayName}`)}
                           onClick={() => {
+                            rememberOpener();
                             setSelectedIntroId(req.id);
                             setIsMobileViewingChat(true);
                           }}
@@ -1386,6 +1422,14 @@ export default function MessagesPage() {
           </div>
 
           <div
+            ref={threadPaneRef}
+            tabIndex={-1}
+            onKeyDown={(event) => {
+              if (event.key !== 'Escape' || event.defaultPrevented || !isMobileViewingChat || !window.matchMedia('(max-width: 767px)').matches) return;
+              if (!(event.target instanceof HTMLElement) || !event.currentTarget.contains(event.target)) return;
+              event.stopPropagation();
+              returnToInbox();
+            }}
             className={cn(
               'flex h-full min-w-0 flex-1 flex-col',
               !isMobileViewingChat && 'hidden md:flex',
@@ -1404,7 +1448,7 @@ export default function MessagesPage() {
                   if (selectedIntro) void handleIntroRespond(selectedIntro.id, 'declined');
                 }}
                 locale={primary}
-                onBack={() => setIsMobileViewingChat(false)}
+                onBack={returnToInbox}
               />
             ) : selectedConversation ? (
               <>
@@ -1420,17 +1464,16 @@ export default function MessagesPage() {
                   onEditMessage={(id, body) => { void handleEditMessage(id, body); }}
                   onDeleteMessage={(message) => { void handleDeleteMessage(message); }}
                   onForwardMessage={setForwarding}
+                  canForwardMessage={(message) => canForwardMessage(message, isPreviewDemo())}
                   onTypingStart={handleTypingStart}
                   onTypingStop={handleTypingStop}
                   isRecipientTyping={isRecipientTyping}
                   onAskAi={openInboxAi}
-                  initialDraft={composerDraft}
+                  initialDraft={composerDraft?.id === selectedConversation.id ? composerDraft.text : undefined}
                   initialSearch={selectedConversation?.id === openConversationId ? findParam : undefined}
                   threadState={threadState}
                   onRetryThread={() => setThreadReload((n) => n + 1)}
-                  onBack={() => {
-                    setIsMobileViewingChat(false);
-                  }}
+                  onBack={returnToInbox}
                   onReport={() => setReportBlockModal({ open: true, mode: 'report' })}
                   onBlock={() => setReportBlockModal({ open: true, mode: 'block' })}
                   validationState={validationStates[selectedConversation.id] ?? {
@@ -1494,10 +1537,7 @@ export default function MessagesPage() {
                 onSelectRecent={(id) => {
                   const conv = conversations.find((c) => c.id === id);
                   if (!conv) return;
-                  setSelectedConversation(conv);
-                  setActiveConversationId(conv.id);
-                  markConversationRead(conv.id);
-                  setIsMobileViewingChat(true);
+                  openConversation(conv, { markRead: true });
                 }}
               />
             )}

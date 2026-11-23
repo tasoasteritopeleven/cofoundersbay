@@ -243,6 +243,7 @@ export class IntrosService {
       `${names.get(requesterId)?.displayName ?? 'Someone'} asks you for an introduction to ${names.get(targetId)?.displayName ?? 'someone you know'}`,
       'You decide whether to forward it. Nobody is told why if you do not.',
       `/intros?tab=forward&intro=${row.id}`,
+      true,
     );
     return { intro: (await this.shapeAll([row], requesterId))[0] };
   }
@@ -293,6 +294,7 @@ export class IntrosService {
       `${names.get(intermediaryId)?.displayName ?? 'Someone you know'} introduces you to ${names.get(row.requesterId)?.displayName ?? 'a founder'}`,
       note.value ?? 'Accept to start a protected conversation on their need card, or say not now.',
       `/intros?tab=received&intro=${row.id}`,
+      true,
     );
     await this.notify(row.requesterId, 'Your introduction was forwarded', 'They will see your card and decide.', `/intros?intro=${row.id}`);
     return { intro: (await this.shapeAll([row], intermediaryId))[0] };
@@ -338,7 +340,7 @@ export class IntrosService {
     return { methods: await this.verification.publicMethods(row.requesterId) };
   }
 
-  private async notify(userId: string, title: string, body: string, link: string) {
-    await this.notifications.createNotification({ userId, type: 'intro_request', title, body, link }).catch(() => undefined);
+  private async notify(userId: string, title: string, body: string, link: string, requiresResponse = false) {
+    await this.notifications.createNotification({ userId, type: 'intro_request', title, body, link, meta: { requiresResponse } }).catch(() => undefined);
   }
 }

@@ -261,7 +261,7 @@ export function unpinPage(key: string): PinResult {
 }
 
 /** Moves a pinned page one place earlier (-1) or later (+1). */
-export function movePin(key: string, step: -1 | 1): void {
+export function movePin(key: string, step: -1 | 1): number | undefined {
   update((store) => {
     const i = store.pins.indexOf(key);
     const j = i + step;
@@ -270,6 +270,8 @@ export function movePin(key: string, step: -1 | 1): void {
     [pins[i], pins[j]] = [pins[j], pins[i]];
     return { ...store, pins };
   });
+  const index = readUsage().pins.indexOf(key);
+  return index >= 0 ? index + 1 : undefined;
 }
 
 /** Takes a page out of "Your pages" (and unpins it); it can come back from Settings. */

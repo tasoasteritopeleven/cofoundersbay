@@ -43,6 +43,7 @@ import { ASK } from '@/lib/page-questions';
 import { elWord } from '@/lib/rows-el';
 import { LiveNotices } from '@/components/notifications/LiveNotices';
 import { notificationEl } from '@/lib/notification-text';
+import { notificationNextAction } from '@/lib/notification-chat';
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
   connection: UserPlus,
@@ -146,6 +147,7 @@ const NotificationRow = memo(function NotificationRow({
   const Icon = TYPE_ICONS[item.type] ?? Bell;
   const colorClass = TYPE_COLORS[item.type] ?? TYPE_COLORS.system;
   const typeLabel = TYPE_LABELS[item.type];
+  const nextAction = notificationNextAction(item);
 
   // A row of the list card (RowHead, not a card's head: twenty card titles in
   // one list read as twenty headings): the type's mark, the notification with
@@ -199,7 +201,7 @@ const NotificationRow = memo(function NotificationRow({
             // Delete sit above it.
             <Link
               href={item.link}
-              onClick={() => onRead(item.id)}
+              onClick={() => { if (!nextAction) onRead(item.id); }}
               className={cn("block first-letter:uppercase after:absolute after:inset-0 after:content-[''] hover:underline", !isUnread && 'text-foreground/80')}
             >
               <BilingualText en={item.title} el={notificationEl(item.title)} compact wrap />
@@ -218,7 +220,8 @@ const NotificationRow = memo(function NotificationRow({
         {/* Always shown: at opacity-0 until hover the three actions were
             invisible on touch screens yet still took taps, and on a desktop
             they left an empty band under every row. */}
-        <div className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1">
+        <div className="pointer-events-none relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1 [&_button]:pointer-events-auto">
+          {nextAction ? <span className="text-xs font-medium text-primary-accessible"><BilingualText en={nextAction.en} el={nextAction.el} compact /></span> : null}
           {/* tap-target-y on the row actions: they were 16px tall, under the
               24px target minimum, and they sit close enough together that the
               SC 2.5.8 spacing exception does not rescue them either. */}
@@ -468,15 +471,27 @@ export default function NotificationsPage() {
       id: 'notifications',
       labelEn: 'Notifications',
       labelEl: 'Ειδοποιήσεις',
-      rows: isLoading ? undefined : notifications.map((n) =>
-        `${n.readAt ? '' : '(unread) '}${n.savedAt ? '(saved) ' : ''}${n.title}${n.body ? ` · ${n.body}` : ''} · ${n.type} · ${n.createdAt.slice(0, 10)}`,
+      rows: isLoading || !data?.notifications ? undefined : notifications.map((n) =>
+        `${n.readAt ? '' : '(unread) '}${n.savedAt ? '(saved) ' : ''}${n.title}${n.body ? ` · ${n.body}` : ''} · ${notificationNextAction(n)?.en ?? n.type} · ${n.createdAt?.slice(0, 10) ?? ''}`,
       ),
-      rowsEl: isLoading ? undefined : notifications.map((n) =>
-        `${n.readAt ? '' : '(αδιάβαστη) '}${n.savedAt ? '(αποθηκευμένη) ' : ''}${notificationEl(n.title)}${n.body ? ` · ${notificationEl(n.body)}` : ''} · ${elWord(n.type)} · ${n.createdAt.slice(0, 10)}`,
+      rowsEl: isLoading || !data?.notifications ? undefined : notifications.map((n) =>
+        `${n.readAt ? '' : '(αδιάβαστη) '}${n.savedAt ? '(αποθηκευμένη) ' : ''}${notificationEl(n.title)}${n.body ? ` · ${notificationEl(n.body)}` : ''} · ${notificationNextAction(n)?.el ?? elWord(n.type)} · ${n.createdAt?.slice(0, 10) ?? ''}`,
       ),
     },
   ]);
   usePageControls([
+    {
+      id: 'open_notification_action',
+      labelEn: 'Open next notification action',
+      labelEl: 'Άνοιγμα επόμενης ενέργειας ειδοποίησης',
+      writes: false,
+      options: rowOptions(notifications.filter((n) => notificationNextAction(n)), (n) => n.id, (n) => n.title),
+      run: (v) => {
+        const row = notifications.find((n) => n.id === v);
+        const action = row && notificationNextAction(row);
+        if (action) router.push(action.href);
+      },
+    },
     {
       id: 'mark_read',
       labelEn: 'Mark notification read',

@@ -500,6 +500,9 @@ export function pageListFor<T extends { id: string; label: string }>(
   message: string,
   lists: readonly T[],
 ): T | undefined {
+  if (/since (?:my|the|our) last visit|what changed since|τι αλλαξε απο|τελευταια επισκεψη/.test(fold(message))) {
+    return lists.find((list) => list.id === 'since_last_visit');
+  }
   if (!lists.length || !LIST_QUESTION.test(message)) return undefined;
   const said = new Set(wordsOf(message).map(stem));
   let best: { list: T; score: number } | undefined;

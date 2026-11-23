@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
 import { BilingualText } from '@/components/common/BilingualText';
 import { CfbGlyph, type CfbGlyphName } from '@/components/icons/CfbGlyph';
 import { SectionSticker, glyphStickerTint } from '@/components/dashboard/SectionSticker';
@@ -10,11 +8,11 @@ import { useLiveNotices, type LiveNotice } from '@/components/notifications/Live
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAskAssistant } from '@/hooks/useAskAssistant';
+import { useReturnSummary } from '@/hooks/useReturnSummary';
 import { useUnreadCounts } from '@/hooks/useUnreadCounts';
-import { listNotifications } from '@/lib/api';
 import { nowStartingPoints, type HomeAskNow } from '@/lib/home-ask';
-import { qk } from '@/lib/query-keys';
-import { readLastVisit, sinceLastVisit } from '@/lib/since-last-visit';
+import { usePageList } from '@/lib/page-controls';
+import { matchesContinuation, type ContinuationTarget } from '@/lib/home-continuation';
 import { bilingualAria } from '@/lib/i18n/format';
 
 export type TodayRow = {
@@ -25,6 +23,7 @@ export type TodayRow = {
   el: string;
   count?: number;
   ask: { en: string; el: string };
+  entityId?: string;
 };
 
 const NOTICE_GLYPH: Record<string, CfbGlyphName> = { commitment: 'pact', 'follow-up': 'chart', milestone: 'flag' };
@@ -37,6 +36,7 @@ const fromNotice = (notice: LiveNotice, ask?: HomeAskNow): TodayRow => ({
   en: notice.en,
   el: notice.el,
   ask: ask?.prompt ?? { en: `What should I do next here: ${notice.en}`, el: `Τι να κάνω στη συνέχεια εδώ: ${notice.el}` },
+  entityId: notice.entityId,
 });
 
 const fromNow = (action: HomeAskNow): TodayRow => ({
@@ -77,20 +77,12 @@ export function useTodayRows() {
   return { rows: todayRows(notices, nowStartingPoints({ ...counts, followUps: followUps.length })) };
 }
 
-export function HomeToday() {
+export function HomeToday({ continuation, rows: suppliedRows }: { continuation?: ContinuationTarget; rows?: TodayRow[] } = {}) {
   const { ask } = useAskAssistant();
-  const { rows } = useTodayRows();
-  // After mount: the clock and the storage are the reader's, not the server's.
-  const [lastVisit, setLastVisit] = useState<number | null>(null);
-  useEffect(() => { setLastVisit(readLastVisit()); }, []);
-  const { data: recent } = useQuery({
-    queryKey: qk('notifications', 'recent'),
-    queryFn: () => listNotifications({ limit: 30 }),
-    enabled: lastVisit !== null,
-    staleTime: 60_000,
-    retry: 0,
-  });
-  const since = sinceLastVisit(recent?.notifications ?? [], lastVisit);
+  const { rows: currentRows } = useTodayRows();
+  const rows = suppliedRows ?? currentRows;
+  const since = useReturnSummary();
+  usePageList([{ id: 'since_last_visit', labelEn: 'Changes since your last visit', labelEl: 'Αλλαγές από την τελευταία επίσκεψη', rows: since ? [since.en] : undefined, rowsEl: since ? [since.el] : undefined }]);
   if (rows.length === 0 && !since) return null;
   return (
     <Card data-home-today="">
@@ -99,7 +91,7 @@ export function HomeToday() {
           <SectionSticker glyph="update" tint="info" />
           <h2 className="card-title"><BilingualText en="Today" el="Σήμερα" compact /></h2>
         </div>
-        {since ? <p className="text-xs text-muted-foreground" data-home-since=""><BilingualText en={since.en} el={since.el} compact wrap /></p> : null}
+        {since ? <Link href="/notifications" className="block text-sm text-muted-foreground hover:underline" data-home-since=""><BilingualText en={since.en} el={since.el} compact wrap /></Link> : null}
         <ul className="divide-y divide-border">
           {rows.map((row) => (
             <li key={row.key} data-row="" className="flex items-center gap-3 py-2">
@@ -115,7 +107,7 @@ export function HomeToday() {
                 className="row-tool h-8 w-8 shrink-0 text-muted-foreground"
                 aria-label={bilingualAria(`Ask about: ${row.en}`, `Ρωτήστε για: ${row.el}`)}
                 title={bilingualAria(`Ask about: ${row.en}`, `Ρωτήστε για: ${row.el}`)}
-                onClick={() => ask(row.ask)}
+                onClick={() => ask(continuation && matchesContinuation(continuation, row) ? continuation.ask : row.ask)}
               >
                 <CfbGlyph name="spark" className="icon-sm" aria-hidden="true" />
               </Button>

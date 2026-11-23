@@ -20,11 +20,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useRoleOptional } from '@/contexts/RoleContext';
 import { useConnectionWith } from '@/hooks/useConnectionWith';
 import { useStoredUser } from '@/hooks/useStoredUser';
+import { useReturnSummary } from '@/hooks/useReturnSummary';
 import { getMeProfile, getRecommendations } from '@/lib/api';
 import { viewerFacts } from '@/lib/match-explain';
 import { usePageControls, usePageList } from '@/lib/page-controls';
 import { qk, queryKeys } from '@/lib/query-keys';
-import { HOME_COPY, homeAudience, homeOrder, memberRole, overviewPathFor, saysWhatTheyWant } from '@/lib/role-home';
+import { HOME_COPY, homeAudience, homeOrder, memberRole, nextHomeStep, overviewPathFor, saysWhatTheyWant } from '@/lib/role-home';
 import { cn } from '@/lib/utils';
 
 /* The cast's own member for each audience — provider and org read as the
@@ -56,6 +57,7 @@ function Home() {
   const audience = homeAudience(role);
   const copy = HOME_COPY[audience];
   const { rows: waitingRows } = useTodayRows();
+  const since = useReturnSummary();
   const { data: profile, isLoading: profileLoading } = useQuery({ queryKey: queryKeys.me.profile(), queryFn: getMeProfile, staleTime: 60_000, retry: 0 });
   // The key /matches and the founder dashboard read, so the three lists agree.
   const { data: recommendations, isLoading: peopleLoading } = useQuery({
@@ -76,6 +78,7 @@ function Home() {
   // Finished steps go, once the account is known: a founder who has done them
   // must not see them flash. `?first=1` shows them anyway, as a new account does.
   const showSteps = params?.get('first') === '1' || (!profileLoading && settled && doneCount < steps.length);
+  const nextStep = nextHomeStep(steps, showSteps && Boolean(profile) && settled);
 
   // A brand-new account's welcome notice is not something waiting on them.
   const waiting = waitingRows.length;
@@ -83,6 +86,8 @@ function Home() {
 
   // What waits, as Overview's Today lists it, and the way there.
   usePageList([
+    { id: 'since_last_visit', labelEn: 'Changes since your last visit', labelEl: 'Αλλαγές από την τελευταία επίσκεψη', rows: since ? [since.en] : undefined, rowsEl: since ? [since.el] : undefined },
+    { id: 'getting_started', labelEn: 'Getting started', labelEl: 'Πρώτα βήματα', rows: showSteps ? steps.map((step) => step.en) : undefined, rowsEl: showSteps ? steps.map((step) => step.el) : undefined },
     {
       id: 'waiting_on_you',
       labelEn: 'Waiting on you',
@@ -92,6 +97,15 @@ function Home() {
     },
   ]);
   usePageControls([
+    {
+      id: 'open_getting_started_step',
+      labelEn: 'Open my next getting started step',
+      labelEl: 'Άνοιγμα του επόμενου βήματος εκκίνησης',
+      writes: false,
+      unavailableEn: nextStep ? undefined : 'No next step is available yet.',
+      unavailableEl: nextStep ? undefined : 'Δεν υπάρχει ακόμη διαθέσιμο επόμενο βήμα.',
+      run: () => { if (nextStep) router.push(nextStep.href); },
+    },
     {
       id: 'open_waiting',
       labelEn: 'Open what is waiting on you',
@@ -185,6 +199,9 @@ function Home() {
                   <span className={cn('min-w-0', step.done && 'text-muted-foreground')}>
                     <BilingualText en={step.en} el={step.el} compact wrap />
                   </span>
+                  {step === nextStep ? (
+                    <span className="ml-auto shrink-0 text-xs text-primary-accessible"><BilingualText en="Up next" el="Επόμενο" compact /></span>
+                  ) : null}
                 </Link>
               </li>
             ))}
@@ -217,6 +234,7 @@ function Home() {
         {/* The assistant is the first thing on the first page: the box alone,
             its shortcuts stay on Overview. */}
         <HomeAskHero role={audience === 'org' ? 'incubator' : audience} plain greeting={false} />
+        {since ? <Link href="/notifications" className="inline-block text-sm text-muted-foreground hover:underline" data-home-since=""><BilingualText en={since.en} el={since.el} compact wrap /></Link> : null}
         {/* What waits, here and not one page away: the first three in Today's
             order (a person first), each row its own way in; the rest on Overview. */}
         {showWaiting ? (

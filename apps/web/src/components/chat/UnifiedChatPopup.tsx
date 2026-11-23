@@ -211,6 +211,20 @@ export function UnifiedChatPopup() {
   const msgEndRef = useRef<HTMLDivElement>(null);
   const msgInputRef = useRef<HTMLInputElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const threadOpenerRef = useRef<HTMLElement | null>(null);
+  const restoreThreadFocus = useRef(false);
+  const backToConversations = useCallback(() => {
+    restoreThreadFocus.current = true;
+    setSelected(null);
+    setActiveConversationId(null);
+  }, [setActiveConversationId]);
+  useEffect(() => {
+    if (selected || !restoreThreadFocus.current) return;
+    restoreThreadFocus.current = false;
+    const opener = threadOpenerRef.current;
+    threadOpenerRef.current = null;
+    (opener?.isConnected ? opener : popupRef.current)?.focus({ preventScroll: true });
+  }, [selected]);
 
   // ── Draggable ──────────────────────────────────────────────────────────────
   const { position, isDragging, dragHandleProps } = useDraggable({
@@ -227,17 +241,16 @@ export function UnifiedChatPopup() {
   useEffect(() => {
     if (!isOpen || isMinimized) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
+      if (e.key !== 'Escape' || e.defaultPrevented || !(e.target instanceof Node) || !popupRef.current?.contains(e.target)) return;
       if (selected && activeTab === 'messages') {
-        setSelected(null);
-        setActiveConversationId(null);
+        backToConversations();
       } else {
         close();
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isMinimized, selected, activeTab, close, setActiveConversationId]);
+  }, [isOpen, isMinimized, selected, activeTab, close, backToConversations]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -265,8 +278,8 @@ export function UnifiedChatPopup() {
     if (isOpen && !isMinimized) {
       const opener = overlayOpener(popupRef.current);
       if (opener && !popupRef.current?.contains(opener)) openerRef.current = opener;
-      setTimeout(() => popupRef.current?.focus(), 50);
-      return;
+      const timeout = setTimeout(() => popupRef.current?.focus(), 50);
+      return () => clearTimeout(timeout);
     }
     if (!isOpen) {
       const opener = openerRef.current;
@@ -470,7 +483,8 @@ export function UnifiedChatPopup() {
   // Focus msg input when thread opens
   useEffect(() => {
     if (selected && !isMinimized && activeTab === 'messages') {
-      setTimeout(() => msgInputRef.current?.focus(), 100);
+      const timeout = setTimeout(() => msgInputRef.current?.focus(), 100);
+      return () => clearTimeout(timeout);
     }
   }, [selected?.id, isMinimized, activeTab]);
 
@@ -490,6 +504,8 @@ export function UnifiedChatPopup() {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleSelectConversation = useCallback((conv: Conversation) => {
+    const opener = document.activeElement;
+    threadOpenerRef.current = opener instanceof HTMLElement && popupRef.current?.contains(opener) ? opener : null;
     setSelected(conv);
     setMsgInput('');
     setActiveConversationId(conv.id);
@@ -706,7 +722,7 @@ export function UnifiedChatPopup() {
             <div className="flex shrink-0 items-center gap-2 border-b border-border bg-card/80 px-3 py-2">
               <button
                 type="button"
-                onClick={() => { setSelected(null); setActiveConversationId(null); }}
+                onClick={backToConversations}
                 className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 aria-label={bilingualAria('Back to conversations', 'Πίσω στις συνομιλίες')}
               >

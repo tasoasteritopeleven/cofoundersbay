@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { HOME_COPY, homeAudience, homeOrder, memberRole, overviewPathFor, saysWhatTheyWant } from './role-home';
+import { HOME_COPY, homeAudience, homeOrder, memberRole, nextHomeStep, ONBOARDING_MATCHES, overviewPathFor, saysWhatTheyWant } from './role-home';
+
+it('names only the next unfinished step once its profile and connections are known', () => {
+  const steps = [{ done: true, key: 'one' }, { done: false, key: 'two' }, { done: false, key: 'three' }];
+  expect(nextHomeStep(steps, false)).toBeUndefined();
+  expect(nextHomeStep(steps, true)).toBe(steps[1]);
+  expect(nextHomeStep(steps.slice(0, 1), true)).toBeUndefined();
+  expect(ONBOARDING_MATCHES.mentor.en).not.toBe(ONBOARDING_MATCHES.investor.en);
+});
 
 describe('the first page for each kind of member', () => {
   it('sorts roles the way their dashboards do', () => {

@@ -131,6 +131,12 @@ describe('your pages', () => {
 });
 
 describe('pins', () => {
+  it('reports the new shortcut position from the persisted order', () => {
+    pinPage('/messages');
+    pinPage('/jobs');
+    expect(movePin('/jobs', -1)).toBe(1);
+    expect(yourPages(readUsage(), NOW).map((page) => page.key)).toEqual(['/jobs', '/messages']);
+  });
   it('pins, refuses a no-op, a home and a seventh, and unpins with its place', () => {
     expect(pinPage('/messages')).toEqual({ ok: true, index: 0 });
     expect(pinPage('/messages')).toEqual({ ok: false, reason: 'already' });

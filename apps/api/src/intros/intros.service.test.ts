@@ -136,15 +136,19 @@ describe('IntrosService', () => {
     const { intro } = await service.request('alex', ask);
     expect(intro).toMatchObject({ role: 'requester', status: 'pending', toRequester: ['connection'], toTarget: ['connection', 'mentor'] });
     expect(notifications.createNotification).toHaveBeenLastCalledWith(expect.objectContaining({ userId: 'elena', type: 'intro_request' }));
+    expect(notifications.createNotification).toHaveBeenLastCalledWith(expect.objectContaining({ meta: { requiresResponse: true } }));
 
     // Nikos cannot see or act on it before Elena forwards it.
     expect((await service.list('nikos')).received).toEqual([]);
     await expect(service.accept('nikos', intro.id)).rejects.toBeInstanceOf(ForbiddenException);
 
     await service.forward('elena', intro.id, { note: 'Worth half an hour.' });
+    expect(notifications.createNotification).toHaveBeenCalledWith(expect.objectContaining({ userId: 'nikos', meta: { requiresResponse: true } }));
+    expect(notifications.createNotification).toHaveBeenLastCalledWith(expect.objectContaining({ userId: 'alex', meta: { requiresResponse: false } }));
     expect((await service.list('nikos')).received[0]).toMatchObject({ status: 'forwarded', forwardNote: 'Worth half an hour.' });
 
     const accepted = await service.accept('nikos', intro.id);
+    expect(notifications.createNotification).toHaveBeenLastCalledWith(expect.objectContaining({ userId: 'elena', meta: { requiresResponse: false } }));
     expect(commitments.expressInterest).toHaveBeenCalledWith({ id: 'nikos' }, 'c1', { note: 'Introduced by Elena.' });
     expect(accepted).toMatchObject({ cardId: 'c1', threadId: 't1', intro: { status: 'accepted' } });
     // The intermediary is told it was accepted, and does not get the thread.

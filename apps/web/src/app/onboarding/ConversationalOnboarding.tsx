@@ -20,6 +20,7 @@ import { useLanguagePreference, useBilingualString } from '@/lib/i18n/LanguagePr
 import { COMMITMENT_LEVELS, LOOKING_FOR_OPTIONS, STARTUP_STAGES, founderGoalsPayload } from '@/lib/founder-options';
 import { onRadioGroupKeyDown, radioTabIndex } from '@/lib/radio-keys';
 import { TOP_BANNER_STACK } from '@/components/layout/useTopBannerHeight';
+import { ONBOARDING_MATCHES } from '@/lib/role-home';
 
 type Role = 'founder' | 'mentor' | 'investor' | 'org';
 
@@ -134,8 +135,8 @@ const BOT_QUESTIONS: Record<Step, { en: string; el: string }> = {
   skills: { en: 'Last step: what are your key skills? Select all that apply.', el: 'Τελευταίο βήμα: ποιες είναι οι βασικές σας δεξιότητες; Επιλέξτε όσες ισχύουν.' },
   submitting: { en: 'Creating your profile…', el: 'Δημιουργία του προφίλ σας…' },
   done: {
-    en: 'Your profile is ready. Next: Matches lists people who complement you, with the reasons, and nothing is sent until you press Connect. Ten short questions on how you like to work show where you and a match agree.',
-    el: 'Το προφίλ σας είναι έτοιμο. Επόμενο: στις Αντιστοιχίσεις βλέπετε ανθρώπους που σας συμπληρώνουν, με τους λόγους, και τίποτα δεν στέλνεται μέχρι να πατήσετε Σύνδεση. Δέκα σύντομες ερωτήσεις για το πώς σας αρέσει να δουλεύετε δείχνουν πού συμφωνείτε με μια αντιστοίχιση.',
+    en: 'Your profile is ready. Nothing is sent until you press Connect.',
+    el: 'Το προφίλ σας είναι έτοιμο. Τίποτα δεν στέλνεται μέχρι να πατήσετε Σύνδεση.',
   },
 };
 
@@ -752,6 +753,9 @@ export function ConversationalOnboarding() {
 
           {step === 'done' && (
             <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">
+                <BilingualText {...ONBOARDING_MATCHES[form.current.role]} wrap />
+              </p>
               <Button className="w-full gap-2" onClick={() => router.push(takeReturnTo('/matches'))} data-testid="onboarding-matches-button">
                 <ArrowRight className="icon-sm" />
                 <BilingualText en="See my matches" el="Δείτε τις αντιστοιχίσεις σας" compact />
