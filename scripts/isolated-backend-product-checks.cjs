@@ -282,6 +282,38 @@ async function runProductChecks({ base, db, results, password, privateDir, uploa
   for (const [key, value] of staleCookies) dave.cookies.set(key, value);
   check('the_old_session_is_refused', (await dave.request('GET', '/auth/me')).status === 401);
   check('the_password_no_longer_signs_in', (await client().request('POST', '/auth/login', { email: 'dave@product.example', password })).status === 401);
+
+  const cid = c.data.user.id;
+  const event = await db.event.create({ data: {
+    creatorId: aid, title: 'Reconnect test', startAt: new Date(Date.now() - 7_200_000), endAt: new Date(Date.now() - 3_600_000),
+    rsvps: { create: [{ userId: bid, status: 'going' }, { userId: cid, status: 'interested' }] },
+  } });
+  const eventPath = `/events/${event.id}`;
+  const matchLink = `${eventPath}#reconnect`;
+  const interest = (actor, target, interested) => actor.request('PUT', `${eventPath}/reconnect/${target}`, { interested });
+  const attend = (actor, userId, attended) => actor.request('PUT', `${eventPath}/attendance`, { userId, attended });
+  const matches = () => db.notification.count({ where: { link: matchLink, meta: { path: ['eventReconnect'], equals: 'match' } } });
+  check('reconnect_roster_requires_session', (await anonymous.request('GET', `${eventPath}/attendance`)).status === 401);
+  check('reconnect_only_organizer_can_read_roster', (await bob.request('GET', `${eventPath}/attendance`)).status === 403);
+  check('reconnect_cannot_self_confirm', (await attend(bob, bid, true)).status === 403);
+  const bulk = await alice.request('PUT', `${eventPath}/attendance`, { allGoing: true });
+  check('reconnect_bulk_marks_only_going', bulk.status === 200 && bulk.data.changed === 1 && await db.eventRsvp.count({ where: { eventId: event.id, userId: cid, checkedInAt: null } }) === 1);
+  check('reconnect_rsvp_is_not_attendance', (await carol.request('GET', `${eventPath}/reconnect`)).data.state === 'not_confirmed');
+  check('reconnect_unconfirmed_target_is_refused', (await interest(bob, cid, true)).status === 403);
+  check('reconnect_manual_attendance', (await attend(alice, cid, true)).status === 200);
+  check('reconnect_selection_is_private', (await interest(bob, cid, true)).data.mutual === false && await matches() === 0);
+  const otherView = await carol.request('GET', `${eventPath}/reconnect`);
+  check('reconnect_no_inbound_selection_leak', otherView.data.rows.some((row) => row.userId === bid && !row.interested && !row.mutual));
+  check('reconnect_mutual_notifies_both', (await interest(carol, bid, true)).data.mutual === true && await matches() === 2);
+  check('reconnect_repeat_does_not_renotify', (await interest(bob, cid, true)).data.mutual === true && await matches() === 2);
+  check('reconnect_does_not_create_connection', await db.connectionRequest.count({ where: { OR: [{ requesterId: bid, receiverId: cid }, { requesterId: cid, receiverId: bid }] } }) === 0);
+  check('reconnect_withdraw_revokes_both', (await interest(bob, cid, false)).status === 200 && await matches() === 0 && await db.eventReconnectInterest.count({ where: { eventId: event.id } }) === 0);
+  check('reconnect_second_round', (await interest(bob, cid, true)).status === 200);
+  await db.eventReconnectInterest.updateMany({ where: { eventId: event.id }, data: { expiresAt: new Date(Date.now() - 1000) } });
+  await db.event.update({ where: { id: event.id }, data: { endAt: new Date(Date.now() - 15 * 86_400_000) } });
+  const closed = await bob.request('GET', `${eventPath}/reconnect`);
+  check('reconnect_expired_unmatched_is_deleted', closed.data.state === 'closed' && closed.data.rows.length === 0 && await db.eventReconnectInterest.count({ where: { eventId: event.id } }) === 0);
+  check('reconnect_deadlines_are_enforced', (await interest(bob, cid, true)).status === 409 && (await attend(alice, cid, false)).status === 409);
 }
 
 module.exports = { runProductChecks };

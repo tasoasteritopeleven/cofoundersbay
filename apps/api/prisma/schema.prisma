@@ -860,9 +860,25 @@ model EventRsvp {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   checkedInAt DateTime?
+  reconnectNudgedAt DateTime?
+  reconnectGiven EventReconnectInterest[] @relation("ReconnectGiven")
+  reconnectReceived EventReconnectInterest[] @relation("ReconnectReceived")
 
   @@id([eventId, userId])
   @@index([userId])
+}
+
+model EventReconnectInterest {
+  eventId   String
+  fromId    String
+  toId      String
+  expiresAt DateTime?
+  sender    EventRsvp @relation("ReconnectGiven", fields: [eventId, fromId], references: [eventId, userId], onDelete: Cascade)
+  recipient EventRsvp @relation("ReconnectReceived", fields: [eventId, toId], references: [eventId, userId], onDelete: Cascade)
+
+  @@id([eventId, fromId, toId])
+  @@index([eventId, toId])
+  @@index([expiresAt])
 }
 
 model MentorAvailability {
