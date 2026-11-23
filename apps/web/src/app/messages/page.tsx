@@ -56,7 +56,7 @@ import { choiceControl, rowOptions, usePageControls, usePageList, type PageContr
 import { useQueryClient } from '@tanstack/react-query';
 import type { ConversationValidationState } from '@/components/messaging/ConversationValidation';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
-import { confirmSentMessage, conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
+import { canForwardMessage, confirmSentMessage, conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
 
 function mapConversation(s: ConversationSummary): Conversation {
   const lastAt = s.lastMessage?.createdAt ?? s.updatedAt;
@@ -958,7 +958,9 @@ export default function MessagesPage() {
     const message = forwarding;
     setForwarding(null);
     if (!message) return;
-    if (isPreviewDemo()) {
+    const preview = isPreviewDemo();
+    if (!canForwardMessage(message, preview)) return;
+    if (preview) {
       await apiRequest(`/api/messages/conversations/${encodeURIComponent(conversationId)}/messages`, {
         method: 'POST',
         body: JSON.stringify({ body: message.content }),
@@ -1462,6 +1464,7 @@ export default function MessagesPage() {
                   onEditMessage={(id, body) => { void handleEditMessage(id, body); }}
                   onDeleteMessage={(message) => { void handleDeleteMessage(message); }}
                   onForwardMessage={setForwarding}
+                  canForwardMessage={(message) => canForwardMessage(message, isPreviewDemo())}
                   onTypingStart={handleTypingStart}
                   onTypingStop={handleTypingStop}
                   isRecipientTyping={isRecipientTyping}

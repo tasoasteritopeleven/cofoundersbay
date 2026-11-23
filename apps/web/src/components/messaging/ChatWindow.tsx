@@ -97,6 +97,7 @@ type ChatWindowProps = {
   onEditMessage?: (messageId: string, body: string) => void;
   onDeleteMessage?: (message: Message) => void;
   onForwardMessage?: (message: Message) => void;
+  canForwardMessage?: (message: Message) => boolean;
   onBack?: () => void;
   onReport?: () => void;
   onBlock?: () => void;
@@ -448,6 +449,7 @@ export function ChatWindow({
   onEditMessage,
   onDeleteMessage,
   onForwardMessage,
+  canForwardMessage,
   onBack,
   onReport,
   onBlock,
@@ -986,7 +988,7 @@ export function ChatWindow({
                     onReact={handleReact}
                     onEdit={onEditMessage ? (m) => { setReplyTo(null); setEditing(m); applyDraft(m.content); } : undefined}
                     onDelete={onDeleteMessage}
-                    onForward={onForwardMessage}
+                    onForward={canForwardMessage?.(msg) === false ? undefined : onForwardMessage}
                   />
                 </div>
               );

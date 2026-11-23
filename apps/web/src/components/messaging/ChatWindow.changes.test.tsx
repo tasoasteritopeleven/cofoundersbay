@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { LanguagePreferenceProvider } from '@/lib/i18n/LanguagePreferenceContext';
+import { canForwardMessage } from '@/lib/message-selection';
 import { ChatWindow, type Message } from './ChatWindow';
 
 /**
@@ -16,7 +17,7 @@ afterEach(cleanup);
 const minutesAgo = (n: number) => new Date(Date.now() - n * 60_000);
 const message = (over: Partial<Message>): Message => ({ id: 'm1', senderId: 'me', content: 'Original', timestamp: minutesAgo(1), status: 'read', ...over });
 
-function renderThread(messages: Message[], handlers: { onEditMessage?: (id: string, body: string) => void; onDeleteMessage?: (m: Message) => void; onForwardMessage?: (m: Message) => void } = {}) {
+function renderThread(messages: Message[], handlers: { onEditMessage?: (id: string, body: string) => void; onDeleteMessage?: (m: Message) => void; onForwardMessage?: (m: Message) => void; canForwardMessage?: (m: Message) => boolean } = {}) {
   const onSendMessage = vi.fn();
   render(
     <LanguagePreferenceProvider>
@@ -86,6 +87,22 @@ describe('editing in the composer', () => {
 });
 
 describe('who can do what', () => {
+  it('leaves demo audio playable without offering to forward it as text', () => {
+    const audio = message({ content: 'Voice message', attachments: [{ type: 'audio/webm', url: 'blob:recording', name: 'voice-note.webm' }] });
+    renderThread([audio, message({ id: 'm2', content: 'Plain text' })], {
+      onForwardMessage: vi.fn(),
+      canForwardMessage: (m) => canForwardMessage(m, true),
+    });
+
+    hover('Voice message');
+    expect(document.querySelector('audio[data-voice-note]')).toBeTruthy();
+    expect(screen.queryByTitle(/Forward/)).toBeNull();
+    expect(canForwardMessage(audio, false)).toBe(true);
+
+    hover('Plain text');
+    expect(screen.getByTitle(/Forward/)).toBeTruthy();
+  });
+
   it('offers no edit after fifteen minutes, but still delete and forward', () => {
     renderThread([message({ timestamp: minutesAgo(20) })], { onEditMessage: vi.fn(), onDeleteMessage: vi.fn(), onForwardMessage: vi.fn() });
     hover('Original');

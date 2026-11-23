@@ -29,3 +29,7 @@ export function confirmSentMessage<T extends { id: string }>(current: T[], tempo
     message.id === temporaryId ? [{ ...message, ...saved }] : message.id === saved.id ? [] : [message],
   );
 }
+
+export function canForwardMessage(message: { attachments?: readonly unknown[] }, preview: boolean): boolean {
+  return !preview || !message.attachments?.length;
+}
