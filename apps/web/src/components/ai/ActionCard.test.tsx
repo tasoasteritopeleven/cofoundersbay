@@ -1,9 +1,11 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { LanguagePreferenceProvider } from '@/lib/i18n/LanguagePreferenceContext';
 import { getActionSpec } from '@/lib/action-registry';
 import type { CopilotAction, CopilotActionStatus, CopilotActionTool } from '@/lib/copilot-types';
 import { ActionCard } from './ActionCard';
+import { qk } from '@/lib/query-keys';
 
 /**
  * The registry knows which writes can be taken back. This asserts the user is
@@ -38,6 +40,26 @@ function renderCard(a: CopilotAction, onUndo?: (x: CopilotAction) => void) {
 }
 
 afterEach(cleanup);
+
+it.each([
+  ['set_event_attendance', { attended: true }, 'Confirm attendance'],
+  ['set_event_attendance', { attended: false }, 'Clear attendance'],
+  ['set_event_reconnect', { interested: true }, 'Select to reconnect'],
+  ['set_event_reconnect', { interested: false }, 'Withdraw reconnect interest'],
+] as const)('names the event, attendee and direction for %s', (tool, args, label) => {
+  const client = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } });
+  client.setQueryData(qk('events', 'detail', 'e1'), { event: { title: 'Founders meetup' } });
+  client.setQueryData(qk('events', 'attendance', 'e1', undefined), { rows: [{ userId: 'u1', displayName: 'Elena' }] });
+  client.setQueryData(qk('events', 'reconnect', 'e1', undefined), { rows: [{ userId: 'u1', displayName: 'Elena' }] });
+  render(
+    <QueryClientProvider client={client}>
+      <LanguagePreferenceProvider>
+        <ActionCard action={action(tool, 'pending', { eventId: 'e1', userId: 'u1', ...args })} onConfirm={vi.fn()} onDismiss={vi.fn()} />
+      </LanguagePreferenceProvider>
+    </QueryClientProvider>,
+  );
+  expect(screen.getByText(`${label} — Elena · Founders meetup`)).toBeTruthy();
+});
 
 describe('ActionCard reversibility', () => {
   it('warns, before confirming, that an intro cannot be taken back', () => {
