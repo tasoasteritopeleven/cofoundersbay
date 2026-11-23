@@ -32,7 +32,6 @@ import { useBilingualString } from '@/lib/i18n/LanguagePreferenceContext';
 import { AppShell } from '@/components/layout/AppShell';
 import type { PageRailSection } from '@/components/layout/PageRail';
 import { RailAction, RailOptions, RailStats } from '@/components/layout/RailParts';
-import { bilingualInline } from '@/lib/i18n/format';
 import { RailPeople } from '@/components/layout/RailPeople';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -629,7 +628,7 @@ export default function DiscoverPage() {
               view with how many of the results each finds (the mentors page
               does the same with expertise; docs §62.5, §111). */}
           {!loading && !searchFailed && hits.length > 0 ? (
-            <div className="-mt-4 flex gap-1.5 overflow-x-auto pb-1" role="group" aria-label={bilingualInline('Role', 'Ρόλος')}>
+            <div className="-mt-4 flex gap-1.5 overflow-x-auto pb-1" role="group" aria-label={sayOne('Role', 'Ρόλος')}>
               {roleChips.map((r) => {
                 const on = roleFilter === r.value;
                 return (
@@ -713,7 +712,7 @@ export default function DiscoverPage() {
           )}
 
           {!loading && promotedHits.length > 0 && (
-            <section aria-label="Promoted · Προώθηση" className="space-y-3 border-b border-border pb-4">
+            <section aria-label={sayOne('Promoted', 'Προωθημένα')} className="space-y-3 border-b border-border pb-4">
               <div className="flex flex-wrap items-baseline gap-2">
                 <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 text-xs font-medium text-foreground">
                   <BilingualText en={PROMOTED_COPY.label.en} el={PROMOTED_COPY.label.el} compact />

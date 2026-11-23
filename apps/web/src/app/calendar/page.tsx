@@ -5,6 +5,7 @@ import { RailStats } from '@/components/layout/RailParts';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { groupAgenda } from './calendar-agenda';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -41,7 +42,7 @@ import { getUpcomingMentorshipSessions, listEvents, listMilestones, type EventIt
 import { buildIcs, downloadIcs, type IcsEntry } from '@/lib/ics';
 import { qk } from '@/lib/query-keys';
 import { useDemoData } from '@/contexts/DemoDataContext';
-import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
+import { useBilingualString, useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 import { bilingualAria } from '@/lib/i18n/format';
 import { useHydrated } from '@/components/common/RelativeTime';
 import { useI18n } from '@/components/common/I18nProvider';
@@ -499,6 +500,8 @@ function MiniCalendar({
 export default function CalendarPage() {
   const router = useRouter();
   const { primary } = useLanguagePreference();
+  const sayOne = useBilingualString();
+  const [showLater, setShowLater] = useState(false);
   // The page is prerendered at build time, and "today" then is not today when
   // it is read: after the date changed, the grid, the today highlight and the
   // sample dates all disagreed with the browser and React #418 fired on every
@@ -579,6 +582,12 @@ export default function CalendarPage() {
     // A follow-up stays on the list once its day has passed: that is when it matters most.
     return filteredEvents.filter((e) => new Date(e.date) >= todayStart || e.id.startsWith('followup-')).slice(0, 8);
   }, [filteredEvents]);
+  const agenda = groupAgenda(upcomingEvents, now);
+  const agendaGroups = [
+    { id: 'overdue', en: 'Overdue follow-ups', el: 'Εκκρεμείς επανεπικοινωνίες', events: agenda.overdue },
+    { id: 'today', en: 'Today', el: 'Σήμερα', events: agenda.today },
+    { id: 'later', en: 'Later', el: 'Αργότερα', events: agenda.later },
+  ] as const;
 
   // What the export carries: everything the filters leave, from today on.
   const exportable = useMemo(() => {
@@ -612,6 +621,13 @@ export default function CalendarPage() {
       rows: loading ? undefined : thisMonthEvents.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title} · ${e.type}${e.location ? ` · ${e.location}` : ''}`),
       sample: isSample,
     },
+    ...agendaGroups.map(({ id, en, el, events }) => ({
+      id,
+      labelEn: en,
+      labelEl: el,
+      rows: !hydrated || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title}`),
+      sample: isSample,
+    })),
   ]);
   // Offered to the assistant: the event-type filter, through the same setter.
   usePageControls([
@@ -712,13 +728,13 @@ export default function CalendarPage() {
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center overflow-hidden rounded-xl border">
-            <Button variant={view === 'calendar' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-r-none" onClick={() => setView('calendar')} aria-label={bilingualAria('Calendar view', 'Προβολή ημερολογίου')}>
+            <Button variant={view === 'calendar' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-r-none" onClick={() => setView('calendar')} aria-label={sayOne('Calendar view', 'Προβολή ημερολογίου')} aria-pressed={view === 'calendar'}>
               <LayoutGrid className="icon-sm" />
             </Button>
-            <Button variant={view === 'week' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-none" onClick={() => setView('week')} aria-label={bilingualAria('Week view', 'Προβολή εβδομάδας')} aria-pressed={view === 'week'}>
+            <Button variant={view === 'week' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-none" onClick={() => setView('week')} aria-label={sayOne('Week view', 'Προβολή εβδομάδας')} aria-pressed={view === 'week'}>
               <CalendarRange className="icon-sm" />
             </Button>
-            <Button variant={view === 'list' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-l-none" onClick={() => setView('list')} aria-label={bilingualAria('List view', 'Προβολή λίστας')}>
+            <Button variant={view === 'list' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8 rounded-l-none" onClick={() => setView('list')} aria-label={sayOne('List view', 'Προβολή λίστας')} aria-pressed={view === 'list'}>
               <List className="icon-sm" />
             </Button>
           </div>
@@ -863,19 +879,41 @@ export default function CalendarPage() {
                       )}
                     </p>
                   ) : null}
-                  <div className="space-y-2">
-                    {upcomingEvents.map((e) => (
-                      <div key={e.id} className="flex min-w-0 items-center gap-3 overflow-hidden text-sm">
-                        <span className="w-[4.5rem] shrink-0 tabular-nums text-xs text-muted-foreground">
-                          {formatUpcomingDate(e.date, primary)}
-                        </span>
-                        <div className={cn('h-2 w-2 rounded-full shrink-0', TYPE_CONFIG[e.type].color.replace('text-', 'bg-'))} />
-                        <span className="min-w-0 flex-1 truncate">
-                          <BilingualText en={e.title} el={e.titleEl} compact />
-                        </span>
-                        <Badge variant="secondary" className="h-4 shrink-0 text-2xs">
-                          <BilingualText en={TYPE_CONFIG[e.type].labelEn} el={TYPE_CONFIG[e.type].labelEl} compact secondaryClassName="hidden" />
-                        </Badge>
+                  <div className="space-y-3">
+                    {agendaGroups.filter(({ events }) => events.length > 0).map(({ id, en, el, events }) => (
+                      <div key={id} className="space-y-2">
+                        {id === 'later' ? (
+                          <>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start px-0 sm:hidden"
+                              onClick={() => setShowLater((open) => !open)}
+                              aria-expanded={showLater}
+                              aria-controls="calendar-agenda-later"
+                            >
+                              <BilingualText en={en} el={el} compact /> <span>({events.length})</span>
+                            </Button>
+                            <h3 className="hidden text-xs font-medium text-muted-foreground sm:block"><BilingualText en={en} el={el} compact /></h3>
+                          </>
+                        ) : (
+                          <h3 className="text-xs font-medium text-muted-foreground"><BilingualText en={en} el={el} compact /></h3>
+                        )}
+                        <div id={id === 'later' ? 'calendar-agenda-later' : undefined} className={cn('space-y-2', id === 'later' && !showLater && 'hidden sm:block')}>
+                          {events.map((e) => (
+                            <div key={e.id} className="flex min-w-0 items-center gap-3 overflow-hidden text-sm">
+                              <span className="w-[4.5rem] shrink-0 tabular-nums text-xs text-muted-foreground">
+                                {formatUpcomingDate(e.date, primary)}
+                              </span>
+                              <div className={cn('h-2 w-2 rounded-full shrink-0', TYPE_CONFIG[e.type].color.replace('text-', 'bg-'))} />
+                              <span className="min-w-0 flex-1 truncate">
+                                <BilingualText en={e.title} el={e.titleEl} compact />
+                              </span>
+                              <Badge variant="secondary" className="h-4 shrink-0 text-2xs">
+                                <BilingualText en={TYPE_CONFIG[e.type].labelEn} el={TYPE_CONFIG[e.type].labelEl} compact secondaryClassName="hidden" />
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
