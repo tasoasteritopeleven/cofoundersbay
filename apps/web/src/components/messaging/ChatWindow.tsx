@@ -782,7 +782,7 @@ export function ChatWindow({
               data-messages-tools-anchor=""
               aria-label={bilingualAria('Page tools', 'Εργαλεία σελίδας')}
               className="tap-target inline-flex h-9 w-9 items-center justify-center rounded-xl bg-transparent text-foreground/70 hover:bg-secondary/60 hover:text-foreground sm:hidden"
-              onClick={() => window.dispatchEvent(new CustomEvent('cfb-open-page-tools'))}
+              onClick={(event) => window.dispatchEvent(new CustomEvent('cfb-open-page-tools', { detail: event.currentTarget }))}
             >
               <SlidersHorizontal className="icon-md" aria-hidden="true" />
             </button>

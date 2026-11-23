@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PageRail, type PageRailSection } from './PageRail';
 import { PageRailProvider, closePageTools, currentRailSections } from './PageRailContext';
@@ -106,6 +106,17 @@ describe('the assistant and a mounted rail', () => {
 });
 
 describe('a link in a section asking the tools to step aside', () => {
+  it('returns focus to the thread tools opener after Escape', async () => {
+    vi.stubGlobal('innerWidth', 390);
+    mount();
+    render(<button type="button" onClick={(event) => window.dispatchEvent(new CustomEvent('cfb-open-page-tools', { detail: event.currentTarget }))}>Thread tools</button>);
+    const opener = screen.getByRole('button', { name: 'Thread tools' });
+    fireEvent.click(opener);
+    const sheet = screen.getByRole('dialog');
+    fireEvent.keyDown(sheet, { key: 'Escape' });
+    await waitFor(() => expect(document.activeElement).toBe(opener));
+  });
+
   it('closes the sheet on a phone, so the place that was asked for is in view', async () => {
     vi.stubGlobal('innerWidth', 390);
     mount();
