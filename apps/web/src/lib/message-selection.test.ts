@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pendingConversation } from './message-selection';
+import { conversationDraft, pendingConversation } from './message-selection';
 
 describe('conversation deep-link selection', () => {
   const conversations = [{ id: 'one' }, { id: 'two' }];
@@ -14,4 +14,11 @@ describe('conversation deep-link selection', () => {
     expect(pendingConversation('two', 'one', conversations)).toBe(conversations[1]);
     expect(pendingConversation('unknown', 'one', conversations)).toBeUndefined();
   });
+});
+
+it('keeps the same prefill seed when reopening a conversation without a new draft', () => {
+  const seed = conversationDraft(undefined, 'one', 'original text');
+  expect(conversationDraft(seed, 'one')).toBe(seed);
+  expect(conversationDraft(seed, 'two')).toBeUndefined();
+  expect(conversationDraft(seed, 'one', 'new text')).toEqual({ id: 'one', text: 'new text' });
 });

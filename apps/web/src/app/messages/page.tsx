@@ -56,7 +56,7 @@ import { choiceControl, rowOptions, usePageControls, usePageList, type PageContr
 import { useQueryClient } from '@tanstack/react-query';
 import type { ConversationValidationState } from '@/components/messaging/ConversationValidation';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
-import { pendingConversation } from '@/lib/message-selection';
+import { conversationDraft, pendingConversation } from '@/lib/message-selection';
 
 function mapConversation(s: ConversationSummary): Conversation {
   const lastAt = s.lastMessage?.createdAt ?? s.updatedAt;
@@ -317,7 +317,7 @@ export default function MessagesPage() {
   const [threadReload, setThreadReload] = useState(0);
   const [introResponding, setIntroResponding] = useState<Record<string, boolean>>({});
   const [selectedIntroId, setSelectedIntroId] = useState<string | null>(null);
-  const [composerDraft, setComposerDraft] = useState<string | undefined>();
+  const [composerDraft, setComposerDraft] = useState<{ id: string; text: string }>();
   const [reportBlockModal, setReportBlockModal] = useState<{ open: boolean; mode: 'report' | 'block' | 'both' }>({ open: false, mode: 'both' });
   const [validationStates, setValidationStates] = useState<Record<string, ConversationValidationState>>({});
   const { setActiveConversationId, markConversationRead } = useMessaging();
@@ -339,7 +339,7 @@ export default function MessagesPage() {
     rememberOpener();
     setSidebarTab('chats');
     setSelectedConversation((current) => current?.id === conv.id ? current : conv);
-    setComposerDraft(options?.draft);
+    setComposerDraft((current) => conversationDraft(current, conv.id, options?.draft));
     setActiveConversationId(conv.id);
     if (options?.markRead) markConversationRead(conv.id);
     setIsMobileViewingChat(true);
@@ -782,7 +782,7 @@ export default function MessagesPage() {
     if (searchParams?.get('action') !== 'schedule' || !selectedConversation) {
       return;
     }
-    setComposerDraft(t(messagesEn('schedule_draft'), messagesEl('schedule_draft')));
+    setComposerDraft({ id: selectedConversation.id, text: t(messagesEn('schedule_draft'), messagesEl('schedule_draft')) });
   }, [searchParams, selectedConversation?.id, t]);
 
   // Typing indicator emit
@@ -1457,7 +1457,7 @@ export default function MessagesPage() {
                   onTypingStop={handleTypingStop}
                   isRecipientTyping={isRecipientTyping}
                   onAskAi={openInboxAi}
-                  initialDraft={composerDraft}
+                  initialDraft={composerDraft?.id === selectedConversation.id ? composerDraft.text : undefined}
                   initialSearch={selectedConversation?.id === openConversationId ? findParam : undefined}
                   threadState={threadState}
                   onRetryThread={() => setThreadReload((n) => n + 1)}
