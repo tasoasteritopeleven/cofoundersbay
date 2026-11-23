@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { readLastVisit, sinceLastVisit } from './since-last-visit';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { notificationsSince, readLastVisit, sinceLastVisit } from './since-last-visit';
 
 const at = (iso: string, type: string) => ({ type, createdAt: iso });
 const last = Date.parse('2026-11-05T12:00:00Z');
@@ -13,6 +13,21 @@ describe('what is new since the last visit', () => {
 
   it('says nothing on a quiet day', () => {
     expect(sinceLastVisit([at('2026-11-04T10:00:00Z', 'message')], last)).toBeNull();
+  });
+
+  it('counts all new rows across pages and stops when it reaches the visit', async () => {
+    const message = at('2026-11-06T10:00:00Z', 'message');
+    const readPage = vi.fn()
+      .mockResolvedValueOnce({ notifications: Array.from({ length: 30 }, (_, id) => ({ ...message, id: String(id) })), nextCursor: 'next' })
+      .mockResolvedValueOnce({ notifications: [{ ...message, id: '30' }, { ...message, id: '29' }, at('2026-11-05T12:00:00Z', 'message')], nextCursor: 'older' });
+    await expect(notificationsSince(last, readPage)).resolves.toMatchObject({ en: 'Since your last visit: messages 31' });
+    expect(readPage.mock.calls).toEqual([[null], ['next']]);
+  });
+
+  it('does not return partial counts when another page fails or the cursor repeats', async () => {
+    const page = { notifications: [at('2026-11-06T10:00:00Z', 'message')], nextCursor: 'next' };
+    await expect(notificationsSince(last, vi.fn().mockResolvedValueOnce(page).mockRejectedValueOnce(new Error('offline')))).rejects.toThrow('offline');
+    await expect(notificationsSince(last, vi.fn().mockResolvedValue(page))).rejects.toThrow('Invalid notification cursor');
   });
 
   it('counts only what arrived after, by kind, messages first', () => {

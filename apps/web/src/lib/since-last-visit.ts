@@ -24,12 +24,40 @@ const LABEL: Record<Kind, { en: string; el: string }> = {
 
 const kindOf = (type: string): Kind => KIND.get(type) ?? 'rest';
 
-export function sinceLastVisit(items: ReadonlyArray<{ id?: string; type: string; createdAt: string }>, lastVisitMs: number | null): { en: string; el: string } | null {
+type VisitNotification = { id?: string; type: string; createdAt: string };
+
+export async function notificationsSince(
+  lastVisitMs: number,
+  readPage: (cursor: string | null) => Promise<{ notifications: VisitNotification[]; nextCursor: string | null }>,
+  signal?: AbortSignal,
+) {
+  const items: VisitNotification[] = [];
+  const seenCursors = new Set<string>();
+  let cursor: string | null = null;
+
+  do {
+    signal?.throwIfAborted();
+    const page = await readPage(cursor);
+    signal?.throwIfAborted();
+    if (!Array.isArray(page?.notifications)) throw new Error('Missing notifications');
+    items.push(...page.notifications);
+    if (page.notifications.some((item) => Date.parse(item?.createdAt) <= lastVisitMs)) break;
+
+    cursor = page.nextCursor;
+    if (cursor === null) break;
+    if (typeof cursor !== 'string' || !cursor || seenCursors.has(cursor)) throw new Error('Invalid notification cursor');
+    seenCursors.add(cursor);
+  } while (cursor);
+
+  return sinceLastVisit(items, lastVisitMs);
+}
+
+export function sinceLastVisit(items: readonly VisitNotification[], lastVisitMs: number | null): { en: string; el: string } | null {
   if (lastVisitMs === null) return null;
   const counts = new Map<Kind, number>();
   const seen = new Set<string>();
   for (const item of items) {
-    const created = Date.parse(item.createdAt);
+    const created = Date.parse(item?.createdAt);
     if (!Number.isFinite(created) || created <= lastVisitMs || (item.id && seen.has(item.id))) continue;
     if (item.id) seen.add(item.id);
     const kind = kindOf(item.type);

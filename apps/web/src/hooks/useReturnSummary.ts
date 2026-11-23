@@ -6,7 +6,7 @@ import { useStoredUser } from '@/hooks/useStoredUser';
 import { listNotifications } from '@/lib/api';
 import { isPreviewDemo } from '@/lib/preview-demo';
 import { qk } from '@/lib/query-keys';
-import { readLastVisit, sinceLastVisit } from '@/lib/since-last-visit';
+import { notificationsSince, readLastVisit } from '@/lib/since-last-visit';
 
 export function useReturnSummary() {
   const user = useStoredUser();
@@ -18,13 +18,13 @@ export function useReturnSummary() {
   }, [id, demo]);
   const previous = id && anchor?.id === id && anchor.demo === demo ? anchor.previous : null;
   const recent = useQuery({
-    queryKey: qk('notifications', 'recent', id, demo),
-    queryFn: () => listNotifications({ limit: 30 }),
+    queryKey: qk('notifications', 'recent', id, demo, previous),
+    queryFn: ({ signal }) => previous === null
+      ? null
+      : notificationsSince(previous, (cursor) => listNotifications({ limit: 30, cursor }), signal),
     enabled: previous !== null,
     staleTime: 60_000,
     retry: 0,
   });
-  return !recent.isError && Array.isArray(recent.data?.notifications)
-    ? sinceLastVisit(recent.data.notifications, previous)
-    : null;
+  return recent.isError ? null : recent.data ?? null;
 }
