@@ -857,6 +857,13 @@ export function planCopilotTools(rawMessage: string): PlannedTool[] {
   // Typed as a command, it is the whole request (docs §114).
   if (message === '/audit') return [{ name: 'get_studio_check', args: {} }];
 
+  const reconnectAsk = fold(message);
+  if (/\b(?:reconnect|meet again)\b/.test(reconnectAsk) && /\bevents?\b/.test(reconnectAsk)
+    || /(?:επανασυνδε|ξαναβρεθ|ξανασυναντ)/.test(reconnectAsk) && /εκδηλωσ/.test(reconnectAsk)) {
+    const eventId = rawMessage.match(/\/events\/([\w-]+)/i)?.[1];
+    return [{ name: 'get_event_reconnect', args: eventId ? { eventId } : {} }];
+  }
+
   const tools: PlannedTool[] = [];
   const add = (name: CopilotToolName, args: Record<string, string> = {}) => {
     if (!tools.some((t) => t.name === name && JSON.stringify(t.args) === JSON.stringify(args))) {

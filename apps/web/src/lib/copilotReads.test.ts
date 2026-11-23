@@ -72,6 +72,18 @@ it('keeps later mutual matches and private selections ahead of unselected candid
   expect(read.section).not.toContain('Candidate 4');
 });
 
+it('reads the event from page context and does not fall back to upcoming events', async () => {
+  const question = 'Who can I reconnect with after this event?';
+  vi.mocked(getEventReconnect).mockClear();
+  vi.mocked(getEventReconnect).mockResolvedValue({ state: 'open', closesAt: '', rows: [] });
+  const offPage = await runCopilotTurn(question);
+  expect(offPage.message).toContain('I need the event ID.');
+  expect(getEventReconnect).not.toHaveBeenCalled();
+  const onPage = await runCopilotTurn(question, { route: '/events/selected-event' });
+  expect(onPage.usedTools).toEqual(['get_event_reconnect']);
+  expect(getEventReconnect).toHaveBeenCalledWith('selected-event');
+});
+
 const en = { t: (s: string, v?: Record<string, string | number>) => translate('en', s, v), locale: 'en' };
 const el = { t: (s: string, v?: Record<string, string | number>) => translate('el', s, v), locale: 'el' };
 

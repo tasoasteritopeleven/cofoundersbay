@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { planCopilotTools } from './copilot-planner';
 import { listActionIds } from '@cofounderbay/shared';
+import { CAPABILITY_SAMPLES } from './capability-samples';
 
 /**
  * The heuristic planner is the path taken when the model behind the assistant
@@ -20,6 +21,13 @@ function plan(message: string) {
 function argsFor(message: string, name: string) {
   return planCopilotTools(message).find((tool) => tool.name === name)?.args;
 }
+
+it('routes reconnect samples to the specific read, not upcoming events', () => {
+  const sample = CAPABILITY_SAMPLES.get_event_reconnect;
+  expect(plan(sample.en)).toEqual(['get_event_reconnect']);
+  expect(plan(sample.el)).toEqual(['get_event_reconnect']);
+  expect(argsFor(`${sample.en} /events/event-42`, 'get_event_reconnect')).toEqual({ eventId: 'event-42' });
+});
 
 describe('planning the analytics window', () => {
   it('reads the window out of an English or Greek request', () => {

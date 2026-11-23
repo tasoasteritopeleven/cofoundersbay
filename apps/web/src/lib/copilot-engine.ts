@@ -637,7 +637,7 @@ export async function runCopilotTurn(
     list.total !== undefined && list.total > list.shown
       ? t('{list}: {shown} on screen of {total}.', { list: list.label, shown: list.shown, total: list.total })
       : t('{list}: {shown} on screen.', { list: list.label, shown: list.shown });
-  const askedList = pageListFor(userMessage, pageLists);
+  const askedList = planned.some((tool) => tool.name === 'get_event_reconnect') ? undefined : pageListFor(userMessage, pageLists);
   const summarisesLists = pageLists.length > 0 && asksAboutThisPage(userMessage);
   if (askedList) {
     const lines = [describeCount(askedList)];
@@ -672,7 +672,11 @@ export async function runCopilotTurn(
     // whole reply: the other tools in the turn still have something to say.
     if (isAreaRead(tool.name)) {
       try {
-        const read = await AREA_READERS[tool.name](tool.args ?? {}, { t, locale: replyLocale });
+        const args = tool.args ?? {};
+        const contextualEvent = tool.name === 'get_event_reconnect' && !args.eventId
+          ? pageContext?.route.match(/^\/events\/([\w-]+)\/?$/)?.[1]
+          : undefined;
+        const read = await AREA_READERS[tool.name](contextualEvent ? { ...args, eventId: contextualEvent } : args, { t, locale: replyLocale });
         sections.push(read.section);
         citations.push(...read.citations);
         actions.push(...read.actions);
