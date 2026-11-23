@@ -29,10 +29,17 @@ describe('what is new since the last visit', () => {
   });
 
   it('remembers the previous visit, and a reload keeps the same line', () => {
-    expect(readLastVisit(1000)).toBeNull();
+    expect(readLastVisit('reader', false, 1000)).toBeNull();
     window.sessionStorage.clear();
-    expect(readLastVisit(2000)).toBe(1000);
-    expect(readLastVisit(3000)).toBe(1000);
-    expect(window.localStorage.getItem('cfb.home.lastVisit')).toBe('2000');
+    expect(readLastVisit('reader', false, 2000)).toBe(1000);
+    expect(readLastVisit('reader', false, 3000)).toBe(1000);
+    expect(window.localStorage.getItem('cfb.home.lastVisit:member:reader')).toBe('2000');
+    expect(readLastVisit('reader', true, 3000)).toBeNull();
+    expect(readLastVisit('other', false, 3000)).toBeNull();
+  });
+
+  it('does not count a duplicate id or an unreadable timestamp', () => {
+    const item = { ...at('2026-11-06T10:00:00Z', 'message'), id: 'same' };
+    expect(sinceLastVisit([item, item, at('invalid', 'message')], last)?.en).toBe('Since your last visit: messages 1');
   });
 });

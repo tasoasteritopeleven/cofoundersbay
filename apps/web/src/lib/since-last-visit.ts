@@ -9,11 +9,11 @@ const THIS_SESSION = 'cfb.home.sinceVisit';
 
 type Kind = 'messages' | 'people' | 'matches' | 'rest';
 
-const KIND: Array<[RegExp, Kind]> = [
-  [/message/, 'messages'],
-  [/connection|intro|follow/, 'people'],
-  [/match/, 'matches'],
-];
+const KIND = new Map<string, Kind>([
+  ['message', 'messages'], ['messages', 'messages'], ['direct', 'messages'],
+  ['connection_request', 'people'], ['connection_accepted', 'people'], ['intro_request', 'people'], ['follow_new', 'people'],
+  ['match', 'matches'], ['match_suggestion', 'matches'],
+]);
 
 const LABEL: Record<Kind, { en: string; el: string }> = {
   messages: { en: 'messages', el: 'μηνύματα' },
@@ -22,13 +22,16 @@ const LABEL: Record<Kind, { en: string; el: string }> = {
   rest: { en: 'other', el: 'άλλα' },
 };
 
-const kindOf = (type: string): Kind => KIND.find(([pattern]) => pattern.test(type))?.[1] ?? 'rest';
+const kindOf = (type: string): Kind => KIND.get(type) ?? 'rest';
 
-export function sinceLastVisit(items: ReadonlyArray<{ type: string; createdAt: string }>, lastVisitMs: number | null): { en: string; el: string } | null {
+export function sinceLastVisit(items: ReadonlyArray<{ id?: string; type: string; createdAt: string }>, lastVisitMs: number | null): { en: string; el: string } | null {
   if (lastVisitMs === null) return null;
   const counts = new Map<Kind, number>();
+  const seen = new Set<string>();
   for (const item of items) {
-    if (Date.parse(item.createdAt) <= lastVisitMs) continue;
+    const created = Date.parse(item.createdAt);
+    if (!Number.isFinite(created) || created <= lastVisitMs || (item.id && seen.has(item.id))) continue;
+    if (item.id) seen.add(item.id);
     const kind = kindOf(item.type);
     counts.set(kind, (counts.get(kind) ?? 0) + 1);
   }
@@ -45,14 +48,20 @@ export function sinceLastVisit(items: ReadonlyArray<{ type: string; createdAt: s
  * When the reader was last on the home, before this visit. The mark moves on at
  * once, but a reload in the same session keeps the line it already showed.
  */
-export function readLastVisit(now = Date.now()): number | null {
+export function readLastVisit(userId: string, demo: boolean, now = Date.now()): number | null {
+  if (!userId) return null;
+  const suffix = `:${demo ? 'demo' : 'member'}:${userId}`;
+  const valid = (value: string | null) => {
+    const time = Number(value);
+    return Number.isFinite(time) && time > 0 && time <= now && now - time <= 30 * 86_400_000 ? time : null;
+  };
   try {
-    const held = window.sessionStorage.getItem(THIS_SESSION);
-    if (held !== null) return held === '' ? null : Number(held);
-    const stored = window.localStorage.getItem(LAST_VISIT);
-    window.sessionStorage.setItem(THIS_SESSION, stored ?? '');
-    window.localStorage.setItem(LAST_VISIT, String(now));
-    return stored ? Number(stored) : null;
+    const held = window.sessionStorage.getItem(THIS_SESSION + suffix);
+    if (held !== null) return valid(held);
+    const stored = valid(window.localStorage.getItem(LAST_VISIT + suffix));
+    window.sessionStorage.setItem(THIS_SESSION + suffix, stored === null ? '' : String(stored));
+    window.localStorage.setItem(LAST_VISIT + suffix, String(now));
+    return stored;
   } catch {
     return null;
   }

@@ -33,6 +33,7 @@ import {
   getVentureReadiness,
   type SearchHit,
   listMilestones,
+  listResearchBoards,
   getAnalyticsMetrics,
   getAnalyticsProfileViews,
   getDashboardActivity,
@@ -54,6 +55,7 @@ import { Sparkline } from '@/components/charts/Sparkline';
 import { FounderProgressCard } from '@/components/gamification/FounderProgressCard';
 import { YourPagesRow } from '@/components/dashboard/YourPages';
 import { HomeContinue } from '@/components/home/HomeContinue';
+import { homeContinuation, matchesContinuation } from '@/lib/home-continuation';
 import {
   FIRST_MOVE_LATER_KEY,
   FounderFirstMove,
@@ -79,7 +81,7 @@ import { SectionSticker } from '@/components/dashboard/SectionSticker';
 import { explainMatch, saysLookingFor, viewerFacts, type ViewerFacts } from '@/lib/match-explain';
 import { useUnreadCounts } from '@/hooks/useUnreadCounts';
 import { isMilestoneOverdue } from '@/lib/milestone-order';
-import { HomeToday } from '@/components/dashboard/HomeToday';
+import { HomeToday, useTodayRows } from '@/components/dashboard/HomeToday';
 import { HomeAskHero } from '@/components/dashboard/HomeAskHero';
 import { useInvestorFollowUps } from '@/lib/follow-ups';
 
@@ -509,13 +511,14 @@ export default function FounderDashboardContent() {
    * query keys - so the tile, the list under it and that page cannot disagree,
    * and marking one done on either surface refreshes the other.
    */
-  const { data: milestoneData, isLoading: milestonesLoading, isError: milestonesFailed } = useQuery({
+  const milestoneQuery = useQuery({
     queryKey: qk('milestones', 'all', 'all'),
     queryFn: () => listMilestones({ limit: 100 }),
     enabled: hasSession && mounted,
     staleTime: 30_000,
     retry: 0,
   });
+  const { data: milestoneData, isLoading: milestonesLoading, isError: milestonesFailed } = milestoneQuery;
 
   /*
    * What actually happened, from the endpoint /activity pages through. The
@@ -619,27 +622,6 @@ export default function FounderDashboardContent() {
    * I do next?" is asked most — and the one where the assistant previously had
    * to answer from the route name alone.
    */
-  usePublishPageSnapshot('/dashboard/founder', {
-    title: 'Founder dashboard',
-    state: !mounted ? 'loading' : isPreviewDemo() ? 'demo' : 'ready',
-    summary: `${displayName}'s dashboard: profile, readiness, connections and the current round.`,
-    figures: {
-      'Profile completeness': `${profilePct}%`,
-      'Founder progress': `${founderProgress}%`,
-      'Pending intros': pendingRequests,
-      'Unread messages': unreadMessages,
-      'Recommended matches': matchCount ?? recommendations?.suggestions?.length ?? 0,
-      'Milestones complete': `${completedMilestoneCount}/${milestones.length}`,
-      'Next milestone': nextOpenMilestone?.titleEn ?? 'none',
-      ...(showDemoData
-        ? { 'Round progress': `${fundingPct}%`, 'Committed investors': fundStats.committed }
-        : {}),
-      'Need cards posted': firstMove.count ?? 'unknown',
-      'Ladder steps waiting on you': waitingThreads.length,
-    },
-    actions: ['navigate', 'draft_need_card', 'shortlist_add', 'send_connection', 'start_or_send_message'],
-  });
-
   const onboardingSteps = buildOnboardingSteps({
     hasProfile:      !!(profile?.profile?.displayName && profile?.profile?.headline),
     hasPreferences:  saysLookingFor(profile?.profile),
@@ -659,18 +641,63 @@ export default function FounderDashboardContent() {
     full: false,
   });
 
+  const boardsQuery = useQuery({
+    queryKey: qk('research-boards', false),
+    queryFn: () => listResearchBoards({ archived: false }),
+    enabled: mounted && hasSession && !showFirstMove,
+    staleTime: 60_000,
+    retry: 0,
+  });
+  const showContinuation = mounted && hasSession && !showFirstMove;
+  const continuation = homeContinuation(
+    { rows: boardsQuery.data?.boards, failed: boardsQuery.isError, busy: boardsQuery.isPending },
+    { rows: milestoneData?.milestones, failed: milestonesFailed, busy: milestoneQuery.isPending },
+  );
+  const continuationTarget = showContinuation ? continuation.target : undefined;
+  const { rows: todayRows } = useTodayRows();
+  const duplicateContinuation = todayRows.some((row) => matchesContinuation(continuationTarget, row));
+  const continuationUnavailable = !showContinuation || continuation.pending
+    ? { en: 'The continuation step is not available yet.', el: 'Το επόμενο βήμα δεν είναι ακόμη διαθέσιμο.' }
+    : continuation.boardsFailed || continuation.milestonesFailed
+      ? { en: 'Some continuation work could not be read.', el: 'Δεν ήταν δυνατή η ανάγνωση ορισμένων εκκρεμοτήτων.' }
+      : { en: 'There is no open board or milestone to continue.', el: 'Δεν υπάρχει ανοιχτός πίνακας ή ορόσημο για συνέχεια.' };
+  usePublishPageSnapshot('/dashboard/founder', {
+    title: 'Founder dashboard',
+    state: !mounted ? 'loading' : isPreviewDemo() ? 'demo' : 'ready',
+    summary: `${displayName}'s dashboard: profile, readiness, connections and the current round.`,
+    figures: {
+      'Profile completeness': `${profilePct}%`,
+      'Founder progress': `${founderProgress}%`,
+      'Pending intros': pendingRequests,
+      'Unread messages': unreadMessages,
+      'Recommended matches': matchCount ?? recommendations?.suggestions?.length ?? 0,
+      'Milestones complete': `${completedMilestoneCount}/${milestones.length}`,
+      'Next milestone': nextOpenMilestone?.titleEn ?? (milestonesFailed || !milestoneData?.milestones ? 'unknown' : 'none'),
+      ...(showDemoData
+        ? { 'Round progress': `${fundingPct}%`, 'Committed investors': fundStats.committed }
+        : {}),
+      'Need cards posted': firstMove.count ?? 'unknown',
+      'Ladder steps waiting on you': waitingThreads.length,
+      ...(showContinuation ? {
+        'Continue': continuationTarget?.en ?? continuationUnavailable.en,
+        ...(continuationTarget ? { 'Continue data': continuation.boardsFailed || continuation.milestonesFailed ? 'partial' : 'available' } : {}),
+      } : {}),
+    },
+    actions: ['navigate', 'draft_need_card', 'shortlist_add', 'send_connection', 'start_or_send_message'],
+  });
+
   usePageList([
     {
       id: 'open_milestones',
       labelEn: 'Open milestones',
       labelEl: 'Ανοιχτά ορόσημα',
-      rows: !mounted || milestonesLoading
+      rows: !mounted || milestonesLoading || !milestoneData?.milestones
         ? undefined
         : openMilestonesByDue.map((m) => `${m.titleEn} · ${m.progress}%${isPastDue(m) ? ' · overdue' : m.dueDate ? ` · due ${formatShortDate(m.dueDate, 'en')}` : ''}`),
-      rowsEl: !mounted || milestonesLoading
+      rowsEl: !mounted || milestonesLoading || !milestoneData?.milestones
         ? undefined
         : openMilestonesByDue.map((m) => `${m.titleEl} · ${m.progress}%${isPastDue(m) ? ' · εκπρόθεσμο' : m.dueDate ? ` · λήξη ${formatShortDate(m.dueDate, 'el')}` : ''}`),
-      total: milestones.length,
+      total: milestoneData?.milestones ? milestones.length : undefined,
       sample: usingDemoMilestones,
     },
     {
@@ -691,6 +718,15 @@ export default function FounderDashboardContent() {
   ]);
 
   usePageControls([
+    {
+      id: 'open_continuation',
+      labelEn: 'Open next step to continue',
+      labelEl: 'Άνοιγμα επόμενου βήματος για συνέχεια',
+      writes: false,
+      unavailableEn: continuationTarget ? undefined : continuationUnavailable.en,
+      unavailableEl: continuationTarget ? undefined : continuationUnavailable.el,
+      run: () => { if (continuationTarget) router.push(continuationTarget.href); },
+    },
     {
       id: 'open_lowest_progress',
       labelEn: 'Open lowest founder progress dimension',
@@ -1269,7 +1305,7 @@ export default function FounderDashboardContent() {
             live counts, the people, the one thing in progress, the progress
             score. The first steps and the three doors are on Help, and the
             shortcuts in the page's tools. */}
-        <div data-tour="founder-today"><HomeToday /></div>
+        <div data-tour="founder-today"><HomeToday continuation={continuationTarget} rows={todayRows} /></div>
 
         <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" data-tour="founder-stats">
           <MetricTile
@@ -1325,7 +1361,16 @@ export default function FounderDashboardContent() {
         <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
           <div className="min-w-0 space-y-5">
             {milestonesCard}
-            {showFirstMove ? null : <HomeContinue />}
+            {showContinuation ? (
+              <HomeContinue
+                continuation={duplicateContinuation ? { ...continuation, target: undefined } : continuation}
+                busy={boardsQuery.isFetching || milestoneQuery.isFetching}
+                retry={() => {
+                  if (continuation.boardsFailed) void boardsQuery.refetch();
+                  if (continuation.milestonesFailed) void milestoneQuery.refetch();
+                }}
+              />
+            ) : null}
           </div>
           <div className="min-w-0 space-y-5">
             {topMatchesCard}

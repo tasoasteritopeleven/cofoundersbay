@@ -11,7 +11,7 @@ import { isMilestoneOverdue } from '@/lib/milestone-order';
 import { PREVIEW_MILESTONE_EL } from '@/lib/i18n/strings-milestones';
 import { qk } from '@/lib/query-keys';
 
-export type LiveNotice = { key: string; href: string; en: string; el: string };
+export type LiveNotice = { key: string; href: string; en: string; el: string; entityId?: string };
 
 /**
  * What is due now, worked out from the data rather than sent: finishing the
@@ -46,6 +46,7 @@ export function liveNotices({ followUps, milestones, threads }: {
     notices.push({
       key: 'milestone',
       href: '/milestones',
+      entityId: late.length === 1 ? late[0].id : undefined,
       en: late.length === 1 ? `Overdue milestone: ${late[0].title}` : `${late.length} milestones are overdue`,
       el: late.length === 1 ? `Εκπρόθεσμο ορόσημο: ${PREVIEW_MILESTONE_EL[late[0].title]?.title ?? late[0].title}` : `Εκπρόθεσμα ορόσημα: ${late.length}`,
     });

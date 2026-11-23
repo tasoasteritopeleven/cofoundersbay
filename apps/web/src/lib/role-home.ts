@@ -103,3 +103,14 @@ export function homeOrder(input: { loading: boolean; peopleCount: number; showSt
   const stepsFirst = !input.loading && input.peopleCount === 0 && input.showSteps;
   return { stepsFirst, peopleEmptyButton: !input.showSteps };
 }
+
+export function nextHomeStep<T extends { done: boolean }>(steps: readonly T[], ready: boolean): T | undefined {
+  return ready ? steps.find((step) => !step.done) : undefined;
+}
+
+export const ONBOARDING_MATCHES: Record<Exclude<HomeAudience, 'provider'>, Words> = {
+  founder: { en: 'Start with a match who has the skills you need.', el: 'Ξεκινήστε με κάποιον που έχει τις δεξιότητες που χρειάζεστε.' },
+  mentor: { en: 'Start with a founder who could use your experience.', el: 'Ξεκινήστε με έναν ιδρυτή που θα μπορούσε να αξιοποιήσει την εμπειρία σας.' },
+  investor: { en: 'Start with a team that fits what you invest in.', el: 'Ξεκινήστε με μια ομάδα που ταιριάζει σε όσα επενδύετε.' },
+  org: { en: 'Start with a founder or mentor who fits your programmes.', el: 'Ξεκινήστε με έναν ιδρυτή ή μέντορα που ταιριάζει στα προγράμματά σας.' },
+};
