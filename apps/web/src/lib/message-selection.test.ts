@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { conversationDraft, pendingConversation } from './message-selection';
+import { conversationDraft, mergeReopenedMessages, pendingConversation } from './message-selection';
 
 describe('conversation deep-link selection', () => {
   const conversations = [{ id: 'one' }, { id: 'two' }];
@@ -21,4 +21,13 @@ it('keeps the same prefill seed when reopening a conversation without a new draf
   expect(conversationDraft(seed, 'one')).toBe(seed);
   expect(conversationDraft(seed, 'two')).toBeUndefined();
   expect(conversationDraft(seed, 'one', 'new text')).toEqual({ id: 'one', text: 'new text' });
+});
+
+it('keeps live messages past the first 200 and does not replace current rows with older copies', () => {
+  const firstPage = Array.from({ length: 200 }, (_, index) => ({ id: String(index), timestamp: new Date(index), content: 'on server' }));
+  const edited = { ...firstPage[199], content: 'edited live' };
+  const recent = { id: '200', timestamp: new Date(200), content: 'received live while away' };
+  const merged = mergeReopenedMessages([...firstPage.slice(0, 198), edited, recent], firstPage);
+  expect(merged).toHaveLength(201);
+  expect(merged.slice(-3)).toEqual([firstPage[198], edited, recent]);
 });

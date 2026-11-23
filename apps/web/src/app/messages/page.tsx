@@ -56,7 +56,7 @@ import { choiceControl, rowOptions, usePageControls, usePageList, type PageContr
 import { useQueryClient } from '@tanstack/react-query';
 import type { ConversationValidationState } from '@/components/messaging/ConversationValidation';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
-import { conversationDraft, pendingConversation } from '@/lib/message-selection';
+import { conversationDraft, mergeReopenedMessages, pendingConversation } from '@/lib/message-selection';
 
 function mapConversation(s: ConversationSummary): Conversation {
   const lastAt = s.lastMessage?.createdAt ?? s.updatedAt;
@@ -315,6 +315,7 @@ export default function MessagesPage() {
   const [connectionsFailed, setConnectionsFailed] = useState(false);
   const [threadState, setThreadState] = useState<InboxReadState>('loading');
   const [threadReload, setThreadReload] = useState(0);
+  const loadedThread = useRef<{ id: string; userId: string } | null>(null);
   const [introResponding, setIntroResponding] = useState<Record<string, boolean>>({});
   const [selectedIntroId, setSelectedIntroId] = useState<string | null>(null);
   const [composerDraft, setComposerDraft] = useState<{ id: string; text: string }>();
@@ -725,26 +726,33 @@ export default function MessagesPage() {
   // Load messages when conversation is selected
   useEffect(() => {
     if (!canUseMessaging || !selectedConversation) {
+      loadedThread.current = null;
       return;
     }
 
     let cancelled = false;
+    const retainMessages = loadedThread.current?.id === selectedConversation.id && loadedThread.current.userId === currentUserId;
     // The last thread's messages do not stay under the next one's name
     // while it loads, or after its read fails (docs §73).
-    setMessages([]);
-    setThreadState('loading');
+    if (!retainMessages) {
+      loadedThread.current = null;
+      setMessages([]);
+      setThreadState('loading');
+    }
     const run = async () => {
       try {
         const { messages: list } = await listConversationMessages(selectedConversation.id, 200);
         if (cancelled) return;
-        setMessages(list.map((m) => mapMessage(m, currentUserId)));
+        const fetched = list.map((m) => mapMessage(m, currentUserId));
+        setMessages((current) => retainMessages ? mergeReopenedMessages(current, fetched) : fetched);
+        loadedThread.current = { id: selectedConversation.id, userId: currentUserId };
         setThreadState('ready');
         setConversations((prev) =>
           prev.map((c) => (c.id === selectedConversation.id ? { ...c, unreadCount: 0 } : c)),
         );
         socketRef.current?.emit('conversation:join', { conversationId: selectedConversation.id });
       } catch {
-        if (cancelled) return;
+        if (cancelled || retainMessages) return;
         setThreadState('failed');
       }
     };
