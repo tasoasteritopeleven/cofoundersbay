@@ -1999,6 +1999,7 @@ export interface AnalyticsAchievement {
   icon: string;
   unlocked: boolean | null;
   unlockedAt?: string;
+  progress?: { current: number; target: number };
 }
 
 export interface WeeklySummary {
