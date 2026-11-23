@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
-import { agendaDateLabel, groupAgenda, useAgendaClock } from './calendar-agenda';
+import { agendaDateLabel, calendarDayKey, eventsOnDay, groupAgenda, useAgendaClock } from './calendar-agenda';
 import { restoreDateOnly } from '@/lib/calendar-days';
 
 it('stamps the clock after mount and refreshes at midnight and when returning', () => {
@@ -54,4 +54,19 @@ it('preserves the literal milestone date serialized by the API at UTC midnight',
   const milestone = { date: restoreDateOnly('2026-10-25T00:00:00.000Z') };
   expect(groupAgenda([milestone], new Date(2026, 9, 25, 12)).today).toEqual([milestone]);
   expect(restoreDateOnly('2026-10-25T01:00:00.000Z')).toBe('2026-10-25T01:00:00.000Z');
+});
+
+it('puts the same timed events on the local day in the agenda and day views', () => {
+  const selected = new Date(2026, 9, 25);
+  const morning = { date: new Date(2026, 9, 25, 0, 30).toISOString() };
+  const evening = { date: new Date(2026, 9, 25, 23, 30).toISOString() };
+  const milestone = { date: '2026-10-25' };
+  const tomorrow = { date: new Date(2026, 9, 26, 0, 30).toISOString() };
+  const events = [morning, evening, milestone, tomorrow];
+
+  expect(calendarDayKey(selected)).toBe('2026-10-25');
+  expect(eventsOnDay(events, selected)).toEqual([morning, evening, milestone]);
+  expect(groupAgenda(events, selected).today).toEqual(eventsOnDay(events, selected));
+  expect(agendaDateLabel(morning.date, true)).toBe('2026-10-25 00:30');
+  expect(agendaDateLabel(evening.date, true)).toBe('2026-10-25 23:30');
 });

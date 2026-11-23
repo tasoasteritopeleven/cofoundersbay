@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { calendarDaysUntil } from '@/lib/calendar-days';
 
 export function useAgendaClock() {
   const [now, setNow] = useState<Date | null>(null);
@@ -29,22 +28,41 @@ export function useAgendaClock() {
 }
 
 export function groupAgenda<T extends { date: string }>(events: readonly T[], now: Date) {
+  const today = calendarDayKey(now);
   const groups = { overdue: [] as T[], today: [] as T[], later: [] as T[] };
   for (const event of events) {
-    const offset = calendarDaysUntil(event.date, now);
-    if (offset === null) continue;
-    groups[offset < 0 ? 'overdue' : offset === 0 ? 'today' : 'later'].push(event);
+    const day = calendarDayKey(event.date);
+    if (!day) continue;
+    groups[day < today ? 'overdue' : day === today ? 'today' : 'later'].push(event);
   }
   return groups;
 }
 
-export function agendaLocalDate(iso: string) {
-  return new Date(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso}T00:00:00` : iso);
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+const pad = (value: number) => String(value).padStart(2, '0');
+
+export function calendarDate(iso: string) {
+  return new Date(DATE_ONLY.test(iso) ? `${iso}T00:00:00` : iso);
+}
+
+export function calendarDayKey(value: Date | string): string {
+  const date = typeof value === 'string' ? calendarDate(value) : value;
+  if (!Number.isFinite(date.getTime())) return '';
+  if (typeof value === 'string' && DATE_ONLY.test(value)) return value;
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+export function eventsOnDay<T extends { date: string }>(events: readonly T[], day: Date): T[] {
+  const key = calendarDayKey(day);
+  return key ? events.filter((event) => calendarDayKey(event.date) === key) : [];
+}
+
+export function calendarTime(iso: string) {
+  const date = calendarDate(iso);
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 export function agendaDateLabel(iso: string, timed: boolean) {
-  const date = agendaLocalDate(iso);
-  const pad = (value: number) => String(value).padStart(2, '0');
-  const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-  return timed ? `${day} ${pad(date.getHours())}:${pad(date.getMinutes())}` : day;
+  const day = calendarDayKey(iso);
+  return timed ? `${day} ${calendarTime(iso)}` : day;
 }

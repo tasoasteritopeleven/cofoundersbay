@@ -5,8 +5,8 @@ import { RailStats } from '@/components/layout/RailParts';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { agendaDateLabel, agendaLocalDate, groupAgenda, useAgendaClock } from './calendar-agenda';
-import { calendarDaysUntil, restoreDateOnly } from '@/lib/calendar-days';
+import { agendaDateLabel, calendarDate, calendarDayKey, calendarTime, eventsOnDay, groupAgenda, useAgendaClock } from './calendar-agenda';
+import { restoreDateOnly } from '@/lib/calendar-days';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -45,7 +45,6 @@ import { qk } from '@/lib/query-keys';
 import { useDemoData } from '@/contexts/DemoDataContext';
 import { useBilingualString, useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 import { bilingualAria } from '@/lib/i18n/format';
-import { useHydrated } from '@/components/common/RelativeTime';
 import { useI18n } from '@/components/common/I18nProvider';
 import { ASK } from '@/lib/page-questions';
 import { useInvestorFollowUps, type FollowUpLead } from '@/lib/follow-ups';
@@ -60,8 +59,8 @@ interface CalendarEvent {
   titleEl?: string;
   type: EventType;
   date: string; // ISO date
-  time?: string;
-  endTime?: string;
+  timed?: boolean;
+  endDate?: string;
   description?: string;
   location?: string;
   locationEl?: string;
@@ -107,37 +106,27 @@ const MONTHS = [
 
 // ── Demo Data ────────────────────────────────────────────────────────────────
 
-// UTC throughout, like every other date the product renders.
-//
-// `new Date(y, m, day, hour, min)` builds the instant in the *runtime's* zone,
-// so the demo events themselves came out different on the server (UTC) than in
-// the browser: at UTC+14 this produced a timestamp 14 hours earlier, which lands
-// on a different calendar day, and at the extremes `now.getMonth()` was a
-// different month entirely. The grid, the events and the "today" highlight all
-// disagreed, and React could not hydrate the page.
-const now = new Date();
-const y = now.getUTCFullYear();
-const m = now.getUTCMonth();
-
-function d(day: number, hour = 10, min = 0) {
-  return new Date(Date.UTC(y, m, day, hour, min)).toISOString();
+function demoEvents(year: number, month: number): CalendarEvent[] {
+  const d = (day: number, hour?: number, min = 0) => {
+    const date = new Date(year, month, day, hour ?? 0, min);
+    return hour === undefined ? calendarDayKey(date) : date.toISOString();
+  };
+  return [
+    { id: '1',  title: 'MVP Sprint Review',           titleEl: 'Ανασκόπηση sprint MVP',           type: 'milestone', date: d(2),  priority: 'high',   status: 'in_progress', href: '/milestones' },
+    { id: '2',  title: 'Mentor Session — Dr. Sarah Kim', titleEl: 'Συνεδρία μέντορα — Dr. Sarah Kim',    type: 'session',   date: d(4, 14), timed: true, endDate: d(4, 15), participants: ['Dr. Sarah Kim'], href: '/mentor/sessions' },
+    { id: '3',  title: 'Pitch Deck Deadline',          titleEl: 'Προθεσμία pitch deck',             type: 'deadline',  date: d(7),  priority: 'high',   href: '/builder/pitch-deck' },
+    { id: '4',  title: 'Startup Meetup Athens',        titleEl: 'Meetup για startups στην Αθήνα',             type: 'event',     date: d(9, 18), timed: true, endDate: d(9, 21), location: 'Aegean Venture Lab, Athens', locationEl: 'Aegean Venture Lab, Αθήνα', href: '/events' },
+    { id: '5',  title: 'Team Standup',                 titleEl: 'Standup ομάδας',                   type: 'meeting',   date: d(10, 9, 30), timed: true, endDate: d(10, 10), participants: ['Alex Demo', 'Maria Georgiou', 'Marcus Chen'] },
+    { id: '6',  title: 'Seed Round Application',       titleEl: 'Αίτηση Seed round',                type: 'deadline',  date: d(12), priority: 'high',   href: '/fundraising' },
+    { id: '7',  title: 'Co-founder Interview',         titleEl: 'Συνέντευξη συνιδρυτή',             type: 'meeting',   date: d(14, 11), timed: true, endDate: d(14, 11, 45), participants: ['Marcus Chen'] },
+    { id: '8',  title: 'Accelerator Demo Day',         titleEl: 'Demo Day επιταχυντή',              type: 'event',     date: d(18, 16), timed: true, endDate: d(18, 20), location: 'Online (Zoom)', locationEl: 'Διαδικτυακά (Zoom)', href: '/events' },
+    { id: '9',  title: 'Market Analysis Due',          titleEl: 'Λήξη ανάλυσης αγοράς',             type: 'milestone', date: d(20), priority: 'medium', status: 'pending', href: '/milestones' },
+    { id: '10', title: 'Investor Call — Nikos Andreou', titleEl: 'Κλήση με επενδυτή — Nikos Andreou', type: 'session',   date: d(22, 15), timed: true, endDate: d(22, 15, 30), participants: ['Nikos Andreou'] },
+    { id: '11', title: 'Grant Submission Deadline',    titleEl: 'Προθεσμία υποβολής grant',         type: 'deadline',  date: d(25), priority: 'high',   href: '/fundraising' },
+    { id: '12', title: 'User Testing Round 2',         titleEl: 'Δοκιμές χρηστών γύρος 2',          type: 'milestone', date: d(27), priority: 'medium', status: 'pending' },
+    { id: '13', title: 'Community AMA',                titleEl: 'AMA κοινότητας',                   type: 'event',     date: d(28, 19), timed: true, endDate: d(28, 20), location: 'Discord', href: '/events' },
+  ];
 }
-
-const DEMO_EVENTS: CalendarEvent[] = [
-  { id: '1',  title: 'MVP Sprint Review',           titleEl: 'Ανασκόπηση sprint MVP',           type: 'milestone', date: d(2),  priority: 'high',   status: 'in_progress', href: '/milestones' },
-  { id: '2',  title: 'Mentor Session — Dr. Sarah Kim', titleEl: 'Συνεδρία μέντορα — Dr. Sarah Kim',    type: 'session',   date: d(4, 14), time: '14:00', endTime: '15:00', participants: ['Dr. Sarah Kim'], href: '/mentor/sessions' },
-  { id: '3',  title: 'Pitch Deck Deadline',          titleEl: 'Προθεσμία pitch deck',             type: 'deadline',  date: d(7),  priority: 'high',   href: '/builder/pitch-deck' },
-  { id: '4',  title: 'Startup Meetup Athens',        titleEl: 'Meetup για startups στην Αθήνα',             type: 'event',     date: d(9, 18), time: '18:00', endTime: '21:00', location: 'Aegean Venture Lab, Athens', locationEl: 'Aegean Venture Lab, Αθήνα', href: '/events' },
-  { id: '5',  title: 'Team Standup',                 titleEl: 'Standup ομάδας',                   type: 'meeting',   date: d(10, 9, 30), time: '09:30', endTime: '10:00', participants: ['Alex Demo', 'Maria Georgiou', 'Marcus Chen'] },
-  { id: '6',  title: 'Seed Round Application',       titleEl: 'Αίτηση Seed round',                type: 'deadline',  date: d(12), priority: 'high',   href: '/fundraising' },
-  { id: '7',  title: 'Co-founder Interview',         titleEl: 'Συνέντευξη συνιδρυτή',             type: 'meeting',   date: d(14, 11), time: '11:00', endTime: '11:45', participants: ['Marcus Chen'] },
-  { id: '8',  title: 'Accelerator Demo Day',         titleEl: 'Demo Day επιταχυντή',              type: 'event',     date: d(18, 16), time: '16:00', endTime: '20:00', location: 'Online (Zoom)', locationEl: 'Διαδικτυακά (Zoom)', href: '/events' },
-  { id: '9',  title: 'Market Analysis Due',          titleEl: 'Λήξη ανάλυσης αγοράς',             type: 'milestone', date: d(20), priority: 'medium', status: 'pending', href: '/milestones' },
-  { id: '10', title: 'Investor Call — Nikos Andreou', titleEl: 'Κλήση με επενδυτή — Nikos Andreou', type: 'session',   date: d(22, 15), time: '15:00', endTime: '15:30', participants: ['Nikos Andreou'] },
-  { id: '11', title: 'Grant Submission Deadline',    titleEl: 'Προθεσμία υποβολής grant',         type: 'deadline',  date: d(25), priority: 'high',   href: '/fundraising' },
-  { id: '12', title: 'User Testing Round 2',         titleEl: 'Δοκιμές χρηστών γύρος 2',          type: 'milestone', date: d(27), priority: 'medium', status: 'pending' },
-  { id: '13', title: 'Community AMA',                titleEl: 'AMA κοινότητας',                   type: 'event',     date: d(28, 19), time: '19:00', endTime: '20:00', location: 'Discord', href: '/events' },
-];
 
 // ── Live items ───────────────────────────────────────────────────────────────
 //
@@ -148,8 +137,6 @@ const DEMO_EVENTS: CalendarEvent[] = [
 // sessions (both sides: the ones you attend and the ones you give), and the
 // events you said you are going to or interested in. The samples above are the
 // showcase's, shown only when the demo has nothing of its own.
-
-const hhmm = (iso: string) => iso.slice(11, 16);
 
 function fromMilestone(mst: Milestone): CalendarEvent | null {
   if (!mst.dueDate) return null;
@@ -176,15 +163,14 @@ function fromFollowUp(lead: FollowUpLead): CalendarEvent {
 }
 
 function fromSession(sess: MentorshipSessionItem): CalendarEvent {
-  const end = new Date(Date.parse(sess.scheduledAt) + (sess.duration ?? 0) * 60_000).toISOString();
   return {
     id: `session-${sess.id}`,
     title: sess.title ?? 'Mentoring session',
     titleEl: sess.title ?? 'Συνεδρία καθοδήγησης',
     type: 'session',
     date: sess.scheduledAt,
-    time: hhmm(sess.scheduledAt),
-    endTime: sess.duration ? hhmm(end) : undefined,
+    timed: true,
+    endDate: sess.duration ? new Date(Date.parse(sess.scheduledAt) + sess.duration * 60_000).toISOString() : undefined,
     description: sess.agenda ?? undefined,
     location: sess.meetingType === 'in_person' ? sess.meetingLocation ?? undefined : sess.meetingType === 'video' ? 'Video call' : undefined,
     locationEl: sess.meetingType === 'video' ? 'Βιντεοκλήση' : undefined,
@@ -199,8 +185,8 @@ function fromEvent(ev: EventItem): CalendarEvent {
     title: ev.title,
     type: 'event',
     date: ev.startAt,
-    time: hhmm(ev.startAt),
-    endTime: ev.endAt ? hhmm(ev.endAt) : undefined,
+    timed: true,
+    endDate: ev.endAt ?? undefined,
     location: ev.isOnline ? 'Online' : ev.location ?? undefined,
     locationEl: ev.isOnline ? 'Διαδικτυακά' : undefined,
     href: `/events/${ev.id}`,
@@ -209,45 +195,27 @@ function fromEvent(ev: EventItem): CalendarEvent {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-/**
- * A calendar entry as a calendar-file entry: timed ones keep their UTC times,
- * milestones and deadlines (no time) are all-day. The end is the start's day
- * at `endTime`, or the next day's when the end reads earlier than the start.
- */
 function toIcsEntry(e: CalendarEvent, origin: string, lang: 'en' | 'el'): IcsEntry {
   const title = lang === 'el' && e.titleEl ? e.titleEl : e.title;
   const location = lang === 'el' && e.locationEl ? e.locationEl : e.location;
-  let end: string | null = null;
-  if (e.time && e.endTime) {
-    const endIso = `${e.date.slice(0, 11)}${e.endTime}:00.000Z`;
-    end = Date.parse(endIso) > Date.parse(e.date) ? endIso : new Date(Date.parse(endIso) + 86_400_000).toISOString();
-  }
   return {
     uid: e.id,
     title,
-    start: e.date,
-    end,
-    allDay: !e.time,
+    start: e.timed ? e.date : calendarDayKey(e.date),
+    end: e.endDate ?? null,
+    allDay: !e.timed,
     description: e.description ?? null,
     location: location ?? null,
     url: e.href ? `${origin}${e.href}` : null,
   };
 }
 
-function isSameDay(a: Date, b: Date) {
-  return (
-    a.getUTCFullYear() === b.getUTCFullYear() &&
-    a.getUTCMonth() === b.getUTCMonth() &&
-    a.getUTCDate() === b.getUTCDate()
-  );
-}
-
 function getDaysInMonth(year: number, month: number) {
-  return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  return new Date(year, month + 1, 0).getDate();
 }
 
 function getFirstDayOfMonth(year: number, month: number) {
-  return new Date(Date.UTC(year, month, 1)).getUTCDay();
+  return new Date(year, month, 1).getDay();
 }
 
 const MONTH_SHORT = {
@@ -258,7 +226,7 @@ const MONTH_SHORT = {
 /** Controlled "22 Σεπ" — locale short-month on Windows el-GR overflowed a
  *  56px column and the day digit clipped into what read as "?? Σεπ". */
 function formatUpcomingDate(iso: string, lang: 'en' | 'el'): string {
-  const dt = agendaLocalDate(iso);
+  const dt = calendarDate(iso);
   if (Number.isNaN(dt.getTime())) return '—';
   return `${dt.getDate()} ${MONTH_SHORT[lang][dt.getMonth()]}`;
 }
@@ -267,10 +235,12 @@ function formatUpcomingDate(iso: string, lang: 'en' | 'el'): string {
 
 const MONTHS_GENITIVE_EL = ['Ιανουαρίου', 'Φεβρουαρίου', 'Μαρτίου', 'Απριλίου', 'Μαΐου', 'Ιουνίου', 'Ιουλίου', 'Αυγούστου', 'Σεπτεμβρίου', 'Οκτωβρίου', 'Νοεμβρίου', 'Δεκεμβρίου'];
 
-/** The seven UTC days of the week that holds `anchor`, Sunday first like the month grid. */
+function addDays(date: Date, offset: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset);
+}
+
 function weekDays(anchor: Date): Date[] {
-  const start = new Date(Date.UTC(anchor.getUTCFullYear(), anchor.getUTCMonth(), anchor.getUTCDate() - anchor.getUTCDay()));
-  return Array.from({ length: 7 }, (_, i) => new Date(start.getTime() + i * 86_400_000));
+  return Array.from({ length: 7 }, (_, i) => addDays(anchor, i - anchor.getDay()));
 }
 
 /**
@@ -283,30 +253,31 @@ function WeekView({
   anchor,
   onAnchor,
   lang,
+  today,
 }: {
   events: CalendarEvent[];
   anchor: Date;
   onAnchor: (d: Date) => void;
   lang: 'en' | 'el';
+  today: Date;
 }) {
   const days = weekDays(anchor);
   const first = days[0];
   const last = days[6];
-  const today = new Date();
   // After a day number Greek takes the genitive: «18–24 Οκτωβρίου», not «Οκτώβριος».
-  const monthName = (d: Date) => (lang === 'el' ? MONTHS_GENITIVE_EL[d.getUTCMonth()] : MONTHS[d.getUTCMonth()].en);
-  const range = first.getUTCMonth() === last.getUTCMonth()
-    ? `${first.getUTCDate()}–${last.getUTCDate()} ${monthName(last)} ${last.getUTCFullYear()}`
-    : `${first.getUTCDate()} ${MONTH_SHORT[lang][first.getUTCMonth()]} – ${last.getUTCDate()} ${MONTH_SHORT[lang][last.getUTCMonth()]} ${last.getUTCFullYear()}`;
+  const monthName = (d: Date) => (lang === 'el' ? MONTHS_GENITIVE_EL[d.getMonth()] : MONTHS[d.getMonth()].en);
+  const range = first.getMonth() === last.getMonth()
+    ? `${first.getDate()}–${last.getDate()} ${monthName(last)} ${last.getFullYear()}`
+    : `${first.getDate()} ${MONTH_SHORT[lang][first.getMonth()]} – ${last.getDate()} ${MONTH_SHORT[lang][last.getMonth()]} ${last.getFullYear()}`;
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost" size="icon" onClick={() => onAnchor(new Date(anchor.getTime() - 7 * 86_400_000))} aria-label={bilingualAria('Previous week', 'Προηγούμενη εβδομάδα')}>
+          <Button variant="ghost" size="icon" onClick={() => onAnchor(addDays(anchor, -7))} aria-label={bilingualAria('Previous week', 'Προηγούμενη εβδομάδα')}>
             <ChevronLeft className="icon-sm" />
           </Button>
           <span className="text-sm font-semibold tabular-nums">{range}</span>
-          <Button variant="ghost" size="icon" onClick={() => onAnchor(new Date(anchor.getTime() + 7 * 86_400_000))} aria-label={bilingualAria('Next week', 'Επόμενη εβδομάδα')}>
+          <Button variant="ghost" size="icon" onClick={() => onAnchor(addDays(anchor, 7))} aria-label={bilingualAria('Next week', 'Επόμενη εβδομάδα')}>
             <ChevronRight className="icon-sm" />
           </Button>
         </div>
@@ -314,13 +285,14 @@ function WeekView({
       <CardContent>
         <ol className="grid grid-cols-1 gap-2 md:grid-cols-7">
           {days.map((day) => {
-            const items = events.filter((e) => isSameDay(new Date(e.date), day));
-            const isToday = isSameDay(day, today);
+            const key = calendarDayKey(day);
+            const items = eventsOnDay(events, day);
+            const isToday = key === calendarDayKey(today);
             return (
-              <li key={day.toISOString()} className={cn('min-w-0 rounded-lg border border-border p-2 md:min-h-40', isToday && 'border-primary/40 bg-primary-subtle')}>
+              <li key={key} className={cn('min-w-0 rounded-lg border border-border p-2 md:min-h-40', isToday && 'border-primary/40 bg-primary-subtle')}>
                 <p className={cn('mb-1.5 text-xs text-muted-foreground', isToday && 'font-semibold text-foreground')}>
-                  <BilingualText en={DAYS[day.getUTCDay()].en} el={DAYS[day.getUTCDay()].el} compact secondaryClassName="hidden" />{' '}
-                  <span className="tabular-nums">{day.getUTCDate()}</span>
+                  <BilingualText en={DAYS[day.getDay()].en} el={DAYS[day.getDay()].el} compact secondaryClassName="hidden" />{' '}
+                  <span className="tabular-nums">{day.getDate()}</span>
                 </p>
                 {items.length ? (
                   <ul className="space-y-1">
@@ -328,7 +300,7 @@ function WeekView({
                       const cfg = TYPE_CONFIG[e.type];
                       const body = (
                         <>
-                          {e.time ? <span className="mr-1 tabular-nums">{e.time}</span> : null}
+                          {e.timed ? <span className="mr-1 tabular-nums">{calendarTime(e.date)}</span> : null}
                           <BilingualText en={e.title} el={e.titleEl} compact />
                         </>
                       );
@@ -378,7 +350,7 @@ function EventChip({ event, framed = false }: { event: CalendarEvent; framed?: b
         className={framed ? 'text-sm' : undefined}
         items={[
           <BilingualText key="kind" en={cfg.labelEn} el={cfg.labelEl} compact />,
-          event.time ? <span key="time" className="tabular-nums">{event.time}{event.endTime ? ` – ${event.endTime}` : ''}</span> : null,
+          event.timed ? <span key="time" className="tabular-nums">{calendarTime(event.date)}{event.endDate ? ` – ${calendarTime(event.endDate)}` : ''}</span> : null,
           event.location ? <BilingualText key="where" en={event.location} el={event.locationEl} compact /> : null,
         ]}
       />
@@ -408,24 +380,27 @@ function MiniCalendar({
   selectedDate,
   onSelectDate,
   events,
+  today,
 }: {
   year: number;
   month: number;
   selectedDate: Date;
   onSelectDate: (d: Date) => void;
   events: CalendarEvent[];
+  today: Date;
 }) {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
-  const today = new Date();
+  const todayKey = calendarDayKey(today);
+  const selectedKey = calendarDayKey(selectedDate);
   const { locale, bcp47, t } = useI18n();
 
-  // UTC matches the Date.UTC cells. Only English and Greek pair in one label;
+  // Only English and Greek pair in one label;
   // every other locale reads its own date format, since the DOM pass cannot
   // re-spell a weekday and month written out in English.
   const dayLabel = (date: Date, hasEvents: boolean) => {
     const spell = (tag: string) =>
-      date.toLocaleDateString(tag, { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      date.toLocaleDateString(tag, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     if (locale !== 'en' && locale !== 'el') {
       return hasEvents ? t('{label}, has events', { label: spell(bcp47) }) : spell(bcp47);
     }
@@ -435,14 +410,7 @@ function MiniCalendar({
     );
   };
 
-  const eventDates = useMemo(() => {
-    const set = new Set<number>();
-    events.forEach((e) => {
-      const ed = new Date(e.date);
-      if (ed.getUTCFullYear() === year && ed.getUTCMonth() === month) set.add(ed.getUTCDate());
-    });
-    return set;
-  }, [events, year, month]);
+  const eventDates = useMemo(() => new Set(events.map((e) => calendarDayKey(e.date))), [events]);
 
   const cells: (number | null)[] = [];
   for (let i = 0; i < firstDay; i++) cells.push(null);
@@ -460,14 +428,11 @@ function MiniCalendar({
       <div className="grid grid-cols-7 gap-0.5">
         {cells.map((day, i) => {
           if (day === null) return <div key={`e-${i}`} />;
-          // Date.UTC, to match isSameDay below. The local constructor put this
-          // cell on the previous calendar day at UTC+14, so `isToday` and
-          // `isSelected` — and therefore the cell's className — differed between
-          // the server and the browser.
-          const date = new Date(Date.UTC(year, month, day));
-          const isToday = isSameDay(date, today);
-          const isSelected = isSameDay(date, selectedDate);
-          const hasEvents = eventDates.has(day);
+          const date = new Date(year, month, day);
+          const key = calendarDayKey(date);
+          const isToday = key === todayKey;
+          const isSelected = key === selectedKey;
+          const hasEvents = eventDates.has(key);
           return (
             <button
               key={day}
@@ -507,11 +472,13 @@ export default function CalendarPage() {
   // it is read: after the date changed, the grid, the today highlight and the
   // sample dates all disagreed with the browser and React #418 fired on every
   // visit. Nothing dated renders until the client has its own clock.
-  const hydrated = useHydrated();
   const agendaNow = useAgendaClock();
-  const [currentMonth, setCurrentMonth] = useState(now.getUTCMonth());
-  const [currentYear, setCurrentYear] = useState(now.getUTCFullYear());
-  const [selectedDate, setSelectedDate] = useState(now);
+  const [browsedMonth, setBrowsedMonth] = useState<Date | null>(null);
+  const [pickedDate, setSelectedDate] = useState<Date | null>(null);
+  const selectedDate = pickedDate ?? agendaNow;
+  const visibleMonth = browsedMonth ?? agendaNow;
+  const currentMonth = visibleMonth?.getMonth() ?? 0;
+  const currentYear = visibleMonth?.getFullYear() ?? 0;
   // The month sits under the day on a phone, so choosing a date goes back up to it.
   const selectDay = (date: Date) => {
     setSelectedDate(date);
@@ -522,14 +489,10 @@ export default function CalendarPage() {
   const [typeFilter, setTypeFilter] = useState<EventType | 'all'>('all');
   const [view, setView] = useState<'calendar' | 'week' | 'list'>('calendar');
 
-  const prevMonth = () => {
-    if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear((y) => y - 1); }
-    else setCurrentMonth((m) => m - 1);
-  };
-  const nextMonth = () => {
-    if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear((y) => y + 1); }
-    else setCurrentMonth((m) => m + 1);
-  };
+  const moveMonth = (offset: number) => setBrowsedMonth((month) => {
+    const base = month ?? agendaNow;
+    return base ? new Date(base.getFullYear(), base.getMonth() + offset, 1) : null;
+  });
 
   const { showDemoData } = useDemoData();
   const { items: followUps } = useInvestorFollowUps();
@@ -569,21 +532,22 @@ export default function CalendarPage() {
   const isSample = !loading && liveEvents.length === 0 && showDemoData;
 
   const filteredEvents = useMemo(() => {
-    let evts = liveEvents.length ? liveEvents : isSample ? DEMO_EVENTS : [];
+    let evts = liveEvents.length ? liveEvents : isSample && agendaNow ? demoEvents(agendaNow.getFullYear(), agendaNow.getMonth()) : [];
     if (typeFilter !== 'all') evts = evts.filter((e) => e.type === typeFilter);
-    return [...evts].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }, [typeFilter, liveEvents, isSample]);
+    return [...evts].sort((a, b) => calendarDate(a.date).getTime() - calendarDate(b.date).getTime());
+  }, [typeFilter, liveEvents, isSample, agendaNow]);
 
   const selectedDayEvents = useMemo(() => {
-    return filteredEvents.filter((e) => isSameDay(new Date(e.date), selectedDate));
+    return selectedDate ? eventsOnDay(filteredEvents, selectedDate) : [];
   }, [filteredEvents, selectedDate]);
 
   const upcomingEvents = useMemo(() => {
     if (!agendaNow) return [];
+    const today = calendarDayKey(agendaNow);
     // A follow-up stays on the list once its day has passed: that is when it matters most.
     return filteredEvents.filter((e) => {
-      const offset = calendarDaysUntil(e.date, agendaNow);
-      return offset !== null && (offset >= 0 || e.id.startsWith('followup-'));
+      const day = calendarDayKey(e.date);
+      return day && (day >= today || e.id.startsWith('followup-'));
     }).slice(0, 8);
   }, [filteredEvents, agendaNow]);
   const agenda = agendaNow ? groupAgenda(upcomingEvents, agendaNow) : { overdue: [], today: [], later: [] };
@@ -595,10 +559,10 @@ export default function CalendarPage() {
 
   // What the export carries: everything the filters leave, from today on.
   const exportable = useMemo(() => {
-    const n = new Date();
-    const todayStart = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()));
-    return filteredEvents.filter((e) => new Date(e.date) >= todayStart);
-  }, [filteredEvents]);
+    if (!agendaNow) return [];
+    const today = calendarDayKey(agendaNow);
+    return filteredEvents.filter((e) => calendarDayKey(e.date) >= today);
+  }, [filteredEvents, agendaNow]);
   const exportCalendar = () => {
     if (!exportable.length) return;
     const lang = document.documentElement.dataset.primaryLang === 'el' ? 'el' : 'en';
@@ -609,10 +573,8 @@ export default function CalendarPage() {
   };
 
   // Stats
-  const thisMonthEvents = filteredEvents.filter((e) => {
-    const ed = new Date(e.date);
-    return ed.getUTCFullYear() === currentYear && ed.getUTCMonth() === currentMonth;
-  });
+  const monthKey = visibleMonth ? calendarDayKey(visibleMonth).slice(0, 7) : '';
+  const thisMonthEvents = monthKey ? filteredEvents.filter((e) => calendarDayKey(e.date).startsWith(monthKey)) : [];
   const deadlineCount = thisMonthEvents.filter((e) => e.type === 'deadline').length;
   const sessionCount = thisMonthEvents.filter((e) => e.type === 'session').length;
   const milestoneCount = thisMonthEvents.filter((e) => e.type === 'milestone').length;
@@ -622,14 +584,14 @@ export default function CalendarPage() {
       id: 'month',
       labelEn: 'This month',
       labelEl: 'Αυτός ο μήνας',
-      rows: loading ? undefined : thisMonthEvents.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title} · ${e.type}${e.location ? ` · ${e.location}` : ''}`),
+      rows: !agendaNow || loading ? undefined : thisMonthEvents.map((e) => `${agendaDateLabel(e.date, Boolean(e.timed))} · ${e.title} · ${e.type}${e.location ? ` · ${e.location}` : ''}`),
       sample: isSample,
     },
     ...agendaGroups.map(({ id, en, el, events }) => ({
       id,
       labelEn: en,
       labelEl: el,
-      rows: !agendaNow || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${agendaDateLabel(e.date, Boolean(e.time))} · ${e.title}`),
+      rows: !agendaNow || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${agendaDateLabel(e.date, Boolean(e.timed))} · ${e.title}`),
       sample: isSample,
     })),
   ]);
@@ -713,7 +675,7 @@ export default function CalendarPage() {
     },
   ];
 
-  if (!hydrated) {
+  if (!agendaNow || !selectedDate) {
     return (
       <AppShell showHelp rail={rail} askAi={ASK.calendar}>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_1fr]" aria-busy="true">
@@ -780,12 +742,12 @@ export default function CalendarPage() {
               <Card>
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <Button variant="ghost" size="icon" onClick={prevMonth} aria-label={bilingualAria('Previous month', 'Προηγούμενος μήνας')}><ChevronLeft className="icon-sm" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => moveMonth(-1)} aria-label={bilingualAria('Previous month', 'Προηγούμενος μήνας')}><ChevronLeft className="icon-sm" /></Button>
                     <span className="text-sm font-semibold">
                       <BilingualText en={MONTHS[currentMonth].en} el={MONTHS[currentMonth].el} compact secondaryClassName="hidden" />{' '}
                       {currentYear}
                     </span>
-                    <Button variant="ghost" size="icon" onClick={nextMonth} aria-label={bilingualAria('Next month', 'Επόμενος μήνας')}><ChevronRight className="icon-sm" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => moveMonth(1)} aria-label={bilingualAria('Next month', 'Επόμενος μήνας')}><ChevronRight className="icon-sm" /></Button>
                   </div>
                 </CardHeader>
                 <CardContent className="pb-4">
@@ -795,6 +757,7 @@ export default function CalendarPage() {
                     selectedDate={selectedDate}
                     onSelectDate={selectDay}
                     events={filteredEvents}
+                    today={agendaNow}
                   />
                 </CardContent>
               </Card>
@@ -828,8 +791,8 @@ export default function CalendarPage() {
                     {/* en-GB, as every other date on the page ("23 Oct"):
                         it read "Thursday, October 22, 2026". */}
                     <BilingualText
-                      en={selectedDate.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-                      el={selectedDate.toLocaleDateString('el-GR', { timeZone: 'UTC', weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                      en={selectedDate.toLocaleDateString('en-GB', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                      el={selectedDate.toLocaleDateString('el-GR', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                       wrap
                     />
                   </CardTitle>
@@ -850,7 +813,7 @@ export default function CalendarPage() {
                       {/* This day, filled in: "Schedule something" opened the
                           same empty form as the header's Add Event (§78). */}
                       <Button asChild variant="outline" size="sm" className="mt-3 gap-1">
-                        <Link href={`/events/create?date=${selectedDate.toISOString().slice(0, 10)}`}><Plus className="icon-sm" /> <BilingualText en="Schedule on this day" el="Προγραμματισμός αυτή την ημέρα" compact /></Link>
+                        <Link href={`/events/create?date=${calendarDayKey(selectedDate)}`}><Plus className="icon-sm" /> <BilingualText en="Schedule on this day" el="Προγραμματισμός αυτή την ημέρα" compact /></Link>
                       </Button>
                     </div>
                   )}
@@ -926,9 +889,7 @@ export default function CalendarPage() {
             </div>
           </div>
         ) : view === 'week' ? (
-          hydrated ? (
-            <WeekView events={filteredEvents} anchor={selectedDate} onAnchor={setSelectedDate} lang={primary} />
-          ) : null
+          <WeekView events={filteredEvents} anchor={selectedDate} onAnchor={setSelectedDate} lang={primary} today={agendaNow} />
         ) : (
           /* List view */
           <div className="space-y-3">
