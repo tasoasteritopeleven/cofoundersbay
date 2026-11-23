@@ -220,8 +220,8 @@ const NotificationRow = memo(function NotificationRow({
         {/* Always shown: at opacity-0 until hover the three actions were
             invisible on touch screens yet still took taps, and on a desktop
             they left an empty band under every row. */}
-        <div className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1">
-          {nextAction ? <span className="pointer-events-none text-xs font-medium text-primary-accessible"><BilingualText en={nextAction.en} el={nextAction.el} compact /></span> : null}
+        <div className="pointer-events-none relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1 [&_button]:pointer-events-auto">
+          {nextAction ? <span className="text-xs font-medium text-primary-accessible"><BilingualText en={nextAction.en} el={nextAction.el} compact /></span> : null}
           {/* tap-target-y on the row actions: they were 16px tall, under the
               24px target minimum, and they sit close enough together that the
               SC 2.5.8 spacing exception does not rescue them either. */}
