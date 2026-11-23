@@ -5,7 +5,8 @@ import { RailStats } from '@/components/layout/RailParts';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { groupAgenda, useAgendaClock } from './calendar-agenda';
+import { agendaDateLabel, agendaLocalDate, groupAgenda, useAgendaClock } from './calendar-agenda';
+import { calendarDaysUntil } from '@/lib/calendar-days';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -257,9 +258,9 @@ const MONTH_SHORT = {
 /** Controlled "22 Σεπ" — locale short-month on Windows el-GR overflowed a
  *  56px column and the day digit clipped into what read as "?? Σεπ". */
 function formatUpcomingDate(iso: string, lang: 'en' | 'el'): string {
-  const dt = new Date(iso);
+  const dt = agendaLocalDate(iso);
   if (Number.isNaN(dt.getTime())) return '—';
-  return `${dt.getUTCDate()} ${MONTH_SHORT[lang][dt.getUTCMonth()]}`;
+  return `${dt.getDate()} ${MONTH_SHORT[lang][dt.getMonth()]}`;
 }
 
 // ── Week ─────────────────────────────────────────────────────────────────────
@@ -579,9 +580,11 @@ export default function CalendarPage() {
 
   const upcomingEvents = useMemo(() => {
     if (!agendaNow) return [];
-    const todayStart = new Date(Date.UTC(agendaNow.getUTCFullYear(), agendaNow.getUTCMonth(), agendaNow.getUTCDate()));
     // A follow-up stays on the list once its day has passed: that is when it matters most.
-    return filteredEvents.filter((e) => new Date(e.date) >= todayStart || e.id.startsWith('followup-')).slice(0, 8);
+    return filteredEvents.filter((e) => {
+      const offset = calendarDaysUntil(e.date, agendaNow);
+      return offset !== null && (offset >= 0 || e.id.startsWith('followup-'));
+    }).slice(0, 8);
   }, [filteredEvents, agendaNow]);
   const agenda = agendaNow ? groupAgenda(upcomingEvents, agendaNow) : { overdue: [], today: [], later: [] };
   const agendaGroups = [
@@ -626,7 +629,7 @@ export default function CalendarPage() {
       id,
       labelEn: en,
       labelEl: el,
-      rows: !agendaNow || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${e.date.slice(0, 10)}${e.time ? ` ${e.time}` : ''} · ${e.title}`),
+      rows: !agendaNow || loading || (failedParts.length > 0 && events.length === 0) ? undefined : events.map((e) => `${agendaDateLabel(e.date, Boolean(e.time))} · ${e.title}`),
       sample: isSample,
     })),
   ]);

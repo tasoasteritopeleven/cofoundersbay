@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { calendarDaysUntil } from '@/lib/calendar-days';
 
 export function useAgendaClock() {
   const [now, setNow] = useState<Date | null>(null);
@@ -28,13 +29,22 @@ export function useAgendaClock() {
 }
 
 export function groupAgenda<T extends { date: string }>(events: readonly T[], now: Date) {
-  const todayKey = now.toISOString().slice(0, 10);
   const groups = { overdue: [] as T[], today: [] as T[], later: [] as T[] };
   for (const event of events) {
-    const date = new Date(event.date);
-    if (!Number.isFinite(date.getTime())) continue;
-    const key = date.toISOString().slice(0, 10);
-    groups[key < todayKey ? 'overdue' : key === todayKey ? 'today' : 'later'].push(event);
+    const offset = calendarDaysUntil(event.date, now);
+    if (offset === null) continue;
+    groups[offset < 0 ? 'overdue' : offset === 0 ? 'today' : 'later'].push(event);
   }
   return groups;
+}
+
+export function agendaLocalDate(iso: string) {
+  return new Date(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso}T00:00:00` : iso);
+}
+
+export function agendaDateLabel(iso: string, timed: boolean) {
+  const date = agendaLocalDate(iso);
+  const pad = (value: number) => String(value).padStart(2, '0');
+  const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  return timed ? `${day} ${pad(date.getHours())}:${pad(date.getMinutes())}` : day;
 }
