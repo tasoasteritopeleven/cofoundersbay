@@ -723,6 +723,7 @@ export default function MessagesPage() {
     if (!canUseMessaging || !selectedConversation) {
       return;
     }
+    if (!isMobileViewingChat && window.matchMedia('(max-width: 767px)').matches) return;
 
     let cancelled = false;
     // The last thread's messages do not stay under the next one's name
@@ -748,7 +749,7 @@ export default function MessagesPage() {
     return () => {
       cancelled = true;
     };
-  }, [canUseMessaging, selectedConversation, currentUserId, threadReload]);
+  }, [canUseMessaging, selectedConversation, currentUserId, threadReload, isMobileViewingChat]);
 
   // Desktop: open the most relevant thread so the right pane is not an empty void.
   useEffect(() => {
