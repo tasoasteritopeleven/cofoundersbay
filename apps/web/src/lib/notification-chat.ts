@@ -11,6 +11,7 @@
  */
 import { NOTIFICATION_CATEGORIES, type NotificationChannel } from '@/lib/notification-prefs';
 import { fold } from '@/lib/composer-menu';
+import { safeInternalPath } from '@/lib/return-to';
 
 // ── Triage ───────────────────────────────────────────────────────────────────
 
@@ -30,6 +31,20 @@ const WAITING_WORDS = ['request', 'invite', 'review', 'security', 'suspicious', 
 export function waitsOnReader(notification: { type: string }): boolean {
   const type = notification.type.toLowerCase();
   return WAITING_TYPES.has(type) || WAITING_WORDS.some((word) => type.includes(word));
+}
+
+export function notificationNextAction(notification: { type: string; link: string | null }) {
+  if (!waitsOnReader(notification)) return null;
+  const href = safeInternalPath(notification.link);
+  if (!href) return null;
+  const type = notification.type.toLowerCase();
+  if (type === 'message' || type === 'direct' || type === 'messages') {
+    return { href, en: 'Open conversation', el: 'Άνοιγμα συνομιλίας' };
+  }
+  if (type.includes('request') || type.includes('invite')) {
+    return { href, en: 'Review request', el: 'Εξέταση αιτήματος' };
+  }
+  return { href, en: 'Review details', el: 'Εξέταση λεπτομερειών' };
 }
 
 /** The unread ones split into what can be marked read and what waits on the reader. */

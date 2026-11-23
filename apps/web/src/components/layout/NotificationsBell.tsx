@@ -30,6 +30,7 @@ import { BilingualText } from '@/components/common/BilingualText';
 import { bilingualAria } from '@/lib/i18n/format';
 import { qk } from '@/lib/query-keys';
 import { notificationEl } from '@/lib/notification-text';
+import { notificationNextAction } from '@/lib/notification-chat';
 
 const TYPE_GLYPH: Record<string, CfbGlyphName> = {
   message: 'messages',
@@ -219,7 +220,9 @@ export function NotificationsBell({ className }: { className?: string }) {
             </div>
           )}
 
-          {items.map((notification) => (
+          {items.map((notification) => {
+            const nextAction = notificationNextAction(notification);
+            return (
             <button
               key={notification.id}
               className={cn(
@@ -228,7 +231,7 @@ export function NotificationsBell({ className }: { className?: string }) {
               )}
               onClick={async () => {
                 try {
-                  if (!notification.readAt) {
+                  if (!notification.readAt && !nextAction) {
                     await markNotificationRead(notification.id);
                     setItems((prev) =>
                       prev.map((item) => (
@@ -266,12 +269,14 @@ export function NotificationsBell({ className }: { className?: string }) {
                 {notification.body && (
                   <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{notification.body}</p>
                 )}
+                {nextAction ? <span className="text-xs font-medium text-primary-accessible"><BilingualText en={nextAction.en} el={nextAction.el} compact /></span> : null}
               </div>
               {!notification.readAt && (
                 <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
               )}
             </button>
-          ))}
+            );
+          })}
         </div>
 
         {items.length > 0 && (

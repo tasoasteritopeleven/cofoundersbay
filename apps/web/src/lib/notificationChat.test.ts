@@ -33,7 +33,13 @@ import { executeAction, undoAction } from '@/lib/action-registry';
 import { planCopilotTools } from '@/lib/copilot-planner';
 import { runCopilotTurn } from '@/lib/copilot-engine';
 import { NOTIFICATION_CATEGORIES, channelsOf, readNotificationPrefs, resetNotificationPrefsForTests } from '@/lib/notification-prefs';
-import { detectNotificationPref, triageSplit, triageTarget, waitsOnReader, wantsTriage } from '@/lib/notification-chat';
+import { detectNotificationPref, notificationNextAction, triageSplit, triageTarget, waitsOnReader, wantsTriage } from '@/lib/notification-chat';
+
+it('only exposes a next action for an actionable notification with a valid destination', () => {
+  expect(notificationNextAction({ type: 'message', link: '/messages?conversation=1' })).toMatchObject({ en: 'Open conversation', href: '/messages?conversation=1' });
+  expect(notificationNextAction({ type: 'match_suggestion', link: '/matches' })).toBeNull();
+  expect(notificationNextAction({ type: 'connection_request', link: '//outside.test' })).toBeNull();
+});
 
 const row = (id: string, type: string, readAt: string | null = null) => ({ id, type, title: id, body: null, link: null, meta: null, createdAt: '2026-10-28T09:00:00Z', readAt });
 const events = NOTIFICATION_CATEGORIES.find((c) => c.id === 'events')!;
