@@ -46,6 +46,7 @@ export interface Achievement {
   icon: string;
   unlocked: boolean | null;
   unlockedAt?: Date;
+  progress?: { current: number; target: number };
 }
 
 export interface WeeklySummary {
@@ -209,13 +210,14 @@ export class AnalyticsService {
   }
 
   async getUserAchievements(userId: string): Promise<Achievement[]> {
-    // Connection count would need Connection model in production
     const connectionCount = await this.prisma.connectionRequest.count({
       where: this.connectionScope(userId),
     });
     const profileViews = await this.prisma.profileView.count({
       where: { profile: { userId } },
     });
+    const networker = { current: connectionCount, target: 50 };
+    const influencer = { current: profileViews, target: 1000 };
 
     const achievements: Achievement[] = [
       {
@@ -230,7 +232,8 @@ export class AnalyticsService {
         title: 'Networker',
         description: 'Currently connected with 50+ members',
         icon: 'users',
-        unlocked: connectionCount >= 50,
+        unlocked: networker.current >= networker.target,
+        progress: networker,
       },
       {
         id: 'active-contributor',
@@ -244,7 +247,8 @@ export class AnalyticsService {
         title: 'Influencer',
         description: '1000+ recorded profile views',
         icon: 'eye',
-        unlocked: profileViews >= 1000,
+        unlocked: influencer.current >= influencer.target,
+        progress: influencer,
       },
     ];
 

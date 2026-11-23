@@ -638,6 +638,7 @@ export async function runCopilotTurn(
       ? t('{list}: {shown} on screen of {total}.', { list: list.label, shown: list.shown, total: list.total })
       : t('{list}: {shown} on screen.', { list: list.label, shown: list.shown });
   const askedList = pageListFor(userMessage, pageLists);
+  const summarisesLists = pageLists.length > 0 && asksAboutThisPage(userMessage);
   if (askedList) {
     const lines = [describeCount(askedList)];
     if (askedList.shown === 0) lines.push(t('The list is empty right now.'));
@@ -647,7 +648,7 @@ export async function runCopilotTurn(
     }
     if (askedList.sample) lines.push(t('These rows are sample data, not your account.'));
     sections.push(lines.join('\n'));
-  } else if (pageLists.length > 0 && asksAboutThisPage(userMessage)) {
+  } else if (summarisesLists) {
     sections.push(pageLists.map(describeCount).join(' '));
   }
 
@@ -1219,6 +1220,7 @@ export async function runCopilotTurn(
 
   return {
     message,
+    hasPageListAnswer: Boolean(askedList) || summarisesLists,
     actions: uniqueActions.slice(0, 5),
     citations: uniqueCitations.slice(0, 8),
     usedTools,

@@ -1,3 +1,7 @@
+export function restoreDateOnly(value: string): string {
+  return /^\d{4}-\d{2}-\d{2}T00:00:00(?:\.0+)?Z$/.test(value) ? value.slice(0, 10) : value;
+}
+
 /**
  * Whole calendar days from today to a date, in the reader's time zone: 0 on
  * the day itself, 1 on the day before, negative once the day has passed.

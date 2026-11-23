@@ -225,10 +225,15 @@ export function PageRail({ sections }: { sections: PageRailSection[] }) {
   const { pinned, peeked, open, togglePinned, setPeeked, registerRailPresence, registerRailOpener, registerRailSections } = usePageRail();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const sheetOpener = useRef<HTMLElement | null>(null);
   // The thread's tools icon lives in the chat header, outside this sheet, and
   // asks the sheet to open. The floating trigger is the other way in.
   useEffect(() => {
-    const open = () => setSheetOpen(true);
+    const open = (event: Event) => {
+      const opener: unknown = (event as CustomEvent<unknown>).detail;
+      sheetOpener.current = opener instanceof HTMLElement ? opener : null;
+      setSheetOpen(true);
+    };
     window.addEventListener('cfb-open-page-tools', open);
     return () => window.removeEventListener('cfb-open-page-tools', open);
   }, []);
@@ -438,7 +443,18 @@ export function PageRail({ sections }: { sections: PageRailSection[] }) {
               </button>
             </SheetTrigger>
           )}
-          <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto">
+          <SheetContent
+            side="bottom"
+            className="max-h-[85dvh] overflow-y-auto"
+            onCloseAutoFocus={(event) => {
+              const opener = sheetOpener.current;
+              sheetOpener.current = null;
+              if (opener?.isConnected) {
+                event.preventDefault();
+                opener.focus();
+              }
+            }}
+          >
             <SheetHeader className="text-left">
               <SheetTitle><BilingualText en="Page tools" el="Εργαλεία σελίδας" /></SheetTitle>
               <SheetDescription>

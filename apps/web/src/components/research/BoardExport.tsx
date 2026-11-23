@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { toPng } from 'html-to-image';
 import { useToast } from '@/components/ui/toast';
 import type { ResearchBoardFull } from '@/lib/api';
 
@@ -26,14 +25,16 @@ export function BoardExport({ board, canvasRef }: BoardExportProps) {
   const [copied, setCopied] = useState(false);
 
   const exportAsImage = useCallback(async () => {
-    if (!canvasRef.current) {
+    const canvas = canvasRef.current;
+    if (!canvas) {
       showError('PNG Export', 'Canvas is not ready.');
       return;
     }
     setIsExporting(true);
     setExportFormat('png');
     try {
-      const dataUrl = await toPng(canvasRef.current, { cacheBust: true, pixelRatio: 2 });
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(canvas, { cacheBust: true, pixelRatio: 2 });
       const link = document.createElement('a');
       link.download = `${board.title || 'research-board'}.png`;
       link.href = dataUrl;

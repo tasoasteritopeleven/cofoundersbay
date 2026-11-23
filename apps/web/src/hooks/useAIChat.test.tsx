@@ -3,6 +3,7 @@ import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api';
 import { AIStreamError, sendAIChat, streamAIChat } from '@/lib/ai-api';
+import * as copilot from '@/lib/copilot-engine';
 import { useAIChat } from './useAIChat';
 
 vi.mock('@/hooks/useSession', () => ({ useSession: () => ({ hasSession: false, mounted: true }) }));
@@ -25,6 +26,37 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('useAIChat streaming safety', () => {
+  it('keeps a page-list answer with no tools or actions when the provider fails', async () => {
+    const question = 'Which deals are in due diligence?';
+    const pageContext = { route: '/fundraising', lists: [{ id: 'due_diligence', label: 'Due diligence', shown: 1, rows: ['Aegean Ventures'] }] };
+    const local = await copilot.runCopilotTurn(question, pageContext);
+    expect(local).toMatchObject({ usedTools: [], actions: [] });
+    expect(local.message).toContain('Aegean Ventures');
+    stream.mockImplementation(async function* () { throw new ApiError(503, 'AI unavailable'); });
+    const { result } = renderHook(() => useAIChat({ enableCopilot: true, pageContext }));
+    await act(() => result.current.sendMessage(question));
+    expect(result.current.messages[1]).toMatchObject({ content: local.message, localFallback: true });
+    expect(result.current.error).toBeNull();
+    expect(stream).toHaveBeenCalledOnce();
+    expect(send).not.toHaveBeenCalled();
+  });
+
+  it.each([503, 401, 403, 429])('uses an existing local answer only for provider failure (%i)', async (status) => {
+    vi.spyOn(copilot, 'runCopilotTurn').mockResolvedValue({ message: 'Local calendar result', actions: [], citations: [], usedTools: ['get_events'] });
+    stream.mockImplementation(async function* () { throw new ApiError(status, 'AI unavailable'); });
+    const { result } = renderHook(() => useAIChat({ enableCopilot: true }));
+    await act(() => result.current.sendMessage('What is on my calendar?'));
+    expect(stream).toHaveBeenCalledOnce();
+    expect(send).not.toHaveBeenCalled();
+    if (status === 503) {
+      expect(result.current.messages[1]).toMatchObject({ content: 'Local calendar result', localFallback: true, isStreaming: false });
+      expect(result.current.error).toBeNull();
+    } else {
+      expect(result.current.messages[1]).toMatchObject({ content: '', failed: true, isStreaming: false });
+      expect(result.current.error).toBe('AI unavailable');
+    }
+  });
+
   it.each([
     new ApiError(401, 'Session expired'),
     new ApiError(403, 'Not allowed'),

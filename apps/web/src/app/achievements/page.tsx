@@ -115,6 +115,10 @@ const ICON_MAP: Record<string, typeof Award> = {
 function apiToAchievement(a: AnalyticsAchievement, index: number): Achievement {
   const tiers: Achievement['tier'][] = ['bronze', 'silver', 'gold', 'platinum'];
   const categories: Achievement['category'][] = ['networking', 'engagement', 'profile', 'activity', 'special'];
+  const current = a.progress?.current;
+  const target = a.progress?.target;
+  const measured = typeof current === 'number' && Number.isFinite(current) && current >= 0 &&
+    typeof target === 'number' && Number.isFinite(target) && target > 0;
   return {
     id: a.id,
     title: a.title,
@@ -123,8 +127,8 @@ function apiToAchievement(a: AnalyticsAchievement, index: number): Achievement {
     tier: tiers[index % tiers.length],
     icon: ICON_MAP[a.icon.toLowerCase()] ?? Award,
     points: (index + 1) * 100,
-    progress: a.unlocked ? 1 : 0,
-    total: 1,
+    progress: measured ? Math.min(current, target) : a.unlocked ? 1 : 0,
+    total: measured ? target : 1,
     unlocked: a.unlocked,
     unlockedAt: a.unlockedAt ? new Date(a.unlockedAt) : undefined,
     rarity: Math.max(2, 50 - index * 4),
@@ -595,11 +599,12 @@ export default function AchievementsPage() {
       id: 'achievements',
       labelEn: 'Achievements',
       labelEl: 'Επιτεύγματα',
-      rows: isLoading ? undefined : (filteredAchievements ?? []).map((a) =>
-        `${a.title} · ${a.unlocked ? 'unlocked' : 'in progress'} · ${a.category} · ${a.points} pts`,
+      sample: !rawAchievements && showDemoData,
+      rows: isLoading || listFailed ? undefined : filteredAchievements.map((a) =>
+        `${a.title} · ${a.unlocked === null ? 'eligibility not verified' : a.unlocked ? 'unlocked' : `${a.progress}/${a.total}`} · ${a.category} · ${a.points} pts`,
       ),
-      rowsEl: isLoading ? undefined : (filteredAchievements ?? []).map((a) =>
-        `${a.title} · ${a.unlocked ? 'ξεκλειδώθηκε' : 'σε εξέλιξη'} · ${elWord(a.category)} · ${a.points} πόντοι`,
+      rowsEl: isLoading || listFailed ? undefined : filteredAchievements.map((a) =>
+        `${a.title} · ${a.unlocked === null ? 'μη επαληθευμένη επιλεξιμότητα' : a.unlocked ? 'ξεκλειδώθηκε' : `${a.progress}/${a.total}`} · ${elWord(a.category)} · ${a.points} πόντοι`,
       ),
     },
   ]);

@@ -126,6 +126,16 @@ describe('personal analytics truthfulness', () => {
     expect(trends.every((day) => day.engagement === null)).toBe(true);
   });
 
+  it('reports progress only for achievements backed by existing measurements', async () => {
+    const { service, prisma } = setup();
+    prisma.connectionRequest.count.mockResolvedValue(12);
+    prisma.profileView.count.mockResolvedValue(0);
+    const achievements = await service.getUserAchievements('owner');
+    expect(achievements.find((a) => a.id === 'networker')).toMatchObject({ unlocked: false, progress: { current: 12, target: 50 } });
+    expect(achievements.find((a) => a.id === 'influencer')).toMatchObject({ unlocked: false, progress: { current: 0, target: 1000 } });
+    expect(achievements.find((a) => a.id === 'active-contributor')?.progress).toBeUndefined();
+  });
+
   it.each(['0d', '366d', '999999999999999y', '-1d', '7d-junk', '', 'NaN'])('rejects invalid or unbounded period %s before querying', async (period) => {
     const { service, prisma } = setup();
     await expect(service.getOverview('owner', period)).rejects.toThrow();

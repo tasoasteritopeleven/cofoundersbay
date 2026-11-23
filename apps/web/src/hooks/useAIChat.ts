@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { ApiError } from '@/lib/api';
 
 function useOptionalQueryClient() {
   try {
@@ -43,6 +44,8 @@ export interface AIMessage {
   timestamp: Date;
   model?: string;
   fallback?: boolean;
+  localFallback?: boolean;
+  interrupted?: boolean;
   isStreaming?: boolean;
   actions?: CopilotAction[];
   citations?: CopilotCitation[];
@@ -300,9 +303,8 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
       setMessages((prev) => [...prev, assistantMessage]);
       setIsStreaming(true);
 
+      let turn: CopilotTurnResult | undefined;
       try {
-        let turn: CopilotTurnResult | undefined;
-
         if (enableCopilot) {
           try {
             turn = await runCopilotTurn(content.trim(), pageContext);
@@ -486,7 +488,7 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
           setMessages((prev) =>
             prev.map((message) =>
               message.id === assistantMessageId
-                ? { ...message, content: narrative, model: 'copilot', isStreaming: false, actions, citations, usedTools: turn?.usedTools ?? [] }
+                ? { ...message, content: narrative, model: 'copilot', localFallback: !isPreviewDemo() && !isAIAvailable && Boolean(narrative), isStreaming: false, actions, citations, usedTools: turn?.usedTools ?? [] }
                 : message,
             ),
           );
@@ -502,6 +504,26 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
           return;
         }
 
+        const providerUnavailable = requestError instanceof TypeError ||
+          requestError?.name === 'TimeoutError' ||
+          (requestError instanceof ApiError && requestError.status >= 500);
+        if (!receivedEvent && providerUnavailable && turn && (turn.hasPageListAnswer || turn.usedTools?.length || turn.actions?.length)) {
+          const local = turn;
+          setMessages((prev) => prev.map((message) => message.id === assistantMessageId
+            ? {
+                ...message,
+                content: local.message,
+                model: 'copilot',
+                localFallback: true,
+                isStreaming: false,
+                actions: local.actions,
+                citations: local.citations,
+                usedTools: local.usedTools,
+              }
+            : message));
+          return;
+        }
+
         setError(requestError?.message || 'Failed to get AI response');
         setMessages((prev) =>
           prev.map((message) =>
@@ -510,6 +532,7 @@ export function useAIChat(options: UseAIChatOptions = {}): UseAIChatReturn {
                   ...message,
                   content: receivedEvent ? message.content : '',
                   failed: !receivedEvent,
+                  interrupted: receivedEvent,
                   isStreaming: false,
                 }
               : message,

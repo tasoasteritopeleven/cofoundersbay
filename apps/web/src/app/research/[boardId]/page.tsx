@@ -81,7 +81,6 @@ import { MERMAID_STARTERS } from '@/components/research/MermaidDiagramNode';
 import { getTemplateDefaultContent } from '@/components/research/VisualTemplateNode';
 import { computeLayout, type LayoutAlgorithm } from '@/lib/autoLayout';
 import { ShapeLibraryPanel, type ShapeTemplate } from '@/components/research/ShapeLibraryPanel';
-import { toPng, toSvg } from 'html-to-image';
 import { BoardSettingsPanel } from '@/components/research/BoardSettingsPanel';
 import { BoardSummaryPanel } from '@/components/research/BoardSummaryPanel';
 import { CommentsPanel } from '@/components/research/CommentsPanel';
@@ -1178,9 +1177,11 @@ export default function ResearchBoardPage() {
   }, [rewriteSelectedContent]);
 
   const exportBoardSvg = useCallback(async () => {
-    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     try {
-      const dataUrl = await toSvg(canvasRef.current, { cacheBust: true });
+      const { toSvg } = await import('html-to-image');
+      const dataUrl = await toSvg(canvas, { cacheBust: true });
       const link = document.createElement('a');
       link.download = `${board?.title ?? 'canvas'}-export.svg`;
       link.href = dataUrl;
@@ -1963,9 +1964,11 @@ export default function ResearchBoardPage() {
 
   // PNG export handler
   const handleExportPng = useCallback(async () => {
-    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     try {
-      const dataUrl = await toPng(canvasRef.current, {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(canvas, {
         cacheBust: true,
         pixelRatio: 2,
       });

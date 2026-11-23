@@ -1,0 +1,85 @@
+import { act, renderHook } from '@testing-library/react';
+import { expect, it, vi } from 'vitest';
+import { buildIcs } from '@/lib/ics';
+import { agendaDateLabel, calendarDayKey, eventsOnDay, groupAgenda, milestoneCalendarDay, useAgendaClock } from './calendar-agenda';
+import { restoreDateOnly } from '@/lib/calendar-days';
+
+it('stamps the clock after mount and refreshes at midnight and when returning', () => {
+  vi.useFakeTimers();
+  const first = new Date(2026, 9, 24, 23, 59, 59);
+  vi.setSystemTime(first);
+  const visible = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible');
+  const { result, unmount } = renderHook(() => useAgendaClock());
+  try {
+    expect(result.current).toEqual(first);
+    act(() => vi.advanceTimersByTime(1_000));
+    expect(result.current).toEqual(new Date(2026, 9, 25));
+    vi.setSystemTime(new Date(2026, 9, 27, 12));
+    act(() => document.dispatchEvent(new Event('visibilitychange')));
+    expect(result.current).toEqual(new Date(2026, 9, 27, 12));
+    vi.setSystemTime(new Date(2026, 9, 29, 12));
+    act(() => window.dispatchEvent(new Event('pageshow')));
+    expect(result.current).toEqual(new Date(2026, 9, 29, 12));
+  } finally {
+    unmount();
+    visible.mockRestore();
+    vi.useRealTimers();
+  }
+});
+
+it('groups the existing agenda by local day without displacing overdue follow-ups', () => {
+  const overdue = { id: 'followup-1', date: '2026-10-24' };
+  const today = { id: 'session-1', date: new Date(2026, 9, 25, 1, 30).toISOString() };
+  const later = { id: 'milestone-1', date: '2026-10-26' };
+  expect(groupAgenda([overdue, today, later], new Date(2026, 9, 25, 12))).toEqual({
+    overdue: [overdue],
+    today: [today],
+    later: [later],
+  });
+});
+
+it('keeps the previous local day’s follow-up overdue just after local midnight', () => {
+  const yesterday = { id: 'followup-yesterday', date: '2026-10-24' };
+  const today = { id: 'followup-today', date: '2026-10-25' };
+  const session = { id: 'session-today', date: new Date(2026, 9, 25, 23).toISOString() };
+  expect(groupAgenda([yesterday, today, session], new Date(2026, 9, 25, 0, 30))).toEqual({
+    overdue: [yesterday],
+    today: [today, session],
+    later: [],
+  });
+  expect(agendaDateLabel(yesterday.date, false)).toBe('2026-10-24');
+  expect(agendaDateLabel(session.date, true)).toBe('2026-10-25 23:00');
+});
+
+it('preserves the literal milestone date serialized by the API at UTC midnight', () => {
+  const milestone = { date: restoreDateOnly('2026-10-25T00:00:00.000Z') };
+  expect(groupAgenda([milestone], new Date(2026, 9, 25, 12)).today).toEqual([milestone]);
+  expect(restoreDateOnly('2026-10-25T01:00:00.000Z')).toBe('2026-10-25T01:00:00.000Z');
+});
+
+it('puts the same timed events on the local day in the agenda and day views', () => {
+  const selected = new Date(2026, 9, 25);
+  const morning = { date: new Date(2026, 9, 25, 0, 30).toISOString() };
+  const evening = { date: new Date(2026, 9, 25, 23, 30).toISOString() };
+  const milestone = { date: '2026-10-25' };
+  const tomorrow = { date: new Date(2026, 9, 26, 0, 30).toISOString() };
+  const events = [morning, evening, milestone, tomorrow];
+
+  expect(calendarDayKey(selected)).toBe('2026-10-25');
+  expect(eventsOnDay(events, selected)).toEqual([morning, evening, milestone]);
+  expect(groupAgenda(events, selected).today).toEqual(eventsOnDay(events, selected));
+  expect(agendaDateLabel(morning.date, true)).toBe('2026-10-25 00:30');
+  expect(agendaDateLabel(evening.date, true)).toBe('2026-10-25 23:30');
+});
+
+it('uses the stored UTC day of milestone deadlines for Calendar and all-day export', () => {
+  const dates = ['2026-10-25T02:00:00.000Z', '2026-10-25T17:00:00.000Z', '2026-10-25'];
+  for (const dueDate of dates) {
+    const date = milestoneCalendarDay(dueDate);
+    expect(agendaDateLabel(date, false)).toBe('2026-10-25');
+    expect(eventsOnDay([{ date }], new Date(2026, 9, 25))).toEqual([{ date }]);
+    const ics = buildIcs([{ uid: 'milestone', title: 'Deadline', start: calendarDayKey(date), allDay: true }]);
+    expect(ics).toContain('DTSTART;VALUE=DATE:20261025\r\n');
+    expect(ics).toContain('DTEND;VALUE=DATE:20261026\r\n');
+  }
+});

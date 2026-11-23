@@ -151,6 +151,9 @@ function AssistantBody({
 
   return (
     <div className="space-y-2">
+      {message.localFallback && (
+        <p className="type-caption text-muted-foreground"><BilingualText en="The AI service did not answer. This result comes from the platform’s built-in assistant." el="Η υπηρεσία AI δεν απάντησε. Αυτό το αποτέλεσμα προέρχεται από τον ενσωματωμένο βοηθό της πλατφόρμας." compact wrap /></p>
+      )}
       {message.isStreaming && !message.content ? (
         <div className="type-ui flex items-center gap-2 text-muted-foreground">
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -173,6 +176,9 @@ function AssistantBody({
       {message.stopped ? (
         <p className="type-caption text-muted-foreground"><BilingualText en="Stopped. What had arrived is above." el="Σταμάτησε. Ό,τι είχε φτάσει είναι παραπάνω." compact wrap /></p>
       ) : null}
+      {message.interrupted && (
+        <p className="type-caption text-muted-foreground"><BilingualText en="The response was interrupted and may be incomplete." el="Η απάντηση διακόπηκε και μπορεί να μην είναι πλήρης." compact wrap /></p>
+      )}
       {message.citations && message.citations.length > 0 && <CitationList citations={message.citations} />}
       {message.actions && message.actions.length > 0 && (
         <div className="grid grid-cols-1 gap-2 pt-1">
