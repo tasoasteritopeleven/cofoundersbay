@@ -452,7 +452,8 @@ export const AREA_READERS: Record<AreaReadId, Reader> = {
     const result = await getEventReconnect(eventId);
     const all = result?.rows;
     if (!Array.isArray(all)) throw new Error('EVENT_RECONNECT_RESPONSE_INCOMPLETE');
-    const rows = all.slice(0, LIMIT);
+    const priority = (row: (typeof all)[number]) => row.mutual ? 2 : row.interested ? 1 : 0;
+    const rows = [...all].sort((a, b) => priority(b) - priority(a)).slice(0, LIMIT);
     const none = result?.state === 'not_confirmed'
       ? t('The organizer must confirm your attendance first.')
       : result?.state === 'before_end'
