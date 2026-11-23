@@ -5,8 +5,7 @@ import { RailStats } from '@/components/layout/RailParts';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { agendaDateLabel, calendarDate, calendarDayKey, calendarTime, eventsOnDay, groupAgenda, useAgendaClock } from './calendar-agenda';
-import { restoreDateOnly } from '@/lib/calendar-days';
+import { agendaDateLabel, calendarDate, calendarDayKey, calendarTime, eventsOnDay, groupAgenda, milestoneCalendarDay, useAgendaClock } from './calendar-agenda';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -144,7 +143,7 @@ function fromMilestone(mst: Milestone): CalendarEvent | null {
     id: `milestone-${mst.id}`,
     title: mst.title,
     type: mst.priority === 'high' ? 'deadline' : 'milestone',
-    date: restoreDateOnly(mst.dueDate),
+    date: milestoneCalendarDay(mst.dueDate),
     priority: mst.priority,
     status: mst.status,
     href: '/milestones',

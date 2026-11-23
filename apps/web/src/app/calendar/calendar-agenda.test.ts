@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
-import { agendaDateLabel, calendarDayKey, eventsOnDay, groupAgenda, useAgendaClock } from './calendar-agenda';
+import { buildIcs } from '@/lib/ics';
+import { agendaDateLabel, calendarDayKey, eventsOnDay, groupAgenda, milestoneCalendarDay, useAgendaClock } from './calendar-agenda';
 import { restoreDateOnly } from '@/lib/calendar-days';
 
 it('stamps the clock after mount and refreshes at midnight and when returning', () => {
@@ -69,4 +70,16 @@ it('puts the same timed events on the local day in the agenda and day views', ()
   expect(groupAgenda(events, selected).today).toEqual(eventsOnDay(events, selected));
   expect(agendaDateLabel(morning.date, true)).toBe('2026-10-25 00:30');
   expect(agendaDateLabel(evening.date, true)).toBe('2026-10-25 23:30');
+});
+
+it('uses the stored UTC day of milestone deadlines for Calendar and all-day export', () => {
+  const dates = ['2026-10-25T02:00:00.000Z', '2026-10-25T17:00:00.000Z', '2026-10-25'];
+  for (const dueDate of dates) {
+    const date = milestoneCalendarDay(dueDate);
+    expect(agendaDateLabel(date, false)).toBe('2026-10-25');
+    expect(eventsOnDay([{ date }], new Date(2026, 9, 25))).toEqual([{ date }]);
+    const ics = buildIcs([{ uid: 'milestone', title: 'Deadline', start: calendarDayKey(date), allDay: true }]);
+    expect(ics).toContain('DTSTART;VALUE=DATE:20261025\r\n');
+    expect(ics).toContain('DTEND;VALUE=DATE:20261026\r\n');
+  }
 });

@@ -41,6 +41,10 @@ export function groupAgenda<T extends { date: string }>(events: readonly T[], no
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 const pad = (value: number) => String(value).padStart(2, '0');
 
+export function milestoneCalendarDay(dueDate: string) {
+  return dueDate.slice(0, 10);
+}
+
 export function calendarDate(iso: string) {
   return new Date(DATE_ONLY.test(iso) ? `${iso}T00:00:00` : iso);
 }
