@@ -328,6 +328,7 @@ export default function MessagesPage() {
   const threadPaneRef = useRef<HTMLDivElement>(null);
   const mobileOpenerRef = useRef<HTMLElement | null>(null);
   const restoreInboxFocus = useRef(false);
+  const collapsedChatId = useRef<string | null>(null);
   const openedLinkRef = useRef<string | null>(null);
   const rememberOpener = useCallback(() => {
     if (window.matchMedia('(max-width: 767px)').matches) {
@@ -337,6 +338,8 @@ export default function MessagesPage() {
   }, []);
   const openConversation = useCallback((conv: Conversation, options?: { draft?: string; markRead?: boolean }) => {
     rememberOpener();
+    if (collapsedChatId.current === conv.id) setThreadReload((n) => n + 1);
+    collapsedChatId.current = null;
     setSidebarTab('chats');
     setSelectedConversation((current) => current?.id === conv.id ? current : conv);
     setComposerDraft((current) => conversationDraft(current, conv.id, options?.draft));
@@ -345,10 +348,11 @@ export default function MessagesPage() {
     setIsMobileViewingChat(true);
   }, [markConversationRead, rememberOpener, setActiveConversationId]);
   const returnToInbox = useCallback(() => {
+    if (sidebarTab === 'chats') collapsedChatId.current = selectedConversation?.id ?? null;
     restoreInboxFocus.current = true;
     setIsMobileViewingChat(false);
     setActiveConversationId(null);
-  }, [setActiveConversationId]);
+  }, [selectedConversation?.id, setActiveConversationId, sidebarTab]);
 
   useEffect(() => {
     if (!window.matchMedia('(max-width: 767px)').matches) return;
@@ -723,7 +727,6 @@ export default function MessagesPage() {
     if (!canUseMessaging || !selectedConversation) {
       return;
     }
-    if (!isMobileViewingChat && window.matchMedia('(max-width: 767px)').matches) return;
 
     let cancelled = false;
     // The last thread's messages do not stay under the next one's name
@@ -749,7 +752,7 @@ export default function MessagesPage() {
     return () => {
       cancelled = true;
     };
-  }, [canUseMessaging, selectedConversation, currentUserId, threadReload, isMobileViewingChat]);
+  }, [canUseMessaging, selectedConversation, currentUserId, threadReload]);
 
   // Desktop: open the most relevant thread so the right pane is not an empty void.
   useEffect(() => {
