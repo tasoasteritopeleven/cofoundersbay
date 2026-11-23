@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useIsAuthenticated } from '@/hooks/useIsAuthenticated';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { defaultDiscoverFilters as defaultFilters, readDiscoverUrl, writeDiscoverUrl, type DiscoverRole as RoleFilter, type DiscoverTab } from '@/lib/discover-url';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   LayoutGrid,
@@ -69,8 +70,6 @@ type ViewMode = 'grid' | 'list' | 'match';
  * lines (docs §86). A base of one column stays for twMerge to replace.
  */
 const PEOPLE_GRID = 'grid-cols-[repeat(auto-fill,minmax(min(100%,24rem),1fr))]';
-type RoleFilter = 'all' | 'founder' | 'cofounder' | 'mentor' | 'investor' | 'service_provider';
-
 const ROLE_FILTERS: { value: RoleFilter; labelEn: string; labelEl: string; icon: React.ElementType }[] = [
   { value: 'all',              labelEn: discoverEn('all'),              labelEl: discoverEl('all'),              icon: Users         },
   { value: 'founder',         labelEn: discoverEn('founders'),         labelEl: discoverEl('founders'),         icon: Rocket        },
@@ -124,20 +123,6 @@ function discoverFilterNames(filters: SearchFiltersValues): NamedFilter[] {
   );
 }
 
-const defaultFilters: SearchFiltersValues = {
-  q: '',
-  role: [],
-  skills: [],
-  industries: [],
-  stage: [],
-  location: '',
-  remote: null,
-  availability: [],
-  fundingStage: [],
-  languages: [],
-  sortBy: 'relevance',
-};
-
 export default function DiscoverPage() {
   const router = useRouter();
   const { success, error: showError } = useToast();
@@ -157,7 +142,7 @@ export default function DiscoverPage() {
   // Two tabs: "For You" and "Top Matches" listed the same eight people
   // from the same read (`getRecommendations`), one as profile cards, one as
   // match cards; they are one tab now (docs §101).
-  const [activeTab, setActiveTab] = useState<'search' | 'matches'>('search');
+  const [activeTab, setActiveTab] = useState<DiscoverTab>('search');
   const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
 
   // Connection request dialog
@@ -175,32 +160,37 @@ export default function DiscoverPage() {
   // the stored query and filters, "New Search" sends saveSearch=true. Both
   // were dead before — apply them once, after mount, then drop the flag so a
   // refresh keeps the filters without reopening the dialog.
-  const urlAppliedRef = useRef(false);
+  const [urlReady, setUrlReady] = useState(false);
   useEffect(() => {
-    if (urlAppliedRef.current) return;
-    urlAppliedRef.current = true;
-    const p = new URLSearchParams(window.location.search);
-    const next: SearchFiltersValues = { ...defaultFilters };
-    const q = p.get('q');
-    if (q) next.q = q;
-    const pick = (key: string) => p.get(key)?.split(',').map((s) => s.trim()).filter(Boolean) ?? [];
-    const roles = pick('roles'); if (roles.length) next.role = roles;
-    const skills = pick('skills'); if (skills.length) next.skills = skills;
-    const industries = pick('industries'); if (industries.length) next.industries = industries;
-    const locations = pick('locations'); if (locations.length) next.location = locations[0];
-    const stage = pick('stage'); if (stage.length) next.stage = stage;
-    if (q || roles.length || skills.length || industries.length || locations.length || stage.length) {
-      setFilters(next);
-      setActiveTab('search');
-    }
-    if (p.get('saveSearch') === 'true') {
-      setSaveSearchName(q ?? '');
-      setSaveSearchOpen(true);
-      p.delete('saveSearch');
-      const qs = p.toString();
-      router.replace(qs ? `/discover?${qs}` : '/discover', { scroll: false });
-    }
-  }, [router]);
+    const applyUrl = () => {
+      if (window.location.pathname !== '/discover') return;
+      const p = new URLSearchParams(window.location.search);
+      const next = readDiscoverUrl(p);
+      setFilters(next.filters);
+      setActiveTab(next.tab);
+      setRoleFilter(next.roleChip);
+      if (p.get('saveSearch') === 'true') {
+        setSaveSearchName(next.filters.q);
+        setSaveSearchOpen(true);
+        p.delete('saveSearch');
+        const qs = p.toString();
+        window.history.replaceState(null, '', qs ? `/discover?${qs}` : '/discover');
+      }
+      setUrlReady(true);
+    };
+    applyUrl();
+    window.addEventListener('popstate', applyUrl);
+    return () => window.removeEventListener('popstate', applyUrl);
+  }, []);
+
+  useEffect(() => {
+    if (!urlReady || window.location.pathname !== '/discover') return;
+    const current = new URLSearchParams(window.location.search);
+    const next = writeDiscoverUrl(current, filters, roleFilter, activeTab);
+    if (next.toString() === current.toString()) return;
+    const query = next.toString();
+    window.history.replaceState(null, '', `/discover${query ? `?${query}` : ''}${window.location.hash}`);
+  }, [urlReady, filters, roleFilter, activeTab]);
 
   const hasToken = useIsAuthenticated();
   const { data: recommendationsData, isLoading: suggestionsLoading, isError: suggestionsFailed, isFetching: suggestionsFetching, refetch: refetchSuggestions } = useQuery({
@@ -273,8 +263,9 @@ export default function DiscoverPage() {
     [suggestions, passedMatchIds],
   );
 
-  // Search function
+  const searchSequence = useRef(0);
   const runSearch = useCallback(async () => {
+    const sequence = ++searchSequence.current;
     setLoading(true);
     try {
       const res = await searchProfiles({
@@ -290,33 +281,36 @@ export default function DiscoverPage() {
         sortBy: filters.sortBy,
         limit: 30,
       });
-      // A 200 whose body is missing `hits` must not blank the page: every
-      // read below goes through `hits.length`, so an undefined here throws
-      // inside render and trips the route error boundary.
-      setHits(Array.isArray(res?.hits) ? res.hits : []);
+      if (sequence !== searchSequence.current) return;
+      if (!Array.isArray(res?.hits)) throw new Error('Missing search results');
+      setHits(res.hits);
       setPromotedIds(Array.isArray(res?.promotedUserIds) ? res.promotedUserIds.filter((id): id is string => typeof id === 'string') : []);
-      setTotal(typeof res?.total === 'number' ? res.total : 0);
+      setTotal(typeof res?.total === 'number' ? res.total : res.hits.length);
       setSearchFailed(false);
     } catch {
+      if (sequence !== searchSequence.current) return;
       setHits([]);
       setPromotedIds([]);
       setTotal(0);
       setSearchFailed(true);
     } finally {
-      setLoading(false);
+      if (sequence === searchSequence.current) setLoading(false);
     }
   }, [filters]);
 
   // Debounced auto-search on filter changes when on search tab
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    if (activeTab !== 'search') return;
+    if (!urlReady || activeTab !== 'search') return;
+    setLoading(true);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const delay = filters.q.length > 0 ? 500 : 150;
     debounceRef.current = setTimeout(() => { void runSearch(); }, delay);
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, activeTab]);
+    return () => {
+      searchSequence.current++;
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [filters, activeTab, runSearch, urlReady]);
 
   /*
    * Plain-language search. Enter in the field reads the words it knows
@@ -465,7 +459,8 @@ export default function DiscoverPage() {
   // Offered to the assistant: the tab, role, sort, layout and reset, and
   // each result's Connect (which opens the same request dialog), Message
   // and Save - over the people on the tab that is showing.
-  const shown = activeTab === 'search' ? roleHits : matchList;
+  const rowsUnread = activeTab === 'search' ? loading || searchFailed : suggestionsLoading || (suggestionsFailed && !recommendationsData);
+  const shown = rowsUnread ? [] : activeTab === 'search' ? roleHits : matchList;
   const byName = (list: SearchHit[]) => rowOptions(list, (h) => h.id, (h) => h.displayName);
   const hitById = (id?: string) => shown.find((h) => h.id === id);
   usePageList([
@@ -473,13 +468,13 @@ export default function DiscoverPage() {
       id: 'people',
       labelEn: activeTab === 'search' ? 'Search results' : 'Top matches',
       labelEl: activeTab === 'search' ? 'Αποτελέσματα αναζήτησης' : 'Κορυφαίες αντιστοιχίσεις',
-      rows: (activeTab === 'search' ? loading : suggestionsLoading) ? undefined : shown.map((h) =>
+      rows: rowsUnread ? undefined : shown.map((h) =>
         `${h.displayName}${h.role ? ` · ${h.role}` : ''}${h.headline ? ` · ${h.headline}` : ''}${h.location ? ` · ${h.location}` : ''}${h.matchScore != null ? ` · match ${h.matchScore}%` : ''}`,
       ),
-      rowsEl: (activeTab === 'search' ? loading : suggestionsLoading) ? undefined : shown.map((h) =>
+      rowsEl: rowsUnread ? undefined : shown.map((h) =>
         `${h.displayName}${h.role ? ` · ${elWord(h.role)}` : ''}${h.headline ? ` · ${h.headline}` : ''}${h.location ? ` · ${h.location}` : ''}${h.matchScore != null ? ` · ταίριασμα ${h.matchScore}%` : ''}`,
       ),
-      ...(activeTab === 'search' ? { total } : {}),
+      ...(!rowsUnread && activeTab === 'search' ? { total } : {}),
     },
   ]);
   usePageControls([
