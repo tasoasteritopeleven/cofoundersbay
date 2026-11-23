@@ -6,7 +6,7 @@ import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { agendaDateLabel, agendaLocalDate, groupAgenda, useAgendaClock } from './calendar-agenda';
-import { calendarDaysUntil } from '@/lib/calendar-days';
+import { calendarDaysUntil, restoreDateOnly } from '@/lib/calendar-days';
 import {
   Calendar as CalendarIcon,
   Download,
@@ -157,7 +157,7 @@ function fromMilestone(mst: Milestone): CalendarEvent | null {
     id: `milestone-${mst.id}`,
     title: mst.title,
     type: mst.priority === 'high' ? 'deadline' : 'milestone',
-    date: mst.dueDate,
+    date: restoreDateOnly(mst.dueDate),
     priority: mst.priority,
     status: mst.status,
     href: '/milestones',

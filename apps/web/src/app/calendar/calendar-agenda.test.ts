@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { agendaDateLabel, groupAgenda, useAgendaClock } from './calendar-agenda';
+import { restoreDateOnly } from '@/lib/calendar-days';
 
 it('stamps the clock after mount and refreshes at midnight and when returning', () => {
   vi.useFakeTimers();
@@ -47,4 +48,10 @@ it('keeps the previous local day’s follow-up overdue just after local midnight
   });
   expect(agendaDateLabel(yesterday.date, false)).toBe('2026-10-24');
   expect(agendaDateLabel(session.date, true)).toBe('2026-10-25 23:00');
+});
+
+it('preserves the literal milestone date serialized by the API at UTC midnight', () => {
+  const milestone = { date: restoreDateOnly('2026-10-25T00:00:00.000Z') };
+  expect(groupAgenda([milestone], new Date(2026, 9, 25, 12)).today).toEqual([milestone]);
+  expect(restoreDateOnly('2026-10-25T01:00:00.000Z')).toBe('2026-10-25T01:00:00.000Z');
 });

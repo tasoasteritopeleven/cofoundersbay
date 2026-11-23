@@ -1,5 +1,6 @@
 import type { CapTableHolder } from '@cofounderbay/shared';
 import { apiRequest, getApiBase } from '@/lib/api';
+import { restoreDateOnly } from '@/lib/calendar-days';
 import type { DataRoomDoc, FundRound, InvestorLead, InvestorStatus } from '@/lib/fundraising-demo';
 
 /**
@@ -154,7 +155,7 @@ export function leadFromApi(lead: ApiLead): InvestorLead {
     checkSize: lead.committedAmount ? `${symbol}${lead.committedAmount.toLocaleString('en-GB')}` : (lead.checkSizeText ?? ''),
     status: FROM_API_STATUS[lead.status],
     lastContact: lead.lastContactAt ?? undefined,
-    nextFollowUp: lead.nextFollowUpAt ?? undefined,
+    nextFollowUp: lead.nextFollowUpAt ? restoreDateOnly(lead.nextFollowUpAt) : undefined,
     nextStep: lead.nextStep ?? undefined,
     notes: lead.notes ?? undefined,
     isVerified: lead.isVerifiedOnPlatform,

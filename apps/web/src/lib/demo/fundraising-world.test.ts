@@ -91,6 +91,7 @@ describe('the API’s words on the page’s cards', () => {
     expect(leadFromApi(lead)).toMatchObject({ name: 'Ada', firm: 'Aegean', status: 'dd', checkSize: '€25K–€150K', lastContact: NOW, notes: 'Warm' });
     expect(leadFromApi({ ...lead, status: 'committed', committedAmount: 250000 }).checkSize).toBe('€250,000');
     expect(leadFromApi({ ...lead, status: 'inactive' }).status).toBe('passed');
+    expect(leadFromApi({ ...lead, nextFollowUpAt: '2026-10-25T00:00:00.000Z' }).nextFollowUp).toBe('2026-10-25');
     expect(apiLeadStatus('dd')).toBe('due_diligence');
   });
 
