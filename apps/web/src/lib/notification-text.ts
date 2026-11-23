@@ -11,6 +11,8 @@
 type Rule = [RegExp, string];
 
 const RULES: Rule[] = [
+  [/^Reconnect after your event$/, 'Επανασυνδεθείτε μετά την εκδήλωση'],
+  [/^You have a mutual event match$/, 'Έχετε αμοιβαίο ενδιαφέρον από την εκδήλωση'],
   // Connections and messages
   [/^New message from (.+)$/, 'Νέο μήνυμα από $1'],
   [/^(.+) wants to connect$/, '$1: αίτημα σύνδεσης'],

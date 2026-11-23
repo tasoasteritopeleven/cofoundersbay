@@ -2,11 +2,16 @@
 
 import { AlertTriangle, Ban, Check, Loader2, RotateCcw, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import { BilingualText } from '@/components/common/BilingualText';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CardFoot, CardHead } from '@/components/common/CardAnatomy';
 import { getActionSpec, undoAvailable } from '@/lib/action-registry';
+import { useStoredUser } from '@/hooks/useStoredUser';
+import { getEvent } from '@/lib/api';
+import { getEventAttendance, getEventReconnect } from '@/lib/event-reconnect-api';
+import { qk } from '@/lib/query-keys';
 import { STATUS } from '@/lib/semantic-colors';
 import { cn } from '@/lib/utils';
 import type { CopilotAction } from '@/lib/copilot-types';
@@ -19,6 +24,38 @@ type ActionCardProps = {
   /** Omitted by callers that cannot take an action back. */
   onUndo?: (action: CopilotAction) => void;
 };
+
+function EventActionSummary({ action }: { action: CopilotAction }) {
+  const viewer = useStoredUser()?.id;
+  const eventId = typeof action.payload.eventId === 'string' ? action.payload.eventId : '';
+  const userId = typeof action.payload.userId === 'string' ? action.payload.userId : '';
+  const attendance = action.tool === 'set_event_attendance';
+  const direction = attendance ? action.payload.attended : action.payload.interested;
+  const event = useQuery({
+    queryKey: qk('events', 'detail', eventId), queryFn: () => getEvent(eventId), enabled: Boolean(eventId), retry: false,
+  });
+  const roster = useQuery({
+    queryKey: qk('events', 'attendance', eventId, viewer), queryFn: () => getEventAttendance(eventId),
+    enabled: Boolean(viewer && eventId && userId) && attendance, retry: false,
+  });
+  const reconnect = useQuery({
+    queryKey: qk('events', 'reconnect', eventId, viewer), queryFn: () => getEventReconnect(eventId),
+    enabled: Boolean(viewer && eventId && userId) && !attendance, retry: false,
+  });
+  if (!eventId || !userId || typeof direction !== 'boolean') {
+    return <BilingualText en="The event, attendee, or requested change is missing." el="Λείπει η εκδήλωση, ο συμμετέχων ή η ζητούμενη αλλαγή." />;
+  }
+  const title = event.data?.event?.title || eventId;
+  const person = (attendance ? roster.data?.rows : reconnect.data?.rows)?.find((row) => row.userId === userId)?.displayName || userId;
+  const change = attendance
+    ? direction ? { en: 'Confirm attendance', el: 'Επιβεβαίωση παρουσίας' } : { en: 'Clear attendance', el: 'Αναίρεση παρουσίας' }
+    : direction ? { en: 'Select to reconnect', el: 'Επιλογή για επανασύνδεση' } : { en: 'Withdraw reconnect interest', el: 'Απόσυρση ενδιαφέροντος επανασύνδεσης' };
+  return (
+    <p className="card-body break-words">
+      <BilingualText en={`${change.en} — ${person} · ${title}`} el={`${change.el} — ${person} · ${title}`} wrap />
+    </p>
+  );
+}
 
 export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: ActionCardProps) {
   const busy = busyId === action.id;
@@ -142,6 +179,7 @@ export function ActionCard({ action, busyId, onConfirm, onDismiss, onUndo }: Act
         {action.tool === 'send_connection' && typeof action.payload.message === 'string' && (
           <p className="card-body italic text-muted-foreground">“{action.payload.message}”</p>
         )}
+        {action.tool === 'set_event_attendance' || action.tool === 'set_event_reconnect' ? <EventActionSummary action={action} /> : null}
 
         {/* Stated before the user commits, not after. The registry verifies each
             of these against the API, so an intro says plainly that it cannot be

@@ -1,4 +1,5 @@
 import type { ReadActionId } from '@cofounderbay/shared';
+import { getEventReconnect } from '@/lib/event-reconnect-api';
 import { TEAM_AREAS, teamGaps, type TeamArea } from '@/lib/team-gaps';
 import {
   acceptsApplications,
@@ -444,6 +445,26 @@ export const AREA_READERS: Record<AreaReadId, Reader> = {
     });
 
     return { section: `${t('Upcoming events:')}\n${lines.join('\n')}`, citations, actions };
+  },
+
+  async get_event_reconnect({ eventId }, { t }) {
+    if (!eventId) return { section: t('I need the event ID.'), citations: [], actions: [] };
+    const result = await getEventReconnect(eventId);
+    const all = result?.rows;
+    if (!Array.isArray(all)) throw new Error('EVENT_RECONNECT_RESPONSE_INCOMPLETE');
+    const priority = (row: (typeof all)[number]) => row.mutual ? 2 : row.interested ? 1 : 0;
+    const rows = [...all].sort((a, b) => priority(b) - priority(a)).slice(0, LIMIT);
+    const none = result?.state === 'not_confirmed'
+      ? t('The organizer must confirm your attendance first.')
+      : result?.state === 'before_end'
+        ? t('Reconnect opens after the event ends.')
+        : t('No reconnect candidates or matches are available.');
+    const lines = rows.map((row) => {
+      const state = row.mutual ? t('Mutual match') : row.interested ? t('Private selection') : '';
+      return `• ${row.displayName ?? t('Attendee')} · ID: ${row.userId}${state ? ` · ${state}` : ''}`;
+    });
+    const heading = t('Post-event reconnect');
+    return { section: rows.length ? `${heading} (${rows.length}/${all.length}):\n${lines.join('\n')}` : none, citations: [], actions: [] };
   },
 
   async get_milestones(_args, { t, locale }) {

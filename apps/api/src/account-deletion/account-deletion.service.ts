@@ -155,7 +155,24 @@ export class AccountDeletionService {
           await tx.group.delete({ where: { id: group.id } });
         }
       }
+      const ownedEvents = await tx.event.findMany({ where: { creatorId: userId }, select: { id: true } });
       await tx.user.delete({ where: { id: userId } });
+      await tx.notification.deleteMany({
+        where: {
+          type: 'system',
+          OR: [
+            { meta: { path: ['reconnectPair'], string_starts_with: `${userId}:` } },
+            { meta: { path: ['reconnectPair'], string_ends_with: `:${userId}` } },
+            {
+              link: { in: ownedEvents.map(({ id }) => `/events/${id}#reconnect`) },
+              OR: [
+                { meta: { path: ['eventReconnect'], equals: 'match' } },
+                { meta: { path: ['eventReconnect'], equals: 'nudge' } },
+              ],
+            },
+          ],
+        },
+      });
     }, { timeout: 30_000 });
 
     const results = await Promise.all([

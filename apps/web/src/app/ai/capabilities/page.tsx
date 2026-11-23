@@ -71,8 +71,10 @@ function CapabilityCard({ spec }: { spec: ActionDeclaration }) {
         )}
         {sample && (
           <Button asChild variant="ghost" size="sm" className={`h-auto min-h-11 w-fit justify-start px-0 py-1.5 text-xs lg:px-0 hover:bg-transparent hover:underline ${BUILDER_BTN}`}>
-            <Link href={hrefFor(sample)}>
-              <BilingualText en={`Try: “${sample.en}”`} el={`Δοκίμασε: «${sample.el}»`} compact wrap />
+            <Link href={spec.id === 'get_event_reconnect' ? '/events' : hrefFor(sample)}>
+              {spec.id === 'get_event_reconnect'
+                ? <BilingualText en={`Open an event and ask: “${sample.en}”`} el={`Ανοίξτε μια εκδήλωση και ρωτήστε: «${sample.el}»`} compact wrap />
+                : <BilingualText en={`Try: “${sample.en}”`} el={`Δοκίμασε: «${sample.el}»`} compact wrap />}
             </Link>
           </Button>
         )}

@@ -850,7 +850,11 @@ function detectBuilderWrite(rawMessage: string): { field: string; content: strin
   return field && content ? { field: field.key, content } : undefined;
 }
 
-export function planCopilotTools(rawMessage: string): PlannedTool[] {
+export function eventIdFromRoute(route?: string): string | undefined {
+  return route?.match(/^\/events\/([\w-]+)\/?$/)?.[1];
+}
+
+export function planCopilotTools(rawMessage: string, pageRoute?: string): PlannedTool[] {
   const message = rawMessage.trim().toLowerCase();
   if (!message) return [{ name: 'get_graph', args: {} }];
 
@@ -1272,6 +1276,15 @@ export function planCopilotTools(rawMessage: string): PlannedTool[] {
           : includesAny(message, ['headline', 'bio', 'my profile', 'τίτλο μου', 'τιτλο μου', 'βιογραφικ', 'προφίλ μου', 'προφιλ μου'])
             ? 'draft_profile'
             : null;
+  const reconnectAsk = fold(message);
+  if (!draftKind && (
+    /^(?:who (?:can|could) i (?:reconnect|meet again)\b|(?:show|list) (?:me )?(?:my )?(?:event )?reconnect(?:ion)? (?:matches|candidates)\b)/.test(reconnectAsk)
+    || /^(?:με ποι(?:ον|ους|α|ες) μπορω να (?:επανασυνδε|ξαναβρεθ|ξανασυναντ)|δειξε (?:μου )?τις αντιστοιχισεις επανασυνδεσ)/.test(reconnectAsk)
+  )) {
+    const eventId = rawMessage.match(/\/events\/([\w-]+)(?![\w/-])/i)?.[1] ?? eventIdFromRoute(pageRoute);
+    if (eventId) return [{ name: 'get_event_reconnect', args: { eventId } }];
+    if (/\bevents?\b|εκδηλωσ/.test(reconnectAsk)) return [{ name: 'navigate', args: { href: '/events', label: 'Events' } }];
+  }
   if (draftKind === 'draft_program_application') {
     const programTitle = detectApplicationProgramTitle(rawMessage);
     add('draft_program_application', programTitle ? { programTitle } : {});

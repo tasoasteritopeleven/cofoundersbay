@@ -16,6 +16,7 @@ import {
   listShortlist,
 } from '@/lib/api';
 import { getWorkspaces } from '@/lib/builder-api';
+import { getEventReconnect } from '@/lib/event-reconnect-api';
 import { listActionIds, getActionDeclaration } from '@cofounderbay/shared';
 import { AREA_READERS, isAreaRead } from './copilot-reads';
 import { replyLocaleFor, runCopilotTurn } from './copilot-engine';
@@ -52,6 +53,37 @@ vi.mock('@/lib/builder-api', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/builder-api')>()),
   getWorkspaces: vi.fn(),
 }));
+vi.mock('@/lib/event-reconnect-api', () => ({ getEventReconnect: vi.fn() }));
+
+it('keeps later mutual matches and private selections ahead of unselected candidates', async () => {
+  const rows = Array.from({ length: 5 }, (_, i) => ({
+    userId: `u${i}`, displayName: `Candidate ${i}`, avatarUrl: null, interested: false, mutual: false,
+  }));
+  vi.mocked(getEventReconnect).mockResolvedValue({
+    state: 'open', closesAt: '', rows: [
+      ...rows,
+      { ...rows[0], displayName: 'Selected person', interested: true },
+      { ...rows[1], displayName: 'Matched person', interested: true, mutual: true },
+    ],
+  });
+  const read = await AREA_READERS.get_event_reconnect({ eventId: 'event' }, en);
+  expect(read.section).toContain('(5/7)');
+  expect(read.section.indexOf('Matched person')).toBeLessThan(read.section.indexOf('Selected person'));
+  expect(read.section).not.toContain('Candidate 4');
+});
+
+it('reads the event from page context and does not fall back to upcoming events', async () => {
+  const question = 'Who can I reconnect with after this event?';
+  vi.mocked(getEventReconnect).mockClear();
+  vi.mocked(getEventReconnect).mockResolvedValue({ state: 'open', closesAt: '', rows: [] });
+  const offPage = await runCopilotTurn(question);
+  expect(offPage.usedTools).toEqual(['navigate']);
+  expect(offPage.actions).toContainEqual(expect.objectContaining({ tool: 'navigate', href: '/events' }));
+  expect(getEventReconnect).not.toHaveBeenCalled();
+  const onPage = await runCopilotTurn(question, { route: '/events/selected-event' });
+  expect(onPage.usedTools).toEqual(['get_event_reconnect']);
+  expect(getEventReconnect).toHaveBeenCalledWith('selected-event');
+});
 
 const en = { t: (s: string, v?: Record<string, string | number>) => translate('en', s, v), locale: 'en' };
 const el = { t: (s: string, v?: Record<string, string | number>) => translate('el', s, v), locale: 'el' };

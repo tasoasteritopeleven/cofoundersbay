@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { planCopilotTools } from './copilot-planner';
 import { listActionIds } from '@cofounderbay/shared';
+import { CAPABILITY_SAMPLES } from './capability-samples';
 
 /**
  * The heuristic planner is the path taken when the model behind the assistant
@@ -20,6 +21,32 @@ function plan(message: string) {
 function argsFor(message: string, name: string) {
   return planCopilotTools(message).find((tool) => tool.name === name)?.args;
 }
+
+it('routes reconnect samples to the specific read, not upcoming events', () => {
+  const sample = CAPABILITY_SAMPLES.get_event_reconnect;
+  for (const question of [sample.en, sample.el]) {
+    expect(planCopilotTools(question, '/events/open-event')).toEqual([
+      { name: 'get_event_reconnect', args: { eventId: 'open-event' } },
+    ]);
+    expect(planCopilotTools(question, '/events')).toEqual([
+      { name: 'navigate', args: { href: '/events', label: 'Events' } },
+    ]);
+  }
+  expect(argsFor(`${sample.en} /events/event-42`, 'get_event_reconnect')).toEqual({ eventId: 'event-42' });
+});
+
+it('keeps an event draft when its title mentions reconnecting, even on an event page', () => {
+  const tools = planCopilotTools("draft an event titled 'Reconnect with alumni'", '/events/open-event');
+  expect(tools).toContainEqual({ name: 'draft_event', args: { title: 'Reconnect with alumni' } });
+  expect(tools.map((tool) => tool.name)).not.toContain('get_event_reconnect');
+});
+
+it.each([
+  "Create an event titled 'Reconnect with alumni'",
+  "Show me the event titled 'Reconnect with alumni'",
+])('does not treat an event title as a reconnect lookup: %s', (prompt) => {
+  expect(planCopilotTools(prompt, '/events/open-event').map((tool) => tool.name)).not.toContain('get_event_reconnect');
+});
 
 describe('planning the analytics window', () => {
   it('reads the window out of an English or Greek request', () => {
