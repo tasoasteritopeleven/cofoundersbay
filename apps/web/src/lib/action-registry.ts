@@ -8,6 +8,7 @@ import {
   type MutationActionId,
   type UndoableActionId,
 } from '@cofounderbay/shared';
+import { setEventAttendance, setEventReconnect } from '@/lib/event-reconnect-api';
 import {
   acceptsApplications,
   listExpertReviews,
@@ -270,6 +271,22 @@ const PIN_REFUSAL: Record<string, string> = {
 
 /** Exhaustive over every declared mutation. Adding one without an arm fails to compile. */
 const EXECUTORS: Record<MutationActionId, Executor> = {
+  set_event_attendance: async (payload) => {
+    if (isPreviewDemo()) return { ok: false, error: 'Attendance cannot be changed in demo mode' };
+    const eventId = requireString(payload, 'eventId');
+    const userId = requireString(payload, 'userId');
+    if (!eventId || !userId || typeof payload.attended !== 'boolean') return { ok: false, error: 'Missing attendance details' };
+    await setEventAttendance(eventId, { userId, attended: payload.attended });
+    return { ok: true };
+  },
+  set_event_reconnect: async (payload) => {
+    if (isPreviewDemo()) return { ok: false, error: 'Reconnect choices cannot be changed in demo mode' };
+    const eventId = requireString(payload, 'eventId');
+    const userId = requireString(payload, 'userId');
+    if (!eventId || !userId || typeof payload.interested !== 'boolean') return { ok: false, error: 'Missing reconnect details' };
+    await setEventReconnect(eventId, userId, payload.interested);
+    return { ok: true };
+  },
   // The reader's own pages (docs §107). Local, so nothing waits on the API;
   // the outcome hands the undo the place the page had.
   pin_shortcut: async (payload) => {

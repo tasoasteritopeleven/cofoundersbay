@@ -17,7 +17,7 @@ import { useToast } from '@/components/ui/toast';
 import { getEvent, rsvpEvent, type EventItem } from '@/lib/api';
 import { cn, initialsOf } from '@/lib/utils';
 import { qk } from '@/lib/query-keys';
-import { usePageControls, type PageControlRunResult } from '@/lib/page-controls';
+import { usePageControls, usePageList, type PageControlRunResult } from '@/lib/page-controls';
 import { PersonHovercard } from '@/components/common/PersonHovercard';
 import { buildIcs, downloadIcs, icsFileName } from '@/lib/ics';
 import { onRadioGroupKeyDown, radioTabIndex } from '@/lib/radio-keys';
@@ -25,6 +25,7 @@ import { bilingualAria } from '@/lib/i18n/format';
 import { StatusText, statusEl, statusEn } from '@/components/common/StatusText';
 import { useLanguagePreference } from '@/lib/i18n/LanguagePreferenceContext';
 import { PhoneStickyAction } from '@/components/common/PhoneStickyAction';
+import { EventReconnect, useEventParticipation } from './EventReconnect';
 
 type Rsvp = 'going' | 'interested' | 'not_going';
 
@@ -75,6 +76,7 @@ export default function EventDetailPage() {
     retry: 0,
   });
   const event = data?.event ?? null;
+  const participation = useEventParticipation(event);
   const { primary } = useLanguagePreference();
   const coverRef = useRef<HTMLImageElement>(null);
   const [coverFailed, setCoverFailed] = useState(false);
@@ -160,7 +162,9 @@ export default function EventDetailPage() {
       writes: false,
       run: share,
     },
+    ...participation.controls,
   ]);
+  usePageList([...participation.lists]);
 
   if (isLoading) {
     return (
@@ -352,6 +356,8 @@ export default function EventDetailPage() {
           </Card>
         </aside>
       </div>
+      <EventReconnect participation={participation} event={event} />
+
       {/* The answer stays in reach on a phone while the RSVP card is off
           screen (docs §115): the same three answers, sent the same way. */}
       {!ended ? (

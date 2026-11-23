@@ -147,6 +147,59 @@ export const ACTION_DECLARATIONS = [
     writes: false,
   },
   {
+    id: 'get_event_reconnect',
+    kind: 'read',
+    label: { en: 'Read event reconnect candidates and matches', el: 'Ανάγνωση επιλογών και αμοιβαίων ενδιαφερόντων εκδήλωσης' },
+    description: {
+      en: 'Read attendees available to reconnect at this event and your own selections and mutual matches. Requires confirmed attendance; never discloses someone else’s one-sided interest.',
+      el: 'Διαβάζει τους διαθέσιμους συμμετέχοντες, τις επιλογές σας και τα αμοιβαία ενδιαφέροντα. Απαιτεί επιβεβαιωμένη παρουσία και δεν αποκαλύπτει μονόπλευρο ενδιαφέρον άλλων.',
+    },
+    params: [{ name: 'eventId', type: 'string', required: true, description: { en: 'ID of the event.', el: 'Αναγνωριστικό εκδήλωσης.' } }],
+    writes: false,
+  },
+  {
+    id: 'set_event_attendance',
+    kind: 'mutation',
+    label: { en: 'Confirm or clear event attendance', el: 'Επιβεβαίωση ή αναίρεση παρουσίας' },
+    description: {
+      en: 'Set one attendee’s attendance. Organizer only, from event start until seven days after it ends. Clearing attendance removes reconnect selections and matches for that attendee.',
+      el: 'Ορίζει την παρουσία ενός συμμετέχοντα. Μόνο ο διοργανωτής, από την έναρξη έως επτά ημέρες μετά τη λήξη. Η αναίρεση διαγράφει τις επιλογές και τα αμοιβαία ενδιαφέροντα του συμμετέχοντα.',
+    },
+    params: [
+      { name: 'eventId', type: 'string', required: true, description: { en: 'ID of the event.', el: 'Αναγνωριστικό εκδήλωσης.' } },
+      { name: 'userId', type: 'string', required: true, description: { en: 'ID of the attendee.', el: 'Αναγνωριστικό συμμετέχοντα.' } },
+      { name: 'attended', type: 'boolean', required: true, description: { en: 'True to confirm; false to clear.', el: 'True για επιβεβαίωση, false για αναίρεση.' } },
+    ],
+    writes: true,
+    invalidates: ['events', 'notifications'],
+    reversal: {
+      kind: 'none',
+      explanation: { en: 'Undo cannot restore deleted selections or retract a notification already seen.', el: 'Η αναίρεση δεν επαναφέρει διαγραμμένες επιλογές ούτε ανακαλεί ειδοποίηση που έχει ήδη διαβαστεί.' },
+    },
+    confirmLabel: { en: 'Update attendance', el: 'Ενημέρωση παρουσίας' },
+  },
+  {
+    id: 'set_event_reconnect',
+    kind: 'mutation',
+    label: { en: 'Select or withdraw event reconnect interest', el: 'Επιλογή ή απόσυρση ενδιαφέροντος εκδήλωσης' },
+    description: {
+      en: 'Select someone privately or withdraw your selection. Both must have confirmed attendance. A mutual match notifies both and does not create a connection. Withdrawing a match removes it for both.',
+      el: 'Επιλέγει ιδιωτικά κάποιον ή αποσύρει την επιλογή σας. Απαιτεί επιβεβαιωμένη παρουσία και των δύο. Το αμοιβαίο ενδιαφέρον ειδοποιεί και τους δύο χωρίς να τους συνδέει. Η απόσυρση το διαγράφει και για τους δύο.',
+    },
+    params: [
+      { name: 'eventId', type: 'string', required: true, description: { en: 'ID of the event.', el: 'Αναγνωριστικό εκδήλωσης.' } },
+      { name: 'userId', type: 'string', required: true, description: { en: 'ID of the confirmed attendee.', el: 'Αναγνωριστικό συμμετέχοντα με επιβεβαιωμένη παρουσία.' } },
+      { name: 'interested', type: 'boolean', required: true, description: { en: 'True to select; false to withdraw.', el: 'True για επιλογή, false για απόσυρση.' } },
+    ],
+    writes: true,
+    invalidates: ['events', 'notifications'],
+    reversal: {
+      kind: 'none',
+      explanation: { en: 'A notification already seen cannot be retracted and withdrawing a match deletes both selections.', el: 'Δεν ανακαλείται ειδοποίηση που έχει ήδη διαβαστεί και η απόσυρση διαγράφει και τις δύο επιλογές.' },
+    },
+    confirmLabel: { en: 'Update reconnect choice', el: 'Ενημέρωση επιλογής επανασύνδεσης' },
+  },
+  {
     id: 'get_milestones',
     kind: 'read',
     label: { en: 'Read your milestones', el: 'Ανάγνωση των ορόσημών σου' },
