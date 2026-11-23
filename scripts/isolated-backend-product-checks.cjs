@@ -314,6 +314,14 @@ async function runProductChecks({ base, db, results, password, privateDir, uploa
   const closed = await bob.request('GET', `${eventPath}/reconnect`);
   check('reconnect_expired_unmatched_is_deleted', closed.data.state === 'closed' && closed.data.rows.length === 0 && await db.eventReconnectInterest.count({ where: { eventId: event.id } }) === 0);
   check('reconnect_deadlines_are_enforced', (await interest(bob, cid, true)).status === 409 && (await attend(alice, cid, false)).status === 409);
+  await db.event.update({ where: { id: event.id }, data: { endAt: event.endAt } });
+  await interest(bob, cid, true);
+  await interest(carol, bid, true);
+  const blockedReconnect = await carol.request('POST', `/connections/block/${bid}`);
+  check('reconnect_block_removes_matches_and_notices', blockedReconnect.status === 201 && await matches() === 0 && await db.eventReconnectInterest.count({ where: { eventId: event.id } }) === 0);
+  await db.eventReconnectInterest.create({ data: { eventId: event.id, fromId: cid, toId: bid, expiresAt: new Date(Date.now() + 60_000) } });
+  check('reconnect_blocked_pairs_are_hidden_both_ways', (await bob.request('GET', `${eventPath}/reconnect`)).data.rows.length === 0 && (await carol.request('GET', `${eventPath}/reconnect`)).data.rows.length === 0);
+  check('reconnect_block_prevents_matching_prior_interest', (await interest(bob, cid, true)).status === 403 && (await interest(carol, bid, true)).status === 403 && await matches() === 0);
 }
 
 module.exports = { runProductChecks };

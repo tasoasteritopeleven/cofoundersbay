@@ -1,6 +1,8 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { serializable } from '../prisma/serializable';
+import { matchNotice, reconnectPairKey } from './reconnect-notices';
 
 const DAY = 86_400_000;
 const HOUR = 3_600_000;
@@ -15,16 +17,6 @@ function endOf(event: { startAt: Date; endAt: Date | null }) {
 @Injectable()
 export class EventReconnectService {
   constructor(private readonly prisma: PrismaService) {}
-
-  private async transact<T>(write: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {
-    for (let attempt = 0; ; attempt++) {
-      try {
-        return await this.prisma.$transaction(write, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
-      } catch (error) {
-        if (!(error instanceof Prisma.PrismaClientKnownRequestError) || !['P2034', 'P2002'].includes(error.code) || attempt >= 2) throw error;
-      }
-    }
-  }
 
   private async event(db: Prisma.TransactionClient, eventId: string) {
     const event = await db.event.findUnique({ where: { id: eventId }, select: eventFields });
@@ -57,7 +49,7 @@ export class EventReconnectService {
   }
 
   async updateAttendance(eventId: string, viewerId: string, input: { userId: string; attended: boolean } | { allGoing: true }) {
-    return this.transact(async (tx) => {
+    return serializable(this.prisma, async (tx) => {
       const event = await this.event(tx, eventId);
       if (event.creatorId !== viewerId) throw new ForbiddenException('Only the organizer can manage attendance');
       const now = new Date();
@@ -89,19 +81,9 @@ export class EventReconnectService {
         await tx.eventReconnectInterest.deleteMany({
           where: { eventId, OR: [{ fromId: input.userId }, { toId: input.userId }] },
         });
-        for (const pair of pairs) await this.removeMatchNotices(tx, eventId, input.userId, pair.toId);
+        for (const pair of pairs) await tx.notification.deleteMany({ where: matchNotice(input.userId, pair.toId, eventId) });
       }
       return { changed: 1 };
-    });
-  }
-
-  private pairKey(a: string, b: string) {
-    return [a, b].sort().join(':');
-  }
-
-  private removeMatchNotices(tx: Prisma.TransactionClient, eventId: string, a: string, b: string) {
-    return tx.notification.deleteMany({
-      where: { type: 'system', link: `/events/${eventId}#reconnect`, meta: { path: ['reconnectPair'], equals: this.pairKey(a, b) } },
     });
   }
 
@@ -130,6 +112,8 @@ export class EventReconnectService {
         user: {
           blocksGiven: { none: { blockedId: viewerId } },
           blocksReceived: { none: { blockerId: viewerId } },
+          connectionsSent: { none: { receiverId: viewerId, status: 'blocked' } },
+          connectionsReceived: { none: { requesterId: viewerId, status: 'blocked' } },
         },
         ...(open ? {} : { reconnectReceived: { some: { fromId: viewerId, expiresAt: null } } }),
       },
@@ -154,7 +138,7 @@ export class EventReconnectService {
 
   async setInterest(eventId: string, viewerId: string, userId: string, interested: boolean) {
     if (viewerId === userId) throw new ForbiddenException('You cannot select yourself');
-    return this.transact(async (tx) => {
+    return serializable(this.prisma, async (tx) => {
       const event = await this.event(tx, eventId);
       const now = new Date();
       const end = endOf(event);
@@ -168,17 +152,23 @@ export class EventReconnectService {
       if (!interested) {
         if (existing?.expiresAt === null) {
           await tx.eventReconnectInterest.deleteMany({ where: { OR: [own, reverse] } });
-          await this.removeMatchNotices(tx, eventId, viewerId, userId);
+          await tx.notification.deleteMany({ where: matchNotice(viewerId, userId, eventId) });
         } else {
           await tx.eventReconnectInterest.deleteMany({ where: own });
         }
         return { interested: false, mutual: false };
       }
-      const blocked = await tx.userBlock.findFirst({
-        where: { OR: [{ blockerId: viewerId, blockedId: userId }, { blockerId: userId, blockedId: viewerId }] },
-        select: { id: true },
-      });
-      if (blocked) throw new ForbiddenException('This attendee is not available');
+      const [blocked, blockedConnection] = await Promise.all([
+        tx.userBlock.findFirst({
+          where: { OR: [{ blockerId: viewerId, blockedId: userId }, { blockerId: userId, blockedId: viewerId }] },
+          select: { id: true },
+        }),
+        tx.connectionRequest.findFirst({
+          where: { status: 'blocked', OR: [{ requesterId: viewerId, receiverId: userId }, { requesterId: userId, receiverId: viewerId }] },
+          select: { id: true },
+        }),
+      ]);
+      if (blocked || blockedConnection) throw new ForbiddenException('This attendee is not available');
       if (existing) return { interested: true, mutual: existing.expiresAt === null };
 
       const incoming = await tx.eventReconnectInterest.findUnique({ where: { eventId_fromId_toId: reverse } });
@@ -192,7 +182,7 @@ export class EventReconnectService {
             type: 'system' as const,
             title: 'You have a mutual event match',
             link: `/events/${eventId}#reconnect`,
-            meta: { eventReconnect: 'match', reconnectPair: this.pairKey(viewerId, userId) },
+            meta: { eventReconnect: 'match', reconnectPair: reconnectPairKey(viewerId, userId) },
           })),
         });
       }
@@ -217,7 +207,7 @@ export class EventReconnectService {
       select: { eventId: true, userId: true },
     });
     for (const { eventId, userId } of rows) {
-      await this.transact(async (tx) => {
+      await serializable(this.prisma, async (tx) => {
         const { count } = await tx.eventRsvp.updateMany({
           where: { eventId, userId, checkedInAt: { not: null }, reconnectNudgedAt: null },
           data: { reconnectNudgedAt: now },

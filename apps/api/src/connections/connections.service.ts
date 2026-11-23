@@ -8,8 +8,10 @@ import {
 } from '@nestjs/common';
 import { ConnectionStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { serializable } from '../prisma/serializable';
 import { NotificationsService } from '../notifications/notifications.service';
 import { AutomationService } from '../automation/automation.service';
+import { matchNotice } from '../events/reconnect-notices';
 
 // User model only has: id, email, role, etc. — NOT displayName/avatarUrl/headline.
 // Those live on the related Profile model. We include profile nested under each User.
@@ -226,51 +228,37 @@ export class ConnectionsService {
       throw new BadRequestException('Cannot block yourself');
     }
 
-    const existing = await this.prisma.connectionRequest.findFirst({
-      where: {
-        OR: [
-          { requesterId: blockerId, receiverId: targetUserId },
-          { requesterId: targetUserId, receiverId: blockerId },
-        ],
-      },
-      include: {
-        requester: profileInclude,
-        receiver: profileInclude,
-      },
-      orderBy: { updatedAt: 'desc' },
+    return serializable(this.prisma, async (tx) => {
+      const pair = [
+        { requesterId: blockerId, receiverId: targetUserId },
+        { requesterId: targetUserId, receiverId: blockerId },
+      ];
+      const existing = await tx.connectionRequest.findFirst({
+        where: { OR: pair },
+        include: { requester: profileInclude, receiver: profileInclude },
+        orderBy: { updatedAt: 'desc' },
+      });
+
+      const connection = existing?.status === 'blocked' ? existing : existing
+        ? await tx.connectionRequest.update({
+            where: { id: existing.id },
+            data: { status: 'blocked', respondedAt: new Date(), message: null },
+            include: { requester: profileInclude, receiver: profileInclude },
+          })
+        : await tx.connectionRequest.create({
+            data: { requesterId: blockerId, receiverId: targetUserId, status: 'blocked', respondedAt: new Date() },
+            include: { requester: profileInclude, receiver: profileInclude },
+          });
+
+      await tx.eventReconnectInterest.deleteMany({
+        where: { OR: [
+          { fromId: blockerId, toId: targetUserId },
+          { fromId: targetUserId, toId: blockerId },
+        ] },
+      });
+      await tx.notification.deleteMany({ where: matchNotice(blockerId, targetUserId) });
+      return { connection: mapConnection(connection) };
     });
-
-    if (existing?.status === 'blocked') {
-      return { connection: mapConnection(existing) };
-    }
-
-    const connection = existing
-      ? await this.prisma.connectionRequest.update({
-          where: { id: existing.id },
-          data: {
-            status: 'blocked',
-            respondedAt: new Date(),
-            message: null,
-          },
-          include: {
-            requester: profileInclude,
-            receiver: profileInclude,
-          },
-        })
-      : await this.prisma.connectionRequest.create({
-          data: {
-            requesterId: blockerId,
-            receiverId: targetUserId,
-            status: 'blocked',
-            respondedAt: new Date(),
-          },
-          include: {
-            requester: profileInclude,
-            receiver: profileInclude,
-          },
-        });
-
-    return { connection: mapConnection(connection) };
   }
 
   async getConnectionStatus(viewerId: string, targetUserId: string) {
