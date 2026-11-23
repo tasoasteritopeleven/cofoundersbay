@@ -17,6 +17,8 @@ function setup() {
     group: { findMany: vi.fn(async () => [] as unknown[]), update: vi.fn(async () => ({})), delete: vi.fn(async () => ({})) },
     groupMember: { updateMany: vi.fn(async () => ({})) },
     user: { delete: vi.fn(async () => ({})) },
+    event: { findMany: vi.fn(async () => [] as Array<{ id: string }>) },
+    notification: { deleteMany: vi.fn(async () => ({})) },
   };
   const prisma: Record<string, any> = {
     user: { findUnique: vi.fn(async () => member() as unknown), count: vi.fn(async () => 0) },

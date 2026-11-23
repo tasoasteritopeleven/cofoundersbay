@@ -266,10 +266,21 @@ async function runProductChecks({ base, db, results, password, privateDir, uploa
   check('an_organization_with_members_blocks_it', blocked.status === 409 && await db.user.count({ where: { id: did } }) === 1 && await db.organization.count({ where: { id: org.id } }) === 1);
   check('the_preview_names_the_organization', (await dave.request('GET', '/account/deletion')).data.blockers.some((b) => b.organizations?.includes('Dave Labs')));
   await db.organizationMembership.delete({ where: { id: membership.id } });
+  const deletionEvent = await db.event.create({ data: {
+    creatorId: aid, title: 'Reconnect before account deletion',
+    startAt: new Date(Date.now() - 2 * 3_600_000), endAt: new Date(Date.now() - 3_600_000),
+    rsvps: { create: [{ userId: bid, checkedInAt: new Date() }, { userId: did, checkedInAt: new Date() }] },
+  } });
+  const deletionReconnect = `/events/${deletionEvent.id}/reconnect`;
+  await bob.request('PUT', `${deletionReconnect}/${did}`, { interested: true });
+  const deletionMatch = await dave.request('PUT', `${deletionReconnect}/${bid}`, { interested: true });
+  const survivingMatchNotice = { userId: bid, link: `/events/${deletionEvent.id}#reconnect` };
+  check('deletion_setup_mutual_reconnect', deletionMatch.data.mutual === true && await db.notification.count({ where: survivingMatchNotice }) === 1);
   const staleCookies = new Map(dave.cookies);
   const gone = await dave.request('POST', '/account/delete', { password });
   check('deletion_succeeds', gone.status === 200 && gone.data.deleted === true);
   check('the_account_row_is_gone', await db.user.count({ where: { id: did } }) === 0 && await db.profile.count({ where: { userId: did } }) === 0);
+  check('deletion_revokes_reconnect_and_surviving_notice', await db.notification.count({ where: survivingMatchNotice }) === 0 && await db.eventReconnectInterest.count({ where: { eventId: deletionEvent.id } }) === 0);
   check('their_round_and_documents_are_gone', await db.fundraisingRound.count({ where: { ownerId: did } }) === 0 && await db.dataRoomDocument.count({ where: { uploadedById: did } }) === 0);
   check('the_private_file_is_gone', !fs.existsSync(path.join(privateDir, daveFile)));
   check('the_organization_went_with_its_only_member', await db.organization.count({ where: { id: org.id } }) === 0);
